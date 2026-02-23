@@ -8,17 +8,20 @@ import { getAppBySlug, getApps } from "@/lib/apps";
 import { siteConfig } from "@/lib/site";
 
 interface AppPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
-export function generateStaticParams() {
+export const dynamicParams = false;
+
+export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
   return getApps().map((app) => ({ slug: app.slug }));
 }
 
-export function generateMetadata({ params }: AppPageProps): Metadata {
-  const app = getAppBySlug(params.slug);
+export async function generateMetadata({ params }: AppPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const app = getAppBySlug(slug);
 
   if (!app) {
     return {
@@ -46,8 +49,9 @@ export function generateMetadata({ params }: AppPageProps): Metadata {
   };
 }
 
-export default function IndividualAppPage({ params }: AppPageProps) {
-  const app = getAppBySlug(params.slug);
+export default async function IndividualAppPage({ params }: AppPageProps) {
+  const { slug } = await params;
+  const app = getAppBySlug(slug);
 
   if (!app) {
     notFound();

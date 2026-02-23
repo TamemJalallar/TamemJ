@@ -52,11 +52,25 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000)
 
+Production build (local verification):
+
+```bash
+npm run build
+```
+
+Static export build (GitHub Pages / static hosting):
+
+```bash
+npm run build:static
+```
+
+Note: `npm run build:static` requires at least one app in `data/apps.json` because `/apps/[slug]` needs generated paths.
+
 ## Add a New App
 
 1. Add a new object to `data/apps.json`
 2. Add an app icon and screenshots under `public/images/apps/<slug>/`
-3. Rebuild the site (`npm run build`)
+3. Rebuild the site (`npm run build` for local, `npm run build:static` for static export)
 4. Update `public/sitemap.xml` with the new app URL
 
 The `/apps` page and `/apps/[slug]` page are generated automatically from the JSON data.
@@ -76,22 +90,24 @@ Deployment configs included in this repo:
 1. Push the project to GitHub/GitLab/Bitbucket
 2. Import the repository in Vercel
 3. Build command: `npm run build`
-4. Output directory: `out` (because `output: "export"` is enabled)
+4. Do not set an output directory (standard Next.js deployment)
 5. Add custom domain `tamemj.com` in Vercel project settings
 6. Redeploy after setting environment/domain settings if needed
 
 ### Netlify
 
 1. Create a new site from your repository
-2. Netlify will read `netlify.toml` automatically (`npm run build`, publish `out`)
+2. Netlify will read `netlify.toml` automatically (`npm run build:static`, publish `out`)
 3. If prompted manually:
-   - Build command: `npm run build`
+   - Build command: `npm run build:static`
    - Publish directory: `out`
 4. Add custom domain `tamemj.com`
 
 ### GitHub Pages (Static)
 
 This project is configured for static export and includes a GitHub Actions workflow for Pages deploy.
+
+Note: GitHub Pages deployment requires at least one app entry in `data/apps.json` (because static export must generate at least one `/apps/[slug]` page path).
 
 1. Push to the `main` branch
 2. In GitHub: `Settings` → `Pages`

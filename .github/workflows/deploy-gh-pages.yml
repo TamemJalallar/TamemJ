@@ -32,7 +32,7 @@ jobs:
         run: npm install
 
       - name: Build static site
-        run: npm run build
+        run: npm run build:static
 
       - name: Add .nojekyll
         run: touch out/.nojekyll
