@@ -7,6 +7,8 @@ import { ScreenshotCarousel } from "@/components/screenshot-carousel";
 import { getAppBySlug, getApps } from "@/lib/apps";
 import { siteConfig } from "@/lib/site";
 
+const STATIC_EXPORT_PLACEHOLDER_SLUG = "__site-build-placeholder__";
+
 interface AppPageProps {
   params: Promise<{
     slug: string;
@@ -16,7 +18,13 @@ interface AppPageProps {
 export const dynamicParams = false;
 
 export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
-  return getApps().map((app) => ({ slug: app.slug }));
+  const apps = getApps();
+
+  if (apps.length === 0) {
+    return [{ slug: STATIC_EXPORT_PLACEHOLDER_SLUG }];
+  }
+
+  return apps.map((app) => ({ slug: app.slug }));
 }
 
 export async function generateMetadata({ params }: AppPageProps): Promise<Metadata> {
@@ -24,6 +32,17 @@ export async function generateMetadata({ params }: AppPageProps): Promise<Metada
   const app = getAppBySlug(slug);
 
   if (!app) {
+    if (slug === STATIC_EXPORT_PLACEHOLDER_SLUG) {
+      return {
+        title: "App Coming Soon",
+        description: "Placeholder page used for static export while no apps are published yet.",
+        robots: {
+          index: false,
+          follow: false
+        }
+      };
+    }
+
     return {
       title: "App Not Found"
     };
@@ -54,6 +73,31 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
   const app = getAppBySlug(slug);
 
   if (!app) {
+    if (slug === STATIC_EXPORT_PLACEHOLDER_SLUG) {
+      return (
+        <section className="section-shell pt-10 sm:pt-14">
+          <div className="page-shell max-w-3xl">
+            <div className="surface-card-strong p-6 sm:p-8">
+              <div className="mb-6">
+                <Link
+                  href="/apps"
+                  className="text-sm font-medium text-slate-600 hover:text-slate-900"
+                >
+                  ← Back to Apps
+                </Link>
+              </div>
+              <p className="eyebrow">Hidden Build Placeholder</p>
+              <h1 className="mt-4 text-2xl font-semibold sm:text-3xl">No apps published yet</h1>
+              <p className="mt-3 text-sm sm:text-base">
+                This internal page exists only so static export can build while the apps catalog is
+                empty. It is not linked anywhere in the site UI.
+              </p>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
     notFound();
   }
 
