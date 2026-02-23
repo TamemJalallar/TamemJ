@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: 248 250 252;
+  --fg: 15 23 42;
+  --line: 226 232 240;
+  --card: 255 255 255;
+  --muted: 100 116 139;
+  --accent: 14 116 144;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: rgb(var(--bg));
+  color: rgb(var(--fg));
+  min-height: 100vh;
+}
+
+::selection {
+  background: rgba(14, 116, 144, 0.14);
+  color: rgb(var(--fg));
+}
+
+@layer base {
+  h1,
+  h2,
+  h3 {
+    @apply tracking-tight text-fg;
+  }
+
+  p {
+    @apply text-slate-600 leading-7;
+  }
+}
+
+@layer components {
+  .page-shell {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-shell {
+    @apply py-12 sm:py-16 lg:py-20;
+  }
+
+  .surface-card {
+    @apply rounded-2xl border border-line/80 bg-card shadow-soft;
+  }
+
+  .surface-card-strong {
+    @apply rounded-2xl border border-line/80 bg-white shadow-card;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center rounded-full border border-line bg-white px-3 py-1 text-xs font-medium uppercase tracking-[0.14em] text-slate-500;
+  }
+
+  .section-title {
+    @apply text-2xl font-semibold sm:text-3xl lg:text-4xl;
+  }
+
+  .section-subtitle {
+    @apply mt-3 max-w-2xl text-sm text-slate-600 sm:text-base;
+  }
+
+  .nav-link {
+    @apply rounded-full px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-white hover:text-slate-900;
+  }
+
+  .nav-link-active {
+    @apply bg-white text-slate-900 shadow-soft;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-full border border-line bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:border-slate-300 hover:bg-slate-50;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .hide-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
