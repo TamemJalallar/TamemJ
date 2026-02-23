@@ -13,7 +13,7 @@ function hasAppsConfigured(): boolean {
   }
 }
 
-const wantsStaticExport = process.env.NEXT_STATIC_EXPORT === "1";
+const wantsStaticExport = process.env.npm_lifecycle_event === "build:static";
 const hasApps = hasAppsConfigured();
 
 if (wantsStaticExport && !hasApps) {
