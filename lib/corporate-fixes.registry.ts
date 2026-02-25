@@ -5,6 +5,7 @@ import type { KBArticle } from "@/types/support";
 export type CorporateFixCategory =
   | "Windows"
   | "macOS"
+  | "Mobile"
   | "O365"
   | "Networking"
   | "Printers"
@@ -45,6 +46,7 @@ interface PublishedCorporateFixesStore {
 export const corporateFixCategories: CorporateFixCategory[] = [
   "Windows",
   "macOS",
+  "Mobile",
   "O365",
   "Networking",
   "Printers",
@@ -54,7 +56,13 @@ export const corporateFixCategories: CorporateFixCategory[] = [
   "Browsers"
 ];
 
-const supportProductFamilies = new Set<KBArticle["productFamily"]>(["Microsoft", "Adobe", "Figma"]);
+const supportProductFamilies = new Set<KBArticle["productFamily"]>([
+  "Microsoft",
+  "Adobe",
+  "Figma",
+  "Okta",
+  "Mobile"
+]);
 
 function isCorporateFixCategory(value: string): value is CorporateFixCategory {
   return corporateFixCategories.includes(value as CorporateFixCategory);
@@ -205,6 +213,9 @@ function mapSupportCategoryToCorporateCategory(category: KBArticle["category"]):
       return "Windows";
     case "macOS":
       return "macOS";
+    case "iOS":
+    case "Android":
+      return "Mobile";
     case "AV / Conference Rooms":
       return "Networking";
     default:

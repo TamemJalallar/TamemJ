@@ -1,6 +1,6 @@
 export type SupportSeverity = "Low" | "Medium" | "High";
 export type SupportAccessLevel = "User Safe" | "Admin Required";
-export type SupportEnvironment = "Windows" | "macOS" | "Both";
+export type SupportEnvironment = "Windows" | "macOS" | "iOS" | "Android" | "Both";
 export type SupportImpact = "Low" | "Medium" | "High";
 export type SupportUrgency = "Low" | "Medium" | "High";
 export type TicketPriority = "P1" | "P2" | "P3" | "P4";
@@ -11,6 +11,8 @@ export type KBCategory =
   | "Microsoft 365"
   | "Windows"
   | "macOS"
+  | "iOS"
+  | "Android"
   | "Networking / VPN"
   | "Identity / MFA / SSO"
   | "Adobe"
@@ -28,7 +30,9 @@ export type KBProductFamily =
   | "Networking"
   | "Browser"
   | "Print"
-  | "AV";
+  | "AV"
+  | "Okta"
+  | "Mobile";
 
 export type SupportStepType = "info" | "command" | "warning";
 

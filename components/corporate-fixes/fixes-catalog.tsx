@@ -41,11 +41,13 @@ function mergeFixCollections(baseFixes: CorporateTechFix[], localFixes: Corporat
 }
 
 export function FixesCatalog({ fixes, categories, tags }: FixesCatalogProps) {
+  const TAG_PREVIEW_LIMIT = 28;
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [localFixes, setLocalFixes] = useState<CorporateTechFix[]>([]);
   const [selectedLocalFix, setSelectedLocalFix] = useState<CorporateTechFix | null>(null);
+  const [showAllTags, setShowAllTags] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -93,6 +95,17 @@ export function FixesCatalog({ fixes, categories, tags }: FixesCatalogProps) {
     () => [...new Set([...tags, ...localFixes.flatMap((fix) => fix.tags)])].sort((a, b) => a.localeCompare(b)),
     [tags, localFixes]
   );
+  const visibleTags = useMemo(() => {
+    if (showAllTags || allTags.length <= TAG_PREVIEW_LIMIT) {
+      return allTags;
+    }
+
+    const selected = allTags.filter((tag) => selectedTags.includes(tag));
+    const remaining = allTags.filter((tag) => !selectedTags.includes(tag));
+    const allowedRemaining = Math.max(TAG_PREVIEW_LIMIT - selected.length, 0);
+
+    return [...selected, ...remaining.slice(0, allowedRemaining)];
+  }, [allTags, selectedTags, showAllTags]);
 
   const normalizedQuery = query.trim().toLowerCase();
 
@@ -250,9 +263,23 @@ export function FixesCatalog({ fixes, categories, tags }: FixesCatalogProps) {
         </div>
 
         <div className="mt-5">
-          <p className="mb-3 text-sm font-medium text-slate-900 dark:text-slate-100">Tags</p>
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+            <p className="text-sm font-medium text-slate-900 dark:text-slate-100">Tags</p>
+            {allTags.length > TAG_PREVIEW_LIMIT ? (
+              <button
+                type="button"
+                onClick={() => setShowAllTags((current) => !current)}
+                className="rounded-full border border-line/80 bg-white px-3 py-1 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-800"
+                aria-expanded={showAllTags}
+              >
+                {showAllTags
+                  ? "Show fewer tags"
+                  : `Show more tags (+${Math.max(allTags.length - visibleTags.length, 0)})`}
+              </button>
+            ) : null}
+          </div>
           <div className="flex flex-wrap gap-2">
-            {allTags.map((tag) => (
+            {visibleTags.map((tag) => (
               <TagChip
                 key={tag}
                 label={tag}

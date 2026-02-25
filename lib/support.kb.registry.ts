@@ -69,6 +69,28 @@ function getFallbackCommands(seed: KBSeed): KBCommand[] {
     ];
   }
 
+  if (seed.environment === "iOS") {
+    return [
+      {
+        title: "iPhone/iPad support checks (non-destructive)",
+        shell: "CLI",
+        content:
+          "# iOS (device UI)\n# Settings > General > About (capture iOS version + device name)\n# Settings > VPN / Device Management (confirm managed profile status)\n# Settings > [App] (confirm permissions enabled as required)\n# Capture timestamp + screenshot of the error for the ticket"
+      }
+    ];
+  }
+
+  if (seed.environment === "Android") {
+    return [
+      {
+        title: "Android support checks (non-destructive)",
+        shell: "CLI",
+        content:
+          "# Android (device UI)\n# Settings > About phone (capture Android version + device model)\n# Settings > Security / Work profile (confirm work profile is present and enabled)\n# App info > Permissions (confirm required permissions)\n# Capture timestamp + screenshot of the error for the ticket"
+      }
+    ];
+  }
+
   if (seed.environment === "Windows") {
     return [
       {
@@ -2281,6 +2303,412 @@ const generalSeeds: KBSeed[] = [
       "Browser policy changes affect SSO for many users.",
       "Identity/Conditional Access behavior is causing redirect loops.",
       "Users request bypassing SSO or security settings to continue work."
+    ]
+  },
+  {
+    slug: "okta-sign-in-loop-browser-or-desktop-sso",
+    title: "Okta Sign-In Loop (Browser / Desktop App SSO)",
+    description:
+      "Troubleshoot repeated Okta sign-in redirects or successful authentication that returns to the login screen without bypassing SSO, MFA, or device trust policies.",
+    category: "Identity / MFA / SSO",
+    productFamily: "Okta",
+    product: "Okta SSO",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    tags: ["okta", "sso", "signin-loop", "mfa", "browser", "identity"],
+    symptoms: [
+      "User signs in successfully but is returned to the Okta login page.",
+      "Loop occurs in browser and sometimes in desktop app web auth windows.",
+      "Issue may reproduce only on one browser profile or device."
+    ],
+    causes: [
+      "Stale Okta/browser session cookies or conflicting tenant/account context.",
+      "Device trust, conditional access, or risk policy check failing after authentication.",
+      "Clock skew, network proxy behavior, or blocked identity redirects."
+    ],
+    remediations: [
+      "Reproduce in a private browser session using only the intended corporate identity.",
+      "Capture the exact app URL, timestamp, browser, and any error/correlation IDs displayed.",
+      "Confirm system date/time is automatic and accurate before retesting.",
+      "Escalate to identity admins for Okta system log review if loop persists after clean-session testing."
+    ],
+    escalationCriteria: [
+      "Okta system logs show policy denials, device trust failures, or risk-based authentication blocks.",
+      "Multiple users cannot access the same app after an Okta policy or app-sign-on rule change.",
+      "Users request disabling MFA or device trust enforcement as a workaround."
+    ]
+  },
+  {
+    slug: "okta-verify-push-not-received-or-delayed",
+    title: "Okta Verify Push Not Received or Delayed",
+    description:
+      "Troubleshoot delayed or missing Okta Verify push prompts using safe device, network, and app-notification checks before MFA method resets.",
+    category: "Identity / MFA / SSO",
+    productFamily: "Okta",
+    product: "Okta Verify",
+    environment: "Both",
+    severity: "Medium",
+    tags: ["okta", "okta-verify", "mfa", "push", "notifications", "authenticator"],
+    symptoms: [
+      "User approves sign-in requests only after a long delay or never receives them.",
+      "Manual code entry works while push notifications fail.",
+      "Problem may occur after phone OS update, app update, or notification permission changes."
+    ],
+    causes: [
+      "Notification permissions disabled or restricted on the mobile device.",
+      "Battery optimization / low power mode delaying background notifications.",
+      "Intermittent network connectivity or push service delivery issues."
+    ],
+    remediations: [
+      "Confirm Okta Verify app notifications are allowed and not silenced/focus-filtered.",
+      "Test on cellular and Wi-Fi to rule out local network delivery issues.",
+      "Use approved alternate factor methods (code/passcode) if available while troubleshooting.",
+      "Avoid re-enrolling or deleting the MFA factor unless directed by the identity support runbook."
+    ],
+    escalationCriteria: [
+      "Multiple users report delayed Okta Verify push behavior at the same time.",
+      "User lost access to all factors and account recovery is required.",
+      "Identity admins need to review factor status, enrollment state, or policy changes."
+    ]
+  },
+  {
+    slug: "okta-new-phone-or-lost-device-mfa-recovery",
+    title: "Okta MFA Recovery (New Phone or Lost Device)",
+    description:
+      "Follow enterprise-safe recovery steps when a user replaces or loses the device used for Okta MFA, without bypassing identity verification controls.",
+    category: "Identity / MFA / SSO",
+    productFamily: "Okta",
+    product: "Okta MFA Recovery",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "10-30 min",
+    tags: ["okta", "mfa", "account-recovery", "lost-device", "new-phone", "identity"],
+    symptoms: [
+      "User cannot complete Okta sign-in after phone replacement or loss.",
+      "Okta Verify or enrolled factor no longer exists on the new device.",
+      "User may be locked out of all apps protected by Okta."
+    ],
+    causes: [
+      "MFA factor tied to an old or unavailable device.",
+      "No backup factor was enrolled previously.",
+      "Identity verification must be re-established before factor reset."
+    ],
+    remediations: [
+      "Verify user identity using approved help desk verification procedures before any factor reset.",
+      "Use documented Okta admin or delegated help desk workflow to reset/re-enroll factors.",
+      "Guide the user to enroll the new device and confirm sign-in to at least one protected app.",
+      "Encourage enrollment of a secondary approved factor if policy allows."
+    ],
+    escalationCriteria: [
+      "User cannot be verified using approved procedures.",
+      "High-risk or privileged account requires security team approval for factor reset.",
+      "User reports suspicious prompts or possible account compromise in addition to device loss."
+    ]
+  },
+  {
+    slug: "okta-access-denied-app-assignment-or-group-membership",
+    title: "Okta 'Access Denied' (App Assignment / Group Membership)",
+    description:
+      "Troubleshoot Okta app access denied messages by validating assignment, group membership, and app sign-on policy without circumventing access governance controls.",
+    category: "Identity / MFA / SSO",
+    productFamily: "Okta",
+    product: "Okta App Access",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    tags: ["okta", "access-denied", "group-membership", "assignment", "sso"],
+    symptoms: [
+      "User signs into Okta but receives Access Denied for a specific app tile.",
+      "App is visible but launch fails due to assignment or policy error.",
+      "Other users can access the app normally."
+    ],
+    causes: [
+      "User is not assigned to the app or required group.",
+      "Assignment propagated slowly after recent changes.",
+      "App sign-on policy blocks based on network, device, or group conditions."
+    ],
+    remediations: [
+      "Confirm which app is affected and whether access worked previously for the same user.",
+      "Capture exact error message and timestamp from Okta or target app launch page.",
+      "Validate user identity, department/location changes, and recent access request approvals.",
+      "Escalate to identity/app admin to review assignment and sign-on policy conditions."
+    ],
+    escalationCriteria: [
+      "App assignment or group membership changes are required.",
+      "Policy exceptions are requested for restricted apps.",
+      "Multiple users lose access after an app assignment or role sync change."
+    ]
+  },
+  {
+    slug: "ios-intune-company-portal-device-compliance-not-evaluating",
+    title: "iOS Intune Company Portal Device Compliance Not Evaluating",
+    description:
+      "Troubleshoot iOS managed device compliance status stuck as pending/unknown in Intune Company Portal using safe profile and sync checks before re-enrollment.",
+    category: "iOS",
+    productFamily: "Mobile",
+    product: "Intune Company Portal (iOS)",
+    environment: "iOS",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "15-30 min",
+    tags: ["ios", "intune", "company-portal", "compliance", "mdm", "enrollment"],
+    symptoms: [
+      "Company Portal shows compliance pending/unknown for an extended period.",
+      "User is blocked from corporate apps due to device compliance requirement.",
+      "Issue started after device restore, iOS update, or management profile changes."
+    ],
+    causes: [
+      "Management profile or device registration state is incomplete.",
+      "Company Portal app cannot sync due to network or sign-in issue.",
+      "Conditional Access checks require updated compliance state from Intune."
+    ],
+    remediations: [
+      "Confirm the device is connected to a stable network and user can sign into Company Portal.",
+      "Open Company Portal and perform a manual sync/check status from the app.",
+      "Verify the management profile exists in iOS Settings and required permissions are granted.",
+      "Avoid removing the management profile or unenrolling without IT approval."
+    ],
+    escalationCriteria: [
+      "Compliance remains stuck after manual sync and profile verification.",
+      "Device is blocked by Conditional Access and user cannot work.",
+      "Re-enrollment is required and must be coordinated through endpoint management support."
+    ]
+  },
+  {
+    slug: "ios-outlook-work-mail-not-syncing-managed-device",
+    title: "iOS Outlook Work Mail Not Syncing (Managed Device)",
+    description:
+      "Troubleshoot Outlook for iOS sync delays or missing mail on managed devices while preserving corporate account security and MDM controls.",
+    category: "iOS",
+    productFamily: "Mobile",
+    product: "Outlook for iOS",
+    environment: "iOS",
+    severity: "Medium",
+    tags: ["ios", "outlook", "mail", "sync", "microsoft-365", "mobile"],
+    symptoms: [
+      "New mail is delayed or not appearing in Outlook for iOS.",
+      "Search or folder refresh is inconsistent on the mobile app.",
+      "Outlook on web/desktop may work while iOS app lags."
+    ],
+    causes: [
+      "Mobile app background refresh or notification settings disabled.",
+      "Network connectivity issues or temporary token/session issue.",
+      "App update state or managed app policy restrictions affecting sync."
+    ],
+    remediations: [
+      "Confirm account sign-in is current and no banner requests re-authentication in Outlook.",
+      "Check iOS Background App Refresh and notifications for Outlook per policy guidance.",
+      "Switch networks (Wi-Fi/cellular) and manually refresh mail folders.",
+      "Escalate before removing and re-adding the managed account if app protection policies apply."
+    ],
+    escalationCriteria: [
+      "Conditional Access or app protection policy prompts appear repeatedly.",
+      "Multiple iOS users report sync issues after an app or iOS update.",
+      "Managed app reconfiguration or policy review is required."
+    ]
+  },
+  {
+    slug: "ios-teams-notifications-not-arriving-managed-device",
+    title: "iOS Teams Notifications Not Arriving (Managed Device)",
+    description:
+      "Troubleshoot missing Teams notifications on iPhone/iPad using safe notification, focus mode, and account checks before app resets.",
+    category: "iOS",
+    productFamily: "Mobile",
+    product: "Microsoft Teams (iOS)",
+    environment: "iOS",
+    severity: "Low",
+    tags: ["ios", "teams", "notifications", "focus-mode", "mobile", "microsoft-365"],
+    symptoms: [
+      "Teams messages arrive when app is open but push notifications do not appear.",
+      "User receives some notifications (mentions/chats) but not all.",
+      "Issue may begin after iOS Focus mode changes or OS update."
+    ],
+    causes: [
+      "iOS notification permissions disabled or notification summary settings delaying delivery.",
+      "Focus mode / Do Not Disturb suppressing banners.",
+      "Teams mobile notification settings not enabled for the event type."
+    ],
+    remediations: [
+      "Check iOS notification settings for Teams and confirm alerts/sounds/badges are enabled.",
+      "Review Focus modes and notification summaries that may delay work app notifications.",
+      "Validate Teams mobile notification preferences for chats, mentions, and meetings.",
+      "Test with a direct message from a coworker after settings changes."
+    ],
+    escalationCriteria: [
+      "Notifications fail for multiple users after a Teams mobile app release.",
+      "Managed app configuration policies appear to suppress notifications.",
+      "Critical on-call/escalation workflows depend on Teams mobile alerts."
+    ]
+  },
+  {
+    slug: "ios-corporate-vpn-connected-no-internal-app-access",
+    title: "iOS Corporate VPN Connected but No Internal App Access",
+    description:
+      "Troubleshoot iOS VPN sessions that appear connected but cannot reach internal apps or sites using safe device and network checks before profile changes.",
+    category: "iOS",
+    productFamily: "Mobile",
+    product: "iOS Corporate VPN",
+    environment: "iOS",
+    severity: "High",
+    accessLevel: "Admin Required",
+    tags: ["ios", "vpn", "mobile", "network", "dns", "internal-access"],
+    symptoms: [
+      "VPN status shows connected but intranet or internal apps still fail.",
+      "Public internet works while internal names/resources fail, or vice versa.",
+      "Issue may start after roaming between Wi-Fi and cellular."
+    ],
+    causes: [
+      "VPN tunnel/profile issue or stale mobile network session.",
+      "DNS resolution path not working while tunnel is active.",
+      "Managed VPN/app-per-app policy configuration mismatch."
+    ],
+    remediations: [
+      "Disconnect/reconnect VPN and retest on both Wi-Fi and cellular if policy allows.",
+      "Capture affected app/site names and exact timestamps for troubleshooting.",
+      "Confirm the device remains compliant and the VPN profile is still installed/managed.",
+      "Avoid deleting VPN profiles or management profiles without IT instruction."
+    ],
+    escalationCriteria: [
+      "Multiple users with the same VPN profile cannot access internal resources.",
+      "App-per-app or managed VPN policy behavior requires network/MDM review.",
+      "Profile reinstallation or MDM re-push is required."
+    ]
+  },
+  {
+    slug: "android-work-profile-not-created-or-paused",
+    title: "Android Work Profile Not Created or Paused",
+    description:
+      "Troubleshoot Android Enterprise work profile setup failures or paused profiles using safe Company Portal/Intune and device setting checks before re-enrollment.",
+    category: "Android",
+    productFamily: "Mobile",
+    product: "Android Work Profile",
+    environment: "Android",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "15-30 min",
+    tags: ["android", "work-profile", "intune", "company-portal", "enrollment", "mdm"],
+    symptoms: [
+      "Work apps are missing or the work profile setup never completes.",
+      "Android shows work profile is paused, disabled, or unavailable.",
+      "User cannot access corporate email/Teams because work profile apps do not launch."
+    ],
+    causes: [
+      "Enrollment workflow interrupted or permission denied during setup.",
+      "Work profile manually paused or restricted by battery/device settings.",
+      "Company Portal/MDM communication issue preventing policy application."
+    ],
+    remediations: [
+      "Confirm Company Portal or approved MDM app is signed in and can sync.",
+      "Check whether the work profile is paused and re-enable it through Android settings.",
+      "Ensure required permissions for Company Portal and work apps are granted.",
+      "Avoid removing the work profile without IT guidance because it can wipe managed app data."
+    ],
+    escalationCriteria: [
+      "Enrollment repeatedly fails after approved retry steps.",
+      "Policy/app deployment errors require endpoint management review.",
+      "User data-loss concerns require guided work profile reset."
+    ]
+  },
+  {
+    slug: "android-outlook-work-mail-not-syncing-work-profile",
+    title: "Android Outlook Work Mail Not Syncing (Work Profile)",
+    description:
+      "Troubleshoot Outlook for Android mail sync issues on managed work-profile devices using safe app, profile, and network checks before resetting accounts.",
+    category: "Android",
+    productFamily: "Mobile",
+    product: "Outlook for Android",
+    environment: "Android",
+    severity: "Medium",
+    tags: ["android", "outlook", "mail", "sync", "work-profile", "microsoft-365"],
+    symptoms: [
+      "Outlook in the work profile does not receive new messages consistently.",
+      "Folders refresh slowly or require manual refresh.",
+      "Desktop/web Outlook may work while Android work-profile Outlook is delayed."
+    ],
+    causes: [
+      "Work profile background restrictions or battery optimization affecting sync.",
+      "Network changes between Wi-Fi and cellular interrupting app session state.",
+      "Managed app configuration or authentication token issue."
+    ],
+    remediations: [
+      "Confirm Outlook is opened from the work profile and shows the correct corporate account.",
+      "Review Android battery optimization/background data settings for the work-profile Outlook app per policy guidance.",
+      "Test sync on another network and perform a manual refresh.",
+      "Escalate before removing the managed account or clearing app data in the work profile."
+    ],
+    escalationCriteria: [
+      "App protection or compliance prompts recur and block sync.",
+      "Multiple Android users report the same issue after app/OS changes.",
+      "Managed app config/policy review is required."
+    ]
+  },
+  {
+    slug: "android-teams-notifications-delayed-work-profile",
+    title: "Android Teams Notifications Delayed or Missing (Work Profile)",
+    description:
+      "Troubleshoot delayed Teams notifications on Android work-profile devices using safe notification, battery, and work profile checks before reinstalling managed apps.",
+    category: "Android",
+    productFamily: "Mobile",
+    product: "Microsoft Teams (Android)",
+    environment: "Android",
+    severity: "Low",
+    tags: ["android", "teams", "notifications", "work-profile", "battery-optimization", "mobile"],
+    symptoms: [
+      "Teams notifications arrive late or only after opening the app.",
+      "Personal apps notify normally but work-profile Teams notifications are delayed.",
+      "Issue may be worse in battery saver mode."
+    ],
+    causes: [
+      "Battery optimization or adaptive battery delaying background processing.",
+      "Work profile notification settings disabled or profile paused.",
+      "Teams notification settings or Android channel-level notification settings misconfigured."
+    ],
+    remediations: [
+      "Verify the work profile is active and notifications are allowed for Teams in the work profile.",
+      "Review battery optimization settings for Teams and Company Portal/management app per support policy.",
+      "Check Teams notification settings for chat, mentions, and meetings.",
+      "Test with a coworker message after each change to confirm improvement."
+    ],
+    escalationCriteria: [
+      "Managed app configuration or endpoint policy is suppressing notifications.",
+      "Issue affects many Android devices after policy or app rollout.",
+      "Critical on-call workflows depend on timely Teams mobile notifications."
+    ]
+  },
+  {
+    slug: "android-corporate-vpn-connected-no-internal-access",
+    title: "Android Corporate VPN Connected but No Internal Access",
+    description:
+      "Troubleshoot Android VPN sessions that show connected but cannot reach internal resources using safe profile/network checks before deleting managed VPN profiles.",
+    category: "Android",
+    productFamily: "Mobile",
+    product: "Android Corporate VPN",
+    environment: "Android",
+    severity: "High",
+    accessLevel: "Admin Required",
+    tags: ["android", "vpn", "mobile", "dns", "routing", "internal-access"],
+    symptoms: [
+      "VPN appears connected but internal apps/sites fail to load.",
+      "Issue may occur only on Wi-Fi or only on cellular.",
+      "VPN reconnect temporarily helps, then access fails again."
+    ],
+    causes: [
+      "Managed VPN profile or tunnel session state issue.",
+      "Network handoff causing stale DNS/tunnel path state.",
+      "Per-app VPN or compliance policy mismatch."
+    ],
+    remediations: [
+      "Disconnect/reconnect the VPN and test on a second approved network if available.",
+      "Capture the affected internal URLs/apps and timestamps for support review.",
+      "Confirm the device remains compliant and work profile/device management is healthy.",
+      "Do not remove the managed VPN profile unless instructed by IT."
+    ],
+    escalationCriteria: [
+      "Many users on the same Android VPN profile are impacted.",
+      "Per-app VPN or tunnel configuration needs network/MDM team review.",
+      "Profile redeployment or MDM remediation is required."
     ]
   }
 ];
