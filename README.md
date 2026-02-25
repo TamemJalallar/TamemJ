@@ -75,6 +75,46 @@ Note: `npm run build:static` requires at least one app in `data/apps.json` becau
 
 The `/apps` page and `/apps/[slug]` page are generated automatically from the JSON data.
 
+## Corporate Tech Fixes (Registry Maintenance)
+
+The corporate troubleshooting section is registry-driven and lives at:
+
+- `app/corporate-tech-fixes/page.tsx` (catalog route)
+- `app/corporate-tech-fixes/[slug]/page.tsx` (dynamic guide route)
+- `lib/corporate-fixes.registry.ts` (source of truth for all fix entries)
+
+### How to Add a New Fix
+
+1. Add a new object to `lib/corporate-fixes.registry.ts` using the `CorporateTechFix` shape
+2. Create a unique `slug` (used for `/corporate-tech-fixes/<slug>/`)
+3. Choose a supported category (`Windows`, `macOS`, `O365`, `Networking`, `Printers`, `Security`)
+4. Add tags that improve search/filter discoverability (product, platform, symptom, policy)
+5. Write step entries with `type` values:
+   - `info` for validation/troubleshooting actions
+   - `command` for copyable PowerShell/Terminal commands
+   - `warning` for risk notices, escalation points, or policy-sensitive actions
+6. Rebuild the site (`npm run build`) and test the new route locally
+
+### Registry Maintenance Guidelines
+
+- Keep entries self-contained and practical; the UI renders directly from the registry
+- Prefer stable wording in titles (symptom-first naming improves search and reuse)
+- Keep tags consistent (`sharepoint` vs `SharePoint`, `vpn`, `mfa`, etc.) because filters are exact matches
+- Update estimated time and access level (`User Safe` vs `Admin Required`) when procedures change
+- Preserve enterprise-safe guidance: no policy bypasses, no disabling security controls, no personal-account workarounds
+- Add explicit escalation warnings for identity, security, DLP, Conditional Access, or tenant policy issues
+- Use commands only where they help diagnosis or approved remediation; avoid destructive commands in generic runbooks
+
+### Enterprise-Safe Documentation Best Practices
+
+- Start with scope validation (one user vs many users, one device vs service-wide)
+- Prefer least-risk steps first (observe, verify, test, then reset)
+- Call out prerequisites (admin rights, user impact, sign-out/restart expectations)
+- Separate user-safe actions from admin-only actions clearly
+- Document escalation criteria early so analysts know when to stop and hand off
+- Avoid instructions that weaken compliance, monitoring, endpoint protection, or authentication controls
+- For major content changes, consider updating `public/sitemap.xml` if you want the new routes indexed quickly
+
 ## Deployment
 
 Deployment configs included in this repo:

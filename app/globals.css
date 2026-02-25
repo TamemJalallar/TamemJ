@@ -98,3 +98,45 @@ body {
     display: none;
   }
 }
+
+@media print {
+  html,
+  body {
+    background: #fff !important;
+    color: #0f172a !important;
+  }
+
+  header,
+  footer {
+    display: none !important;
+  }
+
+  .bg-mesh-soft {
+    background: #fff !important;
+  }
+
+  .surface-card,
+  .surface-card-strong {
+    background: #fff !important;
+    box-shadow: none !important;
+    border-color: #cbd5e1 !important;
+  }
+
+  .fix-step-details .fix-step-body {
+    display: block !important;
+  }
+
+  .fix-step-details summary {
+    cursor: default !important;
+  }
+
+  .fix-step-details summary::-webkit-details-marker {
+    display: none;
+  }
+
+  pre,
+  code {
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+}

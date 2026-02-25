@@ -1,0 +1,212 @@
+"use client";
+
+import Link from "next/link";
+import { useState } from "react";
+import type { CorporateTechFix } from "@/lib/corporate-fixes.registry";
+import { AccessLevelBadge, MetaPill, SeverityBadge, TagChip } from "@/components/corporate-fixes/fix-shared";
+
+interface FixesCatalogProps {
+  fixes: CorporateTechFix[];
+  categories: string[];
+  tags: string[];
+}
+
+function joinClasses(...classes: Array<string | false | null | undefined>): string {
+  return classes.filter(Boolean).join(" ");
+}
+
+export function FixesCatalog({ fixes, categories, tags }: FixesCatalogProps) {
+  const [query, setQuery] = useState("");
+  const [category, setCategory] = useState("All");
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  const normalizedQuery = query.trim().toLowerCase();
+
+  const filteredFixes = fixes.filter((fix) => {
+    const matchesCategory = category === "All" || fix.category === category;
+    const matchesTags =
+      selectedTags.length === 0 || selectedTags.every((tag) => fix.tags.includes(tag));
+
+    if (!matchesCategory || !matchesTags) {
+      return false;
+    }
+
+    if (!normalizedQuery) {
+      return true;
+    }
+
+    const searchTarget = [fix.title, fix.description, fix.category, fix.tags.join(" ")]
+      .join(" ")
+      .toLowerCase();
+
+    return searchTarget.includes(normalizedQuery);
+  });
+
+  const hasActiveFilters = query.trim() !== "" || category !== "All" || selectedTags.length > 0;
+
+  function toggleTag(tag: string) {
+    setSelectedTags((current) =>
+      current.includes(tag) ? current.filter((item) => item !== tag) : [...current, tag]
+    );
+  }
+
+  function clearFilters() {
+    setQuery("");
+    setCategory("All");
+    setSelectedTags([]);
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="surface-card p-4 sm:p-6 dark:border-slate-800 dark:bg-slate-950/70">
+        <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="sm:col-span-2">
+              <label
+                htmlFor="corporate-fixes-search"
+                className="mb-2 block text-sm font-medium text-slate-900 dark:text-slate-100"
+              >
+                Search fixes
+              </label>
+              <input
+                id="corporate-fixes-search"
+                type="search"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Search by issue, product, or tag (e.g., Outlook, VPN, SharePoint)"
+                className="w-full rounded-xl border border-line bg-white px-4 py-2.5 text-sm text-slate-900 outline-none ring-0 transition placeholder:text-slate-400 focus:border-slate-300 focus:shadow-soft dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="corporate-fixes-category"
+                className="mb-2 block text-sm font-medium text-slate-900 dark:text-slate-100"
+              >
+                Category
+              </label>
+              <select
+                id="corporate-fixes-category"
+                value={category}
+                onChange={(event) => setCategory(event.target.value)}
+                className="w-full rounded-xl border border-line bg-white px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-slate-300 focus:shadow-soft dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+              >
+                <option value="All">All Categories</option>
+                {categories.map((item) => (
+                  <option key={item} value={item}>
+                    {item}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex items-end">
+              <button
+                type="button"
+                onClick={clearFilters}
+                className={joinClasses(
+                  "w-full rounded-xl border px-4 py-2.5 text-sm font-semibold transition",
+                  hasActiveFilters
+                    ? "border-slate-900 bg-slate-900 text-white hover:bg-slate-800 dark:border-slate-100 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
+                    : "border-line bg-white text-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-500"
+                )}
+                disabled={!hasActiveFilters}
+              >
+                Clear Filters
+              </button>
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-line/80 bg-slate-50 px-4 py-3 text-sm dark:border-slate-800 dark:bg-slate-900/80">
+            <p className="font-semibold text-slate-900 dark:text-slate-100">
+              {filteredFixes.length} result{filteredFixes.length === 1 ? "" : "s"}
+            </p>
+            <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+              Filter by category, tags, and keywords.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-5">
+          <p className="mb-3 text-sm font-medium text-slate-900 dark:text-slate-100">Tags</p>
+          <div className="flex flex-wrap gap-2">
+            {tags.map((tag) => (
+              <TagChip
+                key={tag}
+                label={tag}
+                active={selectedTags.includes(tag)}
+                onClick={() => toggleTag(tag)}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {filteredFixes.length > 0 ? (
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          {filteredFixes.map((fix) => (
+            <Link
+              key={fix.slug}
+              href={`/corporate-tech-fixes/${fix.slug}`}
+              className="group surface-card block p-5 transition hover:-translate-y-0.5 hover:shadow-card dark:border-slate-800 dark:bg-slate-950/70"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <p className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+                  {fix.category}
+                </p>
+                <span className="text-xs text-slate-400 transition group-hover:text-slate-500 dark:text-slate-500">
+                  Open →
+                </span>
+              </div>
+
+              <h3 className="mt-3 text-lg font-semibold text-slate-900 dark:text-slate-100">
+                {fix.title}
+              </h3>
+              <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                {fix.description}
+              </p>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                <SeverityBadge severity={fix.severity} />
+                <AccessLevelBadge accessLevel={fix.accessLevel} />
+              </div>
+
+              <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                <MetaPill label="Est. Time" value={fix.estimatedTime} />
+                <MetaPill label="Steps" value={`${fix.steps.length}`} />
+              </div>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                {fix.tags.slice(0, 4).map((tag) => (
+                  <TagChip key={tag} label={tag} asSpan />
+                ))}
+                {fix.tags.length > 4 ? (
+                  <span className="inline-flex items-center rounded-full border border-line/70 bg-white px-3 py-1 text-xs font-medium text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
+                    +{fix.tags.length - 4} more
+                  </span>
+                ) : null}
+              </div>
+            </Link>
+          ))}
+        </div>
+      ) : (
+        <div className="surface-card border-dashed p-6 sm:p-8 dark:border-slate-800 dark:bg-slate-950/70">
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+            No matching fixes found
+          </h3>
+          <p className="mt-2 text-sm sm:text-base dark:text-slate-300">
+            Try removing one or more tags, switching the category to
+            <span className="mx-1 rounded bg-slate-100 px-1.5 py-0.5 text-xs text-slate-700 dark:bg-slate-800 dark:text-slate-200">
+              All Categories
+            </span>
+            , or searching with a broader keyword.
+          </p>
+          <button type="button" onClick={clearFilters} className="btn-secondary mt-4">
+            Reset Filters
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
