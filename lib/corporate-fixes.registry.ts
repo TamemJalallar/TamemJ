@@ -1,10 +1,16 @@
+import { getKBArticles } from "@/lib/support.kb.registry";
+import type { KBArticle } from "@/types/support";
+
 export type CorporateFixCategory =
   | "Windows"
   | "macOS"
   | "O365"
   | "Networking"
   | "Printers"
-  | "Security";
+  | "Security"
+  | "Adobe"
+  | "Figma"
+  | "Browsers";
 
 export type CorporateFixSeverity = "Low" | "Medium" | "High";
 
@@ -36,8 +42,118 @@ export const corporateFixCategories: CorporateFixCategory[] = [
   "O365",
   "Networking",
   "Printers",
-  "Security"
+  "Security",
+  "Adobe",
+  "Figma",
+  "Browsers"
 ];
+
+const supportProductFamilies = new Set<KBArticle["productFamily"]>(["Microsoft", "Adobe", "Figma"]);
+
+function toBulletList(items: string[]): string {
+  return items.map((item) => `- ${item}`).join("\n");
+}
+
+function mapSupportCategoryToCorporateCategory(category: KBArticle["category"]): CorporateFixCategory {
+  switch (category) {
+    case "Microsoft 365":
+      return "O365";
+    case "Networking / VPN":
+      return "Networking";
+    case "Identity / MFA / SSO":
+      return "Security";
+    case "Printers / Scanners":
+      return "Printers";
+    case "Adobe":
+      return "Adobe";
+    case "Figma":
+      return "Figma";
+    case "Browsers":
+      return "Browsers";
+    case "Windows":
+      return "Windows";
+    case "macOS":
+      return "macOS";
+    case "AV / Conference Rooms":
+      return "Networking";
+    default:
+      return "O365";
+  }
+}
+
+function normalizeCorporateTags(article: KBArticle): string[] {
+  const environmentTags =
+    article.environment === "Both" ? ["windows", "macos"] : [article.environment.toLowerCase()];
+
+  return [...new Set([...article.tags, article.productFamily.toLowerCase(), "support-kb", ...environmentTags])];
+}
+
+function buildCorporateStepsFromKBArticle(article: KBArticle): CorporateFixStep[] {
+  const steps: CorporateFixStep[] = [];
+
+  if (article.symptoms.length > 0) {
+    steps.push({
+      title: "Symptoms",
+      type: "info",
+      content: toBulletList(article.symptoms)
+    });
+  }
+
+  if (article.causes.length > 0) {
+    steps.push({
+      title: "Likely Causes",
+      type: "info",
+      content: toBulletList(article.causes)
+    });
+  }
+
+  for (const resolutionStep of article.resolutionSteps) {
+    let content = resolutionStep.content.trim();
+
+    if (resolutionStep.requiresAdmin) {
+      content = `${content}\n\nAdmin review or admin rights may be required for this step.`;
+    }
+
+    steps.push({
+      title: resolutionStep.title,
+      type: resolutionStep.type === "warning" ? "warning" : "info",
+      content
+    });
+  }
+
+  for (const command of article.commands) {
+    steps.push({
+      title: command.requiresAdmin ? `${command.title} (Admin Required)` : command.title,
+      type: "command",
+      content: command.content
+    });
+  }
+
+  if (article.escalationCriteria.length > 0) {
+    steps.push({
+      title: "When to Escalate to IT / Security",
+      type: "warning",
+      content: toBulletList(article.escalationCriteria)
+    });
+  }
+
+  return steps;
+}
+
+function convertKBArticleToCorporateFix(article: KBArticle): CorporateTechFix {
+  return {
+    slug: `kb-${article.slug}`,
+    title: article.title,
+    category: mapSupportCategoryToCorporateCategory(article.category),
+    severity: article.severity,
+    accessLevel: article.accessLevel,
+    estimatedTime: article.estimatedTime,
+    tags: normalizeCorporateTags(article),
+    description:
+      `${article.description} This troubleshooting guide is mirrored from the Support Portal knowledge base for quick access in Corporate Tech Fixes.`,
+    steps: buildCorporateStepsFromKBArticle(article)
+  };
+}
 
 const corporateFixes: CorporateTechFix[] = [
   {
@@ -600,8 +716,20 @@ const corporateFixes: CorporateTechFix[] = [
   }
 ];
 
+const supportPortalFixes: CorporateTechFix[] = getKBArticles()
+  .filter((article) => supportProductFamilies.has(article.productFamily))
+  .sort(
+    (a, b) =>
+      a.productFamily.localeCompare(b.productFamily) ||
+      a.category.localeCompare(b.category) ||
+      a.title.localeCompare(b.title)
+  )
+  .map(convertKBArticleToCorporateFix);
+
+const corporateFixRegistry: CorporateTechFix[] = [...corporateFixes, ...supportPortalFixes];
+
 export function getCorporateFixes(): CorporateTechFix[] {
-  return corporateFixes.map((fix) => ({
+  return corporateFixRegistry.map((fix) => ({
     ...fix,
     tags: [...fix.tags],
     steps: fix.steps.map((step) => ({ ...step }))
@@ -609,13 +737,13 @@ export function getCorporateFixes(): CorporateTechFix[] {
 }
 
 export function getCorporateFixBySlug(slug: string): CorporateTechFix | undefined {
-  return corporateFixes.find((fix) => fix.slug === slug);
+  return corporateFixRegistry.find((fix) => fix.slug === slug);
 }
 
 export function getCorporateFixTags(): string[] {
   const tagSet = new Set<string>();
 
-  for (const fix of corporateFixes) {
+  for (const fix of corporateFixRegistry) {
     for (const tag of fix.tags) {
       tagSet.add(tag);
     }
@@ -625,8 +753,7 @@ export function getCorporateFixTags(): string[] {
 }
 
 export function getCorporateFixCategories(): CorporateFixCategory[] {
-  const usedCategories = new Set(corporateFixes.map((fix) => fix.category));
+  const usedCategories = new Set(corporateFixRegistry.map((fix) => fix.category));
 
   return corporateFixCategories.filter((category) => usedCategories.has(category));
 }
-
