@@ -7,6 +7,7 @@ Modern, minimal, mobile-first portfolio website for an independent iOS developer
 - App-focused portfolio home page
 - JSON-driven apps listing (`/data/apps.json`)
 - Dynamic app detail page template (`/apps/[slug]`)
+- Downloads hub with store links + direct downloads (`/downloads`)
 - Privacy policy page template
 - Support page with FAQ + lightweight `mailto:` support form
 - Contact page with `mailto:` form (no backend required)
@@ -26,9 +27,12 @@ Modern, minimal, mobile-first portfolio website for an independent iOS developer
 app/
   apps/
     [slug]/
+  downloads/
   contact/
   privacy/
   support/
+  robots.ts
+  sitemap.ts
   globals.css
   layout.tsx
   page.tsx
@@ -38,8 +42,6 @@ data/
 lib/
 public/
   images/
-  robots.txt
-  sitemap.xml
 types/
 ```
 
@@ -71,7 +73,7 @@ Note: `npm run build:static` requires at least one app in `data/apps.json` becau
 1. Add a new object to `data/apps.json`
 2. Add an app icon and screenshots under `public/images/apps/<slug>/`
 3. Rebuild the site (`npm run build` for local, `npm run build:static` for static export)
-4. Update `public/sitemap.xml` with the new app URL
+4. Rebuild the site and verify the generated sitemap includes the new app URL (`/sitemap.xml`)
 
 The `/apps` page and `/apps/[slug]` page are generated automatically from the JSON data.
 
@@ -186,7 +188,48 @@ Publish flow behavior:
 - Separate user-safe actions from admin-only actions clearly
 - Document escalation criteria early so analysts know when to stop and hand off
 - Avoid instructions that weaken compliance, monitoring, endpoint protection, or authentication controls
-- For major content changes, consider updating `public/sitemap.xml` if you want the new routes indexed quickly
+- For major content changes, rebuild the site so the generated `app/sitemap.ts` output is refreshed
+
+## Downloads Hub (Store Links + Direct Downloads)
+
+The downloads page is registry-driven and lives at:
+
+- `app/downloads/page.tsx`
+- `components/downloads/downloads-browser.tsx`
+- `lib/downloads.registry.ts`
+- `types/download.ts`
+
+### What It Supports
+
+- Mac App Store links (`Mac App Store` button style)
+- Microsoft Store links (`Microsoft Store` button style)
+- GitHub Releases links
+- Direct download rows (hosted externally, e.g. GitHub Releases or Cloudflare R2)
+- Curated "Popular GitHub Downloads" examples
+
+### How to Add a Download
+
+1. Add a new entry to `lib/downloads.registry.ts`
+2. Choose channels in `channels`:
+   - `Mac App Store`
+   - `Microsoft Store`
+   - `GitHub Releases`
+   - `Direct Download`
+   - `Source Code`
+3. Add `directDownloads` rows if you want per-platform download buttons and metadata (file type, size, checksum)
+4. Rebuild and test `/downloads`
+
+### Free Hosting Recommendation for Direct Downloads
+
+- Preferred default: `GitHub Releases` (free, versioned, easy release notes)
+- Alternative: `Cloudflare R2` (free tier, custom URLs)
+- Do not host installer binaries in GitHub Pages itself (site storage/bandwidth limits)
+
+### Legal / Trust Notes
+
+- Use official Apple/Microsoft store badges according to their brand guidelines if you add branded assets
+- Sign and notarize macOS builds; sign Windows installers for better trust and fewer warnings
+- Publish SHA-256 checksums for direct downloads whenever possible
 
 ## ServiceNow-Style Support Portal (ITIL-lite Demo)
 

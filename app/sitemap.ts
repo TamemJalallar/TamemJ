@@ -17,6 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticEntries: MetadataRoute.Sitemap = [
     { url: url("/"), changeFrequency: "weekly", priority: 1, lastModified },
     { url: url("/apps/"), changeFrequency: "weekly", priority: 0.9, lastModified },
+    { url: url("/downloads/"), changeFrequency: "weekly", priority: 0.8, lastModified },
     { url: url("/corporate-tech-fixes/"), changeFrequency: "weekly", priority: 0.9, lastModified },
     { url: url("/support/"), changeFrequency: "weekly", priority: 0.85, lastModified },
     { url: url("/support/kb/"), changeFrequency: "daily", priority: 0.9, lastModified },

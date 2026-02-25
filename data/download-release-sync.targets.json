@@ -1,0 +1,117 @@
+{
+  "version": 1,
+  "targets": [
+    {
+      "entrySlug": "windows-terminal",
+      "repo": "microsoft/terminal",
+      "artifacts": [
+        {
+          "artifactLabel": "Windows MSIX bundle",
+          "assetNameIncludes": ["microsoft.windowsterminal_", ".msixbundle"],
+          "assetNameExcludes": ["preview"]
+        }
+      ]
+    },
+    {
+      "entrySlug": "localsend",
+      "repo": "localsend/localsend",
+      "artifacts": [
+        {
+          "artifactLabel": "Windows installer",
+          "assetNameRegex": "windows.*\\.(exe|msix|msixbundle)$"
+        },
+        {
+          "artifactLabel": "macOS DMG",
+          "assetNameRegex": "(mac|darwin).*\\.dmg$"
+        }
+      ]
+    },
+    {
+      "entrySlug": "keepassxc",
+      "repo": "keepassxreboot/keepassxc",
+      "artifacts": [
+        {
+          "artifactLabel": "Windows installer",
+          "assetNameRegex": "keepassxc.*win.*\\.(msi|exe)$"
+        },
+        {
+          "artifactLabel": "macOS DMG",
+          "assetNameRegex": "keepassxc.*\\.dmg$"
+        }
+      ]
+    },
+    {
+      "entrySlug": "iina",
+      "repo": "iina/iina",
+      "artifacts": [
+        {
+          "artifactLabel": "macOS DMG",
+          "assetNameRegex": "iina.*\\.dmg$"
+        }
+      ]
+    },
+    {
+      "entrySlug": "sharex",
+      "repo": "ShareX/ShareX",
+      "artifacts": [
+        {
+          "artifactLabel": "Windows installer",
+          "assetNameRegex": "sharex.*(setup|installer).*\\.exe$"
+        }
+      ]
+    },
+    {
+      "entrySlug": "flow-launcher",
+      "repo": "Flow-Launcher/Flow.Launcher",
+      "artifacts": [
+        {
+          "artifactLabel": "Windows installer",
+          "assetNameRegex": "flow.*(setup|installer).*\\.exe$"
+        }
+      ]
+    },
+    {
+      "entrySlug": "flameshot",
+      "repo": "flameshot-org/flameshot",
+      "artifacts": [
+        {
+          "artifactLabel": "Windows installer",
+          "assetNameRegex": "flameshot.*\\.(exe|msi)$"
+        },
+        {
+          "artifactLabel": "macOS DMG",
+          "assetNameRegex": "flameshot.*\\.dmg$"
+        }
+      ]
+    },
+    {
+      "entrySlug": "joplin",
+      "repo": "laurent22/joplin",
+      "artifacts": [
+        {
+          "artifactLabel": "Windows installer",
+          "assetNameRegex": "joplin-setup.*\\.exe$"
+        },
+        {
+          "artifactLabel": "macOS DMG",
+          "assetNameRegex": "joplin.*\\.dmg$"
+        }
+      ]
+    },
+    {
+      "entrySlug": "obs-studio",
+      "repo": "obsproject/obs-studio",
+      "artifacts": [
+        {
+          "artifactLabel": "Windows installer",
+          "assetNameRegex": "obs.*(full|installer).*\\.exe$"
+        },
+        {
+          "artifactLabel": "macOS installer",
+          "assetNameRegex": "obs.*(mac|osx).*\\.(dmg|pkg)$"
+        }
+      ]
+    }
+  ]
+}
+
