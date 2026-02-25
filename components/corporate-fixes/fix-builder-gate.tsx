@@ -141,7 +141,7 @@ export function FixBuilderGate() {
     );
   }
 
-  if (!hasPasswordConfigured && !isDevelopment) {
+  if (!usesCloudflareAccess && !hasPasswordConfigured && !isDevelopment) {
     return (
       <div className="space-y-4">
         <div className="surface-card-strong p-6 dark:border-slate-800 dark:bg-slate-950/70 sm:p-8">
