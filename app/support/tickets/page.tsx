@@ -4,7 +4,8 @@ import { TicketsWorkbench } from "@/components/support-portal/tickets-workbench"
 export const metadata: Metadata = {
   title: "My Tickets",
   description: "View and manage locally stored demo incidents and service requests in the support portal.",
-  alternates: { canonical: "/support/tickets/" }
+  alternates: { canonical: "/support/tickets/" },
+  robots: { index: false, follow: false }
 };
 
 export default function TicketsPage() {

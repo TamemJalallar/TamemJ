@@ -4,7 +4,8 @@ import { AnalyticsDashboard } from "@/components/support-portal/analytics-dashbo
 export const metadata: Metadata = {
   title: "Analytics",
   description: "Local analytics dashboard for KB usage, searches, helpful votes, and support ticket trends.",
-  alternates: { canonical: "/support/analytics/" }
+  alternates: { canonical: "/support/analytics/" },
+  robots: { index: false, follow: false }
 };
 
 export default function AnalyticsPage() {

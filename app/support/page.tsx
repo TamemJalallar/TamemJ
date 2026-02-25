@@ -3,14 +3,33 @@ import { SupportForm } from "@/components/support-form";
 import { SupportPortalHome } from "@/components/support-portal/support-portal-home";
 import { getApps } from "@/lib/apps";
 import { siteConfig } from "@/lib/site";
+import { buildSupportOpenGraph, buildSupportTwitter } from "@/lib/support-portal.seo";
 
 export const metadata: Metadata = {
   title: "Support Portal",
   description:
     "ServiceNow-style support portal demo with a knowledge base, service catalog, incident forms, local ticketing, analytics, and preserved iOS app support contact form.",
+  keywords: [
+    "IT support portal",
+    "knowledge base",
+    "service catalog",
+    "incident form",
+    "ITIL demo",
+    "enterprise support docs",
+    "iOS app support"
+  ],
   alternates: {
     canonical: "/support/"
-  }
+  },
+  openGraph: buildSupportOpenGraph(
+    "Support Portal | Tamem J",
+    "ServiceNow-style support portal demo with a knowledge base, service catalog, incident forms, local ticketing, analytics, and preserved iOS app support.",
+    "/support/"
+  ),
+  twitter: buildSupportTwitter(
+    "Support Portal | Tamem J",
+    "ServiceNow-style support portal demo with enterprise-safe troubleshooting docs, service requests, and a preserved iOS app support form."
+  )
 };
 
 const faqs = [

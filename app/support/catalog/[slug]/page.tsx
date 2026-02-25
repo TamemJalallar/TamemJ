@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CatalogItemRequestView } from "@/components/support-portal/catalog-item-request-view";
 import { getCatalogItemBySlug, getCatalogItems } from "@/lib/support.catalog.registry";
+import {
+  buildBreadcrumbJsonLd,
+  buildCatalogItemJsonLd,
+  buildCatalogItemMetadata
+} from "@/lib/support-portal.seo";
 
 interface CatalogDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -21,12 +26,7 @@ export async function generateMetadata({ params }: CatalogDetailPageProps): Prom
     return { title: "Catalog Item Not Found" };
   }
 
-  return {
-    title: item.title,
-    description: item.description,
-    keywords: [...item.tags, item.category, item.product, "service catalog"],
-    alternates: { canonical: `/support/catalog/${item.slug}/` }
-  };
+  return buildCatalogItemMetadata(item);
 }
 
 export default async function CatalogDetailPage({ params }: CatalogDetailPageProps) {
@@ -37,5 +37,24 @@ export default async function CatalogDetailPage({ params }: CatalogDetailPagePro
     notFound();
   }
 
-  return <CatalogItemRequestView item={item} />;
+  const itemJsonLd = buildCatalogItemJsonLd(item);
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: "Support Portal", path: "/support/" },
+    { name: "Service Catalog", path: "/support/catalog/" },
+    { name: item.title, path: `/support/catalog/${item.slug}/` }
+  ]);
+
+  return (
+    <>
+      <CatalogItemRequestView item={item} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+    </>
+  );
 }

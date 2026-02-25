@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { KnowledgeBaseArticleView } from "@/components/support-portal/knowledge-base-article-view";
 import { getKBArticleBySlug, getKBArticles } from "@/lib/support.kb.registry";
+import {
+  buildBreadcrumbJsonLd,
+  buildKbArticleJsonLd,
+  buildKbArticleMetadata
+} from "@/lib/support-portal.seo";
 
 interface KBArticlePageProps {
   params: Promise<{ slug: string }>;
@@ -21,18 +26,7 @@ export async function generateMetadata({ params }: KBArticlePageProps): Promise<
     return { title: "KB Article Not Found" };
   }
 
-  return {
-    title: article.title,
-    description: article.description,
-    keywords: [...article.tags, article.product, article.category, "it support kb"],
-    alternates: { canonical: `/support/kb/${article.slug}/` },
-    openGraph: {
-      title: `${article.title} | Support Portal KB`,
-      description: article.description,
-      type: "article",
-      url: `/support/kb/${article.slug}/`
-    }
-  };
+  return buildKbArticleMetadata(article);
 }
 
 export default async function KBArticlePage({ params }: KBArticlePageProps) {
@@ -47,5 +41,24 @@ export default async function KBArticlePage({ params }: KBArticlePageProps) {
     .map((relatedSlug) => getKBArticleBySlug(relatedSlug))
     .filter((item): item is NonNullable<typeof item> => Boolean(item));
 
-  return <KnowledgeBaseArticleView article={article} relatedArticles={relatedArticles} />;
+  const articleJsonLd = buildKbArticleJsonLd(article);
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: "Support Portal", path: "/support/" },
+    { name: "Knowledge Base", path: "/support/kb/" },
+    { name: article.title, path: `/support/kb/${article.slug}/` }
+  ]);
+
+  return (
+    <>
+      <KnowledgeBaseArticleView article={article} relatedArticles={relatedArticles} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+    </>
+  );
 }
