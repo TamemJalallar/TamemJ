@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { SupportForm } from "@/components/support-form";
+import { SupportPortalHome } from "@/components/support-portal/support-portal-home";
 import { getApps } from "@/lib/apps";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Support",
-  description: "Support page for iOS apps by Tamem J, including FAQ and contact instructions.",
+  title: "Support Portal",
+  description:
+    "ServiceNow-style support portal demo with a knowledge base, service catalog, incident forms, local ticketing, analytics, and preserved iOS app support contact form.",
   alternates: {
     canonical: "/support/"
   }
@@ -15,17 +17,17 @@ const faqs = [
   {
     question: "How do I restore a purchase?",
     answer:
-      "Open the app settings and look for Restore Purchases. If the issue continues, send a support request with your app name and device iOS version."
+      "Open the app settings and use Restore Purchases. If the issue continues, submit the app support form with your app name and device iOS version."
   },
   {
     question: "Why is data not syncing across devices?",
     answer:
-      "Make sure both devices use the same Apple ID and have iCloud enabled (if the app supports sync). Restarting the app can refresh sync status."
+      "Confirm both devices use the same Apple ID and have iCloud enabled (if the app supports sync). Restarting the app can refresh sync status."
   },
   {
-    question: "How do I report a bug or suggest a feature?",
+    question: "How do I report a bug or request a feature?",
     answer:
-      "Use the support form below and include steps to reproduce the issue. Feature suggestions are welcome and help guide future updates."
+      "Use the app support form below. Include steps to reproduce, your device model, iOS version, and the app version if possible."
   }
 ];
 
@@ -34,55 +36,63 @@ export default function SupportPage() {
   const hasApps = apps.length > 0;
 
   return (
-    <section className="section-shell pt-10 sm:pt-14">
-      <div className="page-shell">
-        <div className="grid gap-6 lg:grid-cols-[1fr_1.05fr]">
-          <div className="space-y-6">
-            <div className="surface-card-strong p-6 sm:p-8">
-              <p className="eyebrow">Support</p>
-              <h1 className="mt-4 text-3xl font-semibold sm:text-4xl">App Support</h1>
-              <p className="mt-4 text-sm sm:text-base">
-                {hasApps
-                  ? "Need help with an app? Select the app, describe the issue, and send a support email. This page is designed to stay lightweight and easy to maintain."
-                  : "No apps are published yet. This support page is ready and will become the user support hub as soon as the first app launches."}
-              </p>
-              <div className="mt-6 rounded-xl border border-line bg-slate-50 p-4 text-sm">
-                <p className="font-medium text-slate-900">Support Email</p>
-                <a
-                  href={`mailto:${siteConfig.supportEmail}`}
-                  className="mt-1 inline-block text-slate-700 underline decoration-slate-300 underline-offset-4 hover:decoration-slate-500"
-                >
-                  {siteConfig.supportEmail}
-                </a>
-              </div>
-              <div className="mt-6 rounded-xl border border-line bg-white p-4">
-                <p className="text-sm font-medium text-slate-900">Simple Support Instructions</p>
-                <ol className="mt-3 space-y-2 text-sm text-slate-600">
-                  {hasApps ? (
-                    <>
-                      <li>1. Choose the app from the dropdown.</li>
-                      <li>2. Add a short subject and what happened.</li>
-                      <li>3. Include device model, iOS version, and app version if possible.</li>
-                    </>
-                  ) : (
-                    <>
-                      <li>1. Use the contact email for general inquiries or launch updates.</li>
-                      <li>2. App-specific support options will appear here after release.</li>
-                    </>
-                  )}
-                </ol>
-              </div>
-            </div>
+    <div className="space-y-6 pb-6">
+      <SupportPortalHome />
 
-            <div className="surface-card p-6 sm:p-8">
-              <h2 className="text-lg font-semibold sm:text-xl">FAQ</h2>
+      <section className="rounded-2xl border border-line/70 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-6">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+              Legacy Feature (Preserved)
+            </p>
+            <h2 className="mt-2 text-xl font-semibold text-slate-900 dark:text-slate-100 sm:text-2xl">
+              iOS App Support
+            </h2>
+            <p className="mt-2 max-w-3xl text-sm leading-7 text-slate-600 dark:text-slate-300 sm:text-base">
+              The original lightweight app support experience is still available here. Existing links such
+              as <code className="mx-1 rounded bg-slate-100 px-1.5 py-0.5 text-xs dark:bg-slate-800">/support?app=&lt;slug&gt;</code>
+              continue to work because the support form remains embedded on this page.
+            </p>
+            <div className="mt-4 rounded-xl border border-line/70 bg-slate-50/70 p-4 text-sm dark:border-slate-800 dark:bg-slate-900/70">
+              <p className="font-semibold text-slate-900 dark:text-slate-100">Support Email</p>
+              <a
+                href={`mailto:${siteConfig.supportEmail}`}
+                className="mt-1 inline-block text-slate-700 underline decoration-slate-300 underline-offset-4 hover:decoration-slate-500 dark:text-slate-200 dark:decoration-slate-600"
+              >
+                {siteConfig.supportEmail}
+              </a>
+            </div>
+          </div>
+          <div className="rounded-2xl border border-line/70 bg-slate-50/70 p-4 text-sm dark:border-slate-800 dark:bg-slate-900/70 lg:max-w-sm">
+            <p className="font-semibold text-slate-900 dark:text-slate-100">Simple App Support Instructions</p>
+            <ol className="mt-2 space-y-2 text-slate-600 dark:text-slate-300">
+              {hasApps ? (
+                <>
+                  <li>1. Choose the app from the form.</li>
+                  <li>2. Add a short subject and issue summary.</li>
+                  <li>3. Include device model, iOS version, and app version if possible.</li>
+                </>
+              ) : (
+                <>
+                  <li>1. Use the support email for general inquiries or launch updates.</li>
+                  <li>2. App-specific support options will appear after apps are published.</li>
+                </>
+              )}
+            </ol>
+          </div>
+        </div>
+
+        <div className="mt-6 grid gap-6 xl:grid-cols-[1fr_1.05fr]">
+          <div className="space-y-6">
+            <div className="rounded-2xl border border-line/70 bg-slate-50/70 p-5 dark:border-slate-800 dark:bg-slate-900/70 sm:p-6">
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">FAQ</h3>
               <div className="mt-4 space-y-3">
                 {faqs.map((item) => (
-                  <details key={item.question} className="rounded-xl border border-line bg-white p-4">
-                    <summary className="cursor-pointer list-none pr-6 text-sm font-medium text-slate-900">
+                  <details key={item.question} className="rounded-xl border border-line/70 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+                    <summary className="cursor-pointer list-none pr-6 text-sm font-medium text-slate-900 dark:text-slate-100">
                       {item.question}
                     </summary>
-                    <p className="mt-3 text-sm">{item.answer}</p>
+                    <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">{item.answer}</p>
                   </details>
                 ))}
               </div>
@@ -92,18 +102,15 @@ export default function SupportPage() {
           {hasApps ? (
             <SupportForm apps={apps} />
           ) : (
-            <div className="surface-card-strong p-6 sm:p-8">
-              <h2 className="text-lg font-semibold sm:text-xl">Support Form Coming Soon</h2>
-              <p className="mt-2 text-sm sm:text-base">
-                Once an app is published, an app-specific support form will appear here.
+            <div className="rounded-2xl border border-line/70 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-8">
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Support Form Coming Soon</h3>
+              <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                Once an app is published, the app-specific support form will appear here automatically.
               </p>
-              <a href="/contact" className="btn-secondary mt-6">
-                Contact
-              </a>
             </div>
           )}
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 }

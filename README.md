@@ -81,7 +81,27 @@ The corporate troubleshooting section is registry-driven and lives at:
 
 - `app/corporate-tech-fixes/page.tsx` (catalog route)
 - `app/corporate-tech-fixes/[slug]/page.tsx` (dynamic guide route)
+- `app/corporate-tech-fixes/builder/page.tsx` (KB Builder authoring tool)
 - `lib/corporate-fixes.registry.ts` (source of truth for all fix entries)
+
+Use `/corporate-tech-fixes/builder` to draft entries in the browser, manage steps/tags, and copy a registry snippet + Markdown support doc template.
+
+### Optional Builder Password Gate (Static Hosting Compatible)
+
+The KB Builder supports a client-side password gate for GitHub Pages/static hosting:
+
+- Route: `/corporate-tech-fixes/builder`
+- Config variable (build-time): `NEXT_PUBLIC_CORPORATE_FIXES_BUILDER_PASSWORD_SHA256`
+
+Generate a SHA-256 hash for the password:
+
+```bash
+printf 'your-password' | shasum -a 256
+```
+
+Then set the hex output as `NEXT_PUBLIC_CORPORATE_FIXES_BUILDER_PASSWORD_SHA256` in your local `.env` / CI build environment and redeploy.
+
+Important limitation: on static hosting this is a client-side gate (deterrent), not secure server-side authentication. It prevents casual access but is not equivalent to real auth.
 
 ### How to Add a New Fix
 
@@ -114,6 +134,107 @@ The corporate troubleshooting section is registry-driven and lives at:
 - Document escalation criteria early so analysts know when to stop and hand off
 - Avoid instructions that weaken compliance, monitoring, endpoint protection, or authentication controls
 - For major content changes, consider updating `public/sitemap.xml` if you want the new routes indexed quickly
+
+## ServiceNow-Style Support Portal (ITIL-lite Demo)
+
+The support portal now lives under `app/support/*` and includes:
+
+- Knowledge Base (`/support/kb`, `/support/kb/[slug]`)
+- Service Catalog (`/support/catalog`, `/support/catalog/[slug]`)
+- Incident intake (`/support/incident/new`)
+- My Tickets (`/support/tickets`)
+- Analytics (`/support/analytics`)
+- Admin tools (`/support/admin`, hidden behind local admin toggle)
+
+It is static-hosting compatible (GitHub Pages safe) and stores all demo state locally in the browser.
+
+### Key Files
+
+- `lib/support.kb.registry.ts` — KB article registry (60 seeded articles)
+- `lib/support.catalog.registry.ts` — service catalog registry
+- `types/support.ts` — KB, catalog, ticket, and analytics TypeScript models
+- `lib/support-portal.storage.ts` — local storage persistence (tickets, portal state, helpful votes)
+- `lib/support-portal.analytics.ts` — analytics event tracking + aggregation
+- `components/support-portal/` — shared portal UI library and feature components
+
+### How to Add KB Articles
+
+1. Add a new `KBSeed` entry to `lib/support.kb.registry.ts`
+2. Provide a unique `slug` (used by `/support/kb/<slug>/`)
+3. Fill in enterprise-safe content:
+   - symptoms
+   - likely causes
+   - remediation guidance (safe-first)
+   - escalation criteria
+   - commands (or allow the fallback command generator)
+4. Use correct metadata fields:
+   - `category` (e.g., `Microsoft 365`, `Adobe`, `Figma`, `Browsers`)
+   - `productFamily` (`Microsoft`, `Adobe`, `Figma`, etc.)
+   - `severity`, `accessLevel`, `environment`, `estimatedTime`
+5. Rebuild (`npm run build`) to ensure the static params and metadata generate cleanly
+
+The registry automatically links related articles based on product/category/tag similarity.
+
+### How to Add Catalog Items
+
+1. Add a new `CatalogItem` object in `lib/support.catalog.registry.ts`
+2. Define `requiredFields` using the typed field schema (`text`, `textarea`, `select`, `checkbox`, `multiselect`)
+3. Add:
+   - `expectedFulfillmentTime`
+   - `approvalNote`
+   - `workflowSummary`
+   - tags for search/filtering
+4. Rebuild and test `/support/catalog/<slug>/`
+
+Catalog submissions create local demo request tickets in `My Tickets` (no backend ticket creation).
+
+### Analytics (Local Schema + Reset)
+
+Analytics is stored locally using an event log schema:
+
+- Key: `supportPortal:analytics:v1`
+- Shape:
+  - `version: 1`
+  - `events: AnalyticsEvent[]`
+
+Tracked event types include:
+
+- `kb_view`
+- `search`
+- `search_click`
+- `kb_helpful_vote`
+- `catalog_submit`
+- `incident_submit`
+- `ticket_note_added`
+- `ticket_comment_added`
+- `admin_action`
+
+Reset options are available in `/support/admin` (after enabling Admin Mode from the sidebar):
+
+- Reset Analytics
+- Reset KB Helpful Votes
+- Reset Tickets
+- Seed Demo Tickets
+
+### How Tickets Are Stored Locally
+
+Tickets are stored in browser `localStorage` using typed `Ticket` objects:
+
+- Key: `supportPortal:tickets:v1`
+- Each ticket includes:
+  - `id`, `createdAt`, `updatedAt`
+  - `type`, `status`, `priority`
+  - `impact`, `urgency`
+  - `category`, `subcategory`, `product`
+  - `summary`, `description`
+  - `preferredContactMethod`
+  - `attachments` (filenames only in demo mode)
+  - `activityLog` timeline entries
+
+Related local keys:
+
+- `supportPortal:kbHelpfulVotes:v1` — per-article Yes/No feedback state
+- `supportPortal:state:v1` — admin toggle + sidebar collapse state
 
 ## Deployment
 
