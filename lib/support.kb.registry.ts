@@ -2710,6 +2710,653 @@ const generalSeeds: KBSeed[] = [
       "Per-app VPN or tunnel configuration needs network/MDM team review.",
       "Profile redeployment or MDM remediation is required."
     ]
+  },
+  {
+    slug: "windows-update-pending-restart-blocking-compliance-or-apps",
+    title: "Windows Update Pending Restart Blocking Compliance or App Access",
+    description:
+      "Troubleshoot managed Windows devices that remain in a pending restart state and may fail compliance checks, VPN posture checks, or app updates until restart is completed.",
+    category: "Windows",
+    productFamily: "Windows",
+    product: "Windows Update",
+    environment: "Windows",
+    severity: "Medium",
+    tags: ["windows", "updates", "restart", "compliance", "patching", "reboot"],
+    symptoms: [
+      "Device shows pending restart after Windows updates.",
+      "Company Portal/compliance or VPN posture checks remain outdated.",
+      "Office or browser updates may fail or stay queued."
+    ],
+    causes: [
+      "Windows update install completed but reboot is required to finalize files/services.",
+      "User deferred restart multiple times.",
+      "Pending restart flags remain after patching and require managed reboot workflow."
+    ],
+    remediations: [
+      "Confirm there is no active user presentation/meeting before scheduling a restart.",
+      "Use approved restart window or endpoint management workflow to complete the reboot.",
+      "After restart, confirm updates/compliance status refreshes before further remediation.",
+      "Avoid registry edits or third-party cleanup tools to clear pending restart indicators."
+    ],
+    escalationCriteria: [
+      "Pending restart remains after one or more approved restarts.",
+      "Multiple devices show the same issue after a patch cycle.",
+      "Endpoint management or Windows update servicing policy review is required."
+    ],
+    commands: [
+      {
+        title: "Check Windows Update and pending restart indicators",
+        shell: "PowerShell",
+        content:
+          "Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\Auto Update\\RebootRequired' -ErrorAction SilentlyContinue\nGet-ComputerInfo | Select-Object WindowsProductName, WindowsVersion, OsBuildNumber"
+      }
+    ]
+  },
+  {
+    slug: "windows-credential-manager-stale-corporate-credentials",
+    title: "Windows Credential Manager Stale Corporate Credentials",
+    description:
+      "Troubleshoot repeated prompts or access failures caused by stale Windows stored credentials after password changes or account updates using safe review steps first.",
+    category: "Windows",
+    productFamily: "Windows",
+    product: "Windows Credential Manager",
+    environment: "Windows",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    tags: ["windows", "credential-manager", "password-change", "prompts", "stale-credentials"],
+    symptoms: [
+      "User is repeatedly prompted for credentials on file shares, Outlook, or internal sites.",
+      "Access fails even though the user enters the correct current password.",
+      "Issue started after password reset or account rename/update."
+    ],
+    causes: [
+      "Old cached credentials remain stored in Windows Credential Manager.",
+      "Saved target names no longer match current authentication path.",
+      "Multiple account contexts (old/new UPN) are cached."
+    ],
+    remediations: [
+      "Identify which app/share/site is prompting and confirm the exact account being used.",
+      "Review saved Windows credentials with support guidance before removing entries.",
+      "Remove only affected stale entries and re-test sign-in using the current corporate credentials.",
+      "Document which target names were impacted if escalation is needed."
+    ],
+    escalationCriteria: [
+      "Credential prompts continue after stale entries are removed.",
+      "Kerberos/SSO or identity token issues are suspected rather than saved credentials.",
+      "Multiple users report the same prompts against the same system or service."
+    ],
+    commands: [
+      {
+        title: "List stored Windows credentials",
+        shell: "CMD",
+        content: "cmdkey /list"
+      }
+    ]
+  },
+  {
+    slug: "windows-mapped-drives-disconnected-after-password-change",
+    title: "Windows Mapped Drives Disconnected After Password Change",
+    description:
+      "Troubleshoot mapped drives showing disconnected or repeatedly prompting after a password change by validating current identity context and reconnect behavior safely.",
+    category: "Windows",
+    productFamily: "Windows",
+    product: "Windows Mapped Drives",
+    environment: "Windows",
+    severity: "Medium",
+    tags: ["windows", "mapped-drive", "password-change", "file-share", "smb"],
+    symptoms: [
+      "Mapped drives show red X or 'Disconnected Network Drive'.",
+      "User is prompted for credentials when opening a mapped drive.",
+      "Issue began after password reset or account unlock."
+    ],
+    causes: [
+      "Mapped session cached old credentials.",
+      "VPN/domain connectivity is unavailable at sign-in.",
+      "Drive mapping script/GPO depends on a resource currently unreachable."
+    ],
+    remediations: [
+      "Confirm the user is on the corporate network or connected to approved VPN.",
+      "Verify the user can access the share path directly before remapping.",
+      "Reconnect only required mapped drives using approved scripts or documented support steps.",
+      "Capture exact share path and timestamp if drive mapping policy seems to be failing."
+    ],
+    escalationCriteria: [
+      "Many users lose the same mapped drives after a password policy change.",
+      "GPO/login script mapping failures are suspected.",
+      "File server permissions or SMB service issue is indicated."
+    ],
+    commands: [
+      {
+        title: "Check mapped drives and user identity",
+        shell: "CMD",
+        content: "whoami /upn\nnet use"
+      }
+    ]
+  },
+  {
+    slug: "windows-bitlocker-recovery-prompt-managed-device",
+    title: "Windows BitLocker Recovery Prompt on Managed Device",
+    description:
+      "Handle BitLocker recovery prompts on corporate Windows devices safely by collecting device details and recovery evidence, then escalating through approved security workflows.",
+    category: "Windows",
+    productFamily: "Windows",
+    product: "BitLocker",
+    environment: "Windows",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "10-30 min",
+    tags: ["windows", "bitlocker", "recovery", "security", "encryption"],
+    symptoms: [
+      "Device boots to a BitLocker recovery screen and requests a recovery key.",
+      "Prompt appeared after firmware/BIOS update, docking change, or hardware event.",
+      "User cannot sign in to Windows."
+    ],
+    causes: [
+      "BitLocker integrity checks detected a platform/boot configuration change.",
+      "TPM-related state changed after update or hardware event.",
+      "Recovery key entry is required before normal startup can continue."
+    ],
+    remediations: [
+      "Verify device ownership and user identity using approved help desk procedures.",
+      "Collect the BitLocker recovery key ID shown on the prompt for lookup by authorized staff.",
+      "Use approved key recovery sources and security process; do not attempt to bypass encryption controls.",
+      "Document the trigger event (update, dock, hardware change) after the device is recovered."
+    ],
+    escalationCriteria: [
+      "Recovery key is not available in approved key escrow systems.",
+      "Repeated BitLocker recovery prompts continue after successful unlock.",
+      "Suspicious tamper indicators or high-risk user/device context requires security escalation."
+    ],
+    commands: [
+      {
+        title: "Check BitLocker status (after device boots)",
+        shell: "PowerShell",
+        content: "Get-BitLockerVolume | Select-Object MountPoint, VolumeStatus, ProtectionStatus, KeyProtector"
+      }
+    ]
+  },
+  {
+    slug: "windows-hello-pin-signin-not-available-managed-device",
+    title: "Windows Hello PIN Sign-In Not Available on Managed Device",
+    description:
+      "Troubleshoot Windows Hello for Business PIN sign-in issues using safe device registration and time-sync checks before PIN reset or identity escalation.",
+    category: "Windows",
+    productFamily: "Windows",
+    product: "Windows Hello for Business",
+    environment: "Windows",
+    severity: "High",
+    accessLevel: "Admin Required",
+    tags: ["windows", "windows-hello", "pin", "signin", "whfb", "entra"],
+    symptoms: [
+      "PIN option is missing or unavailable at sign-in.",
+      "User receives PIN unavailable / something went wrong messages.",
+      "Password sign-in works but PIN setup/reset fails."
+    ],
+    causes: [
+      "Device registration or token state is unhealthy.",
+      "Time sync or network connectivity affects identity validation.",
+      "Windows Hello policy or TPM state requires admin review."
+    ],
+    remediations: [
+      "Confirm password sign-in works and the device has stable network connectivity.",
+      "Verify date/time/time zone are correct before retrying PIN setup.",
+      "Collect device registration status for endpoint/identity support.",
+      "Use approved PIN reset workflow only after identity and device checks are complete."
+    ],
+    escalationCriteria: [
+      "Device registration appears broken or Entra join state is unhealthy.",
+      "TPM or Windows Hello policy issues are suspected.",
+      "Multiple devices fail PIN setup after a policy rollout."
+    ],
+    commands: [
+      {
+        title: "Check device registration and sync status",
+        shell: "CMD",
+        content: "dsregcmd /status"
+      }
+    ]
+  },
+  {
+    slug: "windows-dns-resolution-issues-after-vpn-switch-or-network-change",
+    title: "Windows DNS Resolution Issues After VPN Switch or Network Change",
+    description:
+      "Troubleshoot Windows DNS resolution issues after switching networks or VPN state by collecting adapter and resolver evidence before advanced network changes.",
+    category: "Windows",
+    productFamily: "Windows",
+    product: "Windows DNS Client",
+    environment: "Windows",
+    severity: "Medium",
+    tags: ["windows", "dns", "vpn", "network-change", "name-resolution"],
+    symptoms: [
+      "Websites or internal hostnames fail to resolve after network/VPN changes.",
+      "Some sites open by IP address but not by hostname.",
+      "Issue may improve temporarily after reconnecting."
+    ],
+    causes: [
+      "DNS cache contains stale records from prior network/VPN state.",
+      "Adapter DNS servers are incorrect or not refreshed.",
+      "VPN split-DNS policy or resolver order issue."
+    ],
+    remediations: [
+      "Identify whether only internal names fail, only external names fail, or both.",
+      "Reconnect the affected network/VPN and retest using the same hostname.",
+      "Use approved DNS cache flush and adapter renew steps if documented for your environment.",
+      "Attach DNS server/resolution output to the ticket before escalation."
+    ],
+    escalationCriteria: [
+      "VPN split-DNS policy or name server assignment appears wrong.",
+      "Issue affects multiple users after a VPN or DHCP/DNS change.",
+      "Network engineering review is required."
+    ],
+    commands: [
+      {
+        title: "DNS resolver and cache checks (Windows)",
+        shell: "CMD",
+        content: "ipconfig /all\nnslookup microsoft.com\nipconfig /displaydns | more"
+      }
+    ]
+  },
+  {
+    slug: "windows-audio-device-missing-after-dock-undock",
+    title: "Windows Audio Device Missing After Dock / Undock",
+    description:
+      "Troubleshoot missing speakers, headset, or microphone endpoints after docking changes on managed Windows devices using safe device and endpoint checks first.",
+    category: "Windows",
+    productFamily: "Windows",
+    product: "Windows Audio Devices",
+    environment: "Windows",
+    severity: "Medium",
+    tags: ["windows", "audio", "dock", "microphone", "headset", "usb"],
+    symptoms: [
+      "Headset, speaker, or microphone is missing after docking/undocking.",
+      "Teams/Zoom/Meet cannot detect the expected device.",
+      "Audio devices return after reboot or cable reconnect."
+    ],
+    causes: [
+      "USB/dock enumeration issue after power state change.",
+      "Audio endpoint disabled or default device switched unexpectedly.",
+      "Dock firmware/driver or endpoint driver problem."
+    ],
+    remediations: [
+      "Confirm the issue affects one dock/port/device combination or all audio devices.",
+      "Reconnect the dock/device and test another approved port/cable if available.",
+      "Check Sound settings for disabled devices and default input/output selection.",
+      "Escalate if recurring after docking firmware or driver updates."
+    ],
+    escalationCriteria: [
+      "Multiple users with the same dock model are affected.",
+      "Driver/firmware deployment issue is suspected.",
+      "Admin rights are required to update or rollback device drivers."
+    ],
+    commands: [
+      {
+        title: "List audio endpoints and device status",
+        shell: "PowerShell",
+        content: "Get-PnpDevice -Class AudioEndpoint | Select-Object Status, Class, FriendlyName"
+      }
+    ]
+  },
+  {
+    slug: "windows-file-explorer-slow-on-network-shares-or-quick-access",
+    title: "Windows File Explorer Slow on Network Shares or Quick Access",
+    description:
+      "Troubleshoot Windows File Explorer delays when opening folders, network shares, or Quick Access using safe path-isolation and shell diagnostics before profile resets.",
+    category: "Windows",
+    productFamily: "Windows",
+    product: "Windows File Explorer",
+    environment: "Windows",
+    severity: "Low",
+    tags: ["windows", "file-explorer", "quick-access", "network-share", "slow"],
+    symptoms: [
+      "File Explorer takes a long time to open or hangs on a white window.",
+      "Delays are worse when opening Quick Access or a specific network path.",
+      "Only one user or one profile may be affected."
+    ],
+    causes: [
+      "Unavailable network path pinned in Quick Access or recent items.",
+      "Shell extension or preview pane interaction causing delays.",
+      "Profile-specific Explorer cache or namespace issue."
+    ],
+    remediations: [
+      "Identify whether delays happen in all folders or only specific network/pinned paths.",
+      "Test opening a local folder and then the affected network path directly.",
+      "Remove unavailable pinned items through normal File Explorer UI if identified.",
+      "Escalate before deleting user profile or registry shell settings."
+    ],
+    escalationCriteria: [
+      "Issue affects many users after a shell extension or endpoint rollout.",
+      "File server/network path availability issue is suspected.",
+      "Profile reset or registry-level remediation is being considered."
+    ]
+  },
+  {
+    slug: "macos-keychain-password-prompts-outlook-teams-onedrive",
+    title: "macOS Keychain Password Prompts for Outlook / Teams / OneDrive",
+    description:
+      "Troubleshoot repeated macOS Keychain access prompts affecting Microsoft apps on managed Macs using safe keychain status checks before credential deletion or app resets.",
+    category: "macOS",
+    productFamily: "Apple",
+    product: "macOS Keychain",
+    environment: "macOS",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    tags: ["macos", "keychain", "outlook", "teams", "onedrive", "prompts"],
+    symptoms: [
+      "User is repeatedly prompted to allow Keychain access for Outlook, Teams, or OneDrive.",
+      "Prompts return after clicking Always Allow or entering the login password.",
+      "App sign-in or token refresh may fail intermittently."
+    ],
+    causes: [
+      "Login keychain password is out of sync with the current macOS password.",
+      "Keychain item permissions or app signature trust prompts are stuck/corrupt.",
+      "Repeated token recreation by apps triggers repeated prompts."
+    ],
+    remediations: [
+      "Confirm whether prompts affect one app or multiple Microsoft apps on the same Mac.",
+      "Verify the user can unlock the login keychain with the current macOS password.",
+      "Use approved keychain repair/reset runbook only after support reviews impact to stored credentials.",
+      "Capture screenshots of prompt text and app names before escalation."
+    ],
+    escalationCriteria: [
+      "Keychain appears locked/corrupted or login keychain password mismatch is suspected.",
+      "Multiple managed Macs show the issue after an app or macOS update.",
+      "Credential reset or keychain reset could impact other enterprise apps and requires guided support."
+    ],
+    commands: [
+      {
+        title: "Check user keychain configuration (macOS)",
+        shell: "Terminal",
+        content: "security default-keychain -d user\nsecurity list-keychains -d user"
+      }
+    ]
+  },
+  {
+    slug: "macos-screen-recording-permission-missing-for-screen-sharing",
+    title: "macOS Screen Recording Permission Missing for Screen Sharing (Teams/Zoom/Meet)",
+    description:
+      "Troubleshoot screen sharing failures on macOS caused by missing Screen Recording permission using safe privacy-setting checks before app reinstall or policy changes.",
+    category: "macOS",
+    productFamily: "Apple",
+    product: "macOS Privacy Permissions (TCC)",
+    environment: "macOS",
+    severity: "Medium",
+    tags: ["macos", "screen-sharing", "screen-recording", "teams", "zoom", "permissions"],
+    symptoms: [
+      "User can join meetings but screen share shows black screen or nothing happens.",
+      "Meeting app prompts for Screen Recording access or never appears in the list.",
+      "Issue started after macOS update or app reinstall."
+    ],
+    causes: [
+      "Screen Recording permission not granted in Privacy & Security.",
+      "App update/reinstall changed app signature/path and old permission entry no longer applies.",
+      "MDM privacy preferences profile controls or restricts prompts."
+    ],
+    remediations: [
+      "Confirm which meeting app is affected and whether other meeting apps can share screen.",
+      "Check Privacy & Security > Screen Recording and grant access to the approved app if allowed.",
+      "Quit and relaunch the app after permission changes, then retest in a meeting.",
+      "Escalate if MDM privacy profile restrictions block changes."
+    ],
+    escalationCriteria: [
+      "TCC/Privacy settings are managed by MDM and users cannot change them.",
+      "Issue affects multiple Macs after a macOS or app update.",
+      "Resetting TCC entries or profile changes are required."
+    ],
+    commands: [
+      {
+        title: "Open Privacy & Security settings (macOS)",
+        shell: "Terminal",
+        content: "open 'x-apple.systempreferences:com.apple.preference.security'"
+      }
+    ]
+  },
+  {
+    slug: "macos-mdm-profile-missing-or-not-verified-managed-mac",
+    title: "macOS MDM Profile Missing or Not Verified (Managed Mac)",
+    description:
+      "Troubleshoot missing or unverified MDM profiles on managed Macs using safe enrollment checks before profile removal or device re-enrollment.",
+    category: "macOS",
+    productFamily: "Apple",
+    product: "macOS Device Management",
+    environment: "macOS",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "15-30 min",
+    tags: ["macos", "mdm", "management-profile", "enrollment", "device-management"],
+    symptoms: [
+      "Corporate apps or VPN fail because the Mac appears unmanaged or non-compliant.",
+      "Profiles/settings expected from IT are missing.",
+      "System Settings shows profile warnings or verification issues."
+    ],
+    causes: [
+      "Enrollment did not complete successfully.",
+      "Profile trust/verification issue or expired enrollment state.",
+      "User removed or partially removed a management profile (if permitted)."
+    ],
+    remediations: [
+      "Confirm whether the Mac was previously managed and when the issue started.",
+      "Check profile presence/status in System Settings and capture exact warnings shown.",
+      "Avoid removing any remaining profile components without endpoint management guidance.",
+      "Escalate for MDM enrollment status review and re-enrollment planning if needed."
+    ],
+    escalationCriteria: [
+      "Profile verification fails or management profile is missing on a device expected to be managed.",
+      "Compliance blocks business access and the user cannot continue work.",
+      "MDM re-enrollment or device-side cleanup is required."
+    ],
+    commands: [
+      {
+        title: "Check MDM enrollment/profile status (macOS)",
+        shell: "Terminal",
+        content: "profiles status -type enrollment\nprofiles list"
+      }
+    ]
+  },
+  {
+    slug: "macos-filevault-status-or-recovery-prompt-managed-device",
+    title: "macOS FileVault Status or Recovery Prompt on Managed Device",
+    description:
+      "Troubleshoot FileVault status questions and unexpected recovery prompts on managed Macs using approved security workflows without bypassing encryption controls.",
+    category: "macOS",
+    productFamily: "Apple",
+    product: "FileVault",
+    environment: "macOS",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "10-30 min",
+    tags: ["macos", "filevault", "encryption", "recovery", "security"],
+    symptoms: [
+      "User is prompted for a FileVault recovery key or cannot unlock the disk normally.",
+      "FileVault status appears to change unexpectedly after updates.",
+      "User asks for recovery key retrieval for a managed Mac."
+    ],
+    causes: [
+      "Disk encryption state changed or recovery unlock is required.",
+      "Password/account changes impacted expected unlock workflow.",
+      "Authorized recovery method is required through managed key escrow."
+    ],
+    remediations: [
+      "Verify user identity and device ownership before discussing recovery options.",
+      "Use approved key escrow or MDM workflows for FileVault recovery requests.",
+      "Collect exact error prompt text and whether the issue occurs at boot or login.",
+      "Do not disable FileVault or use unauthorized tools to bypass encryption."
+    ],
+    escalationCriteria: [
+      "Recovery key is unavailable in approved escrow systems.",
+      "Repeated recovery prompts continue after successful unlock.",
+      "Security review is required due to suspicious tamper or device custody concerns."
+    ],
+    commands: [
+      {
+        title: "Check FileVault encryption status (macOS)",
+        shell: "Terminal",
+        content: "fdesetup status"
+      }
+    ]
+  },
+  {
+    slug: "macos-wifi-connected-no-internet-on-corporate-ssid",
+    title: "macOS Wi-Fi Connected but No Internet on Corporate SSID",
+    description:
+      "Troubleshoot managed Mac Wi-Fi sessions that show connected but cannot browse or reach internal services using safe DNS/interface evidence collection.",
+    category: "macOS",
+    productFamily: "Apple",
+    product: "macOS Wi-Fi",
+    environment: "macOS",
+    severity: "Medium",
+    tags: ["macos", "wifi", "wireless", "corporate-network", "dns"],
+    symptoms: [
+      "Mac shows connected to corporate Wi-Fi but internet or internal resources fail.",
+      "Issue may follow wake/resume or movement between office areas.",
+      "Other devices may or may not be affected."
+    ],
+    causes: [
+      "Wi-Fi association succeeded but DHCP/DNS routing state is unhealthy.",
+      "Captive portal/802.1X session or roaming issue.",
+      "Local interface state stale after sleep or network transition."
+    ],
+    remediations: [
+      "Capture SSID, office location, and whether failure is internet-only or internal-only.",
+      "Toggle Wi-Fi off/on and retest before deeper remediation.",
+      "Collect interface and DNS output for wireless/network support review.",
+      "Avoid deleting enterprise Wi-Fi profiles/certificates without support guidance."
+    ],
+    escalationCriteria: [
+      "Multiple users in the same area/SSID are affected.",
+      "802.1X/authentication or AP issues are suspected.",
+      "Wireless engineering investigation is required."
+    ],
+    commands: [
+      {
+        title: "Check Wi-Fi interface and DNS state (macOS)",
+        shell: "Terminal",
+        content:
+          "networksetup -getairportnetwork en0 2>/dev/null || true\nifconfig en0\nscutil --dns | head -80"
+      }
+    ]
+  },
+  {
+    slug: "macos-vpn-connected-no-internal-resources-after-sleep",
+    title: "macOS VPN Connected but No Internal Resources After Sleep/Wake",
+    description:
+      "Troubleshoot macOS VPN sessions that remain connected after sleep/wake but lose internal access by collecting route and DNS evidence before profile changes.",
+    category: "macOS",
+    productFamily: "Apple",
+    product: "macOS VPN",
+    environment: "macOS",
+    severity: "High",
+    accessLevel: "Admin Required",
+    tags: ["macos", "vpn", "sleep-wake", "internal-access", "routing", "dns"],
+    symptoms: [
+      "VPN shows connected after wake, but internal apps/sites no longer load.",
+      "Disconnect/reconnect temporarily restores access.",
+      "Public internet may still work."
+    ],
+    causes: [
+      "Route or DNS state not refreshed after sleep/wake transition.",
+      "VPN client session remains connected but is not passing traffic correctly.",
+      "Network switch (home/office/hotspot) left stale tunnel state."
+    ],
+    remediations: [
+      "Confirm whether the issue reproduces consistently after sleep/wake.",
+      "Disconnect/reconnect VPN and retest internal resources immediately.",
+      "Collect route/DNS details while the issue is present for network team review.",
+      "Avoid deleting VPN profiles or certificates unless directed by IT."
+    ],
+    escalationCriteria: [
+      "Multiple Macs using the same VPN client/profile are affected.",
+      "VPN client update or tunnel policy issue is suspected.",
+      "Network/security team review is required."
+    ],
+    commands: [
+      {
+        title: "Collect route and DNS state while VPN is connected",
+        shell: "Terminal",
+        content: "netstat -rn | head -80\nscutil --dns | head -120"
+      }
+    ]
+  },
+  {
+    slug: "macos-printer-offline-or-jobs-stuck-managed-printer",
+    title: "macOS Printer Offline or Jobs Stuck (Managed Printer)",
+    description:
+      "Troubleshoot macOS printing issues on managed printers using safe queue and printer-status checks before removing printer objects or reinstalling drivers.",
+    category: "macOS",
+    productFamily: "Apple",
+    product: "macOS Printing",
+    environment: "macOS",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    tags: ["macos", "printer", "printing", "queue", "cups"],
+    symptoms: [
+      "Printer appears offline on the Mac even though other users can print.",
+      "Jobs remain in queue and do not complete.",
+      "Issue may start after network change or printer wake/sleep."
+    ],
+    causes: [
+      "Local CUPS queue paused/stuck.",
+      "Printer unreachable from the Mac or wrong queue/protocol selected.",
+      "Driver/PPD mismatch after updates or printer replacement."
+    ],
+    remediations: [
+      "Confirm whether the issue is isolated to one Mac or affects the shared queue broadly.",
+      "Pause/resume or cancel only stuck local jobs using normal UI steps first.",
+      "Collect local printer queue status and printer URI details for support.",
+      "Avoid deleting/re-adding managed printers without IT guidance."
+    ],
+    escalationCriteria: [
+      "Shared queue or print server issue affects multiple users.",
+      "Managed printer deployment/profile needs to be re-pushed.",
+      "Driver or CUPS admin remediation is required."
+    ],
+    commands: [
+      {
+        title: "Check local printer queue and defaults (macOS)",
+        shell: "Terminal",
+        content: "lpstat -t"
+      }
+    ]
+  },
+  {
+    slug: "macos-login-items-or-background-agents-high-cpu-after-update",
+    title: "macOS Login Items / Background Agents High CPU After Update",
+    description:
+      "Troubleshoot high CPU after macOS updates by isolating login items and background agents with safe diagnostics before disabling managed security or productivity agents.",
+    category: "macOS",
+    productFamily: "Apple",
+    product: "macOS Background Agents",
+    environment: "macOS",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    tags: ["macos", "cpu", "performance", "login-items", "background-agents"],
+    symptoms: [
+      "Fans run loudly and CPU usage stays high after login.",
+      "Performance degrades after macOS update or reboot.",
+      "Activity Monitor shows one or more background processes consuming CPU."
+    ],
+    causes: [
+      "Post-update indexing or background maintenance tasks still running.",
+      "Login items/background agents stuck or repeatedly crashing/restarting.",
+      "Managed security/sync clients performing heavy catch-up activity."
+    ],
+    remediations: [
+      "Capture the top processes and whether the issue subsides after 15-30 minutes.",
+      "Use Activity Monitor to identify the specific process before changing settings.",
+      "Do not disable endpoint security or management agents without approval.",
+      "Escalate with process names, CPU usage, and timestamps if sustained."
+    ],
+    escalationCriteria: [
+      "Managed security/MDM/backup agent is consuming sustained CPU and needs admin review.",
+      "Many Macs show the issue after the same macOS or agent update.",
+      "Process crash loop or kernel-level issue is suspected."
+    ],
+    commands: [
+      {
+        title: "Top CPU processes (macOS)",
+        shell: "Terminal",
+        content: "ps -Ao pid,pcpu,pmem,comm | sort -k2 -nr | head -15"
+      }
+    ]
   }
 ];
 

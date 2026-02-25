@@ -61,7 +61,9 @@ const supportProductFamilies = new Set<KBArticle["productFamily"]>([
   "Adobe",
   "Figma",
   "Okta",
-  "Mobile"
+  "Mobile",
+  "Windows",
+  "Apple"
 ]);
 
 function isCorporateFixCategory(value: string): value is CorporateFixCategory {
