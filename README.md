@@ -82,7 +82,9 @@ The corporate troubleshooting section is registry-driven and lives at:
 - `app/corporate-tech-fixes/page.tsx` (catalog route)
 - `app/corporate-tech-fixes/[slug]/page.tsx` (dynamic guide route)
 - `app/corporate-tech-fixes/builder/page.tsx` (KB Builder authoring tool)
-- `lib/corporate-fixes.registry.ts` (source of truth for all fix entries)
+- `lib/corporate-fixes.registry.ts` (registry + merged data sources)
+- `data/corporate-fixes.published.json` (remote-published fixes committed by Cloudflare Worker)
+- `workers/corporate-fixes-publisher/` (Cloudflare Worker template for publish-to-site)
 
 Use `/corporate-tech-fixes/builder` to draft entries in the browser, manage steps/tags, and copy a registry snippet + Markdown support doc template.
 
@@ -93,6 +95,7 @@ The KB Builder supports a client-side password gate for GitHub Pages/static host
 - Route: `/corporate-tech-fixes/builder`
 - Auth mode (build-time): `NEXT_PUBLIC_CORPORATE_FIXES_BUILDER_AUTH_MODE`
 - Config variable (build-time): `NEXT_PUBLIC_CORPORATE_FIXES_BUILDER_PASSWORD_SHA256`
+- Optional publish endpoint (build-time): `NEXT_PUBLIC_CORPORATE_FIXES_PUBLISH_ENDPOINT_URL`
 
 Auth modes:
 
@@ -117,17 +120,53 @@ NEXT_PUBLIC_CORPORATE_FIXES_BUILDER_AUTH_MODE=cloudflare-access
 
 and protect `/corporate-tech-fixes/builder*` at the Cloudflare edge.
 
+### Remote Publish-to-Site Pipeline (Cloudflare Worker -> GitHub Commit -> Pages Deploy)
+
+The KB Builder now supports a `Publish to Site` action that sends the current KB entry to a Cloudflare Worker endpoint. The Worker validates the payload and commits it into:
+
+- `data/corporate-fixes.published.json`
+
+That commit triggers the existing GitHub Pages workflow (push to `main`) and the new KB appears publicly after the deploy finishes.
+
+Builder-side endpoint configuration:
+
+```bash
+NEXT_PUBLIC_CORPORATE_FIXES_PUBLISH_ENDPOINT_URL=/api/corporate-tech-fixes/publish
+```
+
+If omitted, the builder defaults to `/api/corporate-tech-fixes/publish`.
+
+Worker setup files:
+
+- `workers/corporate-fixes-publisher/src/index.ts`
+- `workers/corporate-fixes-publisher/wrangler.toml.example`
+- `workers/corporate-fixes-publisher/README.md`
+
+Recommended security:
+
+- Protect the builder route with Cloudflare Access
+- Protect the Worker publish route with Cloudflare Access (separate self-hosted app or path rule)
+- Keep GitHub repo write token only in Worker secrets (`wrangler secret put GITHUB_TOKEN`)
+
+Publish flow behavior:
+
+- `Publish to Site` performs an upsert by slug (creates or updates)
+- Builder also syncs the entry to local preview storage so you can test immediately on your device
+- Public site updates after GitHub Pages redeploy completes
+
 ### How to Add a New Fix
 
-1. Add a new object to `lib/corporate-fixes.registry.ts` using the `CorporateTechFix` shape
+1. Choose a publish method:
+   - Use `/corporate-tech-fixes/builder` and click `Publish to Site` (recommended once Worker is deployed)
+   - Or manually add a new object to `lib/corporate-fixes.registry.ts`
 2. Create a unique `slug` (used for `/corporate-tech-fixes/<slug>/`)
-3. Choose a supported category (`Windows`, `macOS`, `O365`, `Networking`, `Printers`, `Security`)
+3. Choose a supported category (`Windows`, `macOS`, `O365`, `Networking`, `Printers`, `Security`, `Adobe`, `Figma`, `Browsers`)
 4. Add tags that improve search/filter discoverability (product, platform, symptom, policy)
 5. Write step entries with `type` values:
    - `info` for validation/troubleshooting actions
    - `command` for copyable PowerShell/Terminal commands
    - `warning` for risk notices, escalation points, or policy-sensitive actions
-6. Rebuild the site (`npm run build`) and test the new route locally
+6. Rebuild the site (`npm run build`) and test the new route locally (manual flow) or wait for GitHub Pages deploy (remote publish flow)
 
 ### Registry Maintenance Guidelines
 

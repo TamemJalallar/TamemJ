@@ -1,3 +1,4 @@
+import publishedCorporateFixesStore from "@/data/corporate-fixes.published.json";
 import { getKBArticles } from "@/lib/support.kb.registry";
 import type { KBArticle } from "@/types/support";
 
@@ -36,6 +37,11 @@ export interface CorporateTechFix {
   steps: CorporateFixStep[];
 }
 
+interface PublishedCorporateFixesStore {
+  version?: number;
+  entries?: unknown[];
+}
+
 export const corporateFixCategories: CorporateFixCategory[] = [
   "Windows",
   "macOS",
@@ -49,6 +55,131 @@ export const corporateFixCategories: CorporateFixCategory[] = [
 ];
 
 const supportProductFamilies = new Set<KBArticle["productFamily"]>(["Microsoft", "Adobe", "Figma"]);
+
+function isCorporateFixCategory(value: string): value is CorporateFixCategory {
+  return corporateFixCategories.includes(value as CorporateFixCategory);
+}
+
+function isCorporateFixSeverity(value: string): value is CorporateFixSeverity {
+  return value === "Low" || value === "Medium" || value === "High";
+}
+
+function isCorporateFixAccessLevel(value: string): value is CorporateFixAccessLevel {
+  return value === "User Safe" || value === "Admin Required";
+}
+
+function isCorporateFixStepType(value: string): value is CorporateFixStepType {
+  return value === "info" || value === "command" || value === "warning";
+}
+
+function normalizeTags(tags: string[]): string[] {
+  return [...new Set(tags.map((tag) => tag.trim().toLowerCase()).filter(Boolean))];
+}
+
+function normalizePublishedCorporateFix(value: unknown): CorporateTechFix | null {
+  if (!value || typeof value !== "object") {
+    return null;
+  }
+
+  const candidate = value as Partial<CorporateTechFix>;
+
+  if (
+    typeof candidate.slug !== "string" ||
+    typeof candidate.title !== "string" ||
+    typeof candidate.category !== "string" ||
+    typeof candidate.severity !== "string" ||
+    typeof candidate.accessLevel !== "string" ||
+    typeof candidate.estimatedTime !== "string" ||
+    typeof candidate.description !== "string" ||
+    !Array.isArray(candidate.tags) ||
+    !Array.isArray(candidate.steps)
+  ) {
+    return null;
+  }
+
+  if (
+    !isCorporateFixCategory(candidate.category) ||
+    !isCorporateFixSeverity(candidate.severity) ||
+    !isCorporateFixAccessLevel(candidate.accessLevel)
+  ) {
+    return null;
+  }
+
+  const steps: CorporateFixStep[] = [];
+
+  for (const step of candidate.steps) {
+    if (!step || typeof step !== "object") {
+      return null;
+    }
+
+    const current = step as Partial<CorporateFixStep>;
+    if (
+      typeof current.title !== "string" ||
+      typeof current.content !== "string" ||
+      typeof current.type !== "string" ||
+      !isCorporateFixStepType(current.type)
+    ) {
+      return null;
+    }
+
+    steps.push({
+      title: current.title.trim(),
+      type: current.type,
+      content: current.content.trim()
+    });
+  }
+
+  return {
+    slug: candidate.slug.trim(),
+    title: candidate.title.trim(),
+    category: candidate.category,
+    severity: candidate.severity,
+    accessLevel: candidate.accessLevel,
+    estimatedTime: candidate.estimatedTime.trim(),
+    tags: normalizeTags(candidate.tags.filter((tag): tag is string => typeof tag === "string")),
+    description: candidate.description.trim(),
+    steps
+  };
+}
+
+function getPublishedCorporateFixes(): CorporateTechFix[] {
+  const store = publishedCorporateFixesStore as PublishedCorporateFixesStore;
+  if (!Array.isArray(store.entries)) {
+    return [];
+  }
+
+  const seen = new Set<string>();
+  const entries: CorporateTechFix[] = [];
+
+  for (const raw of store.entries) {
+    const entry = normalizePublishedCorporateFix(raw);
+    if (!entry || !entry.slug || seen.has(entry.slug)) {
+      continue;
+    }
+
+    seen.add(entry.slug);
+    entries.push(entry);
+  }
+
+  return entries;
+}
+
+function mergeCorporateFixCollections(...collections: CorporateTechFix[][]): CorporateTechFix[] {
+  const seen = new Set<string>();
+  const merged: CorporateTechFix[] = [];
+
+  for (const collection of collections) {
+    for (const fix of collection) {
+      if (seen.has(fix.slug)) {
+        continue;
+      }
+      seen.add(fix.slug);
+      merged.push(fix);
+    }
+  }
+
+  return merged;
+}
 
 function toBulletList(items: string[]): string {
   return items.map((item) => `- ${item}`).join("\n");
@@ -726,7 +857,13 @@ const supportPortalFixes: CorporateTechFix[] = getKBArticles()
   )
   .map(convertKBArticleToCorporateFix);
 
-const corporateFixRegistry: CorporateTechFix[] = [...corporateFixes, ...supportPortalFixes];
+const publishedCorporateFixes: CorporateTechFix[] = getPublishedCorporateFixes();
+
+const corporateFixRegistry: CorporateTechFix[] = mergeCorporateFixCollections(
+  publishedCorporateFixes,
+  corporateFixes,
+  supportPortalFixes
+);
 
 export function getCorporateFixes(): CorporateTechFix[] {
   return corporateFixRegistry.map((fix) => ({

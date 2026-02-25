@@ -20,6 +20,10 @@ import {
 } from "@/components/corporate-fixes/fix-shared";
 
 const STORAGE_KEY = "corporateTechFixes:kbBuilderDraft:v1";
+const REMOTE_PUBLISH_ENDPOINT = (
+  process.env.NEXT_PUBLIC_CORPORATE_FIXES_PUBLISH_ENDPOINT_URL ?? "/api/corporate-tech-fixes/publish"
+)
+  .trim();
 
 const severityOptions = ["Low", "Medium", "High"] as const;
 const accessLevelOptions = ["User Safe", "Admin Required"] as const;
@@ -42,6 +46,33 @@ type LocalPublishState =
   | { status: "saved"; slug: string; replaced: boolean }
   | { status: "removed"; slug: string }
   | { status: "error"; message: string };
+
+type RemotePublishState =
+  | { status: "idle" }
+  | { status: "publishing" }
+  | {
+      status: "success";
+      slug: string;
+      commitSha?: string;
+      commitUrl?: string;
+      path?: string;
+      replaced: boolean;
+    }
+  | { status: "error"; message: string; statusCode?: number };
+
+interface CorporateFixPublishResponse {
+  ok?: boolean;
+  error?: string;
+  message?: string;
+  statusCode?: number;
+  result?: {
+    slug?: string;
+    replaced?: boolean;
+    path?: string;
+    commitSha?: string;
+    commitUrl?: string;
+  };
+}
 
 function createDefaultDraft(): CorporateFixBuilderDraft {
   return {
@@ -269,6 +300,7 @@ export function FixBuilder() {
   const [loadedFromLocal, setLoadedFromLocal] = useState(false);
   const [localPublishState, setLocalPublishState] = useState<LocalPublishState>({ status: "idle" });
   const [isPublishedLocally, setIsPublishedLocally] = useState(false);
+  const [remotePublishState, setRemotePublishState] = useState<RemotePublishState>({ status: "idle" });
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -429,6 +461,85 @@ export function FixBuilder() {
     }
   }
 
+  async function handlePublishToSite() {
+    if (validationIssues.length > 0) {
+      setRemotePublishState({
+        status: "error",
+        message: "Fix validation issues before publishing to the site."
+      });
+      return;
+    }
+
+    if (!REMOTE_PUBLISH_ENDPOINT) {
+      setRemotePublishState({
+        status: "error",
+        message: "No publish endpoint is configured for this build."
+      });
+      return;
+    }
+
+    setRemotePublishState({ status: "publishing" });
+
+    try {
+      const response = await fetch(REMOTE_PUBLISH_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          fix: normalizedEntry,
+          source: "corporate-tech-fixes-builder",
+          requestedAt: new Date().toISOString()
+        })
+      });
+
+      let payload: CorporateFixPublishResponse | null = null;
+      try {
+        payload = (await response.json()) as CorporateFixPublishResponse;
+      } catch {
+        payload = null;
+      }
+
+      if (!response.ok || !payload?.ok) {
+        setRemotePublishState({
+          status: "error",
+          statusCode: response.status,
+          message:
+            payload?.error ||
+            payload?.message ||
+            `Publish request failed (${response.status}). Check Cloudflare Worker and Access policy configuration.`
+        });
+        return;
+      }
+
+      const result = payload.result ?? {};
+
+      setRemotePublishState({
+        status: "success",
+        slug: result.slug || normalizedEntry.slug,
+        replaced: Boolean(result.replaced),
+        path: result.path,
+        commitSha: result.commitSha,
+        commitUrl: result.commitUrl
+      });
+
+      // Keep local preview in sync immediately while the GitHub Pages deployment runs.
+      try {
+        upsertLocalCorporateFix(normalizedEntry);
+        setIsPublishedLocally(true);
+      } catch {
+        // Ignore local sync failure; remote publish already succeeded.
+      }
+    } catch {
+      setRemotePublishState({
+        status: "error",
+        message:
+          "Unable to reach the publish endpoint. Confirm the Cloudflare Worker route is deployed and reachable from this origin."
+      });
+    }
+  }
+
   function addTagFromInput() {
     const parsed = newTag
       .split(/[\n,]/g)
@@ -500,6 +611,78 @@ export function FixBuilder() {
               <Link href="/corporate-tech-fixes" className="btn-secondary px-4 py-2 text-center text-xs sm:text-sm">
                 Open Tech Fixes
               </Link>
+            </div>
+            <div className="mt-4 rounded-xl border border-line/80 bg-white/70 p-3 dark:border-slate-700 dark:bg-slate-950/50">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+                Publish to Site (GitHub)
+              </p>
+              <p className="mt-1 text-[11px] leading-5 text-slate-500 dark:text-slate-400">
+                Sends this KB to the Cloudflare Worker publish API, which commits
+                <code className="mx-1 rounded bg-slate-100 px-1.5 py-0.5 text-[10px] dark:bg-slate-800">
+                  data/corporate-fixes.published.json
+                </code>
+                and triggers the GitHub Pages deploy workflow.
+              </p>
+              <button
+                type="button"
+                onClick={handlePublishToSite}
+                disabled={remotePublishState.status === "publishing"}
+                className="btn-primary mt-3 w-full px-4 py-2 text-xs sm:text-sm"
+              >
+                {remotePublishState.status === "publishing" ? "Publishing…" : "Publish to Site"}
+              </button>
+              <p className="mt-2 text-[11px] leading-5 text-slate-500 dark:text-slate-400">
+                Endpoint:
+                <code className="ml-1 rounded bg-slate-100 px-1.5 py-0.5 text-[10px] dark:bg-slate-800">
+                  {REMOTE_PUBLISH_ENDPOINT}
+                </code>
+              </p>
+              {remotePublishState.status === "success" ? (
+                <div className="mt-2 rounded-lg border border-emerald-200 bg-emerald-50 p-2.5 text-xs text-emerald-800 dark:border-emerald-900/60 dark:bg-emerald-950/30 dark:text-emerald-200">
+                  <p>
+                    {remotePublishState.replaced ? "Updated" : "Published"} site KB:
+                    <code className="ml-1 rounded bg-white/80 px-1.5 py-0.5 text-[10px] dark:bg-slate-900">
+                      {remotePublishState.slug}
+                    </code>
+                  </p>
+                  {remotePublishState.path ? (
+                    <p className="mt-1">
+                      Path:
+                      <code className="ml-1 rounded bg-white/80 px-1.5 py-0.5 text-[10px] dark:bg-slate-900">
+                        {remotePublishState.path}
+                      </code>
+                    </p>
+                  ) : null}
+                  {remotePublishState.commitSha ? (
+                    <p className="mt-1">
+                      Commit:
+                      {remotePublishState.commitUrl ? (
+                        <a
+                          href={remotePublishState.commitUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="ml-1 underline decoration-emerald-500/40 underline-offset-2"
+                        >
+                          {remotePublishState.commitSha.slice(0, 7)}
+                        </a>
+                      ) : (
+                        <code className="ml-1 rounded bg-white/80 px-1.5 py-0.5 text-[10px] dark:bg-slate-900">
+                          {remotePublishState.commitSha.slice(0, 7)}
+                        </code>
+                      )}
+                    </p>
+                  ) : null}
+                  <p className="mt-1">
+                    Wait for the GitHub Pages deploy workflow to finish before testing the public site.
+                  </p>
+                </div>
+              ) : null}
+              {remotePublishState.status === "error" ? (
+                <p className="mt-2 rounded-lg border border-rose-200 bg-rose-50 p-2.5 text-xs text-rose-800 dark:border-rose-900/60 dark:bg-rose-950/30 dark:text-rose-200">
+                  {remotePublishState.statusCode ? `(${remotePublishState.statusCode}) ` : ""}
+                  {remotePublishState.message}
+                </p>
+              ) : null}
             </div>
             <p className="mt-3 text-[11px] leading-5 text-slate-500 dark:text-slate-400">
               Local-only publish: appears in Tech Fixes on this browser/device. GitHub Pages cannot
