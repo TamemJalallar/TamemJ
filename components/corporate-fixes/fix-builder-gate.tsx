@@ -5,6 +5,11 @@ import type { FormEvent } from "react";
 import { FixBuilder } from "@/components/corporate-fixes/fix-builder";
 
 const SESSION_KEY = "corporateTechFixes:builderUnlocked:v1";
+const AUTH_MODE = (
+  process.env.NEXT_PUBLIC_CORPORATE_FIXES_BUILDER_AUTH_MODE ?? "password"
+)
+  .trim()
+  .toLowerCase();
 const CONFIGURED_PASSWORD_HASH = (
   process.env.NEXT_PUBLIC_CORPORATE_FIXES_BUILDER_PASSWORD_SHA256 ?? ""
 )
@@ -32,11 +37,18 @@ export function FixBuilderGate() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const usesCloudflareAccess = useMemo(() => AUTH_MODE === "cloudflare-access", []);
   const hasPasswordConfigured = useMemo(() => CONFIGURED_PASSWORD_HASH.length === 64, []);
   const isDevelopment = process.env.NODE_ENV !== "production";
 
   useEffect(() => {
     if (typeof window === "undefined") {
+      setCheckingSession(false);
+      return;
+    }
+
+    if (usesCloudflareAccess) {
+      setUnlocked(true);
       setCheckingSession(false);
       return;
     }
@@ -56,7 +68,7 @@ export function FixBuilderGate() {
     } finally {
       setCheckingSession(false);
     }
-  }, [hasPasswordConfigured]);
+  }, [hasPasswordConfigured, usesCloudflareAccess]);
 
   function persistUnlockSession() {
     if (typeof window === "undefined") {
@@ -218,26 +230,48 @@ export function FixBuilderGate() {
 
   return (
     <div className="space-y-4">
+      {usesCloudflareAccess ? (
+        <div className="surface-card p-4 dark:border-slate-800 dark:bg-slate-950/70 sm:p-5">
+          <div className="flex flex-col gap-2">
+            <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+              Protected by Cloudflare Access
+            </p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              This builder is expected to be gated externally by Cloudflare Zero Trust Access.
+              Configure an Access application for
+              <code className="mx-1 rounded bg-slate-100 px-1.5 py-0.5 text-xs dark:bg-slate-800">
+                /corporate-tech-fixes/builder*
+              </code>
+              on your site hostname.
+            </p>
+          </div>
+        </div>
+      ) : null}
+
       <div className="surface-card p-4 dark:border-slate-800 dark:bg-slate-950/70 sm:p-5">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-              Builder Unlocked (Session)
+              {usesCloudflareAccess ? "Builder Access Active" : "Builder Unlocked (Session)"}
             </p>
             <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-              Access remains unlocked for this browser tab/session until you lock it or close the tab.
+              {usesCloudflareAccess
+                ? "Authentication is enforced upstream by Cloudflare Access."
+                : "Access remains unlocked for this browser tab/session until you lock it or close the tab."}
             </p>
           </div>
-          <button
-            type="button"
-            onClick={() => {
-              clearUnlockSession();
-              setUnlocked(false);
-            }}
-            className="btn-secondary"
-          >
-            Lock Builder
-          </button>
+          {!usesCloudflareAccess ? (
+            <button
+              type="button"
+              onClick={() => {
+                clearUnlockSession();
+                setUnlocked(false);
+              }}
+              className="btn-secondary"
+            >
+              Lock Builder
+            </button>
+          ) : null}
         </div>
       </div>
 

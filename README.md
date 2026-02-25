@@ -91,7 +91,13 @@ Use `/corporate-tech-fixes/builder` to draft entries in the browser, manage step
 The KB Builder supports a client-side password gate for GitHub Pages/static hosting:
 
 - Route: `/corporate-tech-fixes/builder`
+- Auth mode (build-time): `NEXT_PUBLIC_CORPORATE_FIXES_BUILDER_AUTH_MODE`
 - Config variable (build-time): `NEXT_PUBLIC_CORPORATE_FIXES_BUILDER_PASSWORD_SHA256`
+
+Auth modes:
+
+- `password` (default) — local client-side password gate using SHA-256 hash comparison
+- `cloudflare-access` — no local password prompt; builder is expected to be protected externally by Cloudflare Zero Trust Access
 
 Generate a SHA-256 hash for the password:
 
@@ -102,6 +108,14 @@ printf 'your-password' | shasum -a 256
 Then set the hex output as `NEXT_PUBLIC_CORPORATE_FIXES_BUILDER_PASSWORD_SHA256` in your local `.env` / CI build environment and redeploy.
 
 Important limitation: on static hosting this is a client-side gate (deterrent), not secure server-side authentication. It prevents casual access but is not equivalent to real auth.
+
+If using Cloudflare Access instead, set:
+
+```bash
+NEXT_PUBLIC_CORPORATE_FIXES_BUILDER_AUTH_MODE=cloudflare-access
+```
+
+and protect `/corporate-tech-fixes/builder*` at the Cloudflare edge.
 
 ### How to Add a New Fix
 
