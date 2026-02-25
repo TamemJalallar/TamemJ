@@ -1,8 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { CorporateTechFix } from "@/lib/corporate-fixes.registry";
+import {
+  LOCAL_CORPORATE_FIXES_UPDATED_EVENT,
+  getLocalCorporateFixes,
+  isLocalCorporateFixSlug
+} from "@/lib/corporate-fixes.local";
+import { FixGuide } from "@/components/corporate-fixes/fix-guide";
 import { AccessLevelBadge, MetaPill, SeverityBadge, TagChip } from "@/components/corporate-fixes/fix-shared";
 
 interface FixesCatalogProps {
@@ -15,14 +21,82 @@ function joinClasses(...classes: Array<string | false | null | undefined>): stri
   return classes.filter(Boolean).join(" ");
 }
 
+function mergeFixCollections(baseFixes: CorporateTechFix[], localFixes: CorporateTechFix[]): CorporateTechFix[] {
+  const seen = new Set<string>();
+  const merged: CorporateTechFix[] = [];
+
+  for (const localFix of localFixes) {
+    if (seen.has(localFix.slug)) continue;
+    seen.add(localFix.slug);
+    merged.push(localFix);
+  }
+
+  for (const baseFix of baseFixes) {
+    if (seen.has(baseFix.slug)) continue;
+    seen.add(baseFix.slug);
+    merged.push(baseFix);
+  }
+
+  return merged;
+}
+
 export function FixesCatalog({ fixes, categories, tags }: FixesCatalogProps) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [localFixes, setLocalFixes] = useState<CorporateTechFix[]>([]);
+  const [selectedLocalFix, setSelectedLocalFix] = useState<CorporateTechFix | null>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const loadLocal = () => setLocalFixes(getLocalCorporateFixes());
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key && !event.key.includes("corporateTechFixes:localEntries")) {
+        return;
+      }
+      loadLocal();
+    };
+    const handleLocalUpdate = () => loadLocal();
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setSelectedLocalFix(null);
+      }
+    };
+
+    loadLocal();
+    window.addEventListener("storage", handleStorage);
+    window.addEventListener(LOCAL_CORPORATE_FIXES_UPDATED_EVENT, handleLocalUpdate as EventListener);
+    window.addEventListener("keydown", handleEscape);
+
+    return () => {
+      window.removeEventListener("storage", handleStorage);
+      window.removeEventListener(
+        LOCAL_CORPORATE_FIXES_UPDATED_EVENT,
+        handleLocalUpdate as EventListener
+      );
+      window.removeEventListener("keydown", handleEscape);
+    };
+  }, []);
+
+  const allFixes = useMemo(() => mergeFixCollections(fixes, localFixes), [fixes, localFixes]);
+  const allCategories = useMemo(
+    () =>
+      [...new Set([...categories, ...localFixes.map((fix) => fix.category)])].sort((a, b) =>
+        a.localeCompare(b)
+      ),
+    [categories, localFixes]
+  );
+  const allTags = useMemo(
+    () => [...new Set([...tags, ...localFixes.flatMap((fix) => fix.tags)])].sort((a, b) => a.localeCompare(b)),
+    [tags, localFixes]
+  );
 
   const normalizedQuery = query.trim().toLowerCase();
 
-  const filteredFixes = fixes.filter((fix) => {
+  const filteredFixes = allFixes.filter((fix) => {
     const matchesCategory = category === "All" || fix.category === category;
     const matchesTags =
       selectedTags.length === 0 || selectedTags.every((tag) => fix.tags.includes(tag));
@@ -54,6 +128,54 @@ export function FixesCatalog({ fixes, categories, tags }: FixesCatalogProps) {
     setQuery("");
     setCategory("All");
     setSelectedTags([]);
+  }
+
+  function renderFixCardContent(fix: CorporateTechFix, options?: { local?: boolean }) {
+    const isLocal = options?.local ?? false;
+
+    return (
+      <>
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex min-w-0 flex-wrap items-center gap-2">
+            <p className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+              {fix.category}
+            </p>
+            {isLocal ? (
+              <span className="inline-flex items-center rounded-full border border-sky-200 bg-sky-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-sky-700 dark:border-sky-900/60 dark:bg-sky-950/30 dark:text-sky-200">
+                Local Draft
+              </span>
+            ) : null}
+          </div>
+          <span className="text-xs text-slate-400 transition group-hover:text-slate-500 dark:text-slate-500">
+            {isLocal ? "Preview (local) →" : "Open →"}
+          </span>
+        </div>
+
+        <h3 className="mt-3 text-lg font-semibold text-slate-900 dark:text-slate-100">{fix.title}</h3>
+        <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">{fix.description}</p>
+
+        <div className="mt-4 flex flex-wrap gap-2">
+          <SeverityBadge severity={fix.severity} />
+          <AccessLevelBadge accessLevel={fix.accessLevel} />
+        </div>
+
+        <div className="mt-4 grid gap-2 sm:grid-cols-2">
+          <MetaPill label="Est. Time" value={fix.estimatedTime} />
+          <MetaPill label="Steps" value={`${fix.steps.length}`} />
+        </div>
+
+        <div className="mt-4 flex flex-wrap gap-2">
+          {fix.tags.slice(0, 4).map((tag) => (
+            <TagChip key={tag} label={tag} asSpan />
+          ))}
+          {fix.tags.length > 4 ? (
+            <span className="inline-flex items-center rounded-full border border-line/70 bg-white px-3 py-1 text-xs font-medium text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
+              +{fix.tags.length - 4} more
+            </span>
+          ) : null}
+        </div>
+      </>
+    );
   }
 
   return (
@@ -92,7 +214,7 @@ export function FixesCatalog({ fixes, categories, tags }: FixesCatalogProps) {
                 className="w-full rounded-xl border border-line bg-white px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-slate-300 focus:shadow-soft dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
               >
                 <option value="All">All Categories</option>
-                {categories.map((item) => (
+                {allCategories.map((item) => (
                   <option key={item} value={item}>
                     {item}
                   </option>
@@ -130,7 +252,7 @@ export function FixesCatalog({ fixes, categories, tags }: FixesCatalogProps) {
         <div className="mt-5">
           <p className="mb-3 text-sm font-medium text-slate-900 dark:text-slate-100">Tags</p>
           <div className="flex flex-wrap gap-2">
-            {tags.map((tag) => (
+            {allTags.map((tag) => (
               <TagChip
                 key={tag}
                 label={tag}
@@ -142,52 +264,46 @@ export function FixesCatalog({ fixes, categories, tags }: FixesCatalogProps) {
         </div>
       </div>
 
+      {localFixes.length > 0 ? (
+        <div className="rounded-2xl border border-sky-200/80 bg-sky-50/80 px-4 py-3 text-sm shadow-soft dark:border-sky-900/60 dark:bg-sky-950/20">
+          <p className="font-semibold text-sky-900 dark:text-sky-100">
+            {localFixes.length} local Tech Fixes {localFixes.length === 1 ? "entry" : "entries"} loaded
+          </p>
+          <p className="mt-1 text-xs text-sky-800/80 dark:text-sky-200/90">
+            These were added from the KB Builder and exist only in this browser/device until you copy
+            them into the registry and redeploy.
+          </p>
+        </div>
+      ) : null}
+
       {filteredFixes.length > 0 ? (
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {filteredFixes.map((fix) => (
-            <Link
-              key={fix.slug}
-              href={`/corporate-tech-fixes/${fix.slug}`}
-              className="group surface-card block p-5 transition hover:-translate-y-0.5 hover:shadow-card dark:border-slate-800 dark:bg-slate-950/70"
-            >
-              <div className="flex items-start justify-between gap-3">
-                <p className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
-                  {fix.category}
-                </p>
-                <span className="text-xs text-slate-400 transition group-hover:text-slate-500 dark:text-slate-500">
-                  Open →
-                </span>
-              </div>
+          {filteredFixes.map((fix) => {
+            const isLocal = isLocalCorporateFixSlug(fix.slug);
 
-              <h3 className="mt-3 text-lg font-semibold text-slate-900 dark:text-slate-100">
-                {fix.title}
-              </h3>
-              <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
-                {fix.description}
-              </p>
+            if (isLocal) {
+              return (
+                <button
+                  key={fix.slug}
+                  type="button"
+                  onClick={() => setSelectedLocalFix(fix)}
+                  className="group surface-card block p-5 text-left transition hover:-translate-y-0.5 hover:shadow-card dark:border-slate-800 dark:bg-slate-950/70"
+                >
+                  {renderFixCardContent(fix, { local: true })}
+                </button>
+              );
+            }
 
-              <div className="mt-4 flex flex-wrap gap-2">
-                <SeverityBadge severity={fix.severity} />
-                <AccessLevelBadge accessLevel={fix.accessLevel} />
-              </div>
-
-              <div className="mt-4 grid gap-2 sm:grid-cols-2">
-                <MetaPill label="Est. Time" value={fix.estimatedTime} />
-                <MetaPill label="Steps" value={`${fix.steps.length}`} />
-              </div>
-
-              <div className="mt-4 flex flex-wrap gap-2">
-                {fix.tags.slice(0, 4).map((tag) => (
-                  <TagChip key={tag} label={tag} asSpan />
-                ))}
-                {fix.tags.length > 4 ? (
-                  <span className="inline-flex items-center rounded-full border border-line/70 bg-white px-3 py-1 text-xs font-medium text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
-                    +{fix.tags.length - 4} more
-                  </span>
-                ) : null}
-              </div>
-            </Link>
-          ))}
+            return (
+              <Link
+                key={fix.slug}
+                href={`/corporate-tech-fixes/${fix.slug}`}
+                className="group surface-card block p-5 transition hover:-translate-y-0.5 hover:shadow-card dark:border-slate-800 dark:bg-slate-950/70"
+              >
+                {renderFixCardContent(fix)}
+              </Link>
+            );
+          })}
         </div>
       ) : (
         <div className="surface-card border-dashed p-6 sm:p-8 dark:border-slate-800 dark:bg-slate-950/70">
@@ -206,7 +322,44 @@ export function FixesCatalog({ fixes, categories, tags }: FixesCatalogProps) {
           </button>
         </div>
       )}
+
+      {selectedLocalFix ? (
+        <div
+          className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/70 p-3 backdrop-blur-sm sm:p-6 print:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="local-fix-preview-title"
+          onClick={() => setSelectedLocalFix(null)}
+        >
+          <div
+            className="mx-auto w-full max-w-5xl rounded-2xl border border-line/80 bg-white p-4 shadow-card dark:border-slate-800 dark:bg-slate-950 sm:p-6"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+                  Local Tech Fixes Preview
+                </p>
+                <h2
+                  id="local-fix-preview-title"
+                  className="mt-1 text-lg font-semibold text-slate-900 dark:text-slate-100"
+                >
+                  {selectedLocalFix.title}
+                </h2>
+                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                  Local builder entry. This preview is available only in this browser until the fix is
+                  added to the registry and redeployed.
+                </p>
+              </div>
+              <button type="button" onClick={() => setSelectedLocalFix(null)} className="btn-secondary">
+                Close Preview
+              </button>
+            </div>
+
+            <FixGuide fix={selectedLocalFix} />
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
-

@@ -1,8 +1,15 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import type { CorporateFixStep, CorporateTechFix } from "@/lib/corporate-fixes.registry";
 import { corporateFixCategories } from "@/lib/corporate-fixes.registry";
+import {
+  buildLocalCorporateFixEntry,
+  getLocalCorporateFixes,
+  removeLocalCorporateFix,
+  upsertLocalCorporateFix
+} from "@/lib/corporate-fixes.local";
 import {
   AccessLevelBadge,
   EnterpriseSupportBanner,
@@ -29,6 +36,12 @@ interface CorporateFixBuilderDraft {
   description: string;
   steps: CorporateFixStep[];
 }
+
+type LocalPublishState =
+  | { status: "idle" }
+  | { status: "saved"; slug: string; replaced: boolean }
+  | { status: "removed"; slug: string }
+  | { status: "error"; message: string };
 
 function createDefaultDraft(): CorporateFixBuilderDraft {
   return {
@@ -254,6 +267,8 @@ export function FixBuilder() {
   const [saveState, setSaveState] = useState<"idle" | "saved">("idle");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [loadedFromLocal, setLoadedFromLocal] = useState(false);
+  const [localPublishState, setLocalPublishState] = useState<LocalPublishState>({ status: "idle" });
+  const [isPublishedLocally, setIsPublishedLocally] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -328,6 +343,7 @@ export function FixBuilder() {
 
   const validationIssues = useMemo(() => getValidationIssues(draft), [draft]);
   const normalizedEntry = useMemo(() => toRegistryEntry(draft), [draft]);
+  const localPreviewEntry = useMemo(() => buildLocalCorporateFixEntry(normalizedEntry), [normalizedEntry]);
 
   const registrySnippet = useMemo(
     () => `${JSON.stringify(normalizedEntry, null, 2)},`,
@@ -337,6 +353,20 @@ export function FixBuilder() {
   const markdownOutput = useMemo(() => buildMarkdownDoc(normalizedEntry), [normalizedEntry]);
 
   const jsonOutput = useMemo(() => JSON.stringify(normalizedEntry, null, 2), [normalizedEntry]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    if (!normalizedEntry.slug.trim()) {
+      setIsPublishedLocally(false);
+      return;
+    }
+
+    const localEntries = getLocalCorporateFixes();
+    setIsPublishedLocally(localEntries.some((entry) => entry.slug === localPreviewEntry.slug));
+  }, [localPreviewEntry.slug, normalizedEntry.slug]);
 
   async function handleCopy(key: string, text: string) {
     const success = await copyText(text);
@@ -348,6 +378,55 @@ export function FixBuilder() {
     window.setTimeout(() => {
       setCopiedKey((current) => (current === key ? null : current));
     }, 1400);
+  }
+
+  function handlePublishToTechFixesLocal() {
+    if (validationIssues.length > 0) {
+      setLocalPublishState({
+        status: "error",
+        message: "Fix validation issues before publishing to Tech Fixes."
+      });
+      return;
+    }
+
+    try {
+      const { storedEntry, replaced } = upsertLocalCorporateFix(normalizedEntry);
+      setIsPublishedLocally(true);
+      setLocalPublishState({
+        status: "saved",
+        slug: storedEntry.slug,
+        replaced
+      });
+    } catch {
+      setLocalPublishState({
+        status: "error",
+        message: "Unable to save to local Tech Fixes in this browser."
+      });
+    }
+  }
+
+  function handleRemoveLocalPublishedEntry() {
+    if (!localPreviewEntry.slug) {
+      return;
+    }
+
+    try {
+      const removed = removeLocalCorporateFix(localPreviewEntry.slug);
+      if (!removed) {
+        return;
+      }
+
+      setIsPublishedLocally(false);
+      setLocalPublishState({
+        status: "removed",
+        slug: localPreviewEntry.slug
+      });
+    } catch {
+      setLocalPublishState({
+        status: "error",
+        message: "Unable to remove the local Tech Fixes entry in this browser."
+      });
+    }
   }
 
   function addTagFromInput() {
@@ -368,7 +447,7 @@ export function FixBuilder() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 overflow-x-hidden">
       <EnterpriseSupportBanner />
 
       <div className="surface-card-strong p-5 sm:p-6 dark:border-slate-800 dark:bg-slate-950/70">
@@ -382,7 +461,8 @@ export function FixBuilder() {
             </h1>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600 dark:text-slate-300 sm:text-base">
               Build new registry entries and support documentation from a form. The tool stores drafts
-              locally in your browser and generates copy/paste-ready output for
+              locally in your browser, can publish local-only previews directly into the Tech Fixes
+              catalog, and generates copy/paste-ready output for
               <code className="mx-1 rounded bg-slate-100 px-1.5 py-0.5 text-xs dark:bg-slate-800">
                 lib/corporate-fixes.registry.ts
               </code>
@@ -400,12 +480,58 @@ export function FixBuilder() {
                 Loaded previous local draft
               </p>
             ) : null}
+            <div className="mt-4 grid gap-2">
+              <button
+                type="button"
+                onClick={handlePublishToTechFixesLocal}
+                className="btn-primary px-4 py-2 text-xs sm:text-sm"
+              >
+                {isPublishedLocally ? "Update in Tech Fixes (Local)" : "Add to Tech Fixes (Local)"}
+              </button>
+              {isPublishedLocally ? (
+                <button
+                  type="button"
+                  onClick={handleRemoveLocalPublishedEntry}
+                  className="btn-secondary px-4 py-2 text-xs sm:text-sm"
+                >
+                  Remove Local Entry
+                </button>
+              ) : null}
+              <Link href="/corporate-tech-fixes" className="btn-secondary px-4 py-2 text-center text-xs sm:text-sm">
+                Open Tech Fixes
+              </Link>
+            </div>
+            <p className="mt-3 text-[11px] leading-5 text-slate-500 dark:text-slate-400">
+              Local-only publish: appears in Tech Fixes on this browser/device. GitHub Pages cannot
+              write new registry files from the builder.
+            </p>
+            {localPublishState.status === "saved" ? (
+              <p className="mt-2 text-xs text-emerald-700 dark:text-emerald-300">
+                {localPublishState.replaced ? "Updated" : "Added"} local Tech Fixes entry:
+                <code className="ml-1 rounded bg-slate-100 px-1.5 py-0.5 text-[11px] dark:bg-slate-800">
+                  {localPublishState.slug}
+                </code>
+              </p>
+            ) : null}
+            {localPublishState.status === "removed" ? (
+              <p className="mt-2 text-xs text-slate-600 dark:text-slate-300">
+                Removed local Tech Fixes entry:
+                <code className="ml-1 rounded bg-slate-100 px-1.5 py-0.5 text-[11px] dark:bg-slate-800">
+                  {localPublishState.slug}
+                </code>
+              </p>
+            ) : null}
+            {localPublishState.status === "error" ? (
+              <p className="mt-2 text-xs text-rose-700 dark:text-rose-300">
+                {localPublishState.message}
+              </p>
+            ) : null}
           </div>
         </div>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
-        <div className="space-y-6">
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] xl:items-start">
+        <div className="min-w-0 space-y-6">
           <section className="surface-card p-5 sm:p-6 dark:border-slate-800 dark:bg-slate-950/70">
             <div className="mb-4 flex items-center justify-between gap-3">
               <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
@@ -440,7 +566,7 @@ export function FixBuilder() {
                 <label className="mb-2 block text-sm font-medium text-slate-900 dark:text-slate-100">
                   Slug
                 </label>
-                <div className="flex gap-2">
+                <div className="flex min-w-0 gap-2">
                   <input
                     type="text"
                     value={draft.slug}
@@ -448,7 +574,7 @@ export function FixBuilder() {
                       setDraft((current) => ({ ...current, slug: slugify(event.target.value) }))
                     }
                     placeholder="outlook-search-not-returning-results"
-                    className="w-full rounded-xl border border-line bg-white px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-slate-300 focus:shadow-soft dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+                    className="min-w-0 w-full rounded-xl border border-line bg-white px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-slate-300 focus:shadow-soft dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
                   />
                   <button
                     type="button"
@@ -765,8 +891,8 @@ export function FixBuilder() {
           </section>
         </div>
 
-        <div className="space-y-6">
-          <section className="surface-card-strong p-5 sm:p-6 dark:border-slate-800 dark:bg-slate-950/70">
+        <div className="min-w-0 space-y-6 xl:sticky xl:top-24">
+          <section className="min-w-0 surface-card-strong p-5 sm:p-6 dark:border-slate-800 dark:bg-slate-950/70">
             <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Preview</h2>
             <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
               Live preview of the registry entry metadata and step outline.
@@ -820,7 +946,7 @@ export function FixBuilder() {
             </div>
           </section>
 
-          <section className="surface-card p-5 sm:p-6 dark:border-slate-800 dark:bg-slate-950/70">
+          <section className="min-w-0 surface-card p-5 sm:p-6 dark:border-slate-800 dark:bg-slate-950/70">
             <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Validation</h2>
             {validationIssues.length === 0 ? (
               <p className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800 dark:border-emerald-900/60 dark:bg-emerald-950/30 dark:text-emerald-200">
@@ -840,7 +966,7 @@ export function FixBuilder() {
             )}
           </section>
 
-          <section className="surface-card p-5 sm:p-6 dark:border-slate-800 dark:bg-slate-950/70">
+          <section className="min-w-0 surface-card p-5 sm:p-6 dark:border-slate-800 dark:bg-slate-950/70">
             <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
               <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
                 Registry Snippet (TS/JSON)
@@ -871,12 +997,12 @@ export function FixBuilder() {
             <p className="mb-3 text-xs text-slate-500 dark:text-slate-400">
               Paste this object into the `corporateFixes` array in `lib/corporate-fixes.registry.ts`.
             </p>
-            <pre className="max-h-[420px] overflow-auto rounded-xl border border-slate-800 bg-slate-950 p-4 text-xs leading-6 text-slate-100 sm:text-sm">
+            <pre className="max-h-[50vh] w-full max-w-full overflow-auto rounded-xl border border-slate-800 bg-slate-950 p-4 text-xs leading-6 text-slate-100 sm:text-sm">
               <code>{registrySnippet}</code>
             </pre>
           </section>
 
-          <section className="surface-card p-5 sm:p-6 dark:border-slate-800 dark:bg-slate-950/70">
+          <section className="min-w-0 surface-card p-5 sm:p-6 dark:border-slate-800 dark:bg-slate-950/70">
             <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
               <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
                 Markdown Support Doc
@@ -907,7 +1033,7 @@ export function FixBuilder() {
             <p className="mb-3 text-xs text-slate-500 dark:text-slate-400">
               Use this for internal docs, notes, or drafting support runbooks before publishing.
             </p>
-            <pre className="max-h-[420px] overflow-auto rounded-xl border border-slate-800 bg-slate-950 p-4 text-xs leading-6 text-slate-100 sm:text-sm">
+            <pre className="max-h-[50vh] w-full max-w-full overflow-auto rounded-xl border border-slate-800 bg-slate-950 p-4 text-xs leading-6 text-slate-100 sm:text-sm">
               <code>{markdownOutput}</code>
             </pre>
           </section>
