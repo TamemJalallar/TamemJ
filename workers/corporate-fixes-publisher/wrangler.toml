@@ -1,0 +1,27 @@
+name = "corporate-fixes-publisher"
+main = "src/index.ts"
+compatibility_date = "2026-02-25"
+
+routes = [
+  { pattern = "tamemj.com/api/corporate-tech-fixes/publish", zone_name = "tamemj.com" }
+]
+
+[vars]
+GITHUB_OWNER = "TamemJalallar"
+GITHUB_REPO = "TamemJ"
+GITHUB_BRANCH = "main"
+GITHUB_PUBLISHED_FIXES_PATH = "data/corporate-fixes.published.json"
+PUBLISH_PATH = "/api/corporate-tech-fixes/publish"
+ALLOWED_ORIGINS = "https://tamemj.com,https://www.tamemj.com"
+REQUIRE_CLOUDFLARE_ACCESS = "true"
+GIT_COMMIT_NAME = "Wrangler-Publisher"
+
+# Optional extra allowlist on top of Cloudflare Access.
+# Comma-separated lowercase emails.
+# ALLOWED_EMAILS = "you@example.com"
+
+# Optional commit email shown in GitHub history.
+# GIT_COMMIT_EMAIL = "noreply@tamemj.com"
+
+# Set secret separately (never commit tokens):
+#   wrangler secret put GITHUB_TOKEN
