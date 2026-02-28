@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import "./globals.css";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 import { seoKeywords, siteConfig } from "@/lib/site";
 
 const inter = Inter({
@@ -21,27 +22,16 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   keywords: seoKeywords,
   applicationName: "tamemj.com",
-  openGraph: {
-    title: siteConfig.title,
-    description: siteConfig.description,
-    url: siteConfig.url,
-    siteName: "tamemj.com",
-    type: "website",
-    images: [
-      {
-        url: "/images/site/og-image.svg",
-        width: 1200,
-        height: 630,
-        alt: "Tamem J iOS apps portfolio"
-      }
-    ]
+  category: "Technology",
+  alternates: {
+    canonical: "/"
   },
-  twitter: {
-    card: "summary_large_image",
-    title: siteConfig.title,
-    description: siteConfig.description,
-    images: ["/images/site/og-image.svg"]
+  robots: {
+    index: true,
+    follow: true
   },
+  openGraph: buildOpenGraph(siteConfig.title, siteConfig.description, "/"),
+  twitter: buildTwitter(siteConfig.title, siteConfig.description),
   icons: {
     icon: "/favicon.svg"
   }
@@ -54,7 +44,34 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
-  const structuredData = {
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: siteConfig.title,
+    url: siteConfig.url,
+    description: siteConfig.description,
+    potentialAction: {
+      "@type": "SearchAction",
+      target: `${toAbsoluteUrl("/support/kb/")}?q={search_term_string}`,
+      "query-input": "required name=search_term_string"
+    }
+  };
+
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: siteConfig.name,
+    url: siteConfig.url,
+    email: siteConfig.email,
+    contactPoint: {
+      "@type": "ContactPoint",
+      email: siteConfig.supportEmail,
+      contactType: "customer support",
+      url: toAbsoluteUrl("/support/")
+    }
+  };
+
+  const personSchema = {
     "@context": "https://schema.org",
     "@type": "Person",
     name: siteConfig.name,
@@ -63,7 +80,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
     email: siteConfig.email,
     worksFor: {
       "@type": "Organization",
-      name: "Independent"
+      name: siteConfig.name
     },
     sameAs: []
   };
@@ -78,7 +95,15 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         </div>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
         />
       </body>
     </html>

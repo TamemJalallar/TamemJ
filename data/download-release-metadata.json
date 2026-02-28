@@ -1,6 +1,498 @@
 {
   "version": 1,
-  "generatedAt": null,
-  "entries": {}
+  "generatedAt": "2026-02-28T05:59:04.594Z",
+  "entries": {
+    "windows-terminal": {
+      "repo": "microsoft/terminal",
+      "releaseTag": "v1.23.20211.0",
+      "releaseName": "Windows Terminal v1.23.20211.0",
+      "releaseUrl": "https://github.com/microsoft/terminal/releases/tag/v1.23.20211.0",
+      "publishedAt": "2026-01-24T00:01:18Z",
+      "artifacts": {
+        "Windows MSIX bundle": {
+          "assetName": "Microsoft.WindowsTerminal_1.23.20211.0_8wekyb3d8bbwe.msixbundle",
+          "resolvedUrl": "https://github.com/microsoft/terminal/releases/download/v1.23.20211.0/Microsoft.WindowsTerminal_1.23.20211.0_8wekyb3d8bbwe.msixbundle",
+          "version": "1.23.20211.0",
+          "fileSize": "20.7 MB",
+          "fileSizeBytes": 21732492,
+          "checksumSha256": "a5b4b6bd5375227945396529d0023167942b5ed0b9e9516004b30e3648c21e52"
+        }
+      }
+    },
+    "localsend": {
+      "repo": "localsend/localsend",
+      "releaseTag": "v1.17.0",
+      "releaseName": "v1.17.0",
+      "releaseUrl": "https://github.com/localsend/localsend/releases/tag/v1.17.0",
+      "publishedAt": "2025-02-20T01:23:55Z",
+      "artifacts": {
+        "Windows installer": {
+          "assetName": "LocalSend-1.17.0-windows-x86-64.exe",
+          "resolvedUrl": "https://github.com/localsend/localsend/releases/download/v1.17.0/LocalSend-1.17.0-windows-x86-64.exe",
+          "version": "1.17.0",
+          "fileSize": "14.2 MB",
+          "fileSizeBytes": 14895464
+        },
+        "macOS DMG": {
+          "assetName": "LocalSend-1.17.0.dmg",
+          "resolvedUrl": "https://github.com/localsend/localsend/releases/download/v1.17.0/LocalSend-1.17.0.dmg",
+          "version": "1.17.0",
+          "fileSize": "31.0 MB",
+          "fileSizeBytes": 32493186
+        }
+      }
+    },
+    "keepassxc": {
+      "repo": "keepassxreboot/keepassxc",
+      "releaseTag": "2.7.11",
+      "releaseName": "Release 2.7.11",
+      "releaseUrl": "https://github.com/keepassxreboot/keepassxc/releases/tag/2.7.11",
+      "publishedAt": "2025-11-23T23:29:50Z",
+      "artifacts": {
+        "Windows installer": {
+          "assetName": "KeePassXC-2.7.11-Win64.msi",
+          "resolvedUrl": "https://github.com/keepassxreboot/keepassxc/releases/download/2.7.11/KeePassXC-2.7.11-Win64.msi",
+          "version": "2.7.11",
+          "fileSize": "34.0 MB",
+          "fileSizeBytes": 35672064,
+          "checksumSha256": "74abea9e12282cc2b0feb51ebc6db65299eb4ef0086e89cfad8dcaafc94a6f67"
+        },
+        "macOS DMG": {
+          "assetName": "KeePassXC-2.7.11-1-arm64.dmg",
+          "resolvedUrl": "https://github.com/keepassxreboot/keepassxc/releases/download/2.7.11/KeePassXC-2.7.11-1-arm64.dmg",
+          "version": "2.7.11",
+          "fileSize": "32.7 MB",
+          "fileSizeBytes": 34237040,
+          "checksumSha256": "11c514ed9fcc33b82d2a8e113bfc989b5834335dafd7a5dadd8942410cfbd025"
+        }
+      }
+    },
+    "iina": {
+      "repo": "iina/iina",
+      "releaseTag": "v1.4.1",
+      "releaseName": "IINA 1.4.1",
+      "releaseUrl": "https://github.com/iina/iina/releases/tag/v1.4.1",
+      "publishedAt": "2025-09-25T13:35:01Z",
+      "artifacts": {
+        "macOS DMG": {
+          "assetName": "IINA.v1.4.1.dmg",
+          "resolvedUrl": "https://github.com/iina/iina/releases/download/v1.4.1/IINA.v1.4.1.dmg",
+          "version": "1.4.1",
+          "fileSize": "103 MB",
+          "fileSizeBytes": 108150662,
+          "checksumSha256": "177ad469ea129bed95a82ac59b5fb58d0a06c35342fca7a37dba214a8821f848"
+        }
+      }
+    },
+    "sharex": {
+      "repo": "ShareX/ShareX",
+      "releaseTag": "v19.0.2",
+      "releaseName": "ShareX 19.0.2",
+      "releaseUrl": "https://github.com/ShareX/ShareX/releases/tag/v19.0.2",
+      "publishedAt": "2026-01-28T01:49:35Z",
+      "artifacts": {
+        "Windows installer": {
+          "assetName": "ShareX-19.0.2-setup.exe",
+          "resolvedUrl": "https://github.com/ShareX/ShareX/releases/download/v19.0.2/ShareX-19.0.2-setup.exe",
+          "version": "19.0.2",
+          "fileSize": "108 MB",
+          "fileSizeBytes": 113511430,
+          "checksumSha256": "30a3172fa3c8d8f998a3d21180ce0fac7761c74e78b701577fe028902b014d1b"
+        }
+      }
+    },
+    "flow-launcher": {
+      "repo": "Flow-Launcher/Flow.Launcher",
+      "releaseTag": "v2.1.0",
+      "releaseName": "v2.1.0",
+      "releaseUrl": "https://github.com/Flow-Launcher/Flow.Launcher/releases/tag/v2.1.0",
+      "publishedAt": "2026-02-24T12:14:36Z",
+      "artifacts": {
+        "Windows installer": {
+          "assetName": "Flow-Launcher-Setup.exe",
+          "resolvedUrl": "https://github.com/Flow-Launcher/Flow.Launcher/releases/download/v2.1.0/Flow-Launcher-Setup.exe",
+          "version": "2.1.0",
+          "fileSize": "95.2 MB",
+          "fileSizeBytes": 99870720,
+          "checksumSha256": "02ef6900b778b1debc9458a2ee8739c9eae0d43e748ebe0179e3749eab0f5630"
+        }
+      }
+    },
+    "flameshot": {
+      "repo": "flameshot-org/flameshot",
+      "releaseTag": "v13.3.0",
+      "releaseName": "v13.3.0",
+      "releaseUrl": "https://github.com/flameshot-org/flameshot/releases/tag/v13.3.0",
+      "publishedAt": "2025-10-28T22:50:45Z",
+      "artifacts": {
+        "Windows installer": {
+          "assetName": "Flameshot-13.3.0-win64.msi",
+          "resolvedUrl": "https://github.com/flameshot-org/flameshot/releases/download/v13.3.0/Flameshot-13.3.0-win64.msi",
+          "version": "13.3.0",
+          "fileSize": "20.5 MB",
+          "fileSizeBytes": 21540864,
+          "checksumSha256": "37ca5916450fab003fb3c64eacd01d103d11d122c30bade6af144d4b0874df66"
+        },
+        "macOS DMG": {
+          "assetName": "Flameshot-13.3.0-artifact-macos-arm64.dmg",
+          "resolvedUrl": "https://github.com/flameshot-org/flameshot/releases/download/v13.3.0/Flameshot-13.3.0-artifact-macos-arm64.dmg",
+          "version": "13.3.0",
+          "fileSize": "37.2 MB",
+          "fileSizeBytes": 39052904,
+          "checksumSha256": "ecf0d815b5b4c0a55f896d67c4cf74c49816ccb20acf9df715a3cd893e0184e7"
+        }
+      }
+    },
+    "joplin": {
+      "repo": "laurent22/joplin",
+      "releaseTag": "v3.5.13",
+      "releaseName": "v3.5.13",
+      "releaseUrl": "https://github.com/laurent22/joplin/releases/tag/v3.5.13",
+      "publishedAt": "2026-02-25T21:19:11Z",
+      "artifacts": {
+        "Windows installer": {
+          "assetName": "Joplin-Setup-3.5.13.exe",
+          "resolvedUrl": "https://github.com/laurent22/joplin/releases/download/v3.5.13/Joplin-Setup-3.5.13.exe",
+          "version": "3.5.13",
+          "fileSize": "232 MB",
+          "fileSizeBytes": 243234176,
+          "checksumSha256": "808c5155861afcaa69264c87ebe9f718d5229ed0dd7d937c1ffa7e9b907dca89"
+        },
+        "macOS DMG": {
+          "assetName": "Joplin-3.5.13-arm64.DMG",
+          "resolvedUrl": "https://github.com/laurent22/joplin/releases/download/v3.5.13/Joplin-3.5.13-arm64.DMG",
+          "version": "3.5.13",
+          "fileSize": "147 MB",
+          "fileSizeBytes": 153626387,
+          "checksumSha256": "2f99fa5591f0ab5007e5e1cbff0dfb03055a1d78a15f003ec38594cd1f563aab"
+        }
+      }
+    },
+    "obs-studio": {
+      "repo": "obsproject/obs-studio",
+      "releaseTag": "32.0.4",
+      "releaseName": "OBS Studio 32.0.4",
+      "releaseUrl": "https://github.com/obsproject/obs-studio/releases/tag/32.0.4",
+      "publishedAt": "2025-12-13T22:02:08Z",
+      "artifacts": {
+        "Windows installer": {
+          "assetName": "OBS-Studio-32.0.4-Windows-x64-Installer.exe",
+          "resolvedUrl": "https://github.com/obsproject/obs-studio/releases/download/32.0.4/OBS-Studio-32.0.4-Windows-x64-Installer.exe",
+          "version": "32.0.4",
+          "fileSize": "150 MB",
+          "fileSizeBytes": 157503576,
+          "checksumSha256": "46a18bce8e2ff662b700c91d340a519376e712fe0af0d335536e4f9fd253f10a"
+        },
+        "macOS installer": {
+          "assetName": "OBS-Studio-32.0.4-macOS-Apple.dmg",
+          "resolvedUrl": "https://github.com/obsproject/obs-studio/releases/download/32.0.4/OBS-Studio-32.0.4-macOS-Apple.dmg",
+          "version": "32.0.4",
+          "fileSize": "179 MB",
+          "fileSizeBytes": 187271736,
+          "checksumSha256": "7c056644636a794cb18281af98d54b5795ad8b0985e950d93b8c510b645b6298"
+        }
+      }
+    },
+    "powertoys": {
+      "repo": "microsoft/PowerToys",
+      "releaseTag": "v0.97.2",
+      "releaseName": "Release v0.97.2",
+      "releaseUrl": "https://github.com/microsoft/PowerToys/releases/tag/v0.97.2",
+      "publishedAt": "2026-02-10T07:37:29Z",
+      "artifacts": {
+        "Windows installer": {
+          "assetName": "PowerToysUserSetup-0.97.2-x64.exe",
+          "resolvedUrl": "https://github.com/microsoft/PowerToys/releases/download/v0.97.2/PowerToysUserSetup-0.97.2-x64.exe",
+          "version": "0.97.2",
+          "fileSize": "381 MB",
+          "fileSizeBytes": 399572632,
+          "checksumSha256": "54a39f62334f7481c1bdde8abf4928f2e74f100a049f50c7339dabfd34134c98"
+        }
+      }
+    },
+    "audacity": {
+      "repo": "audacity/audacity",
+      "releaseTag": "Audacity-3.7.7",
+      "releaseName": "Audacity 3.7.7",
+      "releaseUrl": "https://github.com/audacity/audacity/releases/tag/Audacity-3.7.7",
+      "publishedAt": "2025-12-11T19:48:17Z",
+      "artifacts": {
+        "Windows installer": {
+          "assetName": "audacity-win-3.7.7-64bit.exe",
+          "resolvedUrl": "https://github.com/audacity/audacity/releases/download/Audacity-3.7.7/audacity-win-3.7.7-64bit.exe",
+          "version": "Audacity-3.7.7",
+          "fileSize": "17.7 MB",
+          "fileSizeBytes": 18543040,
+          "checksumSha256": "a96f41f21efcdfec1d2f7f332544f8a8fb00a6c411e3bee2aa0031b691dd91a7"
+        },
+        "macOS DMG": {
+          "assetName": "audacity-macOS-3.7.7-universal.dmg",
+          "resolvedUrl": "https://github.com/audacity/audacity/releases/download/Audacity-3.7.7/audacity-macOS-3.7.7-universal.dmg",
+          "version": "Audacity-3.7.7",
+          "fileSize": "63.8 MB",
+          "fileSizeBytes": 66894576,
+          "checksumSha256": "7a188eec047e32c25c95eb301854e98cdc2bdb2facb169d5022d967c2ba94d35"
+        }
+      }
+    },
+    "handbrake": {
+      "repo": "HandBrake/HandBrake",
+      "releaseTag": "1.10.2",
+      "releaseName": "1.10.2",
+      "releaseUrl": "https://github.com/HandBrake/HandBrake/releases/tag/1.10.2",
+      "publishedAt": "2025-09-06T11:00:22Z",
+      "artifacts": {
+        "Windows installer": {
+          "assetName": "HandBrake-1.10.2-x86_64-Win_GUI.exe",
+          "resolvedUrl": "https://github.com/HandBrake/HandBrake/releases/download/1.10.2/HandBrake-1.10.2-x86_64-Win_GUI.exe",
+          "version": "1.10.2",
+          "fileSize": "23.2 MB",
+          "fileSizeBytes": 24303536,
+          "checksumSha256": "ff868bb43c19a4fd8bec8f4b9d83a756f6818cf4b229012715f35eb2416673cd"
+        },
+        "macOS DMG": {
+          "assetName": "HandBrake-1.10.2.dmg",
+          "resolvedUrl": "https://github.com/HandBrake/HandBrake/releases/download/1.10.2/HandBrake-1.10.2.dmg",
+          "version": "1.10.2",
+          "fileSize": "41.6 MB",
+          "fileSizeBytes": 43647223,
+          "checksumSha256": "32a7771d89f02d5d80d5a45711620fb206b22e7182acd8375d1d87afed7b4fd3"
+        }
+      }
+    },
+    "neovim": {
+      "repo": "neovim/neovim",
+      "releaseTag": "v0.11.6",
+      "releaseName": "Nvim 0.11.6",
+      "releaseUrl": "https://github.com/neovim/neovim/releases/tag/v0.11.6",
+      "publishedAt": "2026-01-26T17:02:35Z",
+      "artifacts": {
+        "Windows installer": {
+          "assetName": "nvim-win64.msi",
+          "resolvedUrl": "https://github.com/neovim/neovim/releases/download/v0.11.6/nvim-win64.msi",
+          "version": "0.11.6",
+          "fileSize": "11.6 MB",
+          "fileSizeBytes": 12119970,
+          "checksumSha256": "dc3d5276cf5d4cf1270685a0ede08296998301840386a8aa5364128a2f45630d"
+        },
+        "macOS package": {
+          "assetName": "nvim-macos-arm64.tar.gz",
+          "resolvedUrl": "https://github.com/neovim/neovim/releases/download/v0.11.6/nvim-macos-arm64.tar.gz",
+          "version": "0.11.6",
+          "fileSize": "8.78 MB",
+          "fileSizeBytes": 9207048,
+          "checksumSha256": "d5ee93b67630d5a87f3d336d0f7e8b2fe6973aa653d3cc93b82b820e6538c1dd"
+        }
+      }
+    },
+    "ripgrep": {
+      "repo": "BurntSushi/ripgrep",
+      "releaseTag": "15.1.0",
+      "releaseName": "15.1.0",
+      "releaseUrl": "https://github.com/BurntSushi/ripgrep/releases/tag/15.1.0",
+      "publishedAt": "2025-10-22T13:00:26Z",
+      "artifacts": {
+        "Windows package": {
+          "assetName": "ripgrep-15.1.0-x86_64-pc-windows-msvc.zip",
+          "resolvedUrl": "https://github.com/BurntSushi/ripgrep/releases/download/15.1.0/ripgrep-15.1.0-x86_64-pc-windows-msvc.zip",
+          "version": "15.1.0",
+          "fileSize": "1.73 MB",
+          "fileSizeBytes": 1810687,
+          "checksumSha256": "124510b94b6baa3380d051fdf4650eaa80a302c876d611e9dba0b2e18d87493a"
+        },
+        "macOS package": {
+          "assetName": "ripgrep-15.1.0-aarch64-apple-darwin.tar.gz",
+          "resolvedUrl": "https://github.com/BurntSushi/ripgrep/releases/download/15.1.0/ripgrep-15.1.0-aarch64-apple-darwin.tar.gz",
+          "version": "15.1.0",
+          "fileSize": "1.70 MB",
+          "fileSizeBytes": 1777930,
+          "checksumSha256": "378e973289176ca0c6054054ee7f631a065874a352bf43f0fa60ef079b6ba715"
+        }
+      }
+    },
+    "bat": {
+      "repo": "sharkdp/bat",
+      "releaseTag": "v0.26.1",
+      "releaseName": "v0.26.1",
+      "releaseUrl": "https://github.com/sharkdp/bat/releases/tag/v0.26.1",
+      "publishedAt": "2025-12-02T20:48:10Z",
+      "artifacts": {
+        "Windows package": {
+          "assetName": "bat-v0.26.1-x86_64-pc-windows-msvc.zip",
+          "resolvedUrl": "https://github.com/sharkdp/bat/releases/download/v0.26.1/bat-v0.26.1-x86_64-pc-windows-msvc.zip",
+          "version": "0.26.1",
+          "fileSize": "3.45 MB",
+          "fileSizeBytes": 3613318,
+          "checksumSha256": "0f729b4b6f5f28d395c641eacc2e9ff68d0096b85aa0eec344aa62425144b69b"
+        },
+        "macOS package": {
+          "assetName": "bat-v0.26.1-aarch64-apple-darwin.tar.gz",
+          "resolvedUrl": "https://github.com/sharkdp/bat/releases/download/v0.26.1/bat-v0.26.1-aarch64-apple-darwin.tar.gz",
+          "version": "0.26.1",
+          "fileSize": "3.07 MB",
+          "fileSizeBytes": 3216703,
+          "checksumSha256": "e30beff26779c9bf60bb541e1d79046250cb74378f2757f8eb250afddb19e114"
+        }
+      }
+    },
+    "github-desktop": {
+      "repo": "desktop/desktop",
+      "releaseTag": "release-3.5.5",
+      "releaseName": "GitHub Desktop 3.5.5",
+      "releaseUrl": "https://github.com/desktop/desktop/releases/tag/release-3.5.5",
+      "publishedAt": "2026-02-18T09:12:17Z",
+      "artifacts": {
+        "Windows installer": {
+          "assetName": "GitHubDesktopSetup-x64.exe",
+          "resolvedUrl": "https://github.com/desktop/desktop/releases/download/release-3.5.5/GitHubDesktopSetup-x64.exe",
+          "version": "release-3.5.5",
+          "fileSize": "185 MB",
+          "fileSizeBytes": 193636320,
+          "checksumSha256": "ed805e0b0c36d4bbee71e6fb4e284b01aeeb4f5a0966f8d26307754f3712a0b0"
+        },
+        "macOS package": {
+          "assetName": "GitHub.Desktop-arm64.zip",
+          "resolvedUrl": "https://github.com/desktop/desktop/releases/download/release-3.5.5/GitHub.Desktop-arm64.zip",
+          "version": "release-3.5.5",
+          "fileSize": "173 MB",
+          "fileSizeBytes": 181398163,
+          "checksumSha256": "910e1709f6988b847a95725a391d99875245e826b4df790e21169e1d013d0ded"
+        }
+      }
+    },
+    "notepad-plus-plus": {
+      "repo": "notepad-plus-plus/notepad-plus-plus",
+      "releaseTag": "v8.9.2",
+      "releaseName": "Notepad++ release 8.9.2",
+      "releaseUrl": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/tag/v8.9.2",
+      "publishedAt": "2026-02-16T13:27:08Z",
+      "artifacts": {
+        "Windows installer": {
+          "assetName": "npp.8.9.2.Installer.x64.exe",
+          "resolvedUrl": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.9.2/npp.8.9.2.Installer.x64.exe",
+          "version": "8.9.2",
+          "fileSize": "6.55 MB",
+          "fileSizeBytes": 6871688,
+          "checksumSha256": "f71207593a3224f032c2d8ffce0b4cca78aaf913386d6d1f0ea97c344624c59a"
+        }
+      }
+    },
+    "git-for-windows": {
+      "repo": "git-for-windows/git",
+      "releaseTag": "v2.53.0.windows.1",
+      "releaseName": "Git for Windows v2.53.0.windows.1",
+      "releaseUrl": "https://github.com/git-for-windows/git/releases/tag/v2.53.0.windows.1",
+      "publishedAt": "2026-02-02T18:57:11Z",
+      "artifacts": {
+        "Windows installer": {
+          "assetName": "Git-2.53.0-64-bit.exe",
+          "resolvedUrl": "https://github.com/git-for-windows/git/releases/download/v2.53.0.windows.1/Git-2.53.0-64-bit.exe",
+          "version": "2.53.0.windows.1",
+          "fileSize": "61.6 MB",
+          "fileSizeBytes": 64573288,
+          "checksumSha256": "3b4e1b127dbebea2931f2ae9dfafa0c2343a488a1222009debfe78d5d335e6a9"
+        }
+      }
+    },
+    "fd": {
+      "repo": "sharkdp/fd",
+      "releaseTag": "v10.3.0",
+      "releaseName": "v10.3.0",
+      "releaseUrl": "https://github.com/sharkdp/fd/releases/tag/v10.3.0",
+      "publishedAt": "2025-08-26T08:18:28Z",
+      "artifacts": {
+        "Windows package": {
+          "assetName": "fd-v10.3.0-x86_64-pc-windows-msvc.zip",
+          "resolvedUrl": "https://github.com/sharkdp/fd/releases/download/v10.3.0/fd-v10.3.0-x86_64-pc-windows-msvc.zip",
+          "version": "10.3.0",
+          "fileSize": "1.42 MB",
+          "fileSizeBytes": 1490905,
+          "checksumSha256": "318aa2a6fa664325933e81fda60d523fff29444129e91ebf0726b5b3bcd8b059"
+        },
+        "macOS package": {
+          "assetName": "fd-v10.3.0-aarch64-apple-darwin.tar.gz",
+          "resolvedUrl": "https://github.com/sharkdp/fd/releases/download/v10.3.0/fd-v10.3.0-aarch64-apple-darwin.tar.gz",
+          "version": "10.3.0",
+          "fileSize": "1.28 MB",
+          "fileSizeBytes": 1337349,
+          "checksumSha256": "0570263812089120bc2a5d84f9e65cd0c25e4a4d724c80075c357239c74ae904"
+        }
+      }
+    },
+    "starship": {
+      "repo": "starship/starship",
+      "releaseTag": "v1.24.2",
+      "releaseName": "v1.24.2",
+      "releaseUrl": "https://github.com/starship/starship/releases/tag/v1.24.2",
+      "publishedAt": "2025-12-30T19:11:57Z",
+      "artifacts": {
+        "Windows installer": {
+          "assetName": "starship-x86_64-pc-windows-msvc.msi",
+          "resolvedUrl": "https://github.com/starship/starship/releases/download/v1.24.2/starship-x86_64-pc-windows-msvc.msi",
+          "version": "1.24.2",
+          "fileSize": "5.41 MB",
+          "fileSizeBytes": 5672960,
+          "checksumSha256": "0aaa293a754f529ebe1ed5c849808656462f1bdc9709d99257dc5a9d19dc2dbc"
+        },
+        "macOS package": {
+          "assetName": "starship-aarch64-apple-darwin.tar.gz",
+          "resolvedUrl": "https://github.com/starship/starship/releases/download/v1.24.2/starship-aarch64-apple-darwin.tar.gz",
+          "version": "1.24.2",
+          "fileSize": "3.69 MB",
+          "fileSizeBytes": 3870662,
+          "checksumSha256": "d3a0da21374962625a2ee992110979bc1fa33424d7b6aea58a70405e26544fd9"
+        }
+      }
+    },
+    "godot-engine": {
+      "repo": "godotengine/godot",
+      "releaseTag": "4.6.1-stable",
+      "releaseName": "4.6.1-stable",
+      "releaseUrl": "https://github.com/godotengine/godot/releases/tag/4.6.1-stable",
+      "publishedAt": "2026-02-16T20:26:38Z",
+      "artifacts": {
+        "Windows package": {
+          "assetName": "Godot_v4.6.1-stable_win64.exe.zip",
+          "resolvedUrl": "https://github.com/godotengine/godot/releases/download/4.6.1-stable/Godot_v4.6.1-stable_win64.exe.zip",
+          "version": "4.6.1-stable",
+          "fileSize": "76.1 MB",
+          "fileSizeBytes": 79805408,
+          "checksumSha256": "088da0457e2d1f7f8a45e6d4605a42b756ea33b9ccd75059bdbc01bb31c2b40d"
+        },
+        "macOS package": {
+          "assetName": "Godot_v4.6.1-stable_macos.universal.zip",
+          "resolvedUrl": "https://github.com/godotengine/godot/releases/download/4.6.1-stable/Godot_v4.6.1-stable_macos.universal.zip",
+          "version": "4.6.1-stable",
+          "fileSize": "154 MB",
+          "fileSizeBytes": 161125030,
+          "checksumSha256": "f43613ad72ab1cc9ef14383545f4de344844451a5c9c5f4ea4a923f1f34f91e4"
+        }
+      }
+    },
+    "balena-etcher": {
+      "repo": "balena-io/etcher",
+      "releaseTag": "v2.1.4",
+      "releaseName": "v2.1.4",
+      "releaseUrl": "https://github.com/balena-io/etcher/releases/tag/v2.1.4",
+      "publishedAt": "2025-07-29T12:18:02Z",
+      "artifacts": {
+        "Windows installer": {
+          "assetName": "balenaEtcher-2.1.4.Setup.exe",
+          "resolvedUrl": "https://github.com/balena-io/etcher/releases/download/v2.1.4/balenaEtcher-2.1.4.Setup.exe",
+          "version": "2.1.4",
+          "fileSize": "191 MB",
+          "fileSizeBytes": 200116376,
+          "checksumSha256": "b75321f3f68c6f09332e97dca6b38744067826d114c04e6c05cbceff63631e62"
+        },
+        "macOS DMG": {
+          "assetName": "balenaEtcher-2.1.4-arm64.dmg",
+          "resolvedUrl": "https://github.com/balena-io/etcher/releases/download/v2.1.4/balenaEtcher-2.1.4-arm64.dmg",
+          "version": "2.1.4",
+          "fileSize": "149 MB",
+          "fileSizeBytes": 156526502,
+          "checksumSha256": "6196813482f3fe8c329002a46610c7623a7ab8d0e48cdeca21d9dc05eb668dc9"
+        }
+      }
+    }
+  }
 }
-

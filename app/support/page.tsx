@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SupportForm } from "@/components/support-form";
 import { SupportPortalHome } from "@/components/support-portal/support-portal-home";
 import { getApps } from "@/lib/apps";
+import { toAbsoluteSupportUrl } from "@/lib/support-portal.seo";
 import { siteConfig } from "@/lib/site";
 import { buildSupportOpenGraph, buildSupportTwitter } from "@/lib/support-portal.seo";
 
@@ -53,10 +54,31 @@ const faqs = [
 export default function SupportPage() {
   const apps = getApps();
   const hasApps = apps.length > 0;
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer
+      }
+    }))
+  };
+  const supportPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Support Portal",
+    url: toAbsoluteSupportUrl("/support/"),
+    description:
+      "ServiceNow-style support portal demo with a knowledge base, service catalog, incident forms, local ticketing, analytics, and iOS app support."
+  };
 
   return (
-    <div className="space-y-6 pb-6">
-      <SupportPortalHome />
+    <>
+      <div className="space-y-6 pb-6">
+        <SupportPortalHome />
 
       <section className="rounded-2xl border border-line/70 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
@@ -130,6 +152,15 @@ export default function SupportPage() {
           )}
         </div>
       </section>
-    </div>
+      </div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(supportPageSchema) }}
+      />
+    </>
   );
 }

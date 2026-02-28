@@ -69,9 +69,19 @@ export function buildSupportTwitter(title: string, description: string): NonNull
 }
 
 export function buildSupportKbIndexMetadata(): Metadata {
+  return buildSupportKbIndexMetadataWithArticles([]);
+}
+
+export function buildSupportKbIndexMetadataWithArticles(articles: KBArticle[]): Metadata {
+  const productFamilies = [...new Set(articles.map((article) => article.productFamily))];
+  const categories = [...new Set(articles.map((article) => article.category))];
+  const articleCount = articles.length;
+
   const title = "Knowledge Base";
   const description =
-    "Enterprise-safe troubleshooting guides for Microsoft 365, Adobe, Figma, Okta, Windows, macOS, iOS, Android, networking, browsers, and printers.";
+    articleCount > 0
+      ? `Browse ${articleCount} enterprise-safe troubleshooting guides for Microsoft 365, Adobe, Figma, Okta, Windows, macOS, iOS, Android, networking, browsers, and printers.`
+      : "Enterprise-safe troubleshooting guides for Microsoft 365, Adobe, Figma, Okta, Windows, macOS, iOS, Android, networking, browsers, and printers.";
 
   return {
     title,
@@ -85,11 +95,44 @@ export function buildSupportKbIndexMetadata(): Metadata {
       "Okta troubleshooting",
       "mobile device support",
       "Windows support",
-      "macOS support"
+      "macOS support",
+      ...productFamilies.map((family) => `${family} support`),
+      ...categories.map((category) => `${category} troubleshooting`)
     ]),
     alternates: { canonical: "/support/kb/" },
     openGraph: buildSupportOpenGraph(`${title} | Support Portal`, description, "/support/kb/"),
     twitter: buildSupportTwitter(`${title} | Support Portal`, description)
+  };
+}
+
+export function buildKbIndexJsonLd(articles: KBArticle[]): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Support Knowledge Base",
+    description: `Enterprise-safe IT troubleshooting knowledge base with ${articles.length} guides.`,
+    url: toAbsoluteSupportUrl("/support/kb/"),
+    isPartOf: {
+      "@type": "WebSite",
+      name: "Tamem J Support Portal",
+      url: toAbsoluteSupportUrl("/support/")
+    },
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: articles.length,
+      itemListElement: articles.map((article, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        item: {
+          "@type": "TechArticle",
+          headline: article.title,
+          description: article.description,
+          url: toAbsoluteSupportUrl(`/support/kb/${article.slug}/`),
+          articleSection: article.category,
+          keywords: uniqueKeywords([article.product, article.productFamily, ...article.tags]).join(", ")
+        }
+      }))
+    }
   };
 }
 
@@ -253,4 +296,3 @@ export function buildCatalogItemJsonLd(item: CatalogItem): Record<string, unknow
     }
   };
 }
-

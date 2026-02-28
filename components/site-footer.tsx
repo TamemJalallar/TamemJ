@@ -13,6 +13,12 @@ export function SiteFooter() {
             <Link href="/apps" className="nav-link">
               Apps
             </Link>
+            <Link href="/downloads" className="nav-link">
+              Downloads
+            </Link>
+            <Link href="/corporate-tech-fixes" className="nav-link">
+              Tech Fixes
+            </Link>
             <Link href="/privacy" className="nav-link">
               Privacy Policy
             </Link>

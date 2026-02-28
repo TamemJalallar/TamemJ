@@ -198,6 +198,9 @@ The downloads page is registry-driven and lives at:
 - `components/downloads/downloads-browser.tsx`
 - `lib/downloads.registry.ts`
 - `types/download.ts`
+- `data/download-release-sync.targets.json` (GitHub sync mapping)
+- `data/download-release-metadata.json` (generated metadata cache)
+- `scripts/sync-download-release-metadata.mjs` (sync tool)
 
 ### What It Supports
 
@@ -216,8 +219,52 @@ The downloads page is registry-driven and lives at:
    - `GitHub Releases`
    - `Direct Download`
    - `Source Code`
-3. Add `directDownloads` rows if you want per-platform download buttons and metadata (file type, size, checksum)
+3. Add `directDownloads` rows if you want per-platform download buttons and metadata (file type, version, size, checksum)
 4. Rebuild and test `/downloads`
+
+### Auto-Sync GitHub Release Metadata (Version, Size, SHA-256)
+
+For GitHub-hosted direct downloads, use the sync tool to prefill metadata and direct asset URLs:
+
+```bash
+npm run sync:downloads
+```
+
+What it does:
+
+- Reads `data/download-release-sync.targets.json`
+- Fetches latest GitHub release + asset metadata for each mapped repo
+- Resolves exact asset URLs for each artifact label
+- Prefills `version`, `fileSize`, and `checksumSha256` (when available from digest/checksum files)
+- Writes the generated cache to `data/download-release-metadata.json`
+
+Optional:
+
+- Set `GITHUB_TOKEN` to avoid unauthenticated API rate limits:
+
+```bash
+GITHUB_TOKEN=ghp_xxx npm run sync:downloads
+```
+
+- To compute missing SHA-256 values by downloading assets (when release digests/checksum files are not published):
+
+```bash
+DOWNLOAD_SYNC_COMPUTE_SHA256=1 npm run sync:downloads
+```
+
+- Optional max download size for checksum computation (default: `100000000` bytes):
+
+```bash
+DOWNLOAD_SYNC_COMPUTE_SHA256=1 DOWNLOAD_SYNC_CHECKSUM_MAX_BYTES=200000000 npm run sync:downloads
+```
+
+After syncing, run:
+
+```bash
+npm run build
+```
+
+so the updated metadata is included in the generated site.
 
 ### Free Hosting Recommendation for Direct Downloads
 

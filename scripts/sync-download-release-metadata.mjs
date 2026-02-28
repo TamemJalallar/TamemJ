@@ -3,6 +3,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
+import { createHash } from "node:crypto";
 
 const repoRoot = process.cwd();
 const targetsPath = path.join(repoRoot, "data", "download-release-sync.targets.json");
@@ -197,7 +198,23 @@ function resolveChecksumForAsset(asset, checksumMap) {
   return undefined;
 }
 
+async function computeSha256FromDownload(url) {
+  const response = await fetch(url, { headers: toHeaders() });
+  if (!response.ok || !response.body) {
+    throw new Error(`Unable to download asset for checksum: ${response.status} ${url}`);
+  }
+
+  const hash = createHash("sha256");
+  for await (const chunk of response.body) {
+    hash.update(chunk);
+  }
+  return hash.digest("hex");
+}
+
 async function main() {
+  const shouldComputeMissingChecksums = process.env.DOWNLOAD_SYNC_COMPUTE_SHA256 === "1";
+  const checksumComputeLimitBytes = Number(process.env.DOWNLOAD_SYNC_CHECKSUM_MAX_BYTES ?? 100_000_000);
+
   const targetsRaw = JSON.parse(await fs.readFile(targetsPath, "utf8"));
   const targets = Array.isArray(targetsRaw.targets) ? targetsRaw.targets : [];
 
@@ -244,6 +261,21 @@ async function main() {
         }
 
         matchedArtifacts += 1;
+        let checksumSha256 = resolveChecksumForAsset(asset, checksumMap);
+        if (
+          !checksumSha256 &&
+          shouldComputeMissingChecksums &&
+          Number.isFinite(Number(asset.size ?? 0)) &&
+          Number(asset.size ?? 0) > 0 &&
+          Number(asset.size ?? 0) <= checksumComputeLimitBytes
+        ) {
+          try {
+            checksumSha256 = await computeSha256FromDownload(asset.browser_download_url);
+          } catch {
+            // Keep checksum empty if checksum computation fails.
+          }
+        }
+
         entryMetadata.artifacts[artifactLabel] = {
           assetName: typeof asset.name === "string" ? asset.name : undefined,
           resolvedUrl:
@@ -253,7 +285,7 @@ async function main() {
           ),
           fileSize: formatBytes(Number(asset.size ?? 0)),
           fileSizeBytes: Number.isFinite(Number(asset.size ?? 0)) ? Number(asset.size ?? 0) : undefined,
-          checksumSha256: resolveChecksumForAsset(asset, checksumMap)
+          checksumSha256
         };
       }
 
@@ -277,4 +309,3 @@ main().catch((error) => {
   console.error(error);
   process.exit(1);
 });
-

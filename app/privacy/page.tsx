@@ -1,12 +1,20 @@
 import type { Metadata } from "next";
+import { buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description: "Privacy policy for iOS apps developed by Tamem J.",
+  keywords: ["privacy policy", "iOS app privacy", "app data handling", "Tamem J privacy"],
   alternates: {
     canonical: "/privacy/"
-  }
+  },
+  openGraph: buildOpenGraph(
+    "Privacy Policy | Tamem J",
+    "Privacy policy for iOS apps developed by Tamem J.",
+    "/privacy/"
+  ),
+  twitter: buildTwitter("Privacy Policy | Tamem J", "Privacy policy for iOS apps developed by Tamem J.")
 };
 
 const sections = [
@@ -55,33 +63,47 @@ const sections = [
 ];
 
 export default function PrivacyPage() {
-  return (
-    <section className="section-shell pt-10 sm:pt-14">
-      <div className="page-shell max-w-4xl">
-        <div className="surface-card-strong p-6 sm:p-8 lg:p-10">
-          <p className="eyebrow">Legal</p>
-          <h1 className="mt-4 text-3xl font-semibold sm:text-4xl">Privacy Policy</h1>
-          <p className="mt-4 text-sm sm:text-base">
-            Last updated: February 23, 2026. This template is intentionally structured so it can
-            be updated quickly as apps or services change.
-          </p>
+  const privacySchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Privacy Policy",
+    url: toAbsoluteUrl("/privacy/"),
+    description: "Privacy policy for iOS apps developed by Tamem J."
+  };
 
-          <div className="mt-8 space-y-8">
-            {sections.map((section) => (
-              <section key={section.title}>
-                <h2 className="text-lg font-semibold sm:text-xl">{section.title}</h2>
-                <div className="mt-3 space-y-3">
-                  {section.body.map((paragraph) => (
-                    <p key={paragraph} className="text-sm sm:text-base">
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-              </section>
-            ))}
+  return (
+    <>
+      <section className="section-shell pt-10 sm:pt-14">
+        <div className="page-shell max-w-4xl">
+          <div className="surface-card-strong p-6 sm:p-8 lg:p-10">
+            <p className="eyebrow">Legal</p>
+            <h1 className="mt-4 text-3xl font-semibold sm:text-4xl">Privacy Policy</h1>
+            <p className="mt-4 text-sm sm:text-base">
+              Last updated: February 23, 2026. This template is intentionally structured so it can
+              be updated quickly as apps or services change.
+            </p>
+
+            <div className="mt-8 space-y-8">
+              {sections.map((section) => (
+                <section key={section.title}>
+                  <h2 className="text-lg font-semibold sm:text-xl">{section.title}</h2>
+                  <div className="mt-3 space-y-3">
+                    {section.body.map((paragraph) => (
+                      <p key={paragraph} className="text-sm sm:text-base">
+                        {paragraph}
+                      </p>
+                    ))}
+                  </div>
+                </section>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(privacySchema) }}
+      />
+    </>
   );
 }

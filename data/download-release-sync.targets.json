@@ -22,7 +22,7 @@
         },
         {
           "artifactLabel": "macOS DMG",
-          "assetNameRegex": "(mac|darwin).*\\.dmg$"
+          "assetNameRegex": "localsend-.*\\.dmg$"
         }
       ]
     },
@@ -111,7 +111,176 @@
           "assetNameRegex": "obs.*(mac|osx).*\\.(dmg|pkg)$"
         }
       ]
+    },
+    {
+      "entrySlug": "powertoys",
+      "repo": "microsoft/PowerToys",
+      "artifacts": [
+        {
+          "artifactLabel": "Windows installer",
+          "assetNameRegex": "PowerToysUserSetup-.*-x64\\.exe$"
+        }
+      ]
+    },
+    {
+      "entrySlug": "audacity",
+      "repo": "audacity/audacity",
+      "artifacts": [
+        {
+          "artifactLabel": "Windows installer",
+          "assetNameRegex": "audacity-win-.*-64bit\\.exe$"
+        },
+        {
+          "artifactLabel": "macOS DMG",
+          "assetNameRegex": "audacity-macOS-.*-universal\\.dmg$"
+        }
+      ]
+    },
+    {
+      "entrySlug": "handbrake",
+      "repo": "HandBrake/HandBrake",
+      "artifacts": [
+        {
+          "artifactLabel": "Windows installer",
+          "assetNameRegex": "HandBrake-.*-x86_64-Win_GUI\\.exe$"
+        },
+        {
+          "artifactLabel": "macOS DMG",
+          "assetNameRegex": "HandBrake-.*\\.dmg$"
+        }
+      ]
+    },
+    {
+      "entrySlug": "neovim",
+      "repo": "neovim/neovim",
+      "artifacts": [
+        {
+          "artifactLabel": "Windows installer",
+          "assetNameRegex": "nvim-win64\\.msi$"
+        },
+        {
+          "artifactLabel": "macOS package",
+          "assetNameRegex": "nvim-macos-arm64\\.tar\\.gz$"
+        }
+      ]
+    },
+    {
+      "entrySlug": "ripgrep",
+      "repo": "BurntSushi/ripgrep",
+      "artifacts": [
+        {
+          "artifactLabel": "Windows package",
+          "assetNameRegex": "ripgrep-.*-x86_64-pc-windows-msvc\\.zip$"
+        },
+        {
+          "artifactLabel": "macOS package",
+          "assetNameRegex": "ripgrep-.*-aarch64-apple-darwin\\.tar\\.gz$"
+        }
+      ]
+    },
+    {
+      "entrySlug": "bat",
+      "repo": "sharkdp/bat",
+      "artifacts": [
+        {
+          "artifactLabel": "Windows package",
+          "assetNameRegex": "bat-v.*-x86_64-pc-windows-msvc\\.zip$"
+        },
+        {
+          "artifactLabel": "macOS package",
+          "assetNameRegex": "bat-v.*-aarch64-apple-darwin\\.tar\\.gz$"
+        }
+      ]
+    },
+    {
+      "entrySlug": "github-desktop",
+      "repo": "desktop/desktop",
+      "artifacts": [
+        {
+          "artifactLabel": "Windows installer",
+          "assetNameRegex": "GitHubDesktopSetup-.*\\.exe$"
+        },
+        {
+          "artifactLabel": "macOS package",
+          "assetNameRegex": "GitHub\\.Desktop-.*\\.zip$"
+        }
+      ]
+    },
+    {
+      "entrySlug": "notepad-plus-plus",
+      "repo": "notepad-plus-plus/notepad-plus-plus",
+      "artifacts": [
+        {
+          "artifactLabel": "Windows installer",
+          "assetNameRegex": "npp\\..*\\.Installer\\.x64\\.exe$"
+        }
+      ]
+    },
+    {
+      "entrySlug": "git-for-windows",
+      "repo": "git-for-windows/git",
+      "artifacts": [
+        {
+          "artifactLabel": "Windows installer",
+          "assetNameRegex": "Git-.*-64-bit\\.exe$"
+        }
+      ]
+    },
+    {
+      "entrySlug": "fd",
+      "repo": "sharkdp/fd",
+      "artifacts": [
+        {
+          "artifactLabel": "Windows package",
+          "assetNameRegex": "fd-v.*-x86_64-pc-windows-msvc\\.zip$"
+        },
+        {
+          "artifactLabel": "macOS package",
+          "assetNameRegex": "fd-v.*-aarch64-apple-darwin\\.tar\\.gz$"
+        }
+      ]
+    },
+    {
+      "entrySlug": "starship",
+      "repo": "starship/starship",
+      "artifacts": [
+        {
+          "artifactLabel": "Windows installer",
+          "assetNameRegex": "starship-x86_64-pc-windows-msvc\\.msi$"
+        },
+        {
+          "artifactLabel": "macOS package",
+          "assetNameRegex": "starship-aarch64-apple-darwin\\.tar\\.gz$"
+        }
+      ]
+    },
+    {
+      "entrySlug": "godot-engine",
+      "repo": "godotengine/godot",
+      "artifacts": [
+        {
+          "artifactLabel": "Windows package",
+          "assetNameRegex": "Godot_v.*-stable_win64\\.exe\\.zip$"
+        },
+        {
+          "artifactLabel": "macOS package",
+          "assetNameRegex": "Godot_v.*-stable_macos\\.universal\\.zip$"
+        }
+      ]
+    },
+    {
+      "entrySlug": "balena-etcher",
+      "repo": "balena-io/etcher",
+      "artifacts": [
+        {
+          "artifactLabel": "Windows installer",
+          "assetNameRegex": "balenaEtcher-.*\\.Setup\\.exe$"
+        },
+        {
+          "artifactLabel": "macOS DMG",
+          "assetNameRegex": "balenaEtcher-.*-(arm64|x64)\\.dmg$"
+        }
+      ]
     }
   ]
 }
-

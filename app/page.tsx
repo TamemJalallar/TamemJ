@@ -3,18 +3,45 @@ import Link from "next/link";
 import { AppCard } from "@/components/app-card";
 import { SectionHeading } from "@/components/section-heading";
 import { getFeaturedApps } from "@/lib/apps";
+import { buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
+  title: "Home",
   description: siteConfig.description,
+  keywords: [
+    "iOS developer portfolio",
+    "iPhone app developer",
+    "app support portal",
+    "corporate tech fixes",
+    "app downloads"
+  ],
   alternates: {
     canonical: "/"
-  }
+  },
+  openGraph: buildOpenGraph(siteConfig.title, siteConfig.description, "/"),
+  twitter: buildTwitter(siteConfig.title, siteConfig.description)
 };
 
 export default function HomePage() {
   const featuredApps = getFeaturedApps();
   const hasFeaturedApps = featuredApps.length > 0;
+  const collectionSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Tamem J Portfolio",
+    description: siteConfig.description,
+    url: siteConfig.url,
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: featuredApps.map((app, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: app.name,
+        url: toAbsoluteUrl(`/apps/${app.slug}/`)
+      }))
+    }
+  };
 
   return (
     <>
@@ -141,6 +168,10 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
+      />
     </>
   );
 }

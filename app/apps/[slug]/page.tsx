@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { AppStoreButton } from "@/components/app-store-button";
 import { ScreenshotCarousel } from "@/components/screenshot-carousel";
 import { getAppBySlug, getApps } from "@/lib/apps";
-import { siteConfig } from "@/lib/site";
+import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 
 const STATIC_EXPORT_PLACEHOLDER_SLUG = "__site-build-placeholder__";
 
@@ -51,20 +51,19 @@ export async function generateMetadata({ params }: AppPageProps): Promise<Metada
   return {
     title: app.name,
     description: app.shortDescription,
+    keywords: [
+      app.name,
+      app.category,
+      "iPhone app",
+      "iOS app",
+      "App Store app",
+      ...app.features.slice(0, 6)
+    ],
     alternates: {
       canonical: `/apps/${app.slug}/`
     },
-    openGraph: {
-      title: `${app.name} | Tamem J`,
-      description: app.shortDescription,
-      url: `${siteConfig.url}/apps/${app.slug}/`,
-      images: [
-        {
-          url: app.screenshots[0]?.src ?? "/images/site/og-image.svg",
-          alt: `${app.name} screenshot`
-        }
-      ]
-    }
+    openGraph: buildOpenGraph(`${app.name} | Tamem J`, app.shortDescription, `/apps/${app.slug}/`, "article"),
+    twitter: buildTwitter(`${app.name} | Tamem J`, app.shortDescription)
   };
 }
 
@@ -101,14 +100,39 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
     notFound();
   }
 
+  const appSchema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: app.name,
+    applicationCategory: app.category,
+    operatingSystem: "iOS",
+    description: app.shortDescription,
+    url: toAbsoluteUrl(`/apps/${app.slug}/`),
+    image: app.icon,
+    screenshot: app.screenshots.map((screenshot) => screenshot.src),
+    downloadUrl: app.appStoreUrl,
+    offers: {
+      "@type": "Offer",
+      price: app.pricing.toLowerCase().includes("free") ? "0" : undefined,
+      priceCurrency: "USD"
+    }
+  };
+
+  const breadcrumbSchema = buildBreadcrumbJsonLd([
+    { name: "Home", path: "/" },
+    { name: "Apps", path: "/apps/" },
+    { name: app.name, path: `/apps/${app.slug}/` }
+  ]);
+
   return (
-    <section className="section-shell pt-10 sm:pt-14">
-      <div className="page-shell">
-        <div className="mb-6">
-          <Link href="/apps" className="text-sm font-medium text-slate-600 hover:text-slate-900">
-            ← Back to Apps
-          </Link>
-        </div>
+    <>
+      <section className="section-shell pt-10 sm:pt-14">
+        <div className="page-shell">
+          <div className="mb-6">
+            <Link href="/apps" className="text-sm font-medium text-slate-600 hover:text-slate-900">
+              ← Back to Apps
+            </Link>
+          </div>
 
         <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:gap-8">
           <div className="space-y-6">
@@ -179,7 +203,16 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
             <ScreenshotCarousel screenshots={app.screenshots} appName={app.name} />
           </div>
         </div>
-      </div>
-    </section>
+        </div>
+      </section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(appSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+    </>
   );
 }
