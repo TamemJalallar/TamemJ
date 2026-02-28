@@ -7,6 +7,7 @@ export type CorporateFixCategory =
   | "macOS"
   | "Mobile"
   | "O365"
+  | "Business"
   | "Networking"
   | "Printers"
   | "Security"
@@ -48,6 +49,7 @@ export const corporateFixCategories: CorporateFixCategory[] = [
   "macOS",
   "Mobile",
   "O365",
+  "Business",
   "Networking",
   "Printers",
   "Security",
@@ -61,6 +63,7 @@ const supportProductFamilies = new Set<KBArticle["productFamily"]>([
   "Adobe",
   "Figma",
   "Okta",
+  "Partnerships",
   "Mobile",
   "Windows",
   "Apple"
@@ -199,6 +202,8 @@ function mapSupportCategoryToCorporateCategory(category: KBArticle["category"]):
   switch (category) {
     case "Microsoft 365":
       return "O365";
+    case "Business / Partnerships":
+      return "Business";
     case "Networking / VPN":
       return "Networking";
     case "Identity / MFA / SSO":
