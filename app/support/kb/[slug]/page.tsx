@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { KnowledgeBaseArticleView } from "@/components/support-portal/knowledge-base-article-view";
+import { getRecommendedAffiliatesForKBArticle } from "@/lib/affiliate-support.registry";
 import { getKBArticleBySlug, getKBArticles } from "@/lib/support.kb.registry";
 import {
   buildBreadcrumbJsonLd,
@@ -40,6 +41,7 @@ export default async function KBArticlePage({ params }: KBArticlePageProps) {
   const relatedArticles = article.relatedArticleSlugs
     .map((relatedSlug) => getKBArticleBySlug(relatedSlug))
     .filter((item): item is NonNullable<typeof item> => Boolean(item));
+  const recommendedAffiliates = getRecommendedAffiliatesForKBArticle(article);
 
   const articleJsonLd = buildKbArticleJsonLd(article);
   const breadcrumbJsonLd = buildBreadcrumbJsonLd([
@@ -50,7 +52,11 @@ export default async function KBArticlePage({ params }: KBArticlePageProps) {
 
   return (
     <>
-      <KnowledgeBaseArticleView article={article} relatedArticles={relatedArticles} />
+      <KnowledgeBaseArticleView
+        article={article}
+        relatedArticles={relatedArticles}
+        recommendedAffiliates={recommendedAffiliates}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}

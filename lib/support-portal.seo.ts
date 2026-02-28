@@ -80,8 +80,8 @@ export function buildSupportKbIndexMetadataWithArticles(articles: KBArticle[]): 
   const title = "Knowledge Base";
   const description =
     articleCount > 0
-      ? `Browse ${articleCount} enterprise-safe troubleshooting guides for Microsoft 365, Adobe, Figma, Okta, Windows, macOS, iOS, Android, networking, browsers, and printers.`
-      : "Enterprise-safe troubleshooting guides for Microsoft 365, Adobe, Figma, Okta, Windows, macOS, iOS, Android, networking, browsers, and printers.";
+      ? `Browse ${articleCount} enterprise-safe troubleshooting guides for Microsoft 365, Adobe, Figma, Okta, Windows, macOS, iOS, Android, networking, browsers, printers, and affiliate operations.`
+      : "Enterprise-safe troubleshooting guides for Microsoft 365, Adobe, Figma, Okta, Windows, macOS, iOS, Android, networking, browsers, printers, and affiliate operations.";
 
   return {
     title,
@@ -96,6 +96,8 @@ export function buildSupportKbIndexMetadataWithArticles(articles: KBArticle[]): 
       "mobile device support",
       "Windows support",
       "macOS support",
+      "affiliate operations support",
+      "affiliate link governance",
       ...productFamilies.map((family) => `${family} support`),
       ...categories.map((category) => `${category} troubleshooting`)
     ]),

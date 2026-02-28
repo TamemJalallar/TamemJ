@@ -285,6 +285,7 @@ so the updated metadata is included in the generated site.
 - Affiliate links are configured in `lib/affiliate-links.ts`
 - The downloads page reads those links in `app/downloads/page.tsx` and renders the CTA/disclosure in `components/downloads/downloads-browser.tsx`
 - To update your Amazon link, change the `amazon-it-gear` URL value in `lib/affiliate-links.ts`
+- Disclosure UI component is shared via `components/affiliate/affiliate-disclosure-banner.tsx`
 
 ## ServiceNow-Style Support Portal (ITIL-lite Demo)
 
@@ -301,8 +302,10 @@ It is static-hosting compatible (GitHub Pages safe) and stores all demo state lo
 
 ### Key Files
 
-- `lib/support.kb.registry.ts` — KB article registry (60 seeded articles)
+- `lib/support.kb.registry.ts` — KB article registry (includes Microsoft, Adobe, Figma, Windows/macOS, mobile, and affiliate operations docs)
 - `lib/support.catalog.registry.ts` — service catalog registry
+- `lib/affiliate-links.ts` — affiliate programs + status (`Applied` vs `Active`)
+- `lib/affiliate-support.registry.ts` — mapping rules between KB article context and recommended affiliates
 - `types/support.ts` — KB, catalog, ticket, and analytics TypeScript models
 - `lib/support-portal.storage.ts` — local storage persistence (tickets, portal state, helpful votes)
 - `lib/support-portal.analytics.ts` — analytics event tracking + aggregation
@@ -319,12 +322,30 @@ It is static-hosting compatible (GitHub Pages safe) and stores all demo state lo
    - escalation criteria
    - commands (or allow the fallback command generator)
 4. Use correct metadata fields:
-   - `category` (e.g., `Microsoft 365`, `Adobe`, `Figma`, `Browsers`)
-   - `productFamily` (`Microsoft`, `Adobe`, `Figma`, etc.)
+   - `category` (e.g., `Microsoft 365`, `Adobe`, `Figma`, `Browsers`, `Business / Partnerships`)
+   - `productFamily` (`Microsoft`, `Adobe`, `Figma`, `Partnerships`, etc.)
    - `severity`, `accessLevel`, `environment`, `estimatedTime`
 5. Rebuild (`npm run build`) to ensure the static params and metadata generate cleanly
 
 The registry automatically links related articles based on product/category/tag similarity.
+
+### Affiliate Registry + Support Doc Mapping
+
+- Affiliate program definitions are in `lib/affiliate-links.ts`
+  - `status: "Applied"` means no live tracking URL yet (links point to official program page)
+  - `status: "Active"` means live partner link is in use (rendered with sponsored link attributes)
+- KB-to-affiliate associations are in `lib/affiliate-support.registry.ts`
+  - Mapping rules support `productFamilies`, `categories`, `tags`, and explicit article slug targeting
+  - Affiliate recommendations appear in `components/support-portal/knowledge-base-article-view.tsx`
+- Current affiliate support operation docs are in KB with slugs:
+  - `amazon-associates-affiliate-setup-and-link-compliance`
+  - `adobe-affiliate-partnerize-setup-and-attribution-validation`
+  - `onepassword-affiliate-cj-setup-and-conversion-testing`
+  - `malwarebytes-affiliate-setup-and-security-safe-promotion`
+  - `grammarly-affiliate-impact-setup-and-link-governance`
+  - `surfshark-affiliate-placement-and-policy-compliant-positioning`
+  - `proton-partners-affiliate-setup-and-privacy-safe-messaging`
+  - `apple-services-performance-partners-onboarding-and-approval-notes`
 
 ### How to Add Catalog Items
 

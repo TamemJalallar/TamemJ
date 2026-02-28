@@ -3357,6 +3357,350 @@ const generalSeeds: KBSeed[] = [
         content: "ps -Ao pid,pcpu,pmem,comm | sort -k2 -nr | head -15"
       }
     ]
+  },
+  {
+    slug: "amazon-associates-affiliate-setup-and-link-compliance",
+    title: "Amazon Associates Setup, Link Governance, and Compliance",
+    description:
+      "Operational playbook for configuring Amazon Associates links in a support/downloads portal with disclosure placement, link validation, and policy-safe usage.",
+    category: "Business / Partnerships",
+    productFamily: "Partnerships",
+    product: "Amazon Associates",
+    environment: "Both",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    estimatedTime: "15-25 min",
+    tags: ["affiliate", "amazon", "compliance", "disclosure", "tracking", "downloads"],
+    symptoms: [
+      "Affiliate links are live but disclosures are missing or inconsistent across pages.",
+      "Outbound links are not using approved attributes for sponsored content.",
+      "Clicks are visible in local analytics but not attributed as expected in partner reporting."
+    ],
+    causes: [
+      "Affiliate links were added ad hoc without a centralized registry.",
+      "Disclosure banner and link treatment are not consistently rendered across routes.",
+      "Tracking parameters were changed or rewritten by redirects."
+    ],
+    remediations: [
+      "Store all affiliate URLs in a single registry file and reference them by key in UI components.",
+      "Render a clear affiliate disclosure banner near partner CTAs on Downloads and support pages.",
+      "Use rel='sponsored nofollow noreferrer' for active affiliate outbound links.",
+      "Validate link redirects after every registry update and before deployment."
+    ],
+    escalationCriteria: [
+      "Partner program reports compliance policy warnings or attribution anomalies.",
+      "There is uncertainty about required disclosure language in regulated jurisdictions.",
+      "A link unexpectedly redirects to unapproved landing pages or broken storefronts."
+    ],
+    commands: [
+      {
+        title: "Validate Amazon shortlink redirect path",
+        shell: "CLI",
+        content:
+          "curl -I https://amzn.to/4b1Cr3z\ncurl -Ls -o /dev/null -w \"Final URL: %{url_effective}\\nHTTP: %{http_code}\\n\" https://amzn.to/4b1Cr3z"
+      }
+    ]
+  },
+  {
+    slug: "adobe-affiliate-partnerize-setup-and-attribution-validation",
+    title: "Adobe Affiliate (Partnerize) Setup and Attribution Validation",
+    description:
+      "Setup guide for Adobe Affiliate links with Partnerize-friendly tracking hygiene, category-level placement strategy, and safe promotion copy.",
+    category: "Business / Partnerships",
+    productFamily: "Partnerships",
+    product: "Adobe Affiliate",
+    environment: "Both",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    estimatedTime: "20-30 min",
+    tags: ["affiliate", "adobe", "partnerize", "creative-cloud", "attribution", "tracking"],
+    symptoms: [
+      "Adobe troubleshooting pages are high traffic but partner conversions are low.",
+      "Links point to generic Adobe pages without campaign context.",
+      "Team cannot confirm which content clusters generate conversions."
+    ],
+    causes: [
+      "Placement strategy not aligned to Adobe-specific support articles.",
+      "Inconsistent mapping between support docs and affiliate offers.",
+      "No periodic QA of active links and redirect targets."
+    ],
+    remediations: [
+      "Map Adobe affiliate links to Adobe KB categories and article tags using a documented registry.",
+      "Use contextual CTA text based on user intent (licensing, install, app troubleshooting).",
+      "Review partner dashboard click/conversion patterns weekly and tune placements.",
+      "Maintain neutral support-first wording and avoid claims that bypass enterprise licensing controls."
+    ],
+    escalationCriteria: [
+      "Partnerize dashboard reports invalid traffic or policy enforcement actions.",
+      "Enterprise procurement restrictions require legal/compliance review of placement copy.",
+      "Attribution drops after site release and requires structured rollback/testing."
+    ],
+    commands: [
+      {
+        title: "Quick redirect and status check for Adobe partner links",
+        shell: "CLI",
+        content:
+          "curl -I \"https://www.adobe.com/affiliates.html\"\n# Replace with approved Adobe tracking URL once issued and re-run checks."
+      }
+    ]
+  },
+  {
+    slug: "onepassword-affiliate-cj-setup-and-conversion-testing",
+    title: "1Password Affiliate (CJ) Setup and Conversion Test Plan",
+    description:
+      "Operational checklist for 1Password affiliate placements in identity/security support content, including disclosure, link QA, and non-bypass messaging.",
+    category: "Business / Partnerships",
+    productFamily: "Partnerships",
+    product: "1Password Affiliate",
+    environment: "Both",
+    severity: "Low",
+    accessLevel: "Admin Required",
+    estimatedTime: "15-20 min",
+    tags: ["affiliate", "1password", "identity", "security", "cj", "conversion-testing"],
+    symptoms: [
+      "Identity/MFA support docs generate clicks but poor qualified conversions.",
+      "No repeatable process exists to validate updated 1Password tracking links.",
+      "Offer placement appears in unrelated categories."
+    ],
+    causes: [
+      "Link placements are not scoped to identity and credential-management topics.",
+      "A/B comparisons were run without preserving baseline CTA positions.",
+      "Disclosure or partner status labels are missing near links."
+    ],
+    remediations: [
+      "Place 1Password partner links only in relevant identity, credential, and security support contexts.",
+      "Document pre/post update link checks and keep a changelog for affiliate URL updates.",
+      "Ensure active links include sponsored attributes and visible disclosure text.",
+      "Review conversion quality by article family and remove low-intent placements."
+    ],
+    escalationCriteria: [
+      "CJ account flags traffic quality or placement non-compliance issues.",
+      "Security/legal stakeholders require revision of copy or placement rules.",
+      "Users report misunderstanding affiliate CTAs as mandatory support steps."
+    ],
+    commands: [
+      {
+        title: "Baseline check for 1Password affiliate landing path",
+        shell: "CLI",
+        content:
+          "curl -I \"https://1password.com/affiliate/\"\n# Replace with live CJ tracking URL after approval for final validation."
+      }
+    ]
+  },
+  {
+    slug: "malwarebytes-affiliate-setup-and-security-safe-promotion",
+    title: "Malwarebytes Affiliate Setup and Security-Safe Promotion Guidelines",
+    description:
+      "Guide for placing Malwarebytes affiliate offers in security-adjacent docs while maintaining enterprise-safe remediation guidance and escalation boundaries.",
+    category: "Business / Partnerships",
+    productFamily: "Partnerships",
+    product: "Malwarebytes Affiliate",
+    environment: "Both",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    estimatedTime: "15-25 min",
+    tags: ["affiliate", "malwarebytes", "security", "endpoint", "partnerize", "compliance"],
+    symptoms: [
+      "Security-related pages have partner links but unclear safety/disclaimer messaging.",
+      "Recommendations conflict with existing corporate endpoint tooling guidance.",
+      "Analysts are unsure when to suggest partner tools vs IT escalation."
+    ],
+    causes: [
+      "Affiliate placement rules are not aligned with enterprise security standards.",
+      "Support playbooks do not clearly separate user-safe advice from admin-managed controls.",
+      "No documented escalation path when threat signals are high."
+    ],
+    remediations: [
+      "Keep affiliate suggestions optional and secondary to approved corporate security controls.",
+      "Add clear escalation guidance for suspected compromise, phishing, or policy violations.",
+      "Review copy to avoid implying users should bypass managed endpoint protection.",
+      "Include partner link status and disclosure in the recommendation section."
+    ],
+    escalationCriteria: [
+      "Users report active compromise indicators, suspicious sign-ins, or lateral movement concerns.",
+      "Partner CTA placement conflicts with internal security standards or legal guidance.",
+      "Security team requests temporary suspension of security-affiliate promotions."
+    ],
+    commands: [
+      {
+        title: "Check published Malwarebytes partner landing URL",
+        shell: "CLI",
+        content:
+          "curl -I \"https://www.malwarebytes.com/affiliates\"\n# Use your approved tracking URL for production QA."
+      }
+    ]
+  },
+  {
+    slug: "grammarly-affiliate-impact-setup-and-link-governance",
+    title: "Grammarly Affiliate (Impact) Setup and Link Governance",
+    description:
+      "Runbook for adding Grammarly affiliate placements to productivity/documentation support topics with clean disclosure and attribution hygiene.",
+    category: "Business / Partnerships",
+    productFamily: "Partnerships",
+    product: "Grammarly Affiliate",
+    environment: "Both",
+    severity: "Low",
+    accessLevel: "Admin Required",
+    estimatedTime: "10-20 min",
+    tags: ["affiliate", "grammarly", "impact", "productivity", "documentation", "governance"],
+    symptoms: [
+      "Documentation and communication guides lack structured partner mapping.",
+      "Affiliate links are copied manually, leading to inconsistent URLs.",
+      "Policy teams request an auditable workflow for placement updates."
+    ],
+    causes: [
+      "No central registry linking article families to affiliate providers.",
+      "Lack of release checklist for validating outbound link health.",
+      "Affiliate status (applied vs active) is not visible in UI."
+    ],
+    remediations: [
+      "Store Grammarly links and metadata in the affiliate registry with status indicators.",
+      "Connect relevant support docs to Grammarly via documented mapping rules.",
+      "Include disclosure banner and avoid deceptive or mandatory language around partner tools.",
+      "Run a link health check before each deploy and after partner URL updates."
+    ],
+    escalationCriteria: [
+      "Impact account flags policy concerns or invalid traffic behavior.",
+      "Disclosure requirements change and legal review is needed.",
+      "Attribution drops sharply after navigation or SEO updates."
+    ],
+    commands: [
+      {
+        title: "Check Grammarly affiliate info page reachability",
+        shell: "CLI",
+        content:
+          "curl -I \"https://www.grammarly.com/affiliates\"\n# Swap with your live Impact URL once approved."
+      }
+    ]
+  },
+  {
+    slug: "surfshark-affiliate-placement-and-policy-compliant-positioning",
+    title: "Surfshark Affiliate Placement and Policy-Compliant Positioning",
+    description:
+      "Position Surfshark partner links within networking/privacy support docs while preserving enterprise VPN guidance and avoiding policy bypass messaging.",
+    category: "Business / Partnerships",
+    productFamily: "Partnerships",
+    product: "Surfshark Affiliate",
+    environment: "Both",
+    severity: "Low",
+    accessLevel: "Admin Required",
+    estimatedTime: "10-20 min",
+    tags: ["affiliate", "surfshark", "vpn", "privacy", "networking", "impact"],
+    symptoms: [
+      "VPN troubleshooting pages need partner placement but overlap with corporate VPN policies.",
+      "Users may confuse consumer VPN recommendations with mandatory corporate access methods.",
+      "No documented guardrails exist for consumer-VPN promotional language."
+    ],
+    causes: [
+      "Affiliate messaging not separated from official enterprise network runbooks.",
+      "Category mapping lacks explicit inclusion/exclusion rules.",
+      "Disclosures are inconsistent across pages with networking content."
+    ],
+    remediations: [
+      "Keep corporate VPN support steps primary and place partner links in optional recommendation sections.",
+      "Explicitly state that affiliate tools do not replace corporate security/network policy requirements.",
+      "Use consistent disclosure, rel attributes, and status badges for partner links.",
+      "Track click quality by article type and remove underperforming or confusing placements."
+    ],
+    escalationCriteria: [
+      "Network/security teams report conflicts with approved remote access standards.",
+      "Users repeatedly attempt policy-bypass workarounds after reading partner CTAs.",
+      "Partner platform flags non-compliant placement or traffic anomalies."
+    ],
+    commands: [
+      {
+        title: "Validate Surfshark partner destination availability",
+        shell: "CLI",
+        content:
+          "curl -I \"https://surfshark.com/affiliate\"\n# Replace with your approved tracking URL before go-live."
+      }
+    ]
+  },
+  {
+    slug: "proton-partners-affiliate-setup-and-privacy-safe-messaging",
+    title: "Proton Partners Setup and Privacy-Safe Messaging",
+    description:
+      "Support document for Proton affiliate placements in privacy and identity content, including trust messaging and enterprise-safe boundaries.",
+    category: "Business / Partnerships",
+    productFamily: "Partnerships",
+    product: "Proton Partners",
+    environment: "Both",
+    severity: "Low",
+    accessLevel: "Admin Required",
+    estimatedTime: "10-20 min",
+    tags: ["affiliate", "proton", "privacy", "encryption", "identity", "compliance"],
+    symptoms: [
+      "Privacy-focused support pages have no consistent affiliate recommendation strategy.",
+      "Copy mixes personal-privacy suggestions with enterprise account requirements.",
+      "Team cannot quickly identify where Proton links are currently used."
+    ],
+    causes: [
+      "No content governance layer for privacy affiliate links.",
+      "Lack of mapping between support categories and partner relevance.",
+      "Incomplete disclosure rollout across support layouts."
+    ],
+    remediations: [
+      "Use registry-based placement so Proton links only appear in relevant privacy/security topics.",
+      "Keep guidance neutral and avoid suggesting migration away from corporate-managed systems.",
+      "Add clear disclosure and status badges for partner links.",
+      "Review content quarterly for policy alignment and conversion quality."
+    ],
+    escalationCriteria: [
+      "Legal/compliance requests copy changes for privacy/security claims.",
+      "Partner reporting indicates invalid traffic, misattribution, or policy issues.",
+      "Support teams report user confusion between corporate and personal security tooling."
+    ],
+    commands: [
+      {
+        title: "Verify Proton partner information endpoint",
+        shell: "CLI",
+        content:
+          "curl -I \"https://proton.me/partners/affiliates\"\n# Replace with your partner tracking URL for final validation."
+      }
+    ]
+  },
+  {
+    slug: "apple-services-performance-partners-onboarding-and-approval-notes",
+    title: "Apple Services Performance Partners Onboarding and Approval Notes",
+    description:
+      "Operational notes for Apple Services Performance Partner onboarding, approval boundaries, and compliant promotion handling in a support-driven portfolio.",
+    category: "Business / Partnerships",
+    productFamily: "Partnerships",
+    product: "Apple Services Performance Partners",
+    environment: "Both",
+    severity: "Low",
+    accessLevel: "Admin Required",
+    estimatedTime: "15-25 min",
+    tags: ["affiliate", "apple", "performance-partners", "approval", "app-store", "policy"],
+    symptoms: [
+      "Apple partner application is submitted but tracking links are not yet available.",
+      "Team needs a documented process for handling approval-gated partner programs.",
+      "Placement plans exist before final partner terms are accepted."
+    ],
+    causes: [
+      "Program approvals are pending and operational readiness steps are incomplete.",
+      "No fallback plan for pending-status partner entries in the affiliate registry.",
+      "Lack of central documentation on partner-specific restrictions."
+    ],
+    remediations: [
+      "Keep Apple partner entries marked as Applied until official tracking links are issued.",
+      "Use official Apple program pages as placeholders without sponsored attribution until activation.",
+      "Document approval terms and update disclosure/copy to match accepted policies.",
+      "Deploy activation changes only after link QA and compliance sign-off."
+    ],
+    escalationCriteria: [
+      "Program terms are unclear and require legal/partnership review.",
+      "Tracking links are issued but redirect behavior does not match approved campaigns.",
+      "Team requests pre-approval promotional copy that may violate program guidelines."
+    ],
+    commands: [
+      {
+        title: "Verify Apple partner program page availability",
+        shell: "CLI",
+        content:
+          "curl -I \"https://performance-partners.apple.com/home\"\n# Update to approved Apple tracking URL after partner activation."
+      }
+    ]
   }
 ];
 

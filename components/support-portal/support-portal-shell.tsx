@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
+import { AffiliateDisclosureBanner } from "@/components/affiliate/affiliate-disclosure-banner";
 import { SidebarNav } from "@/components/support-portal/sidebar-nav";
 import { SupportIcon } from "@/components/support-portal/icons";
 import {
@@ -87,7 +88,10 @@ export function SupportPortalShell({ children }: { children: ReactNode }) {
               </div>
             </div>
 
-            <div className="px-4 py-4 sm:px-6 lg:px-0 lg:py-0">{children}</div>
+            <div className="space-y-4 px-4 py-4 sm:px-6 lg:px-0 lg:py-0">
+              <AffiliateDisclosureBanner compact />
+              {children}
+            </div>
           </div>
         </div>
       </div>

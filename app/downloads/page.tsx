@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { AffiliateDisclosureBanner } from "@/components/affiliate/affiliate-disclosure-banner";
 import { DownloadsBrowser } from "@/components/downloads/downloads-browser";
 import { getAffiliateLinkByKey } from "@/lib/affiliate-links";
 import { getDownloads } from "@/lib/downloads.registry";
@@ -187,6 +188,7 @@ export default function DownloadsPage() {
     <>
       <section className="section-shell pt-10 sm:pt-14">
         <div className="page-shell">
+          <AffiliateDisclosureBanner className="mb-6" />
           <DownloadsBrowser entries={downloads} amazonAffiliateUrl={amazonAffiliate?.url} />
         </div>
       </section>

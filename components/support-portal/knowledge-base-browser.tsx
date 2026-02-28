@@ -96,14 +96,14 @@ export function KnowledgeBaseBrowser({ articles, initialQuery = "" }: KnowledgeB
     <div>
       <SupportPageHeader
         title="Knowledge Base"
-        description="Search enterprise-safe troubleshooting runbooks for Microsoft 365, Adobe, Figma, Windows, macOS, browsers, networking, and printing issues."
+        description="Search enterprise-safe troubleshooting runbooks for Microsoft 365, Adobe, Figma, Windows, macOS, browsers, networking, printing, and affiliate operations."
         breadcrumbs={[{ label: "Support Portal", href: "/support" }, { label: "Knowledge Base" }]}
         search={
           <TopSearchBar
             value={query}
             onChange={setQuery}
             onSubmit={handleSearchSubmit}
-            placeholder="Search issues (e.g., Outlook search, Teams mic, Adobe sign-in, Figma fonts)"
+            placeholder="Search issues (e.g., Outlook search, Teams mic, Adobe sign-in, affiliate tracking)"
             buttonLabel="Search KB"
           />
         }

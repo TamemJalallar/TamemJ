@@ -16,7 +16,9 @@ export const metadata: Metadata = {
     "service catalog",
     "enterprise help desk",
     "IT incident management",
-    "troubleshooting documentation"
+    "troubleshooting documentation",
+    "affiliate operations",
+    "affiliate link governance"
   ],
   openGraph: buildSupportOpenGraph(
     "Support Portal | Tamem J",

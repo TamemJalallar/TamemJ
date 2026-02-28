@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import type { KBArticle } from "@/types/support";
+import type { KBRecommendedAffiliate } from "@/lib/affiliate-support.registry";
 import { SupportPageHeader } from "@/components/support-portal/page-header";
 import { AccordionSteps } from "@/components/support-portal/accordion-steps";
 import { CodeBlock } from "@/components/support-portal/code-block";
@@ -16,10 +17,12 @@ function cx(...classes: Array<string | false | null | undefined>): string {
 
 export function KnowledgeBaseArticleView({
   article,
-  relatedArticles
+  relatedArticles,
+  recommendedAffiliates
 }: {
   article: KBArticle;
   relatedArticles: KBArticle[];
+  recommendedAffiliates: KBRecommendedAffiliate[];
 }) {
   const [helpfulVote, setHelpfulVote] = useState<"yes" | "no" | null>(null);
   const [viewTracked, setViewTracked] = useState(false);
@@ -176,6 +179,70 @@ export function KnowledgeBaseArticleView({
         </div>
 
         <div className="space-y-5">
+          {recommendedAffiliates.length > 0 ? (
+            <div className="rounded-2xl border border-line/70 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-6">
+              <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                Recommended Partners for This Topic
+              </h2>
+              <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                Selected from your affiliate registry based on this article&apos;s category, product family,
+                and tags.
+              </p>
+              <ul className="mt-3 space-y-2">
+                {recommendedAffiliates.map((entry) => (
+                  <li key={`${article.slug}-${entry.affiliate.key}`}>
+                    <div className="rounded-xl border border-line/70 bg-slate-50/60 px-3 py-3 text-sm text-slate-700 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="font-medium">{entry.affiliate.label}</p>
+                          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                            {entry.affiliate.program} • {entry.affiliate.network}
+                          </p>
+                          <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                            {entry.affiliate.description}
+                          </p>
+                        </div>
+                        <span
+                          className={cx(
+                            "inline-flex shrink-0 items-center rounded-full border px-2 py-1 text-[11px] font-semibold",
+                            entry.affiliate.status === "Active"
+                              ? "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900/60 dark:bg-emerald-950/30 dark:text-emerald-200"
+                              : "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-900/60 dark:bg-amber-950/30 dark:text-amber-200"
+                          )}
+                        >
+                          {entry.affiliate.status}
+                        </span>
+                      </div>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        <a
+                          href={entry.affiliate.url}
+                          target="_blank"
+                          rel={
+                            entry.affiliate.status === "Active"
+                              ? "sponsored nofollow noreferrer"
+                              : "nofollow noreferrer"
+                          }
+                          className="btn-secondary !px-3 !py-1.5 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
+                        >
+                          Open partner link
+                        </a>
+                        <Link
+                          href={`/support/kb/${entry.supportDocSlug}`}
+                          className="btn-secondary !px-3 !py-1.5 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
+                        >
+                          Open support playbook
+                        </Link>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">
+                Disclosure: Active partner links may generate commission with no additional user cost.
+              </p>
+            </div>
+          ) : null}
+
           <div className="rounded-2xl border border-line/70 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-6">
             <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Was this helpful?</h2>
             <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">

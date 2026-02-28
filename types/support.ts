@@ -15,6 +15,7 @@ export type KBCategory =
   | "Android"
   | "Networking / VPN"
   | "Identity / MFA / SSO"
+  | "Business / Partnerships"
   | "Adobe"
   | "Figma"
   | "Browsers"
@@ -32,7 +33,8 @@ export type KBProductFamily =
   | "Print"
   | "AV"
   | "Okta"
-  | "Mobile";
+  | "Mobile"
+  | "Partnerships";
 
 export type SupportStepType = "info" | "command" | "warning";
 
