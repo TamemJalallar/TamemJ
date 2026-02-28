@@ -87,6 +87,12 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
 
   return (
     <html lang="en" className={inter.variable}>
+      <head>
+        <meta
+          name="impact-site-verification"
+          {...({ value: "6f0bde00-6698-4a2c-9ce5-4830ca1e13b5" } as any)}
+        />
+      </head>
       <body className="font-sans antialiased">
         <div className="min-h-screen bg-mesh-soft">
           <SiteHeader />

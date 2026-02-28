@@ -196,6 +196,7 @@ The downloads page is registry-driven and lives at:
 
 - `app/downloads/page.tsx`
 - `components/downloads/downloads-browser.tsx`
+- `lib/affiliate-links.ts` (affiliate destinations + labels)
 - `lib/downloads.registry.ts`
 - `types/download.ts`
 - `data/download-release-sync.targets.json` (GitHub sync mapping)
@@ -277,6 +278,13 @@ so the updated metadata is included in the generated site.
 - Use official Apple/Microsoft store badges according to their brand guidelines if you add branded assets
 - Sign and notarize macOS builds; sign Windows installers for better trust and fewer warnings
 - Publish SHA-256 checksums for direct downloads whenever possible
+- For affiliate links, include a clear disclosure near the CTA and use outbound `rel="sponsored nofollow"`
+
+### Affiliate Link Management (Downloads)
+
+- Affiliate links are configured in `lib/affiliate-links.ts`
+- The downloads page reads those links in `app/downloads/page.tsx` and renders the CTA/disclosure in `components/downloads/downloads-browser.tsx`
+- To update your Amazon link, change the `amazon-it-gear` URL value in `lib/affiliate-links.ts`
 
 ## ServiceNow-Style Support Portal (ITIL-lite Demo)
 

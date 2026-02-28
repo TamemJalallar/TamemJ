@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { DownloadsBrowser } from "@/components/downloads/downloads-browser";
+import { getAffiliateLinkByKey } from "@/lib/affiliate-links";
 import { getDownloads } from "@/lib/downloads.registry";
 import { buildBreadcrumbJsonLd, buildCollectionPageJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 import type { DownloadEntry } from "@/types/download";
@@ -69,6 +70,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function DownloadsPage() {
   const downloads = getDownloads();
   const freeCount = downloads.filter(isFreeEntry).length;
+  const amazonAffiliate = getAffiliateLinkByKey("amazon-it-gear");
 
   const downloadsCollectionSchema = buildCollectionPageJsonLd(
     "Software Downloads",
@@ -164,6 +166,14 @@ export default function DownloadsPage() {
           "@type": "Answer",
           text: "For GitHub-backed direct downloads, version, file size, and SHA-256 metadata are included when available."
         }
+      },
+      {
+        "@type": "Question",
+        name: "Do you use affiliate links?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Some recommendation sections may use affiliate links. Disclosures are shown near those links, and purchase price does not change."
+        }
       }
     ]
   };
@@ -177,7 +187,7 @@ export default function DownloadsPage() {
     <>
       <section className="section-shell pt-10 sm:pt-14">
         <div className="page-shell">
-          <DownloadsBrowser entries={downloads} />
+          <DownloadsBrowser entries={downloads} amazonAffiliateUrl={amazonAffiliate?.url} />
         </div>
       </section>
       <script

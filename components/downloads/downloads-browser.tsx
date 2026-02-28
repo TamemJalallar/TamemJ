@@ -95,7 +95,13 @@ function matchesChannelFilter(entry: DownloadEntry, filter: ChannelFilter): bool
   return true;
 }
 
-export function DownloadsBrowser({ entries }: { entries: DownloadEntry[] }) {
+export function DownloadsBrowser({
+  entries,
+  amazonAffiliateUrl
+}: {
+  entries: DownloadEntry[];
+  amazonAffiliateUrl?: string;
+}) {
   const [query, setQuery] = useState("");
   const [platformFilter, setPlatformFilter] = useState<DownloadPlatform | "All">("All");
   const [categoryFilter, setCategoryFilter] = useState<string | "All">("All");
@@ -229,6 +235,36 @@ export function DownloadsBrowser({ entries }: { entries: DownloadEntry[] }) {
           </div>
         </div>
       </section>
+
+      {amazonAffiliateUrl ? (
+        <section className="surface-card p-5 sm:p-6 dark:border-slate-700 dark:bg-slate-950">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div className="max-w-3xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+                Recommended Gear
+              </p>
+              <h2 className="mt-2 text-xl font-semibold text-slate-900 dark:text-slate-100">
+                Shop popular IT accessories
+              </h2>
+              <p className="mt-2 text-sm leading-7 text-slate-600 dark:text-slate-300">
+                Monitors, docks, cables, and support-team essentials.
+              </p>
+              <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                Disclosure: This section contains affiliate links. If you buy through these links, I may
+                earn a commission at no extra cost to you.
+              </p>
+            </div>
+            <a
+              href={amazonAffiliateUrl}
+              target="_blank"
+              rel="sponsored nofollow noreferrer"
+              className="btn-secondary shrink-0 !px-5 !py-3 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
+            >
+              Open Amazon Picks
+            </a>
+          </div>
+        </section>
+      ) : null}
 
       <section className="surface-card p-5 sm:p-6 dark:border-slate-700 dark:bg-slate-950">
         <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
