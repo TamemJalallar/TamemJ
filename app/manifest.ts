@@ -16,9 +16,9 @@ export default function manifest(): MetadataRoute.Manifest {
     lang: "en",
     icons: [
       {
-        src: "/favicon.svg",
-        sizes: "any",
-        type: "image/svg+xml"
+        src: "/favicon.ico",
+        sizes: "48x48",
+        type: "image/x-icon"
       }
     ],
     categories: ["technology", "developer", "productivity"],
@@ -28,21 +28,21 @@ export default function manifest(): MetadataRoute.Manifest {
         short_name: "Support",
         description: "Open IT support knowledge base, catalog, tickets, and analytics.",
         url: "/support/",
-        icons: [{ src: "/favicon.svg", sizes: "any", type: "image/svg+xml" }]
+        icons: [{ src: "/favicon.ico", sizes: "48x48", type: "image/x-icon" }]
       },
       {
         name: "Tech Fixes",
         short_name: "Fixes",
         description: "Open enterprise-safe troubleshooting guides.",
         url: "/corporate-tech-fixes/",
-        icons: [{ src: "/favicon.svg", sizes: "any", type: "image/svg+xml" }]
+        icons: [{ src: "/favicon.ico", sizes: "48x48", type: "image/x-icon" }]
       },
       {
         name: "Downloads",
         short_name: "Downloads",
         description: "Open curated software downloads and tools.",
         url: "/downloads/",
-        icons: [{ src: "/favicon.svg", sizes: "any", type: "image/svg+xml" }]
+        icons: [{ src: "/favicon.ico", sizes: "48x48", type: "image/x-icon" }]
       }
     ]
   };

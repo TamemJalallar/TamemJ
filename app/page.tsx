@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { AppCard } from "@/components/app-card";
 import { SectionHeading } from "@/components/section-heading";
@@ -75,6 +76,25 @@ export default function HomePage() {
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4 sm:gap-5">
+                <div className="col-span-2 surface-card overflow-hidden p-3 sm:p-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
+                    Profile Visuals
+                  </p>
+                  <div className="mt-3">
+                    <figure className="overflow-hidden rounded-xl border border-line/80 bg-slate-100">
+                      <div className="relative aspect-[4/5]">
+                        <Image
+                          src="/images/site/profile-cartoon.png"
+                          alt="Tamem J illustrated portrait"
+                          fill
+                          priority
+                          sizes="(max-width: 1024px) 100vw, 40vw"
+                          className="object-cover object-center"
+                        />
+                      </div>
+                    </figure>
+                  </div>
+                </div>
                 {hasFeaturedApps ? (
                   <>
                     {featuredApps.slice(0, 2).map((app) => (

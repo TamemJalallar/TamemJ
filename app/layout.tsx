@@ -47,7 +47,9 @@ export const metadata: Metadata = {
   twitter: buildTwitter(siteConfig.title, siteConfig.description),
   manifest: "/manifest.webmanifest",
   icons: {
-    icon: "/favicon.svg"
+    icon: [{ url: "/favicon.ico", type: "image/x-icon" }],
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico"
   }
 };
 
