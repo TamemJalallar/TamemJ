@@ -44,13 +44,24 @@ const affiliateSupportMappings: AffiliateSupportMapping[] = [
         "windows-multi-monitor-flicker-after-dock-firmware-update",
         "windows-ethernet-poor-speed-negotiation-on-dock",
         "windows-home-router-qos-for-teams-zoom-calls",
+        "windows-laptop-thermal-throttling-during-video-meetings",
+        "windows-usb-c-dock-not-charging-laptop-consistently",
+        "windows-nvme-free-space-pressure-onedrive-cache-growth",
         "macos-thunderbolt-dock-dual-display-flicker-after-update",
         "macos-external-ssd-not-mounting-after-macos-update",
         "macos-bluetooth-headset-audio-stutter-in-meetings",
         "macos-webcam-not-detected-teams-zoom-after-permission-reset",
         "macos-ethernet-usb-c-adapter-no-ip-after-sleep",
         "macos-battery-health-degradation-remote-work-lifecycle",
-        "macos-home-wifi-channel-interference-video-call-instability"
+        "macos-home-wifi-channel-interference-video-call-instability",
+        "macos-airpods-microphone-switching-between-devices-calls",
+        "macos-thunderbolt-storage-disconnects-under-load",
+        "macos-fan-noise-high-during-teams-zoom-screen-share",
+        "macos-displaylink-adapter-not-working-after-macos-upgrade",
+        "ios-corporate-wifi-certificate-trust-fail-after-update",
+        "ios-managed-app-storage-pressure-causing-outlook-teams-crashes",
+        "android-corporate-wifi-8021x-authentication-fails-after-password-change",
+        "android-teams-camera-microphone-blocked-work-profile-policy"
       ],
       categories: ["Windows", "macOS", "Networking / VPN", "Printers / Scanners", "AV / Conference Rooms"],
       tags: ["dock", "monitor", "keyboard", "printer", "usb", "adapter", "wifi", "network", "headset", "ups"]
@@ -65,7 +76,11 @@ const affiliateSupportMappings: AffiliateSupportMapping[] = [
         "premiere-pro-scratch-disk-full-export-fails-managed-device",
         "after-effects-disk-cache-growth-storage-pressure",
         "acrobat-pdf-too-large-for-email-or-upload-safe-reduction",
-        "creative-cloud-desktop-update-stuck-download-loop"
+        "creative-cloud-desktop-update-stuck-download-loop",
+        "photoshop-canvas-lag-gpu-acceleration-managed-device",
+        "lightroom-classic-catalog-slow-external-drive-workflow",
+        "ios-adobe-acrobat-mobile-cannot-open-sharepoint-files",
+        "android-adobe-acrobat-mobile-sharepoint-open-fails"
       ],
       productFamilies: ["Adobe"],
       categories: ["Adobe"]
@@ -80,7 +95,9 @@ const affiliateSupportMappings: AffiliateSupportMapping[] = [
         "password-manager-autofill-not-working-chrome-edge-enterprise",
         "password-manager-shared-vault-access-not-updating",
         "password-manager-extension-blocked-by-browser-policy",
-        "browser-password-breach-warning-corporate-account"
+        "browser-password-breach-warning-corporate-account",
+        "ios-authenticator-push-approvals-not-received",
+        "android-authenticator-approvals-delayed-battery-restrictions"
       ],
       categories: ["Identity / MFA / SSO"],
       tags: ["mfa", "identity", "security", "password", "credential", "sso"],
@@ -123,7 +140,11 @@ const affiliateSupportMappings: AffiliateSupportMapping[] = [
         "public-wifi-safe-remote-work-connectivity-checklist",
         "secure-home-router-for-remote-work-connectivity",
         "windows-home-router-qos-for-teams-zoom-calls",
-        "macos-home-wifi-channel-interference-video-call-instability"
+        "macos-home-wifi-channel-interference-video-call-instability",
+        "home-mesh-wifi-roaming-causes-vpn-session-drops",
+        "dns-filter-blocks-adobe-figma-endpoints-enterprise-network",
+        "ios-corporate-wifi-certificate-trust-fail-after-update",
+        "android-corporate-wifi-8021x-authentication-fails-after-password-change"
       ],
       categories: ["Networking / VPN", "Browsers"],
       tags: ["vpn", "privacy", "public-wifi", "remote-work", "network"]
@@ -139,7 +160,13 @@ const affiliateSupportMappings: AffiliateSupportMapping[] = [
         "vpn-connected-saas-apps-blocked-ip-reputation-geo",
         "ransomware-safe-onedrive-sharepoint-file-recovery",
         "browser-password-breach-warning-corporate-account",
-        "secure-home-router-for-remote-work-connectivity"
+        "secure-home-router-for-remote-work-connectivity",
+        "dns-filter-blocks-adobe-figma-endpoints-enterprise-network",
+        "home-mesh-wifi-roaming-causes-vpn-session-drops",
+        "ios-authenticator-push-approvals-not-received",
+        "android-authenticator-approvals-delayed-battery-restrictions",
+        "ios-corporate-wifi-certificate-trust-fail-after-update",
+        "android-corporate-wifi-8021x-authentication-fails-after-password-change"
       ],
       categories: ["Identity / MFA / SSO", "Networking / VPN", "Business / Partnerships"],
       tags: ["privacy", "security", "email", "encryption"]
@@ -159,7 +186,18 @@ const affiliateSupportMappings: AffiliateSupportMapping[] = [
         "macos-webcam-not-detected-teams-zoom-after-permission-reset",
         "macos-ethernet-usb-c-adapter-no-ip-after-sleep",
         "macos-battery-health-degradation-remote-work-lifecycle",
-        "macos-home-wifi-channel-interference-video-call-instability"
+        "macos-home-wifi-channel-interference-video-call-instability",
+        "macos-airpods-microphone-switching-between-devices-calls",
+        "macos-thunderbolt-storage-disconnects-under-load",
+        "macos-fan-noise-high-during-teams-zoom-screen-share",
+        "macos-displaylink-adapter-not-working-after-macos-upgrade",
+        "ios-onedrive-camera-upload-not-syncing-managed-account",
+        "ios-sharepoint-link-opens-safari-auth-loop",
+        "ios-authenticator-push-approvals-not-received",
+        "ios-adobe-acrobat-mobile-cannot-open-sharepoint-files",
+        "ios-figma-mirror-prototype-not-refreshing-live",
+        "ios-corporate-wifi-certificate-trust-fail-after-update",
+        "ios-managed-app-storage-pressure-causing-outlook-teams-crashes"
       ],
       tags: ["apple", "ios", "macos", "app-store", "thunderbolt", "battery-health", "webcam"]
     }

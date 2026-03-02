@@ -6154,6 +6154,472 @@ const generalSeeds: KBSeed[] = [
       "Remote-work network kit guidance requires update at scale.",
       "Users request disabling VPN protections to mask roaming issues."
     ]
+  },
+  {
+    slug: "ios-onedrive-camera-upload-not-syncing-managed-account",
+    title: "iOS OneDrive Camera Upload Not Syncing (Managed Account)",
+    description:
+      "Troubleshoot OneDrive camera upload delays on managed iOS devices while preserving enterprise app protection and data governance controls.",
+    category: "iOS",
+    productFamily: "Microsoft",
+    product: "OneDrive for iOS",
+    environment: "iOS",
+    severity: "Medium",
+    tags: ["ios", "onedrive", "camera-upload", "sync", "microsoft-365", "mobile"],
+    symptoms: [
+      "New photos are not uploading to OneDrive work account.",
+      "Camera upload shows pending or paused for long periods.",
+      "Uploads resume intermittently only when app is open."
+    ],
+    causes: [
+      "Background app refresh or cellular data permissions are restricted.",
+      "OneDrive app session token needs refresh after policy/sign-in changes.",
+      "Storage pressure or network instability interrupts large upload queues."
+    ],
+    remediations: [
+      "Confirm the work account is active in OneDrive and camera upload is enabled.",
+      "Validate iOS Background App Refresh and network permissions for OneDrive per policy.",
+      "Connect to a stable network and leave OneDrive open until queue progress is observed.",
+      "Capture timestamps and failed file counts before escalation."
+    ],
+    escalationCriteria: [
+      "Managed app configuration policy updates are needed.",
+      "Many users are affected after a OneDrive/iOS release.",
+      "Compliance or data-loss prevention controls appear to block upload behavior."
+    ]
+  },
+  {
+    slug: "ios-sharepoint-link-opens-safari-auth-loop",
+    title: "iOS SharePoint Link Opens in Safari with Authentication Loop",
+    description:
+      "Resolve SharePoint link handling issues on iOS where links open repeatedly in Safari and re-prompt authentication due to app handoff or session state.",
+    category: "iOS",
+    productFamily: "Microsoft",
+    product: "SharePoint / Office Links (iOS)",
+    environment: "iOS",
+    severity: "Medium",
+    tags: ["ios", "sharepoint", "safari", "auth-loop", "microsoft-365", "links"],
+    symptoms: [
+      "SharePoint or Office document links open in Safari and re-prompt sign-in repeatedly.",
+      "User cannot consistently open links in Teams/Outlook mobile workflows.",
+      "Issue started after iOS, Teams, or Outlook app update."
+    ],
+    causes: [
+      "Link handoff between Microsoft apps and Safari lost expected session context.",
+      "Corporate cookie/session controls require fresh authentication in browser context.",
+      "App protection policy or managed browser configuration mismatch."
+    ],
+    remediations: [
+      "Confirm user is signed into all required Microsoft mobile apps with the same work account.",
+      "Retest the link from Teams and Outlook after refreshing app sessions.",
+      "Validate managed browser/app protection expectations for iOS link handling.",
+      "Document exact URL pattern and affected app source for support."
+    ],
+    escalationCriteria: [
+      "Cross-app SSO policy change is required.",
+      "Multiple users report link-auth loop in same tenant/workflow.",
+      "External-sharing or tenant trust settings appear involved."
+    ]
+  },
+  {
+    slug: "ios-authenticator-push-approvals-not-received",
+    title: "iOS Authenticator Push Approvals Not Received",
+    description:
+      "Troubleshoot missing Microsoft Authenticator approval prompts on iOS with safe notification, network, and account checks before factor reset.",
+    category: "iOS",
+    productFamily: "Microsoft",
+    product: "Microsoft Authenticator (iOS)",
+    environment: "iOS",
+    severity: "High",
+    tags: ["ios", "authenticator", "mfa", "push", "identity", "entra"],
+    symptoms: [
+      "User signs in but never receives approval prompt on iPhone.",
+      "Approval prompts may arrive late or only after opening Authenticator app.",
+      "Fallback verification methods may be unavailable."
+    ],
+    causes: [
+      "iOS push notifications disabled or suppressed by focus/summary settings.",
+      "Authenticator registration/session is stale after device restore or app update.",
+      "Conditional access/authentication method policy mismatch."
+    ],
+    remediations: [
+      "Validate notification permissions for Authenticator and disable suppressive focus settings during testing.",
+      "Confirm the correct work account is registered in Authenticator.",
+      "Test alternate approved MFA method if available to restore immediate access.",
+      "Escalate for controlled factor reset only after identity verification."
+    ],
+    escalationCriteria: [
+      "Privileged account or high-risk access requires security team review.",
+      "Tenant-wide MFA prompt delivery issue is suspected.",
+      "User reports unexpected prompts indicating possible account compromise."
+    ]
+  },
+  {
+    slug: "ios-adobe-acrobat-mobile-cannot-open-sharepoint-files",
+    title: "iOS Acrobat Mobile Cannot Open SharePoint Files",
+    description:
+      "Troubleshoot Acrobat mobile failures opening SharePoint-hosted PDFs on iOS while maintaining enterprise identity and data protection controls.",
+    category: "iOS",
+    productFamily: "Adobe",
+    product: "Adobe Acrobat Reader (iOS)",
+    environment: "iOS",
+    severity: "Medium",
+    tags: ["ios", "adobe", "acrobat", "sharepoint", "pdf", "sso"],
+    symptoms: [
+      "PDF opens from SharePoint link but fails in Acrobat mobile.",
+      "User sees repeated sign-in prompts between Microsoft and Adobe screens.",
+      "Only some documents or libraries are affected."
+    ],
+    causes: [
+      "SSO handoff/session mismatch between SharePoint and Acrobat app contexts.",
+      "Conditional access/app protection policy requires compliant app route.",
+      "File permission inheritance differs from user expectation."
+    ],
+    remediations: [
+      "Verify file opens in SharePoint web/mobile context first to isolate permission vs app issue.",
+      "Confirm Acrobat and Microsoft apps are signed in with the same corporate identity.",
+      "Capture failing library/document path and access timestamps for review.",
+      "Escalate before suggesting account removal or unmanaged file export."
+    ],
+    escalationCriteria: [
+      "Policy exception or trusted app configuration changes are requested.",
+      "Many users report the same open flow failure.",
+      "Sensitive document access or rights-management controls are implicated."
+    ]
+  },
+  {
+    slug: "ios-figma-mirror-prototype-not-refreshing-live",
+    title: "iOS Figma Mirror Prototype Not Refreshing Live",
+    description:
+      "Troubleshoot stale or non-refreshing Figma prototype previews on iOS test devices with safe session and network validation.",
+    category: "iOS",
+    productFamily: "Figma",
+    product: "Figma Mirror (iOS)",
+    environment: "iOS",
+    severity: "Low",
+    tags: ["ios", "figma", "mirror", "prototype", "refresh", "design-qa"],
+    symptoms: [
+      "Prototype changes in desktop Figma do not update on iOS mirror app.",
+      "Mirror app appears connected but shows old frame states.",
+      "Reopen temporarily helps, then stale content returns."
+    ],
+    causes: [
+      "Session sync delay or stale app state in mirror client.",
+      "Intermittent network path issues between device and Figma services.",
+      "Large prototype complexity increases update latency."
+    ],
+    remediations: [
+      "Confirm both desktop and iOS app are signed into the same Figma workspace.",
+      "Reopen the prototype and verify internet connectivity quality on iOS device.",
+      "Test with a small prototype file to isolate project-size effects.",
+      "Capture app version and failing file URL for escalation."
+    ],
+    escalationCriteria: [
+      "Issue reproduces across multiple iOS test devices.",
+      "Figma service regression is suspected for Mirror sync behavior.",
+      "Critical design review timeline is blocked by stale previews."
+    ]
+  },
+  {
+    slug: "ios-corporate-wifi-certificate-trust-fail-after-update",
+    title: "iOS Corporate Wi-Fi Certificate Trust Failure After Update",
+    description:
+      "Troubleshoot enterprise Wi-Fi trust failures on iOS after OS updates using safe certificate/profile checks without bypassing network security.",
+    category: "iOS",
+    productFamily: "Networking",
+    product: "Corporate Wi-Fi (EAP-TLS)",
+    environment: "iOS",
+    severity: "High",
+    accessLevel: "Admin Required",
+    tags: ["ios", "wifi", "certificate", "eap-tls", "network", "mobile"],
+    symptoms: [
+      "Device cannot join corporate Wi-Fi after iOS update.",
+      "User sees certificate trust or authentication errors.",
+      "VPN and internal apps fail because trusted Wi-Fi onboarding is blocked."
+    ],
+    causes: [
+      "Device certificate or trust chain not aligned with new iOS trust handling.",
+      "MDM-delivered Wi-Fi profile requires renewal/redeployment.",
+      "Credential/certificate mismatch after password or identity changes."
+    ],
+    remediations: [
+      "Collect screenshot of exact trust/authentication prompt and timestamp.",
+      "Confirm management profile is present and the expected Wi-Fi profile is installed.",
+      "Validate device date/time and network scope (corporate SSID only).",
+      "Escalate to network/endpoint teams for certificate and profile review."
+    ],
+    escalationCriteria: [
+      "Multiple iOS devices fail on same SSID after update.",
+      "Certificate renewal or profile push change is required.",
+      "User requests insecure onboarding bypass for corporate network."
+    ]
+  },
+  {
+    slug: "ios-managed-app-storage-pressure-causing-outlook-teams-crashes",
+    title: "iOS Managed App Storage Pressure Causing Outlook/Teams Crashes",
+    description:
+      "Address iOS storage pressure impacting managed Outlook/Teams stability with safe cleanup guidance and escalation thresholds.",
+    category: "iOS",
+    productFamily: "Mobile",
+    product: "Managed iOS Apps (Outlook/Teams)",
+    environment: "iOS",
+    severity: "Medium",
+    tags: ["ios", "storage", "outlook", "teams", "mobile", "performance"],
+    symptoms: [
+      "Outlook or Teams closes unexpectedly during normal use.",
+      "App performance degrades with delayed compose/chat behavior.",
+      "Device free storage is consistently low."
+    ],
+    causes: [
+      "Insufficient free device storage for app cache and attachment processing.",
+      "Large media/chat history accumulation in managed apps.",
+      "Background iOS cleanup is unable to keep pace with work data growth."
+    ],
+    remediations: [
+      "Review iOS storage usage and free space according to enterprise support baseline.",
+      "Remove non-business local media/files where policy allows.",
+      "Update apps to current approved versions and reboot device.",
+      "Escalate before clearing managed app data in environments with strict retention policy."
+    ],
+    escalationCriteria: [
+      "Storage pressure recurs rapidly despite normal usage patterns.",
+      "Managed app data reset or device replacement is required.",
+      "Widespread issue appears after a mobile app release."
+    ]
+  },
+  {
+    slug: "android-onedrive-offline-files-not-downloading-work-profile",
+    title: "Android OneDrive Offline Files Not Downloading (Work Profile)",
+    description:
+      "Troubleshoot OneDrive offline file download failures in Android work profiles with safe network and app policy checks.",
+    category: "Android",
+    productFamily: "Microsoft",
+    product: "OneDrive for Android",
+    environment: "Android",
+    severity: "Medium",
+    tags: ["android", "onedrive", "offline-files", "work-profile", "sync", "microsoft-365"],
+    symptoms: [
+      "Files marked for offline use remain unavailable in work profile.",
+      "Download icon spins indefinitely or fails silently.",
+      "Access works online but not during travel/offline scenarios."
+    ],
+    causes: [
+      "Work profile data restrictions block background or large file download.",
+      "Storage constraints or app battery policy limits work-profile sync.",
+      "Token/session issue with OneDrive account in work profile."
+    ],
+    remediations: [
+      "Validate network quality and available storage in the work profile context.",
+      "Confirm OneDrive app has required work-profile permissions and unrestricted background behavior per policy.",
+      "Retry offline mark/download for a smaller file to isolate payload-size behavior.",
+      "Capture file paths and failure timestamps for escalation."
+    ],
+    escalationCriteria: [
+      "Policy changes are needed for work-profile data transfer limits.",
+      "Issue affects many Android users after app or policy update.",
+      "Business travel/offline workflows are materially impacted."
+    ]
+  },
+  {
+    slug: "android-authenticator-approvals-delayed-battery-restrictions",
+    title: "Android Authenticator Approvals Delayed by Battery Restrictions",
+    description:
+      "Resolve delayed Microsoft Authenticator approval prompts on Android where battery optimization suppresses timely MFA notifications.",
+    category: "Android",
+    productFamily: "Microsoft",
+    product: "Microsoft Authenticator (Android)",
+    environment: "Android",
+    severity: "High",
+    tags: ["android", "authenticator", "mfa", "battery-optimization", "entra", "identity"],
+    symptoms: [
+      "MFA approvals arrive late or only after opening Authenticator app.",
+      "User experiences repeated sign-in retries due to missed approval windows.",
+      "Issue is worse when device enters battery saver mode."
+    ],
+    causes: [
+      "Battery optimization suppresses Authenticator push handling in background.",
+      "Notification channels for Authenticator are disabled or limited.",
+      "Work profile restrictions interfere with push delivery timing."
+    ],
+    remediations: [
+      "Verify Authenticator notification permissions and channel settings.",
+      "Review battery optimization rules for Authenticator per enterprise mobility guidance.",
+      "Confirm the enrolled account/factor is current and approved fallback method exists.",
+      "Escalate before factor reset for privileged or high-risk accounts."
+    ],
+    escalationCriteria: [
+      "Multiple users report delayed approvals after policy rollout.",
+      "Authentication method policy change is required.",
+      "Security event indicators accompany delayed or unexpected prompts."
+    ]
+  },
+  {
+    slug: "android-adobe-acrobat-mobile-sharepoint-open-fails",
+    title: "Android Acrobat Mobile SharePoint Open Fails",
+    description:
+      "Troubleshoot Adobe Acrobat mobile failures opening SharePoint-hosted PDFs on Android while maintaining approved identity and data protection controls.",
+    category: "Android",
+    productFamily: "Adobe",
+    product: "Adobe Acrobat Reader (Android)",
+    environment: "Android",
+    severity: "Medium",
+    tags: ["android", "adobe", "acrobat", "sharepoint", "pdf", "sso"],
+    symptoms: [
+      "SharePoint PDF links fail when handed off to Acrobat mobile.",
+      "User gets repeated sign-in prompts with no successful open.",
+      "Issue appears for specific libraries or protected files."
+    ],
+    causes: [
+      "SSO handoff mismatch between Microsoft and Adobe app session contexts.",
+      "Conditional access/app protection requirements block non-compliant open path.",
+      "Document permission model differs from expected inherited access."
+    ],
+    remediations: [
+      "Validate PDF access in SharePoint web/mobile first to isolate permissions.",
+      "Confirm both Adobe and Microsoft apps are signed into approved enterprise identity.",
+      "Capture failing link source app, document library, and timestamps.",
+      "Escalate before moving files to unmanaged storage or disabling policy controls."
+    ],
+    escalationCriteria: [
+      "Many users cannot open SharePoint PDFs via Acrobat mobile.",
+      "Policy tuning is requested for managed app open-in behavior.",
+      "Protected/sensitive document workflows are blocked."
+    ]
+  },
+  {
+    slug: "android-figma-browser-webgl-disabled-large-file-lag",
+    title: "Android Figma Browser WebGL Disabled or Large File Lag",
+    description:
+      "Troubleshoot Figma web performance issues on Android when WebGL path is limited or large design files exceed device/browser capabilities.",
+    category: "Android",
+    productFamily: "Figma",
+    product: "Figma Web (Android Browser)",
+    environment: "Android",
+    severity: "Low",
+    tags: ["android", "figma", "webgl", "browser", "performance", "design"],
+    symptoms: [
+      "Figma files load slowly or interactions stutter on Android browser.",
+      "Prototype playback lags or fails on larger files.",
+      "Performance varies by browser and device model."
+    ],
+    causes: [
+      "Mobile browser graphics path is constrained for complex files.",
+      "Device memory pressure and background apps reduce rendering stability.",
+      "Browser version or enterprise policy disables required capabilities."
+    ],
+    remediations: [
+      "Confirm browser is current and test alternate approved browser profile.",
+      "Close background apps and retry with smaller prototype/file segment.",
+      "Prefer desktop workflow for complex design editing where possible.",
+      "Capture browser/version/device details for escalation."
+    ],
+    escalationCriteria: [
+      "Enterprise browser policy adjustments are required.",
+      "Critical design review or approval path depends on Android browser access.",
+      "Issue reproduces across many devices with same managed browser build."
+    ]
+  },
+  {
+    slug: "android-corporate-wifi-8021x-authentication-fails-after-password-change",
+    title: "Android Corporate Wi-Fi 802.1X Authentication Fails After Password Change",
+    description:
+      "Troubleshoot Android enterprise Wi-Fi authentication failures after password or identity changes using safe profile and cert checks.",
+    category: "Android",
+    productFamily: "Networking",
+    product: "Corporate Wi-Fi (Android 802.1X)",
+    environment: "Android",
+    severity: "High",
+    accessLevel: "Admin Required",
+    tags: ["android", "wifi", "8021x", "authentication", "certificate", "network"],
+    symptoms: [
+      "Android device cannot connect to corporate Wi-Fi after password change.",
+      "Repeated authentication prompts or immediate disconnects occur.",
+      "Other networks may work while corporate SSID fails."
+    ],
+    causes: [
+      "Credential/certificate mismatch between Wi-Fi profile and identity source.",
+      "Work profile or MDM-delivered Wi-Fi settings are outdated.",
+      "Recent policy updates altered accepted auth methods."
+    ],
+    remediations: [
+      "Collect exact error message, SSID, and failure timestamp.",
+      "Verify management profile/work profile is healthy and corporate Wi-Fi profile is present.",
+      "Confirm the user can authenticate to another corporate service with same credentials.",
+      "Escalate to endpoint/network teams for 802.1X profile and certificate validation."
+    ],
+    escalationCriteria: [
+      "Many Android users fail on the same SSID simultaneously.",
+      "Certificate/profile redeployment is required.",
+      "User requests insecure fallback network access."
+    ]
+  },
+  {
+    slug: "android-work-profile-play-store-not-updating-managed-apps",
+    title: "Android Work Profile Play Store Not Updating Managed Apps",
+    description:
+      "Troubleshoot delayed or failed managed app updates in Android work profile Play Store without bypassing enterprise app governance.",
+    category: "Android",
+    productFamily: "Mobile",
+    product: "Managed Google Play (Work Profile)",
+    environment: "Android",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    tags: ["android", "work-profile", "managed-google-play", "app-update", "intune", "mdm"],
+    symptoms: [
+      "Required work apps stay on old versions despite available updates.",
+      "Managed Play shows pending updates indefinitely.",
+      "Users hit app compatibility or sign-in issues until update completes."
+    ],
+    causes: [
+      "Managed Play sync delay or policy dependency blocks update rollout.",
+      "Device battery/network restrictions delay update downloads.",
+      "Work profile state is unhealthy after OS update or storage pressure."
+    ],
+    remediations: [
+      "Open Company Portal/management app and run sync.",
+      "Confirm work profile network and battery settings permit managed app updates.",
+      "Verify sufficient free storage and stable connectivity for update download.",
+      "Escalate for MDM assignment/policy validation if update remains stuck."
+    ],
+    escalationCriteria: [
+      "Update failures affect broad Android user cohorts.",
+      "Mandatory security patch updates are blocked.",
+      "Managed app assignment or staged rollout configuration needs admin correction."
+    ]
+  },
+  {
+    slug: "android-teams-camera-microphone-blocked-work-profile-policy",
+    title: "Android Teams Camera/Microphone Blocked by Work Profile Policy",
+    description:
+      "Troubleshoot Android Teams meeting media access blocked by work profile permissions or policy settings with secure least-privilege handling.",
+    category: "Android",
+    productFamily: "Microsoft",
+    product: "Microsoft Teams (Android)",
+    environment: "Android",
+    severity: "High",
+    accessLevel: "Admin Required",
+    tags: ["android", "teams", "camera", "microphone", "work-profile", "meetings"],
+    symptoms: [
+      "Teams cannot access camera or microphone during meetings.",
+      "Permissions appear enabled in personal profile but not in work profile.",
+      "Issue appeared after policy or OS update."
+    ],
+    causes: [
+      "Work profile-level permission control overrides app-level permission state.",
+      "Managed configuration policy restricts media access for compliance reasons.",
+      "App update changed runtime permission prompts/behavior."
+    ],
+    remediations: [
+      "Validate Teams permissions specifically inside work profile app settings.",
+      "Confirm no work profile privacy/policy restriction is actively blocking media.",
+      "Test with approved headset/camera path and capture exact error language.",
+      "Escalate to endpoint policy owners for controlled permission review."
+    ],
+    escalationCriteria: [
+      "Policy changes are required to re-enable media access.",
+      "Issue affects many Android users in meetings.",
+      "High-visibility customer/leadership meetings are impacted."
+    ]
   }
 ];
 

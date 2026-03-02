@@ -924,6 +924,343 @@ const downloadEntries: DownloadEntry[] = [
     tags: ["media-player", "video", "audio", "free"],
     pricing: "Free",
     channels: [{ type: "Website", url: "https://www.videolan.org/vlc/" }]
+  },
+  {
+    slug: "brave-browser",
+    name: "Brave Browser",
+    summary:
+      "Privacy-first browser with built-in ad/tracker blocking and cross-device sync across desktop and mobile.",
+    category: "Browsers",
+    audience: "Curated",
+    developer: "Brave Software",
+    platforms: ["Windows", "macOS", "Linux", "iOS", "Android"],
+    tags: ["browser", "privacy", "security", "web", "free"],
+    pricing: "Free",
+    channels: [{ type: "Website", url: "https://brave.com/download/" }]
+  },
+  {
+    slug: "bitwarden",
+    name: "Bitwarden",
+    summary:
+      "Cross-platform password manager with secure vault sync, browser extensions, and desktop/mobile clients.",
+    category: "Security",
+    audience: "Curated",
+    developer: "Bitwarden",
+    platforms: ["Windows", "macOS", "Linux", "iOS", "Android", "Web"],
+    tags: ["password-manager", "security", "privacy", "vault", "free"],
+    featuredOnGitHub: true,
+    sourceCodeUrl: "https://github.com/bitwarden/clients",
+    pricing: "Free",
+    channels: [
+      { type: "Website", url: "https://bitwarden.com/download/" },
+      { type: "Source Code", url: "https://github.com/bitwarden/clients" }
+    ]
+  },
+  {
+    slug: "obsidian",
+    name: "Obsidian",
+    summary:
+      "Markdown knowledge base and note-taking app for linked notes, personal documentation, and project planning.",
+    category: "Productivity",
+    audience: "Curated",
+    developer: "Obsidian",
+    platforms: ["Windows", "macOS", "Linux", "iOS", "Android"],
+    tags: ["notes", "markdown", "knowledge-base", "productivity", "free"],
+    pricing: "Free",
+    channels: [{ type: "Website", url: "https://obsidian.md/download" }]
+  },
+  {
+    slug: "docker-desktop",
+    name: "Docker Desktop",
+    summary:
+      "Local container development environment for building, testing, and running Docker images on desktop systems.",
+    category: "Developer Tools",
+    audience: "Curated",
+    developer: "Docker",
+    platforms: ["Windows", "macOS", "Linux"],
+    tags: ["containers", "docker", "developer", "devops", "free"],
+    pricing: "Free",
+    channels: [{ type: "Website", url: "https://www.docker.com/products/docker-desktop/" }]
+  },
+  {
+    slug: "postman",
+    name: "Postman",
+    summary:
+      "API development and testing platform for collections, environment management, and request automation.",
+    category: "Developer Tools",
+    audience: "Curated",
+    developer: "Postman",
+    platforms: ["Windows", "macOS", "Linux", "Web"],
+    tags: ["api", "developer", "testing", "http", "free"],
+    pricing: "Free",
+    channels: [{ type: "Website", url: "https://www.postman.com/downloads/" }]
+  },
+  {
+    slug: "android-studio",
+    name: "Android Studio",
+    summary:
+      "Official Android IDE with emulator, profiler, and Gradle-based tooling for mobile app development.",
+    category: "Developer Tools",
+    audience: "Curated",
+    developer: "Google",
+    platforms: ["Windows", "macOS", "Linux"],
+    tags: ["android", "ide", "developer", "mobile", "free"],
+    pricing: "Free",
+    channels: [{ type: "Website", url: "https://developer.android.com/studio" }]
+  },
+  {
+    slug: "dbeaver-community",
+    name: "DBeaver Community",
+    summary:
+      "Universal SQL client and database administration tool supporting popular engines and JDBC sources.",
+    category: "Developer Tools",
+    audience: "Curated",
+    developer: "DBeaver",
+    platforms: ["Windows", "macOS", "Linux"],
+    tags: ["database", "sql", "developer", "db", "free"],
+    pricing: "Free",
+    channels: [{ type: "Website", url: "https://dbeaver.io/download/" }]
+  },
+  {
+    slug: "signal-desktop",
+    name: "Signal Desktop",
+    summary:
+      "End-to-end encrypted messaging desktop companion with cross-platform clients and security-focused defaults.",
+    category: "Security",
+    audience: "Curated",
+    developer: "Signal Messenger",
+    platforms: ["Windows", "macOS", "Linux", "iOS", "Android"],
+    tags: ["messaging", "security", "privacy", "encrypted", "free"],
+    featuredOnGitHub: true,
+    sourceCodeUrl: "https://github.com/signalapp/Signal-Desktop",
+    pricing: "Free",
+    channels: [
+      { type: "Website", url: "https://signal.org/download/" },
+      { type: "Source Code", url: "https://github.com/signalapp/Signal-Desktop" }
+    ]
+  },
+  {
+    slug: "tailscale",
+    name: "Tailscale",
+    summary:
+      "Secure mesh VPN built on WireGuard for private networking across devices and remote environments.",
+    category: "Networking",
+    audience: "Curated",
+    developer: "Tailscale",
+    platforms: ["Windows", "macOS", "Linux", "iOS", "Android"],
+    tags: ["vpn", "networking", "wireguard", "remote-access", "free"],
+    pricing: "Free",
+    channels: [{ type: "Website", url: "https://tailscale.com/download" }]
+  },
+  {
+    slug: "rustdesk",
+    name: "RustDesk",
+    summary:
+      "Open-source remote desktop and remote support tool with self-hosted options and GitHub Releases binaries.",
+    category: "Utilities",
+    audience: "Curated",
+    developer: "RustDesk",
+    platforms: ["Windows", "macOS", "Linux", "iOS", "Android"],
+    tags: ["remote-desktop", "support", "self-hosted", "github", "free"],
+    featuredOnGitHub: true,
+    popularityLabel: "Popular on GitHub",
+    sourceCodeUrl: "https://github.com/rustdesk/rustdesk",
+    releaseNotesUrl: "https://github.com/rustdesk/rustdesk/releases/latest",
+    license: "AGPL-3.0",
+    pricing: "Free",
+    channels: [
+      { type: "Website", url: "https://rustdesk.com/" },
+      { type: "GitHub Releases", url: "https://github.com/rustdesk/rustdesk/releases/latest" },
+      { type: "Source Code", url: "https://github.com/rustdesk/rustdesk" }
+    ],
+    directDownloads: [
+      {
+        label: "Windows installer",
+        platform: "Windows",
+        url: "https://github.com/rustdesk/rustdesk/releases/latest",
+        host: "GitHub Releases",
+        fileType: "EXE/MSI"
+      },
+      {
+        label: "macOS DMG",
+        platform: "macOS",
+        url: "https://github.com/rustdesk/rustdesk/releases/latest",
+        host: "GitHub Releases",
+        fileType: "DMG"
+      }
+    ]
+  },
+  {
+    slug: "diagrams-net-desktop",
+    name: "diagrams.net Desktop",
+    summary:
+      "Desktop diagramming app for flowcharts, architecture diagrams, and documentation with offline support.",
+    category: "Productivity",
+    audience: "Curated",
+    developer: "JGraph",
+    platforms: ["Windows", "macOS", "Linux"],
+    tags: ["diagramming", "documentation", "productivity", "github", "free"],
+    featuredOnGitHub: true,
+    sourceCodeUrl: "https://github.com/jgraph/drawio-desktop",
+    releaseNotesUrl: "https://github.com/jgraph/drawio-desktop/releases/latest",
+    license: "Apache-2.0",
+    pricing: "Free",
+    channels: [
+      { type: "Website", url: "https://www.diagrams.net/" },
+      { type: "GitHub Releases", url: "https://github.com/jgraph/drawio-desktop/releases/latest" },
+      { type: "Source Code", url: "https://github.com/jgraph/drawio-desktop" }
+    ],
+    directDownloads: [
+      {
+        label: "Windows installer",
+        platform: "Windows",
+        url: "https://github.com/jgraph/drawio-desktop/releases/latest",
+        host: "GitHub Releases",
+        fileType: "EXE"
+      },
+      {
+        label: "macOS DMG",
+        platform: "macOS",
+        url: "https://github.com/jgraph/drawio-desktop/releases/latest",
+        host: "GitHub Releases",
+        fileType: "DMG"
+      }
+    ]
+  },
+  {
+    slug: "wezterm",
+    name: "WezTerm",
+    summary:
+      "GPU-accelerated terminal emulator with multiplexing, tabs, and strong cross-platform shell workflow support.",
+    category: "Developer Tools",
+    audience: "Curated",
+    developer: "wez",
+    platforms: ["Windows", "macOS", "Linux"],
+    tags: ["terminal", "developer", "shell", "github", "free"],
+    featuredOnGitHub: true,
+    sourceCodeUrl: "https://github.com/wez/wezterm",
+    releaseNotesUrl: "https://github.com/wez/wezterm/releases/latest",
+    license: "MIT",
+    pricing: "Free",
+    channels: [
+      { type: "GitHub Releases", url: "https://github.com/wez/wezterm/releases/latest" },
+      { type: "Source Code", url: "https://github.com/wez/wezterm" }
+    ],
+    directDownloads: [
+      {
+        label: "Windows installer",
+        platform: "Windows",
+        url: "https://github.com/wez/wezterm/releases/latest",
+        host: "GitHub Releases",
+        fileType: "MSI"
+      },
+      {
+        label: "macOS package",
+        platform: "macOS",
+        url: "https://github.com/wez/wezterm/releases/latest",
+        host: "GitHub Releases",
+        fileType: "ZIP"
+      }
+    ]
+  },
+  {
+    slug: "alacritty",
+    name: "Alacritty",
+    summary:
+      "Fast, GPU-powered terminal emulator with minimal defaults and configuration-driven customization.",
+    category: "Developer Tools",
+    audience: "Curated",
+    developer: "Alacritty",
+    platforms: ["Windows", "macOS", "Linux"],
+    tags: ["terminal", "developer", "cli", "github", "free"],
+    featuredOnGitHub: true,
+    sourceCodeUrl: "https://github.com/alacritty/alacritty",
+    releaseNotesUrl: "https://github.com/alacritty/alacritty/releases/latest",
+    license: "Apache-2.0",
+    pricing: "Free",
+    channels: [
+      { type: "GitHub Releases", url: "https://github.com/alacritty/alacritty/releases/latest" },
+      { type: "Source Code", url: "https://github.com/alacritty/alacritty" }
+    ],
+    directDownloads: [
+      {
+        label: "Windows package",
+        platform: "Windows",
+        url: "https://github.com/alacritty/alacritty/releases/latest",
+        host: "GitHub Releases",
+        fileType: "ZIP"
+      },
+      {
+        label: "macOS package",
+        platform: "macOS",
+        url: "https://github.com/alacritty/alacritty/releases/latest",
+        host: "GitHub Releases",
+        fileType: "TAR.GZ"
+      }
+    ]
+  },
+  {
+    slug: "syncthing",
+    name: "Syncthing",
+    summary:
+      "Peer-to-peer file synchronization tool for private, encrypted sync between desktops, laptops, and servers.",
+    category: "Utilities",
+    audience: "Curated",
+    developer: "Syncthing",
+    platforms: ["Windows", "macOS", "Linux", "Android"],
+    tags: ["file-sync", "self-hosted", "privacy", "github", "free"],
+    featuredOnGitHub: true,
+    sourceCodeUrl: "https://github.com/syncthing/syncthing",
+    releaseNotesUrl: "https://github.com/syncthing/syncthing/releases/latest",
+    license: "MPL-2.0",
+    pricing: "Free",
+    channels: [
+      { type: "Website", url: "https://syncthing.net/downloads/" },
+      { type: "GitHub Releases", url: "https://github.com/syncthing/syncthing/releases/latest" },
+      { type: "Source Code", url: "https://github.com/syncthing/syncthing" }
+    ],
+    directDownloads: [
+      {
+        label: "Windows package",
+        platform: "Windows",
+        url: "https://github.com/syncthing/syncthing/releases/latest",
+        host: "GitHub Releases",
+        fileType: "ZIP"
+      },
+      {
+        label: "macOS package",
+        platform: "macOS",
+        url: "https://github.com/syncthing/syncthing/releases/latest",
+        host: "GitHub Releases",
+        fileType: "TAR.GZ"
+      }
+    ]
+  },
+  {
+    slug: "veracrypt",
+    name: "VeraCrypt",
+    summary:
+      "Disk encryption utility for protecting sensitive files, removable drives, and encrypted containers.",
+    category: "Security",
+    audience: "Curated",
+    developer: "IDRIX",
+    platforms: ["Windows", "macOS", "Linux"],
+    tags: ["encryption", "security", "privacy", "disk", "free"],
+    pricing: "Free",
+    channels: [{ type: "Website", url: "https://www.veracrypt.fr/en/Downloads.html" }]
+  },
+  {
+    slug: "figma-desktop-app",
+    name: "Figma Desktop App",
+    summary:
+      "Desktop client for Figma design and collaboration workflows with native windowing and performance tuning.",
+    category: "Design",
+    audience: "Curated",
+    developer: "Figma",
+    platforms: ["Windows", "macOS"],
+    tags: ["figma", "design", "ui-ux", "collaboration", "free"],
+    pricing: "Free",
+    channels: [{ type: "Website", url: "https://www.figma.com/downloads/" }]
   }
 ];
 

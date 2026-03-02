@@ -100,6 +100,12 @@ export function IncidentForm() {
   const [requesterName, setRequesterName] = useState("");
   const [requesterPhone, setRequesterPhone] = useState("");
   const [requesterEmail, setRequesterEmail] = useState("");
+  const [department, setDepartment] = useState("");
+  const [location, setLocation] = useState("");
+  const [deviceName, setDeviceName] = useState("");
+  const [contactWindow, setContactWindow] = useState("");
+  const [businessImpactDetail, setBusinessImpactDetail] = useState("");
+  const [isExecutiveImpact, setIsExecutiveImpact] = useState(false);
   const [shortDescription, setShortDescription] = useState("");
   const [detailedDescription, setDetailedDescription] = useState("");
   const [category, setCategory] = useState<IncidentCategory>("Microsoft 365");
@@ -167,6 +173,14 @@ export function IncidentForm() {
     if (!validate()) return;
 
     const product = subcategory;
+    const requestedFields: Record<string, string | boolean> = {};
+
+    if (department.trim()) requestedFields.Department = department.trim();
+    if (location.trim()) requestedFields["Office / Timezone"] = location.trim();
+    if (deviceName.trim()) requestedFields["Device / Hostname"] = deviceName.trim();
+    if (contactWindow.trim()) requestedFields["Best Contact Window"] = contactWindow.trim();
+    if (businessImpactDetail.trim()) requestedFields["Business Impact Detail"] = businessImpactDetail.trim();
+    if (isExecutiveImpact) requestedFields["Executive / High-Visibility Impact"] = true;
 
     const ticket = createTicket({
       requesterName,
@@ -182,7 +196,8 @@ export function IncidentForm() {
       summary: shortDescription,
       description: detailedDescription,
       preferredContactMethod,
-      attachments
+      attachments,
+      requestedFields
     });
 
     trackIncidentSubmit({ category, subcategory, product, priority });
@@ -204,15 +219,21 @@ export function IncidentForm() {
     setShortDescription("");
     setDetailedDescription("");
     setAttachments([]);
+    setDepartment("");
+    setLocation("");
+    setDeviceName("");
+    setContactWindow("");
+    setBusinessImpactDetail("");
+    setIsExecutiveImpact(false);
     setErrors({});
   }
 
   return (
     <div className="space-y-5">
       <SupportPageHeader
-        title="Submit Incident"
-        description="Create an incident ticket using an ITIL-lite intake form. Priority is calculated automatically from impact and urgency."
-        breadcrumbs={[{ label: "Support Portal", href: "/support" }, { label: "Submit Incident" }]}
+        title="Incident Form"
+        description="Create an incident ticket using an expanded ITIL-lite intake form. Priority is calculated automatically from impact and urgency."
+        breadcrumbs={[{ label: "Support Portal", href: "/support" }, { label: "Incident Form" }]}
         actions={
           <div className="rounded-xl border border-line/70 bg-slate-50 px-4 py-3 text-sm dark:border-slate-800 dark:bg-slate-900/70">
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">Calculated Priority</p>
@@ -221,9 +242,9 @@ export function IncidentForm() {
         }
       />
 
-      <div className="grid gap-5 xl:grid-cols-[1.05fr_0.95fr]">
+      <div className="space-y-5">
         <section className="rounded-2xl border border-line/70 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-6">
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Incident Intake Form</h2>
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Incident Form</h2>
           <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
             Submit creates a local ticket and sends ticket details to {supportTicketEmailRecipient}.
           </p>
@@ -319,6 +340,76 @@ export function IncidentForm() {
                 className="w-full rounded-xl border border-line bg-white px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-slate-300 focus:shadow-soft dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
               />
               {errors.detailedDescription ? <p className="mt-1 text-xs text-rose-600">{errors.detailedDescription}</p> : null}
+            </div>
+
+            <div className="rounded-2xl border border-line/70 bg-slate-50/60 p-4 dark:border-slate-800 dark:bg-slate-900/70">
+              <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Incident Context</h3>
+              <div className="mt-3 grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label htmlFor="incident-department" className="mb-2 block text-sm font-medium text-slate-900 dark:text-slate-100">Department</label>
+                  <input
+                    id="incident-department"
+                    type="text"
+                    value={department}
+                    onChange={(event) => setDepartment(event.target.value)}
+                    placeholder="Example: Finance, Design, IT"
+                    className="w-full rounded-xl border border-line bg-white px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-slate-300 focus:shadow-soft dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="incident-location" className="mb-2 block text-sm font-medium text-slate-900 dark:text-slate-100">Office / Timezone</label>
+                  <input
+                    id="incident-location"
+                    type="text"
+                    value={location}
+                    onChange={(event) => setLocation(event.target.value)}
+                    placeholder="Example: NYC (ET) or Remote"
+                    className="w-full rounded-xl border border-line bg-white px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-slate-300 focus:shadow-soft dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="incident-device-name" className="mb-2 block text-sm font-medium text-slate-900 dark:text-slate-100">Device / Hostname</label>
+                  <input
+                    id="incident-device-name"
+                    type="text"
+                    value={deviceName}
+                    onChange={(event) => setDeviceName(event.target.value)}
+                    placeholder="Example: LT-12345 or iPhone 15"
+                    className="w-full rounded-xl border border-line bg-white px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-slate-300 focus:shadow-soft dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="incident-contact-window" className="mb-2 block text-sm font-medium text-slate-900 dark:text-slate-100">Best Contact Window</label>
+                  <input
+                    id="incident-contact-window"
+                    type="text"
+                    value={contactWindow}
+                    onChange={(event) => setContactWindow(event.target.value)}
+                    placeholder="Example: 9am-12pm ET"
+                    className="w-full rounded-xl border border-line bg-white px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-slate-300 focus:shadow-soft dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+                  />
+                </div>
+              </div>
+              <div className="mt-4">
+                <label htmlFor="incident-business-impact" className="mb-2 block text-sm font-medium text-slate-900 dark:text-slate-100">Business Impact Details</label>
+                <textarea
+                  id="incident-business-impact"
+                  rows={3}
+                  value={businessImpactDetail}
+                  onChange={(event) => setBusinessImpactDetail(event.target.value)}
+                  placeholder="Describe deadlines, client meetings, or critical business impact."
+                  className="w-full rounded-xl border border-line bg-white px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-slate-300 focus:shadow-soft dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+                />
+              </div>
+              <label className="mt-4 inline-flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
+                <input
+                  type="checkbox"
+                  checked={isExecutiveImpact}
+                  onChange={(event) => setIsExecutiveImpact(event.target.checked)}
+                  className="h-4 w-4 rounded border-line text-slate-900 focus:ring-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+                />
+                Issue impacts leadership or a high-visibility event
+              </label>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
@@ -427,45 +518,6 @@ export function IncidentForm() {
             </button>
           </form>
         </section>
-
-        <aside className="space-y-5">
-          <div className="rounded-2xl border border-line/70 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-6">
-            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Priority Matrix</h2>
-            <div className="mt-3 overflow-hidden rounded-xl border border-line/70 dark:border-slate-800">
-              <table className="w-full text-xs">
-                <thead className="bg-slate-50 dark:bg-slate-900">
-                  <tr>
-                    <th className="px-3 py-2 text-left font-semibold text-slate-600 dark:text-slate-300">Impact \\ Urgency</th>
-                    <th className="px-3 py-2 text-left font-semibold text-slate-600 dark:text-slate-300">Low</th>
-                    <th className="px-3 py-2 text-left font-semibold text-slate-600 dark:text-slate-300">Medium</th>
-                    <th className="px-3 py-2 text-left font-semibold text-slate-600 dark:text-slate-300">High</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {impactOptions.map((impactValue) => (
-                    <tr key={impactValue} className="border-t border-line/60 dark:border-slate-800">
-                      <td className="px-3 py-2 font-medium text-slate-700 dark:text-slate-200">{impactValue}</td>
-                      {urgencyOptions.map((urgencyValue) => (
-                        <td key={`${impactValue}-${urgencyValue}`} className="px-3 py-2 text-slate-600 dark:text-slate-300">
-                          {calculateTicketPriority(impactValue, urgencyValue)}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-line/70 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-6">
-            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Email Service Status</h2>
-            <p className="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-300">
-              {supportTicketEmailEndpoint
-                ? "Automatic email sending is enabled."
-                : "Automatic email sending is not configured. Set NEXT_PUBLIC_SUPPORT_TICKET_EMAIL_ENDPOINT in your build environment."}
-            </p>
-          </div>
-        </aside>
       </div>
     </div>
   );
