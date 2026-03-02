@@ -586,6 +586,33 @@ Note: GitHub Pages deployment requires at least one app entry in `data/apps.json
 
 If your default branch is not `main`, update the workflow trigger branch name.
 
+### Crypto Donations (Footer)
+
+The footer supports optional crypto donation addresses. Configure these build-time environment variables:
+
+- `NEXT_PUBLIC_DONATION_BTC_ADDRESS`
+- `NEXT_PUBLIC_DONATION_ETH_ADDRESS`
+- `NEXT_PUBLIC_DONATION_BNB_ADDRESS`
+- `NEXT_PUBLIC_DONATION_SOL_ADDRESS`
+- `NEXT_PUBLIC_DONATION_LTC_ADDRESS`
+- `NEXT_PUBLIC_DONATION_XRP_ADDRESS`
+
+Behavior:
+
+- Any configured address appears in the footer donation card with `Copy`, `Open Wallet`, and explorer links.
+- If none are configured, the donation card renders a placeholder message.
+
+Example local `.env.local`:
+
+```env
+NEXT_PUBLIC_DONATION_BTC_ADDRESS=bc1...
+NEXT_PUBLIC_DONATION_ETH_ADDRESS=0x...
+NEXT_PUBLIC_DONATION_BNB_ADDRESS=0x...
+NEXT_PUBLIC_DONATION_SOL_ADDRESS=...
+NEXT_PUBLIC_DONATION_LTC_ADDRESS=ltc1...
+NEXT_PUBLIC_DONATION_XRP_ADDRESS=r...
+```
+
 ## Notes for Future Scalability
 
 - Add analytics later (Plausible, Umami, GA4) in `app/layout.tsx`

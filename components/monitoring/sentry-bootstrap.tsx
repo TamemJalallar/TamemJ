@@ -22,7 +22,7 @@ export function SentryBootstrap() {
       return;
     }
 
-    void import("@sentry/nextjs").then((Sentry) => {
+    void import("@sentry/browser").then((Sentry) => {
       Sentry.init({
         dsn,
         enabled: process.env.NODE_ENV === "production",
