@@ -1,4 +1,11 @@
 import type { Metadata } from "next";
+import type {
+  BreadcrumbList,
+  CollectionPage,
+  Service,
+  TechArticle,
+  WithContext
+} from "schema-dts";
 import { siteConfig } from "@/lib/site";
 import type { CatalogItem, KBArticle } from "@/types/support";
 
@@ -107,7 +114,7 @@ export function buildSupportKbIndexMetadataWithArticles(articles: KBArticle[]): 
   };
 }
 
-export function buildKbIndexJsonLd(articles: KBArticle[]): Record<string, unknown> {
+export function buildKbIndexJsonLd(articles: KBArticle[]): WithContext<CollectionPage> {
   return {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -172,7 +179,7 @@ export function buildSupportCatalogIndexMetadataWithItems(items: CatalogItem[]):
   };
 }
 
-export function buildCatalogIndexJsonLd(items: CatalogItem[]): Record<string, unknown> {
+export function buildCatalogIndexJsonLd(items: CatalogItem[]): WithContext<CollectionPage> {
   return {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -266,7 +273,7 @@ export function buildCatalogItemMetadata(item: CatalogItem): Metadata {
   };
 }
 
-export function buildBreadcrumbJsonLd(items: BreadcrumbItem[]): Record<string, unknown> {
+export function buildBreadcrumbJsonLd(items: BreadcrumbItem[]): WithContext<BreadcrumbList> {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -283,7 +290,7 @@ export function buildBreadcrumbJsonLd(items: BreadcrumbItem[]): Record<string, u
   };
 }
 
-export function buildKbArticleJsonLd(article: KBArticle): Record<string, unknown> {
+export function buildKbArticleJsonLd(article: KBArticle): WithContext<TechArticle> {
   return {
     "@context": "https://schema.org",
     "@type": "TechArticle",
@@ -317,7 +324,7 @@ export function buildKbArticleJsonLd(article: KBArticle): Record<string, unknown
   };
 }
 
-export function buildCatalogItemJsonLd(item: CatalogItem): Record<string, unknown> {
+export function buildCatalogItemJsonLd(item: CatalogItem): WithContext<Service> {
   return {
     "@context": "https://schema.org",
     "@type": "Service",

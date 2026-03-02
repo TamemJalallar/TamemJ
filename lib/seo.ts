@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { BreadcrumbList, CollectionPage, WithContext } from "schema-dts";
 import { siteConfig } from "@/lib/site";
 
 const defaultOgImage = "/images/site/og-image.svg";
@@ -49,7 +50,7 @@ export function buildTwitter(
   };
 }
 
-export function buildBreadcrumbJsonLd(items: BreadcrumbSeoItem[]): Record<string, unknown> {
+export function buildBreadcrumbJsonLd(items: BreadcrumbSeoItem[]): WithContext<BreadcrumbList> {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -67,7 +68,7 @@ export function buildCollectionPageJsonLd(
   description: string,
   path: string,
   items: Array<{ name: string; path: string }>
-): Record<string, unknown> {
+): WithContext<CollectionPage> {
   return {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -90,4 +91,3 @@ export function buildCollectionPageJsonLd(
     }
   };
 }
-

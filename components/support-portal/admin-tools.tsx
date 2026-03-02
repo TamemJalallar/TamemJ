@@ -150,12 +150,13 @@ export function AdminTools() {
           </section>
 
           <section className="rounded-2xl border border-line/70 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-6 lg:col-span-2">
-            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Storage Keys (Local Browser)</h2>
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Storage Keys (Browser)</h2>
             <ul className="mt-3 space-y-2 pl-5 text-sm text-slate-700 dark:text-slate-200">
-              <li className="list-disc leading-7"><code>supportPortal:tickets:v1</code> for demo ticket objects and activity logs.</li>
-              <li className="list-disc leading-7"><code>supportPortal:analytics:v1</code> for analytics events.</li>
+              <li className="list-disc leading-7"><code>supportPortal:tickets:v1</code> for ticket cache in localStorage.</li>
+              <li className="list-disc leading-7"><code>supportPortal:analytics:v1</code> for analytics cache in localStorage.</li>
               <li className="list-disc leading-7"><code>supportPortal:kbHelpfulVotes:v1</code> for local Yes/No article feedback state.</li>
               <li className="list-disc leading-7"><code>supportPortal:state:v1</code> for sidebar collapse and admin toggle preferences.</li>
+              <li className="list-disc leading-7">IndexedDB <code>supportPortalDb</code> mirrors tickets and analytics for larger offline storage capacity.</li>
             </ul>
           </section>
         </div>

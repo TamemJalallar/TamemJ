@@ -1,9 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import type { ReactNode } from "react";
+import type { Organization, Person, SearchAction, WebSite, WithContext } from "schema-dts";
 import "./globals.css";
+import { SentryBootstrap } from "@/components/monitoring/sentry-bootstrap";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { GlobalCommandPalette } from "@/components/support-portal/global-command-palette";
 import { buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 import { seoKeywords, siteConfig } from "@/lib/site";
 
@@ -53,7 +56,7 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
-  const websiteSchema = {
+  const websiteSchema: WithContext<WebSite> = {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: siteConfig.title,
@@ -63,10 +66,10 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
       "@type": "SearchAction",
       target: `${toAbsoluteUrl("/support/kb/")}?q={search_term_string}`,
       "query-input": "required name=search_term_string"
-    }
+    } as SearchAction
   };
 
-  const organizationSchema = {
+  const organizationSchema: WithContext<Organization> = {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: siteConfig.name,
@@ -80,7 +83,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
     }
   };
 
-  const personSchema = {
+  const personSchema: WithContext<Person> = {
     "@context": "https://schema.org",
     "@type": "Person",
     name: siteConfig.name,
@@ -103,11 +106,13 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         />
       </head>
       <body className="font-sans antialiased">
+        <SentryBootstrap />
         <div className="min-h-screen bg-mesh-soft">
           <SiteHeader />
           <main>{children}</main>
           <SiteFooter />
         </div>
+        <GlobalCommandPalette />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}

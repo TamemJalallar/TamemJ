@@ -1,11 +1,25 @@
 import type { AnalyticsEvent, SupportAnalyticsStore, Ticket } from "@/types/support";
 import { createLocalId } from "@/lib/support-portal.storage";
+import {
+  clearAnalyticsFromIndexedDb,
+  loadAnalyticsEventsFromIndexedDb,
+  saveAnalyticsEventsToIndexedDb
+} from "@/lib/support-portal.db";
 
 const ANALYTICS_STORAGE_KEY = "supportPortal:analytics:v1";
 const MAX_EVENTS = 1500;
+const ANALYTICS_UPDATED_EVENT = "supportPortal:analytics:updated";
 
 function isBrowser(): boolean {
   return typeof window !== "undefined" && typeof window.localStorage !== "undefined";
+}
+
+function emitAnalyticsUpdatedEvent(): void {
+  if (!isBrowser()) {
+    return;
+  }
+
+  window.dispatchEvent(new CustomEvent(ANALYTICS_UPDATED_EVENT));
 }
 
 function readAnalyticsStore(): SupportAnalyticsStore {
@@ -37,12 +51,78 @@ function writeAnalyticsStore(store: SupportAnalyticsStore): void {
   try {
     window.localStorage.setItem(ANALYTICS_STORAGE_KEY, JSON.stringify(store));
   } catch {
-    // Demo mode best-effort write.
+    // LocalStorage can fail due to quota; IndexedDB mirror still proceeds.
   }
+
+  void saveAnalyticsEventsToIndexedDb(store.events);
+  emitAnalyticsUpdatedEvent();
 }
 
 export function getSupportAnalyticsStore(): SupportAnalyticsStore {
+  queueHydrateAnalyticsFromIndexedDb();
   return readAnalyticsStore();
+}
+
+let analyticsHydrationStarted = false;
+
+function queueHydrateAnalyticsFromIndexedDb(): void {
+  if (!isBrowser() || analyticsHydrationStarted) {
+    return;
+  }
+  analyticsHydrationStarted = true;
+
+  void loadAnalyticsEventsFromIndexedDb().then((events) => {
+    if (events.length === 0) {
+      return;
+    }
+
+    const current = readAnalyticsStore();
+    if (current.events.length > 0) {
+      return;
+    }
+
+    try {
+      window.localStorage.setItem(ANALYTICS_STORAGE_KEY, JSON.stringify({ version: 1, events }));
+    } catch {
+      // LocalStorage can fail in constrained browsers; keep IndexedDB as source of truth.
+    }
+    emitAnalyticsUpdatedEvent();
+  });
+}
+
+export async function getSupportAnalyticsStoreIndexedDbFirst(): Promise<SupportAnalyticsStore> {
+  if (!isBrowser()) {
+    return { version: 1, events: [] };
+  }
+
+  const events = await loadAnalyticsEventsFromIndexedDb();
+  if (events.length > 0) {
+    const store = { version: 1 as const, events };
+    try {
+      window.localStorage.setItem(ANALYTICS_STORAGE_KEY, JSON.stringify(store));
+    } catch {
+      // LocalStorage can fail in constrained browsers; keep IndexedDB as source of truth.
+    }
+    emitAnalyticsUpdatedEvent();
+    return store;
+  }
+
+  return getSupportAnalyticsStore();
+}
+
+export function subscribeToAnalyticsEvents(callback: () => void): () => void {
+  if (!isBrowser()) {
+    return () => undefined;
+  }
+
+  const handler = () => callback();
+  window.addEventListener(ANALYTICS_UPDATED_EVENT, handler);
+  window.addEventListener("storage", handler);
+
+  return () => {
+    window.removeEventListener(ANALYTICS_UPDATED_EVENT, handler);
+    window.removeEventListener("storage", handler);
+  };
 }
 
 export function recordAnalyticsEvent(
@@ -66,6 +146,8 @@ export function resetSupportAnalytics(): void {
   }
 
   window.localStorage.removeItem(ANALYTICS_STORAGE_KEY);
+  void clearAnalyticsFromIndexedDb();
+  emitAnalyticsUpdatedEvent();
 }
 
 export function trackKBArticleView(input: {

@@ -3,11 +3,20 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import type { Ticket } from "@/types/support";
 import { SupportPageHeader } from "@/components/support-portal/page-header";
 import { TopSearchBar } from "@/components/support-portal/top-search-bar";
 import { SupportIcon } from "@/components/support-portal/icons";
-import { getSupportAnalyticsStore, summarizeSupportAnalytics, trackSearch } from "@/lib/support-portal.analytics";
-import { getStoredTickets } from "@/lib/support-portal.storage";
+import {
+  getSupportAnalyticsStoreIndexedDbFirst,
+  summarizeSupportAnalytics,
+  subscribeToAnalyticsEvents,
+  trackSearch
+} from "@/lib/support-portal.analytics";
+import {
+  getStoredTicketsIndexedDbFirst,
+  subscribeToStoredTickets
+} from "@/lib/support-portal.storage";
 import type { SupportAnalyticsSummary } from "@/lib/support-portal.analytics";
 
 function StatCard({ label, value, href }: { label: string; value: number; href: string }) {
@@ -57,22 +66,37 @@ export function SupportPortalHome() {
   const [summary, setSummary] = useState<SupportAnalyticsSummary | null>(null);
   const [searchValue, setSearchValue] = useState("");
   const [ticketCount, setTicketCount] = useState(0);
-  const [recentTickets, setRecentTickets] = useState<ReturnType<typeof getStoredTickets>>([]);
+  const [recentTickets, setRecentTickets] = useState<Ticket[]>([]);
 
-  useEffect(() => {
-    const analyticsStore = getSupportAnalyticsStore();
-    const tickets = getStoredTickets();
+  async function refreshSummary() {
+    const [analyticsStore, tickets] = await Promise.all([
+      getSupportAnalyticsStoreIndexedDbFirst(),
+      getStoredTicketsIndexedDbFirst()
+    ]);
+
     setTicketCount(tickets.length);
     setRecentTickets(tickets.slice(0, 5));
     setSummary(summarizeSupportAnalytics(analyticsStore.events, tickets));
+  }
+
+  useEffect(() => {
+    void refreshSummary();
+    const unsubscribeTickets = subscribeToStoredTickets(() => {
+      void refreshSummary();
+    });
+    const unsubscribeAnalytics = subscribeToAnalyticsEvents(() => {
+      void refreshSummary();
+    });
+
+    return () => {
+      unsubscribeTickets();
+      unsubscribeAnalytics();
+    };
   }, []);
 
   function submitPortalSearch(query: string) {
     const trimmed = query.trim();
     if (!trimmed) return;
-    const events = getSupportAnalyticsStore().events;
-    const tickets = getStoredTickets();
-    const liveSummary = summarizeSupportAnalytics(events, tickets);
     trackSearch({ area: "portal", query: trimmed, resultCount: 0, context: "portal-home" });
     router.push(`/support/kb?q=${encodeURIComponent(trimmed)}`);
   }

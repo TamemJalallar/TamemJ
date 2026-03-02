@@ -1,55 +1,65 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import type { ReactNode } from "react";
+import { motion } from "framer-motion";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis
+} from "recharts";
 import { SupportPageHeader } from "@/components/support-portal/page-header";
 import {
-  getSupportAnalyticsStore,
+  getSupportAnalyticsStoreIndexedDbFirst,
+  subscribeToAnalyticsEvents,
   summarizeSupportAnalytics
 } from "@/lib/support-portal.analytics";
-import { getStoredTickets } from "@/lib/support-portal.storage";
 import type { SupportAnalyticsSummary } from "@/lib/support-portal.analytics";
+import {
+  getStoredTicketsIndexedDbFirst,
+  subscribeToStoredTickets
+} from "@/lib/support-portal.storage";
 
 function MetricCard({ label, value, hint }: { label: string; value: string | number; hint?: string }) {
   return (
-    <div className="rounded-2xl border border-line/70 bg-white p-4 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-5">
+    <motion.div
+      layout
+      className="rounded-2xl border border-line/70 bg-white p-4 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-5"
+      initial={{ opacity: 0, y: 6 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.2 }}
+    >
       <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">{label}</p>
       <p className="mt-2 text-2xl font-semibold text-slate-900 dark:text-slate-100">{value}</p>
       {hint ? <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{hint}</p> : null}
-    </div>
+    </motion.div>
   );
 }
 
-function BarList({
+function ChartCard({
   title,
-  items,
-  emptyMessage
+  children,
+  emptyMessage,
+  hasData
 }: {
   title: string;
-  items: Array<{ label: string; count: number }>;
+  children: ReactNode;
   emptyMessage: string;
+  hasData: boolean;
 }) {
-  const max = Math.max(0, ...items.map((item) => item.count));
-
   return (
     <section className="rounded-2xl border border-line/70 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-6">
       <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">{title}</h2>
-      {items.length > 0 ? (
-        <ul className="mt-4 space-y-3">
-          {items.map((item) => (
-            <li key={`${title}-${item.label}`}>
-              <div className="mb-1 flex items-center justify-between gap-3 text-xs">
-                <span className="truncate text-slate-700 dark:text-slate-200">{item.label}</span>
-                <span className="shrink-0 font-semibold text-slate-500 dark:text-slate-400">{item.count}</span>
-              </div>
-              <div className="h-2 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
-                <div
-                  className="h-full rounded-full bg-slate-900 dark:bg-slate-100"
-                  style={{ width: `${max > 0 ? Math.max(8, (item.count / max) * 100) : 0}%` }}
-                />
-              </div>
-            </li>
-          ))}
-        </ul>
+      {hasData ? (
+        <div className="mt-4 h-[260px]">{children}</div>
       ) : (
         <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">{emptyMessage}</p>
       )}
@@ -57,28 +67,81 @@ function BarList({
   );
 }
 
+function toChartRows(items: Array<{ label: string; count: number }>) {
+  return items.map((item) => ({
+    name: item.label,
+    value: item.count
+  }));
+}
+
 export function AnalyticsDashboard() {
   const [refreshKey, setRefreshKey] = useState(0);
   const [summary, setSummary] = useState<SupportAnalyticsSummary | null>(null);
   const [eventCount, setEventCount] = useState(0);
 
+  async function refreshAnalytics() {
+    const [analyticsStore, tickets] = await Promise.all([
+      getSupportAnalyticsStoreIndexedDbFirst(),
+      getStoredTicketsIndexedDbFirst()
+    ]);
+    setEventCount(analyticsStore.events.length);
+    setSummary(summarizeSupportAnalytics(analyticsStore.events, tickets));
+  }
+
   useEffect(() => {
-    const store = getSupportAnalyticsStore();
-    const tickets = getStoredTickets();
-    setEventCount(store.events.length);
-    setSummary(summarizeSupportAnalytics(store.events, tickets));
+    void refreshAnalytics();
+
+    const unsubAnalytics = subscribeToAnalyticsEvents(() => {
+      void refreshAnalytics();
+    });
+    const unsubTickets = subscribeToStoredTickets(() => {
+      void refreshAnalytics();
+    });
+
+    return () => {
+      unsubAnalytics();
+      unsubTickets();
+    };
   }, [refreshKey]);
+
+  const helpfulData = useMemo(() => {
+    if (!summary) {
+      return [];
+    }
+
+    return [
+      { name: "Helpful", value: summary.totals.helpfulYes, color: "#16a34a" },
+      { name: "Not Helpful", value: summary.totals.helpfulNo, color: "#e11d48" }
+    ].filter((item) => item.value > 0);
+  }, [summary]);
 
   const helpfulRatio = useMemo(() => {
     if (!summary) return "0 / 0";
     return `${summary.totals.helpfulYes} / ${summary.totals.helpfulNo}`;
   }, [summary]);
 
+  const kbViewsRows = useMemo(
+    () => toChartRows(summary?.mostViewedKBArticles ?? []),
+    [summary]
+  );
+  const searchRows = useMemo(
+    () => toChartRows(summary?.mostSearchedIssues ?? []),
+    [summary]
+  );
+  const productRows = useMemo(
+    () => toChartRows(summary?.topProducts ?? []),
+    [summary]
+  );
+  const priorityRows = useMemo(
+    () => toChartRows(summary?.incidentsByPriority ?? []),
+    [summary]
+  );
+
   return (
     <div className="space-y-5">
       <SupportPageHeader
         title="Analytics"
-        description="Local analytics dashboard for KB views, searches, helpful votes, catalog requests, and incident patterns. No external analytics service is required."
+        description="Local analytics dashboard for KB views, searches, helpful votes, catalog requests, and incident patterns. Events are mirrored into IndexedDB for higher-capacity storage."
         breadcrumbs={[{ label: "Support Portal", href: "/support" }, { label: "Analytics" }]}
         actions={
           <button type="button" onClick={() => setRefreshKey((value) => value + 1)} className="btn-secondary">
@@ -99,75 +162,113 @@ export function AnalyticsDashboard() {
           </div>
 
           <div className="grid gap-5 xl:grid-cols-2">
-            <BarList
+            <ChartCard
               title="Most Viewed KB Articles"
-              items={summary.mostViewedKBArticles}
               emptyMessage="No KB article views tracked yet. Open articles from the Knowledge Base to populate this chart."
-            />
-            <BarList
+              hasData={kbViewsRows.length > 0}
+            >
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={kbViewsRows}>
+                  <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.2} />
+                  <XAxis dataKey="name" hide />
+                  <YAxis allowDecimals={false} />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="value" name="Views" fill="#0f172a" radius={[8, 8, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </ChartCard>
+
+            <ChartCard
               title="Most Searched Issues"
-              items={summary.mostSearchedIssues}
-              emptyMessage="No search queries tracked yet. Use the search bars in the portal to populate results."
-            />
-            <BarList
+              emptyMessage="No search queries tracked yet. Use search across the portal to populate results."
+              hasData={searchRows.length > 0}
+            >
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={searchRows}>
+                  <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.2} />
+                  <XAxis dataKey="name" hide />
+                  <YAxis allowDecimals={false} />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="value" name="Searches" fill="#0ea5e9" radius={[8, 8, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </ChartCard>
+
+            <ChartCard
               title="Top Products Causing Issues / Requests"
-              items={summary.topProducts}
-              emptyMessage="No product-level activity tracked yet. Submit incidents or requests to populate this list."
-            />
-            <BarList
+              emptyMessage="No product-level activity tracked yet."
+              hasData={productRows.length > 0}
+            >
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={productRows} layout="vertical" margin={{ left: 20 }}>
+                  <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.2} />
+                  <XAxis type="number" allowDecimals={false} />
+                  <YAxis type="category" dataKey="name" width={120} />
+                  <Tooltip />
+                  <Bar dataKey="value" name="Events" fill="#4f46e5" radius={[0, 8, 8, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </ChartCard>
+
+            <ChartCard
               title="Incidents by Priority"
-              items={summary.incidentsByPriority}
               emptyMessage="No incident tickets have been recorded yet."
-            />
-            <BarList
+              hasData={priorityRows.length > 0}
+            >
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={priorityRows}>
+                  <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.2} />
+                  <XAxis dataKey="name" />
+                  <YAxis allowDecimals={false} />
+                  <Tooltip />
+                  <Bar dataKey="value" name="Incidents" fill="#dc2626" radius={[8, 8, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </ChartCard>
+
+            <ChartCard
+              title="Helpful vs Not Helpful Ratio"
+              emptyMessage="No helpfulness votes tracked yet."
+              hasData={helpfulData.length > 0}
+            >
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={helpfulData}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={95}
+                    label
+                  >
+                    {helpfulData.map((entry) => (
+                      <Cell key={entry.name} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </ChartCard>
+
+            <ChartCard
               title="Most Selected Categories"
-              items={summary.topTicketCategories}
               emptyMessage="No category activity recorded yet."
-            />
-            <section className="rounded-2xl border border-line/70 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-6">
-              <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Helpful vs Not Helpful Ratio</h2>
-              <div className="mt-4 space-y-3">
-                <div>
-                  <div className="mb-1 flex items-center justify-between text-xs">
-                    <span className="text-slate-700 dark:text-slate-200">Helpful (Yes)</span>
-                    <span className="font-semibold text-slate-500 dark:text-slate-400">{summary.totals.helpfulYes}</span>
-                  </div>
-                  <div className="h-2 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
-                    <div
-                      className="h-full rounded-full bg-emerald-600"
-                      style={{
-                        width: `${
-                          summary.totals.helpfulYes + summary.totals.helpfulNo > 0
-                            ? (summary.totals.helpfulYes / (summary.totals.helpfulYes + summary.totals.helpfulNo)) * 100
-                            : 0
-                        }%`
-                      }}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <div className="mb-1 flex items-center justify-between text-xs">
-                    <span className="text-slate-700 dark:text-slate-200">Not Helpful (No)</span>
-                    <span className="font-semibold text-slate-500 dark:text-slate-400">{summary.totals.helpfulNo}</span>
-                  </div>
-                  <div className="h-2 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
-                    <div
-                      className="h-full rounded-full bg-rose-600"
-                      style={{
-                        width: `${
-                          summary.totals.helpfulYes + summary.totals.helpfulNo > 0
-                            ? (summary.totals.helpfulNo / (summary.totals.helpfulYes + summary.totals.helpfulNo)) * 100
-                            : 0
-                        }%`
-                      }}
-                    />
-                  </div>
-                </div>
-                <p className="text-xs text-slate-500 dark:text-slate-400">
-                  Votes are stored locally and can be cleared from the Admin page.
-                </p>
-              </div>
-            </section>
+              hasData={(summary.topTicketCategories ?? []).length > 0}
+            >
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={toChartRows(summary.topTicketCategories)}>
+                  <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.2} />
+                  <XAxis dataKey="name" hide />
+                  <YAxis allowDecimals={false} />
+                  <Tooltip />
+                  <Bar dataKey="value" name="Selections" fill="#0891b2" radius={[8, 8, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </ChartCard>
           </div>
         </>
       ) : (

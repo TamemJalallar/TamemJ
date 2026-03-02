@@ -7,6 +7,7 @@ import type { KBRecommendedAffiliate } from "@/lib/affiliate-support.registry";
 import { SupportPageHeader } from "@/components/support-portal/page-header";
 import { AccordionSteps } from "@/components/support-portal/accordion-steps";
 import { CodeBlock } from "@/components/support-portal/code-block";
+import { TroubleshootingDecisionTree } from "@/components/support-portal/troubleshooting-decision-tree";
 import { AccessLevelBadge, EnvironmentBadge, SeverityBadge } from "@/components/support-portal/badges";
 import { getKBHelpfulVote, setKBHelpfulVote } from "@/lib/support-portal.storage";
 import { trackKBArticleView, trackKBHelpfulVote } from "@/lib/support-portal.analytics";
@@ -118,7 +119,9 @@ export function KnowledgeBaseArticleView({
         </div>
       </section>
 
-      <section className="rounded-2xl border border-line/70 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-6">
+      <TroubleshootingDecisionTree symptoms={article.symptoms} accessLevel={article.accessLevel} />
+
+      <section id="resolution-steps" className="rounded-2xl border border-line/70 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-6">
         <div className="mb-4 flex items-center justify-between gap-3">
           <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Resolution Steps</h2>
           <p className="text-xs text-slate-500 dark:text-slate-400">Accordion runbook sections</p>

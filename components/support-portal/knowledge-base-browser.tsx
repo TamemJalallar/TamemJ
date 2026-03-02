@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import type { KBArticle } from "@/types/support";
 import { SupportPageHeader } from "@/components/support-portal/page-header";
 import { TopSearchBar } from "@/components/support-portal/top-search-bar";
 import { FilterChips } from "@/components/support-portal/filter-chips";
 import { AccessLevelBadge, EnvironmentBadge, SeverityBadge } from "@/components/support-portal/badges";
+import { buildFuzzyIndex, runFuzzySearch } from "@/lib/fuzzy-search";
 import { trackSearch, trackSearchClick } from "@/lib/support-portal.analytics";
 
 interface KnowledgeBaseBrowserProps {
@@ -44,9 +46,7 @@ export function KnowledgeBaseBrowser({ articles, initialQuery = "" }: KnowledgeB
     setQuery(params.get("q") ?? "");
   }, [initialQuery]);
 
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-
+  const filteredByFacets = useMemo(() => {
     return articles.filter((article) => {
       if (selectedCategories.length > 0 && !selectedCategories.includes(article.category)) {
         return false;
@@ -57,8 +57,38 @@ export function KnowledgeBaseBrowser({ articles, initialQuery = "" }: KnowledgeB
       if (selectedSeverities.length > 0 && !selectedSeverities.includes(article.severity)) {
         return false;
       }
-      if (!q) return true;
 
+      return true;
+    });
+  }, [articles, selectedCategories, selectedFamilies, selectedSeverities]);
+
+  const fuzzyIndex = useMemo(() => {
+    return buildFuzzyIndex(filteredByFacets, {
+      keys: [
+        { name: "title", weight: 0.42 },
+        { name: "description", weight: 0.22 },
+        { name: "product", weight: 0.12 },
+        { name: "productFamily", weight: 0.06 },
+        { name: "category", weight: 0.05 },
+        { name: "tags", weight: 0.08 },
+        { name: "symptoms", weight: 0.05 }
+      ]
+    });
+  }, [filteredByFacets]);
+
+  const filtered = useMemo(() => {
+    const q = query.trim();
+    if (!q) {
+      return filteredByFacets;
+    }
+
+    const fuzzyMatches = runFuzzySearch(fuzzyIndex, q, 160).map((entry) => entry.item);
+    if (fuzzyMatches.length > 0) {
+      return fuzzyMatches;
+    }
+
+    const normalized = q.toLowerCase();
+    return filteredByFacets.filter((article) => {
       const haystack = [
         article.title,
         article.description,
@@ -71,9 +101,9 @@ export function KnowledgeBaseBrowser({ articles, initialQuery = "" }: KnowledgeB
         .join(" ")
         .toLowerCase();
 
-      return haystack.includes(q);
+      return haystack.includes(normalized);
     });
-  }, [articles, query, selectedCategories, selectedFamilies, selectedSeverities]);
+  }, [filteredByFacets, fuzzyIndex, query]);
 
   function handleSearchSubmit(term: string) {
     trackSearch({ area: "kb", query: term, resultCount: filtered.length, context: "knowledge-base" });
@@ -156,39 +186,49 @@ export function KnowledgeBaseBrowser({ articles, initialQuery = "" }: KnowledgeB
       />
 
       {filtered.length > 0 ? (
-        <div className="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
-          {filtered.map((article, index) => (
-            <Link
-              key={article.slug}
-              href={`/support/kb/${article.slug}`}
-              onClick={() =>
-                trackSearchClick({
-                  area: "kb",
-                  query,
-                  clickedSlug: article.slug,
-                  clickedTitle: article.title,
-                  rank: index + 1
-                })
-              }
-              className="group rounded-2xl border border-line/70 bg-white p-5 shadow-soft transition hover:-translate-y-0.5 hover:shadow-card dark:border-slate-800 dark:bg-slate-950/70"
-            >
-              <div className="flex items-start justify-end gap-3">
-                <span className="text-xs text-slate-400 transition group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300">
-                  Open →
-                </span>
-              </div>
+        <motion.div layout className="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
+          <AnimatePresence mode="popLayout">
+            {filtered.map((article, index) => (
+              <motion.div
+                key={article.slug}
+                layout
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.18 }}
+              >
+                <Link
+                  href={`/support/kb/${article.slug}`}
+                  onClick={() =>
+                    trackSearchClick({
+                      area: "kb",
+                      query,
+                      clickedSlug: article.slug,
+                      clickedTitle: article.title,
+                      rank: index + 1
+                    })
+                  }
+                  className="group block rounded-2xl border border-line/70 bg-white p-5 shadow-soft transition hover:-translate-y-0.5 hover:shadow-card dark:border-slate-800 dark:bg-slate-950/70"
+                >
+                  <div className="flex items-start justify-end gap-3">
+                    <span className="text-xs text-slate-400 transition group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300">
+                      Open →
+                    </span>
+                  </div>
 
-              <h2 className="mt-3 text-lg font-semibold text-slate-900 dark:text-slate-100">{article.title}</h2>
-              <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">{article.description}</p>
+                  <h2 className="mt-3 text-lg font-semibold text-slate-900 dark:text-slate-100">{article.title}</h2>
+                  <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">{article.description}</p>
 
-              <div className="mt-4 flex flex-wrap gap-2">
-                <SeverityBadge severity={article.severity} />
-                <AccessLevelBadge accessLevel={article.accessLevel} />
-                <EnvironmentBadge environment={article.environment} />
-              </div>
-            </Link>
-          ))}
-        </div>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <SeverityBadge severity={article.severity} />
+                    <AccessLevelBadge accessLevel={article.accessLevel} />
+                    <EnvironmentBadge environment={article.environment} />
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
       ) : (
         <div className="rounded-2xl border border-dashed border-line/80 bg-white p-6 text-sm shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-8">
           <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">No matching KB articles</h2>

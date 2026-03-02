@@ -12,8 +12,9 @@ import {
 } from "@/components/support-portal/badges";
 import {
   addTicketActivity,
-  getStoredTickets,
+  getStoredTicketsIndexedDbFirst,
   seedDemoTickets,
+  subscribeToStoredTickets,
   updateTicketStatus
 } from "@/lib/support-portal.storage";
 import { trackTicketActivityAdded } from "@/lib/support-portal.analytics";
@@ -35,14 +36,19 @@ export function TicketsWorkbench() {
   const [noteText, setNoteText] = useState("");
   const [commentText, setCommentText] = useState("");
 
-  function refreshTickets() {
-    const next = getStoredTickets();
+  async function refreshTickets() {
+    const next = await getStoredTicketsIndexedDbFirst();
     setTickets(next);
     setSelectedTicketId((current) => current ?? next[0]?.id ?? null);
   }
 
   useEffect(() => {
-    refreshTickets();
+    void refreshTickets();
+    const unsubscribe = subscribeToStoredTickets(() => {
+      void refreshTickets();
+    });
+
+    return () => unsubscribe();
   }, []);
 
   const filteredTickets = useMemo(() => {
@@ -67,7 +73,7 @@ export function TicketsWorkbench() {
 
   function handleStatusChange(ticketId: string, status: TicketStatus) {
     updateTicketStatus(ticketId, status);
-    refreshTickets();
+    void refreshTickets();
   }
 
   function submitActivity(mode: "note" | "comment") {
@@ -82,7 +88,7 @@ export function TicketsWorkbench() {
     });
 
     trackTicketActivityAdded({ ticketId: selectedTicket.id, mode });
-    refreshTickets();
+    void refreshTickets();
 
     if (mode === "note") setNoteText("");
     else setCommentText("");

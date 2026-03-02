@@ -10,9 +10,20 @@
     "start": "next start"
   },
   "dependencies": {
+    "@floating-ui/react": "^0.27.18",
+    "@sentry/nextjs": "^10.41.0",
+    "@xstate/react": "^6.1.0",
+    "cmdk": "^1.1.1",
+    "dexie": "^4.3.0",
+    "framer-motion": "^12.34.4",
+    "fuse.js": "^7.1.0",
     "next": "^15.0.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "recharts": "^3.7.0",
+    "schema-dts": "^1.1.5",
+    "shiki": "^4.0.1",
+    "xstate": "^5.28.0"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",

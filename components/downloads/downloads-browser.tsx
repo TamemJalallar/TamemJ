@@ -1,15 +1,45 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import {
+  autoUpdate,
+  flip,
+  FloatingPortal,
+  offset,
+  safePolygon,
+  shift,
+  useClick,
+  useDismiss,
+  useFloating,
+  useFocus,
+  useHover,
+  useInteractions,
+  useRole
+} from "@floating-ui/react";
+import { AnimatePresence, motion } from "framer-motion";
 import type {
   DirectDownloadArtifact,
   DownloadChannelLink,
   DownloadEntry,
   DownloadPlatform
 } from "@/types/download";
+import { buildFuzzyIndex, runFuzzySearch } from "@/lib/fuzzy-search";
 
 function cx(...classes: Array<string | false | null | undefined>): string {
   return classes.filter(Boolean).join(" ");
+}
+
+async function copyText(text: string): Promise<boolean> {
+  if (typeof navigator === "undefined" || !navigator.clipboard?.writeText) {
+    return false;
+  }
+
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 const platformOrder: DownloadPlatform[] = ["macOS", "Windows", "Linux", "iOS", "Android", "Web"];
@@ -130,28 +160,49 @@ export function DownloadsBrowser({
   const filtered = useMemo(() => {
     const normalized = query.trim().toLowerCase();
 
-    const matches = entries.filter((entry) => {
+    const facetMatches = entries.filter((entry) => {
       if (platformFilter !== "All" && !entry.platforms.includes(platformFilter)) return false;
       if (categoryFilter !== "All" && entry.category !== categoryFilter) return false;
       if (!matchesChannelFilter(entry, channelFilter)) return false;
       if (freeOnly && !isFreeEntry(entry)) return false;
       if (popularOnly && !isPopularEntry(entry)) return false;
-
-      if (!normalized) return true;
-      const haystack = [
-        entry.name,
-        entry.summary,
-        entry.category,
-        entry.developer ?? "",
-        entry.pricing ?? "",
-        ...entry.tags,
-        ...entry.platforms
-      ]
-        .join(" ")
-        .toLowerCase();
-
-      return haystack.includes(normalized);
+      return true;
     });
+
+    const fuzzyIndex = buildFuzzyIndex(facetMatches, {
+      keys: [
+        { name: "name", weight: 0.4 },
+        { name: "summary", weight: 0.24 },
+        { name: "category", weight: 0.1 },
+        { name: "tags", weight: 0.12 },
+        { name: "platforms", weight: 0.07 },
+        { name: "developer", weight: 0.04 },
+        { name: "popularityLabel", weight: 0.03 }
+      ],
+      threshold: 0.35
+    });
+
+    let matches = facetMatches;
+    if (normalized) {
+      const fuzzyMatches = runFuzzySearch(fuzzyIndex, normalized, 200).map((entry) => entry.item);
+      matches =
+        fuzzyMatches.length > 0
+          ? fuzzyMatches
+          : facetMatches.filter((entry) => {
+              const haystack = [
+                entry.name,
+                entry.summary,
+                entry.category,
+                entry.developer ?? "",
+                entry.pricing ?? "",
+                ...entry.tags,
+                ...entry.platforms
+              ]
+                .join(" ")
+                .toLowerCase();
+              return haystack.includes(normalized);
+            });
+    }
 
     return matches.sort((a, b) => {
       if (sortBy === "A-Z") return a.name.localeCompare(b.name);
@@ -239,6 +290,22 @@ export function DownloadsBrowser({
             <StatCard label="Direct Binaries" value={String(stats.directArtifacts)} />
           </div>
         </div>
+      </section>
+
+      <section className="surface-card p-4 sm:p-5 dark:border-slate-700 dark:bg-slate-950">
+        <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">How to use this page</h2>
+        <ul className="mt-3 space-y-2 pl-5 text-sm text-slate-700 dark:text-slate-200 sm:text-base">
+          <li className="list-disc">Use search + filters to narrow by app, platform, category, and channel.</li>
+          <li className="list-disc">
+            In each app card, use the OS chips at the top-right: hover on desktop or tap on mobile to open download details.
+          </li>
+          <li className="list-disc">
+            Inside the OS panel, use direct “Download” links and verify the displayed SHA-256 checksum when provided.
+          </li>
+          <li className="list-disc">
+            Store links are prioritized when available; direct binaries and GitHub Releases are shown for non-store apps.
+          </li>
+        </ul>
       </section>
 
       {amazonAffiliateUrl ? (
@@ -410,11 +477,22 @@ export function DownloadsBrowser({
         </div>
 
         {filtered.length > 0 ? (
-          <div className="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
-            {filtered.map((entry) => (
-              <DownloadCard key={entry.slug} entry={entry} />
-            ))}
-          </div>
+          <motion.div layout className="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
+            <AnimatePresence mode="popLayout">
+              {filtered.map((entry) => (
+                <motion.div
+                  key={entry.slug}
+                  layout
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.18 }}
+                >
+                  <DownloadCard entry={entry} />
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
         ) : (
           <div className="surface-card border-dashed p-5 dark:border-slate-700 dark:bg-slate-950">
             <p className="text-sm text-slate-600 dark:text-slate-300">
@@ -620,6 +698,27 @@ function PlatformDownloadChip({
   platform: DownloadPlatform;
   artifacts: DirectDownloadArtifact[];
 }) {
+  const [open, setOpen] = useState(false);
+  const [copiedChecksumKey, setCopiedChecksumKey] = useState<string | null>(null);
+  const { refs, floatingStyles, context } = useFloating({
+    open,
+    onOpenChange: setOpen,
+    placement: "bottom-end",
+    whileElementsMounted: autoUpdate,
+    middleware: [offset(8), flip({ padding: 12 }), shift({ padding: 12 })]
+  });
+
+  const hover = useHover(context, {
+    enabled: artifacts.length > 0,
+    handleClose: safePolygon(),
+    move: false
+  });
+  const click = useClick(context, { enabled: artifacts.length > 0 });
+  const focus = useFocus(context, { enabled: artifacts.length > 0 });
+  const dismiss = useDismiss(context, { outsidePress: true });
+  const role = useRole(context, { role: "dialog" });
+  const { getReferenceProps, getFloatingProps } = useInteractions([hover, click, focus, dismiss, role]);
+
   if (artifacts.length === 0) {
     return (
       <span className="rounded-full border border-line bg-white px-2 py-0.5 text-[10px] font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
@@ -629,51 +728,92 @@ function PlatformDownloadChip({
   }
 
   return (
-    <div className="group relative">
+    <div className="relative">
       <button
         type="button"
+        ref={refs.setReference}
+        {...getReferenceProps({
+          type: "button",
+          "aria-expanded": open,
+          "aria-label": `Show ${platform} download details`
+        })}
         className="rounded-full border border-cyan-300 bg-cyan-50 px-2 py-0.5 text-[10px] font-semibold text-cyan-700 transition hover:bg-cyan-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-1 dark:border-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-100 dark:hover:bg-cyan-900/60"
-        aria-label={`Show ${platform} download details`}
       >
         {platform}
       </button>
-      <div className="pointer-events-none invisible absolute right-0 top-full z-20 mt-1 w-[19rem] rounded-lg border border-line bg-white p-2 opacity-0 shadow-card transition group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:visible group-focus-within:opacity-100 dark:border-slate-700 dark:bg-slate-900">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
-          {platform} Downloads
-        </p>
-        <ul className="mt-1.5 space-y-1.5">
-          {artifacts.map((artifact) => (
-            <li
-              key={`${platform}-${artifact.label}-${artifact.url}`}
-              className="rounded-md border border-line/80 bg-slate-50/80 p-2 dark:border-slate-700 dark:bg-slate-800/80"
-            >
-              <div className="flex items-start justify-between gap-2">
-                <div className="min-w-0">
-                  <p className="truncate text-[11px] font-semibold text-slate-900 dark:text-slate-100">
-                    {artifact.label}
-                  </p>
-                  <p className="mt-0.5 text-[10px] text-slate-500 dark:text-slate-400">
-                    {artifact.fileType ? `${artifact.fileType}` : "Installer"}
-                    {artifact.version ? ` | ${formatVersion(artifact.version)}` : ""}
-                    {artifact.fileSize ? ` | ${artifact.fileSize}` : ""}
-                  </p>
-                  {artifact.checksumSha256 ? (
-                    <p className="mt-0.5 text-[10px] text-slate-500 dark:text-slate-400">SHA-256 available</p>
-                  ) : null}
-                </div>
-                <a
-                  href={artifact.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="pointer-events-auto rounded-md border border-line bg-white px-2 py-1 text-[10px] font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
+      {open ? (
+        <FloatingPortal>
+          <div
+            ref={refs.setFloating}
+            style={floatingStyles}
+            className="z-40 w-[19rem] rounded-lg border border-line bg-white p-2 shadow-card dark:border-slate-700 dark:bg-slate-900"
+            {...getFloatingProps()}
+          >
+            <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+              {platform} Downloads
+            </p>
+            <ul className="mt-1.5 space-y-1.5">
+              {artifacts.map((artifact) => (
+                <li
+                  key={`${platform}-${artifact.label}-${artifact.url}`}
+                  className="rounded-md border border-line/80 bg-slate-50/80 p-2 dark:border-slate-700 dark:bg-slate-800/80"
                 >
-                  Download
-                </a>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="truncate text-[11px] font-semibold text-slate-900 dark:text-slate-100">
+                        {artifact.label}
+                      </p>
+                      <p className="mt-0.5 text-[10px] text-slate-500 dark:text-slate-400">
+                        {artifact.fileType ? `${artifact.fileType}` : "Installer"}
+                        {artifact.version ? ` | ${formatVersion(artifact.version)}` : ""}
+                        {artifact.fileSize ? ` | ${artifact.fileSize}` : ""}
+                      </p>
+                      {artifact.checksumSha256 ? (
+                        <div className="mt-1 rounded-md border border-line/80 bg-white/70 p-1.5 dark:border-slate-700 dark:bg-slate-900/70">
+                          <div className="flex items-center justify-between gap-1.5">
+                            <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-slate-500 dark:text-slate-400">
+                              SHA-256
+                            </p>
+                            <button
+                              type="button"
+                              onClick={async () => {
+                                const key = `${platform}-${artifact.label}-${artifact.url}`;
+                                const copied = await copyText(artifact.checksumSha256 ?? "");
+                                if (!copied) {
+                                  return;
+                                }
+
+                                setCopiedChecksumKey(key);
+                                window.setTimeout(() => {
+                                  setCopiedChecksumKey((current) => (current === key ? null : current));
+                                }, 1200);
+                              }}
+                              className="rounded border border-line bg-white px-1.5 py-0.5 text-[10px] font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
+                            >
+                              {copiedChecksumKey === `${platform}-${artifact.label}-${artifact.url}` ? "Copied" : "Copy"}
+                            </button>
+                          </div>
+                          <p className="mt-1 break-all font-mono text-[10px] text-slate-600 dark:text-slate-300">
+                            {artifact.checksumSha256}
+                          </p>
+                        </div>
+                      ) : null}
+                    </div>
+                    <a
+                      href={artifact.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="rounded-md border border-line bg-white px-2 py-1 text-[10px] font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
+                    >
+                      Download
+                    </a>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </FloatingPortal>
+      ) : null}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 function cx(...classes: Array<string | false | null | undefined>): string {
   return classes.filter(Boolean).join(" ");
@@ -19,42 +19,44 @@ async function copyText(text: string): Promise<boolean> {
   }
 }
 
-function highlightLine(line: string) {
-  if (!line.trim()) {
-    return <span>&nbsp;</span>;
-  }
+function shellToLanguage(shell: string): string {
+  if (shell === "PowerShell") return "powershell";
+  if (shell === "CMD") return "bat";
+  if (shell === "Terminal") return "bash";
+  if (shell === "CLI") return "bash";
+  return "text";
+}
 
-  if (line.trimStart().startsWith("#")) {
-    return <span className="text-emerald-300">{line}</span>;
-  }
+let shikiHighlighterPromise: Promise<import("shiki").HighlighterGeneric<any, any>> | null = null;
 
-  const parts = line.split(/(\s+)/);
-  let firstTokenDone = false;
-
-  return parts.map((part, index) => {
-    if (!part) return null;
-    if (/^\s+$/.test(part)) return <span key={`${line}-${index}`}>{part}</span>;
-
-    let className = "text-slate-100";
-    if (!firstTokenDone) {
-      className = "text-cyan-300";
-      firstTokenDone = true;
-    } else if (part.startsWith("-")) {
-      className = "text-fuchsia-300";
-    } else if (part.startsWith("$")) {
-      className = "text-amber-300";
-    } else if (part.includes("://")) {
-      className = "text-sky-300";
-    } else if (/^[0-9]+$/.test(part)) {
-      className = "text-orange-300";
-    }
-
-    return (
-      <span key={`${line}-${index}`} className={className}>
-        {part}
-      </span>
+async function getShikiHighlighter() {
+  if (!shikiHighlighterPromise) {
+    shikiHighlighterPromise = import("shiki").then(({ createHighlighter }) =>
+      createHighlighter({
+        themes: ["github-dark-default"],
+        langs: ["powershell", "bat", "bash", "shell", "text", "json"]
+      })
     );
-  });
+  }
+
+  return shikiHighlighterPromise;
+}
+
+async function highlightCode(content: string, shell: string): Promise<string> {
+  const highlighter = await getShikiHighlighter();
+  const lang = shellToLanguage(shell);
+
+  try {
+    return highlighter.codeToHtml(content, {
+      lang,
+      theme: "github-dark-default"
+    });
+  } catch {
+    return highlighter.codeToHtml(content, {
+      lang: "text",
+      theme: "github-dark-default"
+    });
+  }
 }
 
 export function CodeBlock({
@@ -71,6 +73,25 @@ export function CodeBlock({
   className?: string;
 }) {
   const [copied, setCopied] = useState(false);
+  const [highlightedHtml, setHighlightedHtml] = useState<string | null>(null);
+
+  const fallbackText = useMemo(() => content, [content]);
+
+  useEffect(() => {
+    let cancelled = false;
+    setHighlightedHtml(null);
+
+    void highlightCode(content, shell).then((html) => {
+      if (cancelled) {
+        return;
+      }
+      setHighlightedHtml(html);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [content, shell]);
 
   async function handleCopy() {
     const success = await copyText(content);
@@ -97,15 +118,16 @@ export function CodeBlock({
           {copied ? "Copied" : "Copy"}
         </button>
       </div>
-      <pre className="overflow-x-auto p-3 text-xs leading-6 sm:text-sm print:whitespace-pre-wrap print:break-words">
-        <code>
-          {content.split("\n").map((line, index) => (
-            <div key={`${title}-${index}`} className="min-h-5 whitespace-pre">
-              {highlightLine(line)}
-            </div>
-          ))}
-        </code>
-      </pre>
+      <div className="overflow-x-auto p-3 text-xs leading-6 sm:text-sm print:whitespace-pre-wrap print:break-words">
+        {highlightedHtml ? (
+          <div
+            className="[&_pre]:m-0 [&_pre]:rounded-xl [&_pre]:bg-transparent [&_pre]:p-0 [&_code]:font-mono"
+            dangerouslySetInnerHTML={{ __html: highlightedHtml }}
+          />
+        ) : (
+          <pre className="whitespace-pre text-slate-100">{fallbackText}</pre>
+        )}
+      </div>
     </div>
   );
 }

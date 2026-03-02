@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { FAQPage, ItemList, WebPage, WithContext } from "schema-dts";
 import { AffiliateDisclosureBanner } from "@/components/affiliate/affiliate-disclosure-banner";
 import { DownloadsBrowser } from "@/components/downloads/downloads-browser";
 import { getAffiliateLinkByKey } from "@/lib/affiliate-links";
@@ -83,7 +84,7 @@ export default function DownloadsPage() {
     }))
   );
 
-  const softwareListSchema = {
+  const softwareListSchema: WithContext<ItemList> = {
     "@context": "https://schema.org",
     "@type": "ItemList",
     name: "Downloadable Software Catalog",
@@ -125,7 +126,7 @@ export default function DownloadsPage() {
     }))
   };
 
-  const downloadsWebPageSchema = {
+  const downloadsWebPageSchema: WithContext<WebPage> = {
     "@context": "https://schema.org",
     "@type": "WebPage",
     name: "Downloads",
@@ -140,7 +141,7 @@ export default function DownloadsPage() {
     ]
   };
 
-  const downloadsFaqSchema = {
+  const downloadsFaqSchema: WithContext<FAQPage> = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     mainEntity: [

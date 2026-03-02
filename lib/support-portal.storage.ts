@@ -5,6 +5,11 @@ import type {
   TicketActivityEntry,
   TicketStatus
 } from "@/types/support";
+import {
+  clearTicketsFromIndexedDb,
+  loadTicketsFromIndexedDb,
+  saveTicketsToIndexedDb
+} from "@/lib/support-portal.db";
 
 const STORAGE_KEYS = {
   tickets: "supportPortal:tickets:v1",
@@ -12,8 +17,20 @@ const STORAGE_KEYS = {
   kbHelpfulVotes: "supportPortal:kbHelpfulVotes:v1"
 } as const;
 
+const STORAGE_EVENTS = {
+  ticketsUpdated: "supportPortal:tickets:updated"
+} as const;
+
 function isBrowser(): boolean {
   return typeof window !== "undefined" && typeof window.localStorage !== "undefined";
+}
+
+function emitStorageEvent(name: string): void {
+  if (!isBrowser()) {
+    return;
+  }
+
+  window.dispatchEvent(new CustomEvent(name));
 }
 
 export function createLocalId(prefix: string): string {
@@ -49,6 +66,33 @@ function writeLocalJson<T>(key: string, value: T): void {
   } catch {
     // Ignore storage quota or serialization failures in demo mode.
   }
+}
+
+function queueSaveTicketsToIndexedDb(tickets: Ticket[]): void {
+  void saveTicketsToIndexedDb(tickets);
+}
+
+let ticketsHydrationStarted = false;
+
+function queueHydrateTicketsFromIndexedDb(): void {
+  if (!isBrowser() || ticketsHydrationStarted) {
+    return;
+  }
+  ticketsHydrationStarted = true;
+
+  void loadTicketsFromIndexedDb().then((tickets) => {
+    if (tickets.length === 0) {
+      return;
+    }
+
+    const current = readLocalJson<Ticket[]>(STORAGE_KEYS.tickets, []);
+    if (current.length > 0) {
+      return;
+    }
+
+    writeLocalJson(STORAGE_KEYS.tickets, tickets);
+    emitStorageEvent(STORAGE_EVENTS.ticketsUpdated);
+  });
 }
 
 const defaultPortalState: SupportPortalState = {
@@ -93,13 +137,46 @@ export function setSupportSidebarCollapsed(collapsed: boolean): SupportPortalSta
 }
 
 export function getStoredTickets(): Ticket[] {
+  queueHydrateTicketsFromIndexedDb();
   const tickets = readLocalJson<Ticket[]>(STORAGE_KEYS.tickets, []);
 
   return [...tickets].sort((a, b) => (a.updatedAt < b.updatedAt ? 1 : -1));
 }
 
+export async function getStoredTicketsIndexedDbFirst(): Promise<Ticket[]> {
+  if (!isBrowser()) {
+    return [];
+  }
+
+  const indexedDbTickets = await loadTicketsFromIndexedDb();
+  if (indexedDbTickets.length > 0) {
+    writeLocalJson(STORAGE_KEYS.tickets, indexedDbTickets);
+    emitStorageEvent(STORAGE_EVENTS.ticketsUpdated);
+    return [...indexedDbTickets].sort((a, b) => (a.updatedAt < b.updatedAt ? 1 : -1));
+  }
+
+  return getStoredTickets();
+}
+
+export function subscribeToStoredTickets(callback: () => void): () => void {
+  if (!isBrowser()) {
+    return () => undefined;
+  }
+
+  const handler = () => callback();
+  window.addEventListener(STORAGE_EVENTS.ticketsUpdated, handler);
+  window.addEventListener("storage", handler);
+
+  return () => {
+    window.removeEventListener(STORAGE_EVENTS.ticketsUpdated, handler);
+    window.removeEventListener("storage", handler);
+  };
+}
+
 function saveStoredTickets(tickets: Ticket[]): void {
   writeLocalJson(STORAGE_KEYS.tickets, tickets);
+  queueSaveTicketsToIndexedDb(tickets);
+  emitStorageEvent(STORAGE_EVENTS.ticketsUpdated);
 }
 
 function createSimplifiedTicketId(type: Ticket["type"], existingTickets: Ticket[]): string {
@@ -263,6 +340,8 @@ export function resetStoredTickets(): void {
   }
 
   window.localStorage.removeItem(STORAGE_KEYS.tickets);
+  void clearTicketsFromIndexedDb();
+  emitStorageEvent(STORAGE_EVENTS.ticketsUpdated);
 }
 
 export function seedDemoTickets(): Ticket[] {
