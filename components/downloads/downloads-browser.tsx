@@ -188,10 +188,15 @@ function matchesChannelFilter(entry: DownloadEntry, filter: ChannelFilter): bool
 
 export function DownloadsBrowser({
   entries,
-  amazonAffiliateUrl
+  amazonAffiliateUrl,
+  amazonFeaturedProducts = []
 }: {
   entries: DownloadEntry[];
   amazonAffiliateUrl?: string;
+  amazonFeaturedProducts?: Array<{
+    label: string;
+    url: string;
+  }>;
 }) {
   const { user, trackDownload } = useAccount();
   const [query, setQuery] = useState("");
@@ -396,15 +401,15 @@ export function DownloadsBrowser({
         </ul>
       </section>
 
-      {amazonAffiliateUrl ? (
+      {amazonAffiliateUrl || amazonFeaturedProducts.length > 0 ? (
         <section className="surface-card p-4 sm:p-5 dark:border-slate-700 dark:bg-slate-950">
-          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex flex-col gap-3">
             <div className="max-w-3xl">
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
                 Recommended Gear
               </p>
               <h2 className="mt-1.5 text-lg font-semibold text-slate-900 dark:text-slate-100">
-                Shop popular IT accessories
+                Shop curated Amazon picks
               </h2>
               <p className="mt-1.5 text-sm leading-6 text-slate-600 dark:text-slate-300">
                 Monitors, docks, cables, and support-team essentials.
@@ -414,14 +419,38 @@ export function DownloadsBrowser({
                 earn a commission at no extra cost to you.
               </p>
             </div>
-            <a
-              href={amazonAffiliateUrl}
-              target="_blank"
-              rel="sponsored nofollow noreferrer"
-              className="btn-secondary shrink-0 !px-4 !py-2.5 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
-            >
-              Open Amazon Picks
-            </a>
+
+            {amazonFeaturedProducts.length > 0 ? (
+              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                {amazonFeaturedProducts.map((product) => (
+                  <a
+                    key={product.url}
+                    href={product.url}
+                    target="_blank"
+                    rel="sponsored nofollow noreferrer"
+                    className="group rounded-xl border border-line bg-white/90 p-3 text-sm transition hover:border-cyan-300 hover:bg-cyan-50 dark:border-slate-700 dark:bg-slate-900/80 dark:hover:border-cyan-700 dark:hover:bg-cyan-900/30"
+                  >
+                    <p className="font-medium text-slate-900 dark:text-slate-100">{product.label}</p>
+                    <p className="mt-1 text-xs text-cyan-700 transition group-hover:translate-x-0.5 dark:text-cyan-300">
+                      Open product link
+                    </p>
+                  </a>
+                ))}
+              </div>
+            ) : null}
+
+            {amazonAffiliateUrl ? (
+              <div className="flex">
+                <a
+                  href={amazonAffiliateUrl}
+                  target="_blank"
+                  rel="sponsored nofollow noreferrer"
+                  className="btn-secondary shrink-0 !px-4 !py-2.5 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
+                >
+                  Open Full Amazon Picks
+                </a>
+              </div>
+            ) : null}
           </div>
         </section>
       ) : null}

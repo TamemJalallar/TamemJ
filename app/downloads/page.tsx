@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { FAQPage, ItemList, WebPage, WithContext } from "schema-dts";
 import { AffiliateDisclosureBanner } from "@/components/affiliate/affiliate-disclosure-banner";
 import { DownloadsBrowser } from "@/components/downloads/downloads-browser";
-import { getAffiliateLinkByKey } from "@/lib/affiliate-links";
+import { getAffiliateLinkByKey, getAffiliateLinksByKeys } from "@/lib/affiliate-links";
 import { getDownloads } from "@/lib/downloads.registry";
 import { buildBreadcrumbJsonLd, buildCollectionPageJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 import type { DownloadEntry } from "@/types/download";
@@ -99,6 +99,13 @@ export default function DownloadsPage() {
   const downloads = getDownloads();
   const freeCount = downloads.filter(isFreeEntry).length;
   const amazonAffiliate = getAffiliateLinkByKey("amazon-it-gear");
+  const amazonFeaturedProductLinks = getAffiliateLinksByKeys([
+    "amazon-pick-raspberry-pi-5-starter-kit-pro",
+    "amazon-pick-brother-ptd210-label-maker-bundle",
+    "amazon-pick-delamu-cable-management-raceway",
+    "amazon-pick-samsung-gaming-monitor-ls27fg500snxza",
+    "amazon-pick-cyberpowerpc-gxivr8060a40"
+  ]);
 
   const downloadsCollectionSchema = buildCollectionPageJsonLd(
     "Software Downloads",
@@ -216,7 +223,14 @@ export default function DownloadsPage() {
       <section className="section-shell pt-8 sm:pt-10">
         <div className="page-shell">
           <AffiliateDisclosureBanner className="mb-6" />
-          <DownloadsBrowser entries={downloads} amazonAffiliateUrl={amazonAffiliate?.url} />
+          <DownloadsBrowser
+            entries={downloads}
+            amazonAffiliateUrl={amazonAffiliate?.url}
+            amazonFeaturedProducts={amazonFeaturedProductLinks.map((entry) => ({
+              label: entry.label,
+              url: entry.url
+            }))}
+          />
         </div>
       </section>
       <script
