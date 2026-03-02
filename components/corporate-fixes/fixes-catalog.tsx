@@ -12,23 +12,52 @@ import { FixGuide } from "@/components/corporate-fixes/fix-guide";
 import { AccessLevelBadge, MetaPill, SeverityBadge, TagChip } from "@/components/corporate-fixes/fix-shared";
 
 interface FixesCatalogProps {
-  fixes: CorporateTechFix[];
+  fixes: FixCatalogItem[];
   categories: string[];
   tags: string[];
+}
+
+export interface FixCatalogItem {
+  slug: string;
+  title: string;
+  category: CorporateTechFix["category"];
+  severity: CorporateTechFix["severity"];
+  accessLevel: CorporateTechFix["accessLevel"];
+  estimatedTime: string;
+  tags: string[];
+  description: string;
+  stepCount: number;
+  steps?: CorporateTechFix["steps"];
 }
 
 function joinClasses(...classes: Array<string | false | null | undefined>): string {
   return classes.filter(Boolean).join(" ");
 }
 
-function mergeFixCollections(baseFixes: CorporateTechFix[], localFixes: CorporateTechFix[]): CorporateTechFix[] {
+function toCatalogItem(fix: CorporateTechFix): FixCatalogItem {
+  return {
+    slug: fix.slug,
+    title: fix.title,
+    category: fix.category,
+    severity: fix.severity,
+    accessLevel: fix.accessLevel,
+    estimatedTime: fix.estimatedTime,
+    tags: fix.tags,
+    description: fix.description,
+    stepCount: fix.steps.length,
+    steps: fix.steps
+  };
+}
+
+function mergeFixCollections(baseFixes: FixCatalogItem[], localFixes: CorporateTechFix[]): FixCatalogItem[] {
   const seen = new Set<string>();
-  const merged: CorporateTechFix[] = [];
+  const merged: FixCatalogItem[] = [];
 
   for (const localFix of localFixes) {
-    if (seen.has(localFix.slug)) continue;
-    seen.add(localFix.slug);
-    merged.push(localFix);
+    const localCatalogFix = toCatalogItem(localFix);
+    if (seen.has(localCatalogFix.slug)) continue;
+    seen.add(localCatalogFix.slug);
+    merged.push(localCatalogFix);
   }
 
   for (const baseFix of baseFixes) {
@@ -42,12 +71,15 @@ function mergeFixCollections(baseFixes: CorporateTechFix[], localFixes: Corporat
 
 export function FixesCatalog({ fixes, categories, tags }: FixesCatalogProps) {
   const TAG_PREVIEW_LIMIT = 28;
+  const INITIAL_VISIBLE_FIXES = 18;
+  const LOAD_MORE_STEP = 18;
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [localFixes, setLocalFixes] = useState<CorporateTechFix[]>([]);
   const [selectedLocalFix, setSelectedLocalFix] = useState<CorporateTechFix | null>(null);
   const [showAllTags, setShowAllTags] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_FIXES);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -108,6 +140,11 @@ export function FixesCatalog({ fixes, categories, tags }: FixesCatalogProps) {
   }, [allTags, selectedTags, showAllTags]);
 
   const normalizedQuery = query.trim().toLowerCase();
+  const selectedTagsKey = selectedTags.join("|");
+
+  useEffect(() => {
+    setVisibleCount(INITIAL_VISIBLE_FIXES);
+  }, [normalizedQuery, category, selectedTagsKey, INITIAL_VISIBLE_FIXES]);
 
   const filteredFixes = allFixes.filter((fix) => {
     const matchesCategory = category === "All" || fix.category === category;
@@ -128,6 +165,9 @@ export function FixesCatalog({ fixes, categories, tags }: FixesCatalogProps) {
 
     return searchTarget.includes(normalizedQuery);
   });
+  const visibleFixes = filteredFixes.slice(0, visibleCount);
+  const remainingFixesCount = Math.max(filteredFixes.length - visibleFixes.length, 0);
+  const hasMoreFixes = remainingFixesCount > 0;
 
   const hasActiveFilters = query.trim() !== "" || category !== "All" || selectedTags.length > 0;
 
@@ -143,7 +183,7 @@ export function FixesCatalog({ fixes, categories, tags }: FixesCatalogProps) {
     setSelectedTags([]);
   }
 
-  function renderFixCardContent(fix: CorporateTechFix, options?: { local?: boolean }) {
+  function renderFixCardContent(fix: FixCatalogItem, options?: { local?: boolean }) {
     const isLocal = options?.local ?? false;
 
     return (
@@ -174,7 +214,7 @@ export function FixesCatalog({ fixes, categories, tags }: FixesCatalogProps) {
 
         <div className="mt-4 grid gap-2 sm:grid-cols-2">
           <MetaPill label="Est. Time" value={fix.estimatedTime} />
-          <MetaPill label="Steps" value={`${fix.steps.length}`} />
+          <MetaPill label="Steps" value={`${fix.stepCount}`} />
         </div>
 
         <div className="mt-4 flex flex-wrap gap-2">
@@ -257,7 +297,7 @@ export function FixesCatalog({ fixes, categories, tags }: FixesCatalogProps) {
               {filteredFixes.length} result{filteredFixes.length === 1 ? "" : "s"}
             </p>
             <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-              Filter by category, tags, and keywords.
+              Showing {visibleFixes.length} on page. Filter by category, tags, and keywords.
             </p>
           </div>
         </div>
@@ -305,7 +345,7 @@ export function FixesCatalog({ fixes, categories, tags }: FixesCatalogProps) {
 
       {filteredFixes.length > 0 ? (
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {filteredFixes.map((fix) => {
+          {visibleFixes.map((fix) => {
             const isLocal = isLocalCorporateFixSlug(fix.slug);
 
             if (isLocal) {
@@ -313,7 +353,12 @@ export function FixesCatalog({ fixes, categories, tags }: FixesCatalogProps) {
                 <button
                   key={fix.slug}
                   type="button"
-                  onClick={() => setSelectedLocalFix(fix)}
+                  onClick={() => {
+                    const localFix = localFixes.find((item) => item.slug === fix.slug);
+                    if (localFix) {
+                      setSelectedLocalFix(localFix);
+                    }
+                  }}
                   className="group surface-card block p-5 text-left transition hover:-translate-y-0.5 hover:shadow-card dark:border-slate-800 dark:bg-slate-950/70"
                 >
                   {renderFixCardContent(fix, { local: true })}
@@ -349,6 +394,29 @@ export function FixesCatalog({ fixes, categories, tags }: FixesCatalogProps) {
           </button>
         </div>
       )}
+
+      {hasMoreFixes ? (
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          <button
+            type="button"
+            onClick={() =>
+              setVisibleCount((current) =>
+                Math.min(current + LOAD_MORE_STEP, filteredFixes.length)
+              )
+            }
+            className="btn-secondary"
+          >
+            Load More ({Math.min(LOAD_MORE_STEP, remainingFixesCount)})
+          </button>
+          <button
+            type="button"
+            onClick={() => setVisibleCount(filteredFixes.length)}
+            className="rounded-xl border border-line bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-800"
+          >
+            Show All
+          </button>
+        </div>
+      ) : null}
 
       {selectedLocalFix ? (
         <div

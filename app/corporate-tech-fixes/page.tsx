@@ -67,6 +67,17 @@ export const metadata: Metadata = {
 
 export default function CorporateTechFixesPage() {
   const fixes = getCorporateFixes();
+  const catalogFixes = fixes.map((fix) => ({
+    slug: fix.slug,
+    title: fix.title,
+    category: fix.category,
+    severity: fix.severity,
+    accessLevel: fix.accessLevel,
+    estimatedTime: fix.estimatedTime,
+    tags: fix.tags,
+    description: fix.description,
+    stepCount: fix.steps.length
+  }));
   const categories = getCorporateFixCategories();
   const tags = getCorporateFixTags();
   const fixesCollectionSchema = buildCollectionPageJsonLd(
@@ -119,7 +130,7 @@ export default function CorporateTechFixesPage() {
           </div>
 
           <div className="mt-8">
-            <FixesCatalog fixes={fixes} categories={categories} tags={tags} />
+            <FixesCatalog fixes={catalogFixes} categories={categories} tags={tags} />
           </div>
         </div>
       </section>
