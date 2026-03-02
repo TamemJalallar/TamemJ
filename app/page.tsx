@@ -14,7 +14,8 @@ export const metadata: Metadata = {
     "iPhone app developer",
     "app support portal",
     "corporate tech fixes",
-    "app downloads"
+    "app downloads",
+    "pc build guides"
   ],
   alternates: {
     canonical: "/"
@@ -67,6 +68,9 @@ export default function HomePage() {
                   </Link>
                   <Link href="/support" className="btn-secondary">
                     App Support
+                  </Link>
+                  <Link href="/pc-build-guides" className="btn-secondary">
+                    PC Build Guides
                   </Link>
                 </div>
               </div>

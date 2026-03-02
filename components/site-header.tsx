@@ -8,6 +8,7 @@ const navItems = [
   { href: "/apps", label: "Apps" },
   { href: "/downloads", label: "Downloads" },
   { href: "/corporate-tech-fixes", label: "Tech Fixes" },
+  { href: "/pc-build-guides", label: "PC Builds" },
   { href: "/privacy", label: "Privacy" },
   { href: "/support", label: "Support" },
   { href: "/contact", label: "Contact" }

@@ -3701,6 +3701,642 @@ const generalSeeds: KBSeed[] = [
           "curl -I \"https://performance-partners.apple.com/home\"\n# Update to approved Apple tracking URL after partner activation."
       }
     ]
+  },
+  {
+    slug: "outlook-shared-calendar-not-updating-windows-macos",
+    title: "Outlook Shared Calendar Not Updating (Windows / macOS)",
+    description:
+      "Troubleshoot delayed or missing shared calendar updates in Outlook desktop clients using safe cache, delegate, and permission checks.",
+    category: "Microsoft 365",
+    productFamily: "Microsoft",
+    product: "Outlook",
+    environment: "Both",
+    severity: "Medium",
+    tags: ["outlook", "shared-calendar", "delegate", "calendar", "sync"],
+    symptoms: [
+      "Shared calendar updates appear in web but not desktop Outlook.",
+      "One delegate sees new events while another delegate does not.",
+      "Calendar status appears stale for extended periods."
+    ],
+    causes: [
+      "Local Outlook cache for shared folders is stale.",
+      "Delegate permissions changed recently or did not fully propagate.",
+      "Session/token state mismatch after sign-in changes."
+    ],
+    remediations: [
+      "Verify the same calendar in Outlook on the web first.",
+      "Confirm delegate permissions and owner-side sharing state.",
+      "Restart Outlook and force refresh before profile reset actions.",
+      "Escalate to Exchange admins before any profile rebuild."
+    ],
+    escalationCriteria: [
+      "Multiple delegates are affected for the same mailbox.",
+      "Issue follows permissions changes and remains inconsistent.",
+      "Calendar supports regulated or executive scheduling workflows."
+    ]
+  },
+  {
+    slug: "teams-status-stuck-away-or-offline",
+    title: "Teams Status Stuck on Away or Offline",
+    description:
+      "Fix Microsoft Teams presence state issues where users appear Away/Offline despite active usage.",
+    category: "Microsoft 365",
+    productFamily: "Microsoft",
+    product: "Microsoft Teams",
+    environment: "Both",
+    severity: "Low",
+    tags: ["teams", "presence", "status", "away", "offline"],
+    symptoms: [
+      "User remains Away or Offline while actively using Teams.",
+      "Manual status changes revert unexpectedly.",
+      "Presence differs between Teams and Outlook."
+    ],
+    causes: [
+      "Multiple active clients provide conflicting presence signals.",
+      "Client session state is stale.",
+      "Mailbox/calendar integration is delayed."
+    ],
+    remediations: [
+      "Sign out and back in to Teams desktop client.",
+      "Close duplicate sessions on unused devices.",
+      "Validate Outlook calendar connectivity.",
+      "Retest presence using a message and meeting event."
+    ],
+    escalationCriteria: [
+      "Presence issue affects multiple users after updates.",
+      "Calendar/mailbox integration errors are present.",
+      "Operations depend on accurate presence state."
+    ]
+  },
+  {
+    slug: "onedrive-no-permission-to-sync-library",
+    title: "OneDrive: You Do Not Have Permission to Sync This Library",
+    description:
+      "Resolve OneDrive/SharePoint library sync permission errors without weakening access controls.",
+    category: "Microsoft 365",
+    productFamily: "Microsoft",
+    product: "OneDrive",
+    environment: "Both",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    tags: ["onedrive", "sharepoint", "permissions", "library-sync", "access"],
+    symptoms: [
+      "User sees permission error when starting library sync.",
+      "Web access may work but sync fails.",
+      "Reconnect attempts do not resolve the issue."
+    ],
+    causes: [
+      "Group membership or library inheritance issue.",
+      "Link scope or token context mismatch.",
+      "Policy restrictions for protected content."
+    ],
+    remediations: [
+      "Validate access in SharePoint web with the intended account.",
+      "Review site/library permissions and group membership.",
+      "Reconnect sync relationship only through approved workflow.",
+      "Apply least-privilege fixes and re-test."
+    ],
+    escalationCriteria: [
+      "Multiple users show the same permission sync failure.",
+      "DLP/sensitivity controls appear to block sync.",
+      "Owner/security review is required before permission changes."
+    ]
+  },
+  {
+    slug: "sharepoint-external-sharing-blocked-by-policy",
+    title: "SharePoint External Sharing Blocked by Policy",
+    description:
+      "Troubleshoot external sharing failures in SharePoint Online caused by tenant/site policy and security controls.",
+    category: "Microsoft 365",
+    productFamily: "Microsoft",
+    product: "SharePoint",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    tags: ["sharepoint", "external-sharing", "policy", "guest", "security"],
+    symptoms: [
+      "Users cannot send external shares and get policy errors.",
+      "Sharing options are reduced or disabled.",
+      "Previously valid external links no longer work."
+    ],
+    causes: [
+      "Tenant or site sharing policy changed.",
+      "Domain restrictions block recipients.",
+      "Conditional Access/device requirements prevent external access."
+    ],
+    remediations: [
+      "Capture exact error text, URL, and recipient domain.",
+      "Determine if the restriction is tenant-wide or site-specific.",
+      "Verify link scope and guest redemption path.",
+      "Coordinate with security before changing share scope."
+    ],
+    escalationCriteria: [
+      "Policy impact spans multiple teams/sites.",
+      "DLP/CA/sensitivity controls are the blocking factor.",
+      "Business request conflicts with compliance policy."
+    ]
+  },
+  {
+    slug: "m365-group-not-appearing-outlook-or-teams",
+    title: "Microsoft 365 Group Not Appearing in Outlook or Teams",
+    description:
+      "Investigate delayed or missing M365 group visibility across Outlook and Teams after creation or membership updates.",
+    category: "Microsoft 365",
+    productFamily: "Microsoft",
+    product: "Microsoft 365 Groups",
+    environment: "Both",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    tags: ["m365-group", "outlook", "teams", "membership", "provisioning"],
+    symptoms: [
+      "Newly created group is missing in one or both clients.",
+      "Assigned user cannot see group resources.",
+      "Group appears in one service but not another."
+    ],
+    causes: [
+      "Provisioning or replication delay.",
+      "User session has not refreshed claims/membership.",
+      "Group settings are incompatible with expected workload."
+    ],
+    remediations: [
+      "Verify group exists with correct owners/members.",
+      "Sign out/in of affected clients and retest.",
+      "Check hidden-from-client settings and workload enablement.",
+      "Allow propagation window and revalidate."
+    ],
+    escalationCriteria: [
+      "Delays are widespread across groups.",
+      "Directory inconsistency appears across services.",
+      "Backend provisioning incident is suspected."
+    ]
+  },
+  {
+    slug: "intune-app-deployment-failed-error-code-triage",
+    title: "Intune App Deployment Failed (Common Error-Code Triage)",
+    description:
+      "Triage Intune app install failures using error-code context, requirement checks, and detection logic validation.",
+    category: "Microsoft 365",
+    productFamily: "Microsoft",
+    product: "Intune",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "20-35 min",
+    tags: ["intune", "app-deployment", "error-code", "endpoint", "compliance"],
+    symptoms: [
+      "App install repeatedly fails in Company Portal.",
+      "Deployment succeeds for some devices but fails for others.",
+      "Error code persists across retries."
+    ],
+    causes: [
+      "Requirement or detection rule mismatch.",
+      "Device non-compliance or stale check-in.",
+      "Package/dependency issue."
+    ],
+    remediations: [
+      "Capture exact error code, app version, and assignment intent.",
+      "Validate requirements and detection against target device state.",
+      "Review dependency chain and package metadata.",
+      "Retest on controlled pilot after corrections."
+    ],
+    escalationCriteria: [
+      "Failure impacts broad deployment cohorts.",
+      "Package integrity/signing concerns are present.",
+      "Service-side tenant issue is suspected."
+    ],
+    commands: [
+      {
+        title: "Windows Intune management extension logs",
+        shell: "PowerShell",
+        content:
+          "dsregcmd /status\nGet-ChildItem \"C:\\ProgramData\\Microsoft\\IntuneManagementExtension\\Logs\" | Select-Object Name, LastWriteTime"
+      }
+    ]
+  },
+  {
+    slug: "conditional-access-device-not-compliant-remediation-path",
+    title: "Conditional Access Block: Device Not Compliant (Remediation Path)",
+    description:
+      "Handle Conditional Access compliance blocks using approved identity and endpoint remediation steps.",
+    category: "Identity / MFA / SSO",
+    productFamily: "Microsoft",
+    product: "Microsoft Entra ID",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    tags: ["conditional-access", "device-compliance", "entra-id", "identity", "security"],
+    symptoms: [
+      "Sign-in succeeds but app access is blocked for non-compliant device.",
+      "Access works on one device but fails on another.",
+      "Issue appears after compliance policy changes."
+    ],
+    causes: [
+      "Device compliance state is failed or stale.",
+      "Policy recently tightened enforcement.",
+      "MDM registration/check-in mismatch."
+    ],
+    remediations: [
+      "Collect correlation ID, policy name, and device ID from error prompt.",
+      "Validate compliance and latest check-in in endpoint management.",
+      "Run approved sync/compliance refresh workflow.",
+      "Coordinate identity and endpoint teams for final resolution."
+    ],
+    escalationCriteria: [
+      "Blocks occur at scale after policy updates.",
+      "Device appears compliant but policy still blocks.",
+      "Users request bypassing compliance controls."
+    ]
+  },
+  {
+    slug: "windows-hello-pin-reset-managed-device",
+    title: "Windows Hello PIN Reset on Managed Device",
+    description:
+      "Troubleshoot and reset Windows Hello PIN issues in managed environments with security-safe workflow.",
+    category: "Windows",
+    productFamily: "Windows",
+    product: "Windows Hello",
+    environment: "Windows",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    tags: ["windows-hello", "pin", "identity", "managed-device", "windows"],
+    symptoms: [
+      "User cannot sign in with PIN.",
+      "PIN reset loops or fails.",
+      "Issue started after account or policy change."
+    ],
+    causes: [
+      "Hello credential container mismatch.",
+      "TPM or policy state issue.",
+      "MDM/GPO configuration conflict."
+    ],
+    remediations: [
+      "Verify account sign-in works with password.",
+      "Use approved PIN reset flow on managed device.",
+      "Validate Hello policy assignment/compliance state.",
+      "Document expected re-enrollment prompts."
+    ],
+    escalationCriteria: [
+      "TPM/credential provider errors persist.",
+      "Policy conflicts are suspected across device baselines.",
+      "Issue affects multiple endpoints."
+    ]
+  },
+  {
+    slug: "bitlocker-recovery-loop-after-bios-firmware-update",
+    title: "BitLocker Recovery Loop After BIOS/Firmware Update",
+    description:
+      "Respond to repeated BitLocker recovery prompts after BIOS or firmware changes using approved key escrow and admin controls.",
+    category: "Windows",
+    productFamily: "Windows",
+    product: "BitLocker",
+    environment: "Windows",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "15-30 min",
+    tags: ["bitlocker", "recovery", "bios", "firmware", "encryption", "windows"],
+    symptoms: [
+      "Recovery key is requested on every reboot after firmware update.",
+      "Device unlocks once but re-prompts repeatedly.",
+      "Boot sequence/TPM measurements changed."
+    ],
+    causes: [
+      "TPM trust chain changed by firmware or boot config updates.",
+      "BitLocker protectors require admin maintenance flow.",
+      "Unexpected secure boot state shift."
+    ],
+    remediations: [
+      "Confirm device ownership and retrieve key from approved escrow.",
+      "Validate firmware and secure boot configuration under admin control.",
+      "Apply sanctioned protector maintenance procedure.",
+      "Retest across multiple restarts."
+    ],
+    escalationCriteria: [
+      "Escrow key unavailable or invalid.",
+      "Same model cohort shows repeated post-update recovery loops.",
+      "Tamper indicators require security incident review."
+    ]
+  },
+  {
+    slug: "macos-gatekeeper-blocks-corporate-app-after-update",
+    title: "macOS Gatekeeper Blocks Corporate App After Update",
+    description:
+      "Troubleshoot Gatekeeper app blocks after updates without bypassing notarization or security policy controls.",
+    category: "macOS",
+    productFamily: "Apple",
+    product: "macOS Gatekeeper",
+    environment: "macOS",
+    severity: "High",
+    accessLevel: "Admin Required",
+    tags: ["macos", "gatekeeper", "notarization", "app-update", "security"],
+    symptoms: [
+      "Corporate app launch is blocked by Gatekeeper after update.",
+      "App worked before latest release.",
+      "Users request local bypass commands."
+    ],
+    causes: [
+      "Updated package signature/notarization mismatch.",
+      "Allowlist/profile rules no longer match app build.",
+      "MDM policy and package metadata are out of sync."
+    ],
+    remediations: [
+      "Capture exact Gatekeeper warning and app version.",
+      "Validate signature/notarization status with approved tooling.",
+      "Confirm deployment package came from approved source.",
+      "Use managed redistribution/update path for fixes."
+    ],
+    escalationCriteria: [
+      "Notarization/signature checks fail in production package.",
+      "Issue affects multiple managed Macs after release.",
+      "Request involves disabling Gatekeeper controls."
+    ],
+    commands: [
+      {
+        title: "Gatekeeper and signature check",
+        shell: "Terminal",
+        content:
+          "codesign -dv --verbose=4 /Applications/CorpApp.app 2>&1 | head -40\nspctl --assess --type execute --verbose /Applications/CorpApp.app"
+      }
+    ]
+  },
+  {
+    slug: "okta-scim-provisioning-deprovisioning-delay",
+    title: "Okta SCIM Provisioning/Deprovisioning Delay",
+    description:
+      "Investigate delayed Okta SCIM lifecycle events for joins/moves/leavers while maintaining governance controls.",
+    category: "Identity / MFA / SSO",
+    productFamily: "Okta",
+    product: "Okta SCIM Provisioning",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    tags: ["okta", "scim", "provisioning", "deprovisioning", "identity-governance"],
+    symptoms: [
+      "New users are not provisioned on time.",
+      "Departed users remain active in downstream apps.",
+      "Provisioning queue appears delayed or inconsistent."
+    ],
+    causes: [
+      "Connector/API errors or throttling.",
+      "Attribute mapping/filter mismatch.",
+      "Lifecycle trigger sequencing delays."
+    ],
+    remediations: [
+      "Capture impacted user IDs, app integration, and timestamps.",
+      "Review Okta system logs for connector failures.",
+      "Validate assignment scope and mapping attributes.",
+      "Coordinate with app owner for endpoint health and limits."
+    ],
+    escalationCriteria: [
+      "Deprovisioning delay creates security risk.",
+      "Connector issue affects many users.",
+      "Manual emergency access revocation is required."
+    ]
+  },
+  {
+    slug: "okta-app-assignment-not-applying-user-group",
+    title: "Okta App Assignment Not Applying to User/Group",
+    description:
+      "Troubleshoot missing Okta app entitlements despite expected group assignments and policy conditions.",
+    category: "Identity / MFA / SSO",
+    productFamily: "Okta",
+    product: "Okta App Assignment",
+    environment: "Both",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    tags: ["okta", "app-assignment", "group", "entitlements", "sso"],
+    symptoms: [
+      "User does not see expected app in Okta dashboard.",
+      "Group assignment exists but selected users are excluded.",
+      "Assignment appears delayed after changes."
+    ],
+    causes: [
+      "Rule filters exclude target users.",
+      "Policy conditions deny app visibility.",
+      "Assignment sync delay in connector."
+    ],
+    remediations: [
+      "Validate effective group membership for the impacted user.",
+      "Review app assignment rules and sign-on policies.",
+      "Check logs for assignment or policy denial events.",
+      "Test with controlled pilot user in known-good group."
+    ],
+    escalationCriteria: [
+      "Access gap affects multiple business-critical apps.",
+      "Governance approval required for rule changes.",
+      "Temporary admin workaround is needed for urgent access."
+    ]
+  },
+  {
+    slug: "acrobat-sign-in-loop-enterprise-sso",
+    title: "Adobe Acrobat Sign-In Loop with Enterprise SSO",
+    description:
+      "Fix recurring Adobe Acrobat authentication loops in federated enterprise SSO environments.",
+    category: "Adobe",
+    productFamily: "Adobe",
+    product: "Adobe Acrobat",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    tags: ["adobe", "acrobat", "sso", "signin-loop", "federated-auth"],
+    symptoms: [
+      "Acrobat returns to sign-in repeatedly after successful auth.",
+      "Browser auth works but desktop session does not persist.",
+      "Issue starts after IdP/policy changes."
+    ],
+    causes: [
+      "Federated session exchange failure.",
+      "Stale local Adobe auth state.",
+      "Proxy/TLS path issues for Adobe identity endpoints."
+    ],
+    remediations: [
+      "Validate federated login behavior in browser first.",
+      "Capture timestamp and sign-in loop context.",
+      "Apply approved Adobe session cleanup workflow.",
+      "Coordinate with identity team for federation validation."
+    ],
+    escalationCriteria: [
+      "Multiple federated users are affected.",
+      "Recent IdP metadata/certificate changes align with incident.",
+      "Policy updates are required across identity stack."
+    ]
+  },
+  {
+    slug: "adobe-fonts-not-syncing-behind-proxy-firewall",
+    title: "Adobe Fonts Not Syncing Behind Proxy/Firewall",
+    description:
+      "Troubleshoot Adobe Fonts sync failures in controlled enterprise network paths with proxy/firewall restrictions.",
+    category: "Adobe",
+    productFamily: "Adobe",
+    product: "Adobe Fonts",
+    environment: "Both",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    tags: ["adobe", "fonts", "proxy", "firewall", "creative-cloud", "network"],
+    symptoms: [
+      "Fonts do not appear in Adobe apps despite active sign-in.",
+      "Sync works off-network but fails on corporate network.",
+      "Creative Cloud reports fonts unavailable."
+    ],
+    causes: [
+      "Required Adobe endpoints are blocked by network controls.",
+      "TLS inspection/certificate trust issues.",
+      "Local sync service state stale after policy changes."
+    ],
+    remediations: [
+      "Compare behavior on corporate and alternate network.",
+      "Collect endpoint block evidence from proxy/firewall logs.",
+      "Restart Creative Cloud services and retest.",
+      "Submit allowlist updates through security/network process."
+    ],
+    escalationCriteria: [
+      "Policy block affects broad design teams.",
+      "Exception requests require security architecture review.",
+      "Endpoint allowlist changes need governance approval."
+    ]
+  },
+  {
+    slug: "figma-comments-files-not-loading-websocket-firewall",
+    title: "Figma Comments/Files Not Loading (WebSocket/Firewall)",
+    description:
+      "Investigate Figma loading and collaboration failures caused by blocked real-time channels or restrictive network policies.",
+    category: "Figma",
+    productFamily: "Figma",
+    product: "Figma",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    tags: ["figma", "websocket", "firewall", "comments", "network", "collaboration"],
+    symptoms: [
+      "Files open slowly and comments/presence do not load.",
+      "Live collaboration events fail on corporate network.",
+      "Issue resolves on alternate network path."
+    ],
+    causes: [
+      "WebSocket traffic blocked or interrupted.",
+      "Security controls interfere with Figma real-time endpoints.",
+      "DNS/routing path instability."
+    ],
+    remediations: [
+      "Capture browser/app version and network context.",
+      "Reproduce on alternate approved network for isolation.",
+      "Collect network traces for blocked socket requests.",
+      "Coordinate with network/security for endpoint protocol validation."
+    ],
+    escalationCriteria: [
+      "Issue affects multiple users/sites.",
+      "Firewall/policy rollout correlates with incident.",
+      "Any workaround would bypass enterprise controls."
+    ]
+  },
+  {
+    slug: "figma-org-transfer-team-permission-mismatch",
+    title: "Figma Organization Transfer / Team Permission Mismatch",
+    description:
+      "Resolve access mismatches after Figma organization or team restructuring with least-privilege controls.",
+    category: "Figma",
+    productFamily: "Figma",
+    product: "Figma",
+    environment: "Both",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    tags: ["figma", "organization", "permissions", "team", "transfer", "access"],
+    symptoms: [
+      "Users lose edit rights after org or team moves.",
+      "Project roles differ from expected ownership model.",
+      "Inherited permissions are inconsistent."
+    ],
+    causes: [
+      "Role inheritance changed during transfer.",
+      "SSO/group mapping no longer aligns with team structure.",
+      "Legacy project permissions persisted."
+    ],
+    remediations: [
+      "Inventory expected vs actual roles for impacted projects.",
+      "Validate SSO/group mappings against org design.",
+      "Correct roles using least-privilege and document changes.",
+      "Run post-change access validation with pilot users."
+    ],
+    escalationCriteria: [
+      "Mismatch is organization-wide.",
+      "Sensitive projects have incorrect permissions.",
+      "Vendor/admin API support is needed for correction."
+    ]
+  },
+  {
+    slug: "chrome-edge-profile-corruption-enterprise-safe-reset",
+    title: "Chrome/Edge Profile Corruption (Enterprise-Safe Reset)",
+    description:
+      "Fix browser profile corruption with controlled reset workflow that preserves policy and security posture.",
+    category: "Browsers",
+    productFamily: "Browser",
+    product: "Chrome / Edge",
+    environment: "Both",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    tags: ["chrome", "edge", "profile", "corruption", "browser", "reset"],
+    symptoms: [
+      "Browser crashes or resets sessions unexpectedly.",
+      "SSO fails only in one browser profile.",
+      "Settings/extensions behave inconsistently."
+    ],
+    causes: [
+      "Local profile data corruption.",
+      "Extension conflict with stored profile state.",
+      "Managed policy/profile sync mismatch."
+    ],
+    remediations: [
+      "Validate issue with a clean test profile.",
+      "Backup bookmarks and approved user settings.",
+      "Reset/rebuild profile using enterprise-safe steps.",
+      "Reapply only approved extensions and retest SSO."
+    ],
+    escalationCriteria: [
+      "Issue follows browser policy rollout across many users.",
+      "Managed policy conflict remains after clean profile.",
+      "Endpoint engineering change is required."
+    ]
+  },
+  {
+    slug: "vpn-split-tunnel-dns-mismatch-internal-names-fail",
+    title: "VPN Split-Tunnel DNS Mismatch (Internal Names Fail)",
+    description:
+      "Troubleshoot split-tunnel VPN sessions where internal names fail while VPN appears connected.",
+    category: "Networking / VPN",
+    productFamily: "Networking",
+    product: "Corporate VPN",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    tags: ["vpn", "split-tunnel", "dns", "internal-names", "networking", "routing"],
+    symptoms: [
+      "VPN is connected but internal hostnames do not resolve.",
+      "Internal resources work by IP but fail by DNS name.",
+      "Issue varies after reconnect or network changes."
+    ],
+    causes: [
+      "DNS servers/search suffixes not applied correctly via tunnel.",
+      "Local DNS overrides enterprise resolution path.",
+      "Split-tunnel route policy and DNS scope mismatch."
+    ],
+    remediations: [
+      "Capture DNS server/search suffix state while VPN is active.",
+      "Test internal resources by hostname and IP for comparison.",
+      "Reconnect VPN and compare route/DNS outputs.",
+      "Escalate for profile-level DNS/split-tunnel policy correction."
+    ],
+    escalationCriteria: [
+      "Multiple users on same VPN profile are affected.",
+      "Issue started after VPN profile or client updates.",
+      "Requested workaround bypasses managed security controls."
+    ],
+    commands: [
+      {
+        title: "Split-tunnel DNS diagnostics",
+        shell: "CLI",
+        content:
+          "# Windows\nipconfig /all\nResolve-DnsName intranet.company.local\nroute print\n\n# macOS\nscutil --dns\nnslookup intranet.company.local\nnetstat -rn"
+      }
+    ]
   }
 ];
 

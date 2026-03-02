@@ -103,6 +103,9 @@ function saveStoredTickets(tickets: Ticket[]): void {
 }
 
 export interface CreateTicketInput {
+  requesterName: string;
+  requesterPhone: string;
+  requesterEmail: string;
   type: Ticket["type"];
   priority: Ticket["priority"];
   impact: Ticket["impact"];
@@ -125,6 +128,9 @@ export function createTicket(input: CreateTicketInput): Ticket {
     id: createLocalId(input.type === "Incident" ? "INC" : "REQ"),
     createdAt: now,
     updatedAt: now,
+    requesterName: input.requesterName.trim(),
+    requesterPhone: input.requesterPhone.trim(),
+    requesterEmail: input.requesterEmail.trim(),
     type: input.type,
     status: "New",
     priority: input.priority,
@@ -234,6 +240,9 @@ export function seedDemoTickets(): Ticket[] {
       id: "INC-1001",
       createdAt: new Date(Date.now() - 1000 * 60 * 60 * 26).toISOString(),
       updatedAt: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
+      requesterName: "Alex Morgan",
+      requesterPhone: "+1 (212) 555-0144",
+      requesterEmail: "alex.morgan@company.com",
       type: "Incident",
       status: "In Progress",
       priority: "P2",
@@ -268,6 +277,9 @@ export function seedDemoTickets(): Ticket[] {
       id: "REQ-2001",
       createdAt: new Date(Date.now() - 1000 * 60 * 60 * 72).toISOString(),
       updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 6).toISOString(),
+      requesterName: "Jordan Lee",
+      requesterPhone: "+1 (917) 555-0132",
+      requesterEmail: "jordan.lee@company.com",
       type: "Request",
       status: "Waiting on User",
       priority: "P3",
@@ -307,6 +319,9 @@ export function seedDemoTickets(): Ticket[] {
       id: "INC-1002",
       createdAt: new Date(Date.now() - 1000 * 60 * 60 * 8).toISOString(),
       updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
+      requesterName: "Sam Patel",
+      requesterPhone: "+1 (646) 555-0188",
+      requesterEmail: "sam.patel@company.com",
       type: "Incident",
       status: "Resolved",
       priority: "P3",

@@ -64,6 +64,8 @@ const supportProductFamilies = new Set<KBArticle["productFamily"]>([
   "Figma",
   "Okta",
   "Partnerships",
+  "Networking",
+  "Browser",
   "Mobile",
   "Windows",
   "Apple"

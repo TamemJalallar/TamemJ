@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getApps } from "@/lib/apps";
 import { getCorporateFixes } from "@/lib/corporate-fixes.registry";
+import { getPCBuildGuides } from "@/lib/pc-build-guides.registry";
 import { siteConfig } from "@/lib/site";
 import { getCatalogItems } from "@/lib/support.catalog.registry";
 import { getKBArticles } from "@/lib/support.kb.registry";
@@ -19,6 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: url("/apps/"), changeFrequency: "weekly", priority: 0.9, lastModified },
     { url: url("/downloads/"), changeFrequency: "weekly", priority: 0.8, lastModified },
     { url: url("/corporate-tech-fixes/"), changeFrequency: "weekly", priority: 0.9, lastModified },
+    { url: url("/pc-build-guides/"), changeFrequency: "weekly", priority: 0.9, lastModified },
     { url: url("/support/"), changeFrequency: "weekly", priority: 0.85, lastModified },
     { url: url("/support/kb/"), changeFrequency: "daily", priority: 0.9, lastModified },
     { url: url("/support/catalog/"), changeFrequency: "weekly", priority: 0.8, lastModified },
@@ -40,6 +42,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified
   }));
 
+  const pcBuildGuideEntries: MetadataRoute.Sitemap = getPCBuildGuides().map((guide) => ({
+    url: url(`/pc-build-guides/${guide.slug}/`),
+    changeFrequency: "weekly",
+    priority: 0.8,
+    lastModified
+  }));
+
   const kbEntries: MetadataRoute.Sitemap = getKBArticles().map((article) => ({
     url: url(`/support/kb/${article.slug}/`),
     changeFrequency: "monthly",
@@ -54,5 +63,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified
   }));
 
-  return [...staticEntries, ...appEntries, ...corporateFixEntries, ...kbEntries, ...catalogEntries];
+  return [
+    ...staticEntries,
+    ...appEntries,
+    ...corporateFixEntries,
+    ...pcBuildGuideEntries,
+    ...kbEntries,
+    ...catalogEntries
+  ];
 }

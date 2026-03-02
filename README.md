@@ -8,6 +8,7 @@ Modern, minimal, mobile-first portfolio website for an independent iOS developer
 - JSON-driven apps listing (`/data/apps.json`)
 - Dynamic app detail page template (`/apps/[slug]`)
 - Downloads hub with store links + direct downloads (`/downloads`)
+- PC Build Guides with part recommendations (`/pc-build-guides`, `/pc-build-guides/[slug]`)
 - Privacy policy page template
 - Support page with FAQ + lightweight `mailto:` support form
 - Contact page with `mailto:` form (no backend required)
@@ -26,6 +27,8 @@ Modern, minimal, mobile-first portfolio website for an independent iOS developer
 ```text
 app/
   apps/
+    [slug]/
+  pc-build-guides/
     [slug]/
   downloads/
   contact/
@@ -76,6 +79,50 @@ Note: `npm run build:static` requires at least one app in `data/apps.json` becau
 4. Rebuild the site and verify the generated sitemap includes the new app URL (`/sitemap.xml`)
 
 The `/apps` page and `/apps/[slug]` page are generated automatically from the JSON data.
+
+## PC Build Guides (Registry Maintenance)
+
+The PC build section is registry-driven and lives at:
+
+- `app/pc-build-guides/page.tsx`
+- `app/pc-build-guides/[slug]/page.tsx`
+- `components/pc-build-guides/pc-build-guides-catalog.tsx`
+- `components/pc-build-guides/pc-build-guide-view.tsx`
+- `lib/pc-build-guides.registry.ts`
+- `lib/pc-build-purchase-links.ts`
+- `types/pc-build.ts`
+
+### How to Add a New PC Build Guide
+
+1. Add a new seed entry to `lib/pc-build-guides.registry.ts`
+2. Set a unique `slug` (used by `/pc-build-guides/<slug>/`)
+3. Fill required guide fields:
+   - `category`, `difficulty`, `budgetBand`, `estimatedTime`
+   - `useCases`, `tags`
+   - `partRecommendations` (what to buy + benefit + compatibility checks)
+   - `checklist`, `steps`, optional `commands`
+4. Keep tags lowercase and consistent for reliable filtering
+5. Rebuild and validate:
+   - `npm run build`
+   - `npm run build:static`
+
+### Purchase Links and Disclosure
+
+- Part cards in each guide render purchase links from `lib/pc-build-purchase-links.ts`
+- Active affiliate links are labeled and rendered with sponsored/nofollow outbound attributes
+- Non-affiliate vendor links (Newegg, B&H Photo, Micro Center) are rendered as direct search links
+- Each guide shows an affiliate disclosure block above part recommendation cards
+- Set `NEXT_PUBLIC_NEWEGG_AFFILIATE_SID` in your build environment to enable Newegg affiliate tracking
+- Example: `NEXT_PUBLIC_NEWEGG_AFFILIATE_SID=4670565`
+- If `NEXT_PUBLIC_NEWEGG_AFFILIATE_SID` is not set, Newegg links automatically fall back to direct search links
+
+### Authoring Guidelines for Part Advice
+
+- Prioritize compatibility and stability over synthetic benchmark claims
+- Explain user-facing benefits clearly (performance, reliability, acoustics, upgradability)
+- Avoid unsafe guidance (unbounded overvolting, disabling security protections)
+- Include practical checks (socket, BIOS support, clearance, connectors, thermals)
+- Prefer upgrade-friendly recommendations that keep future costs controlled
 
 ## Corporate Tech Fixes (Registry Maintenance)
 
@@ -309,6 +356,7 @@ It is static-hosting compatible (GitHub Pages safe) and stores all demo state lo
 - `types/support.ts` — KB, catalog, ticket, and analytics TypeScript models
 - `lib/support-portal.storage.ts` — local storage persistence (tickets, portal state, helpful votes)
 - `lib/support-portal.analytics.ts` — analytics event tracking + aggregation
+- `lib/support-ticket-email.ts` — support ticket email payload + API send helper
 - `components/support-portal/` — shared portal UI library and feature components
 
 ### How to Add KB Articles
@@ -359,6 +407,29 @@ The registry automatically links related articles based on product/category/tag 
 4. Rebuild and test `/support/catalog/<slug>/`
 
 Catalog submissions create local demo request tickets in `My Tickets` (no backend ticket creation).
+
+### Ticket Email Delivery (API-Based)
+
+- Ticket submissions in:
+  - `/support/incident/new`
+  - `/support/catalog/[slug]`
+  send ticket details to an email API endpoint (automatic send, no draft step).
+- Default recipient: `noreply@tamemj.com`
+- Build-time env vars:
+  - `NEXT_PUBLIC_SUPPORT_TICKET_EMAIL_TO` (recipient override)
+  - `NEXT_PUBLIC_SUPPORT_TICKET_EMAIL_ENDPOINT` (public HTTPS endpoint that accepts ticket payload POST requests and sends email server-side)
+  - `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (Cloudflare Turnstile site key used by ticket forms)
+- Worker secrets/vars:
+  - `RESEND_API_KEY` (secret)
+  - `TURNSTILE_SECRET_KEY` (secret)
+  - `ALLOWED_ORIGIN` (exact site origin)
+  - `TURNSTILE_EXPECTED_HOSTNAME` (hostname expected in Turnstile verification)
+  - `RATE_LIMIT_MAX_PER_MINUTE` (per-IP throttle)
+  - `RATE_LIMIT_KV` (KV namespace binding for rate limiting)
+- Worker template included:
+  - `workers/support-ticket-mailer/src/index.ts`
+  - `workers/support-ticket-mailer/wrangler.toml.example`
+  - `workers/support-ticket-mailer/README.md`
 
 ### Analytics (Local Schema + Reset)
 

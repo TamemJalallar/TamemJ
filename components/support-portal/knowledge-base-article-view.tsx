@@ -166,16 +166,6 @@ export function KnowledgeBaseArticleView({
               </li>
             ))}
           </ul>
-          <div className="mt-5 flex flex-wrap gap-2">
-            {article.tags.map((tag) => (
-              <span
-                key={tag}
-                className="inline-flex items-center rounded-full border border-line/70 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
-              >
-                #{tag}
-              </span>
-            ))}
-          </div>
         </div>
 
         <div className="space-y-5">

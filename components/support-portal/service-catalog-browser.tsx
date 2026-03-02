@@ -127,11 +127,7 @@ export function ServiceCatalogBrowser({
               }
               className="group rounded-2xl border border-line/70 bg-white p-5 shadow-soft transition hover:-translate-y-0.5 hover:shadow-card dark:border-slate-800 dark:bg-slate-950/70"
             >
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">{item.category}</p>
-                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{item.product}</p>
-                </div>
+              <div className="flex items-start justify-end gap-3">
                 <span className="text-xs text-slate-400 transition group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300">Open →</span>
               </div>
 
@@ -141,14 +137,6 @@ export function ServiceCatalogBrowser({
               <div className="mt-4 rounded-xl border border-line/70 bg-slate-50/70 p-3 dark:border-slate-800 dark:bg-slate-900/70">
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">Expected Fulfillment</p>
                 <p className="mt-1 text-sm font-medium text-slate-900 dark:text-slate-100">{item.expectedFulfillmentTime}</p>
-              </div>
-
-              <div className="mt-4 flex flex-wrap gap-2">
-                {item.tags.slice(0, 4).map((tag) => (
-                  <span key={`${item.slug}-${tag}`} className="inline-flex items-center rounded-full border border-line/70 bg-white px-2.5 py-1 text-xs font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
-                    #{tag}
-                  </span>
-                ))}
               </div>
             </Link>
           ))}

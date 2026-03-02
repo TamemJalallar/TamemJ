@@ -218,6 +218,9 @@ export function TicketsWorkbench() {
                   <p className="text-sm font-medium text-slate-900 dark:text-slate-100">{selectedTicket.summary}</p>
                   <p className="text-sm leading-7 text-slate-600 dark:text-slate-300 whitespace-pre-wrap">{selectedTicket.description}</p>
                   <dl className="grid gap-2 text-xs text-slate-500 dark:text-slate-400">
+                    <div><dt className="inline font-semibold">Requester:</dt> <dd className="inline">{selectedTicket.requesterName}</dd></div>
+                    <div><dt className="inline font-semibold">Email:</dt> <dd className="inline">{selectedTicket.requesterEmail}</dd></div>
+                    <div><dt className="inline font-semibold">Phone:</dt> <dd className="inline">{selectedTicket.requesterPhone}</dd></div>
                     <div><dt className="inline font-semibold">Category:</dt> <dd className="inline">{selectedTicket.category}{selectedTicket.subcategory ? ` / ${selectedTicket.subcategory}` : ""}</dd></div>
                     <div><dt className="inline font-semibold">Product:</dt> <dd className="inline">{selectedTicket.product}</dd></div>
                     <div><dt className="inline font-semibold">Preferred Contact:</dt> <dd className="inline">{selectedTicket.preferredContactMethod}</dd></div>

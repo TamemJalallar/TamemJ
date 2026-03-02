@@ -114,6 +114,9 @@ export interface Ticket {
   id: string;
   createdAt: string;
   updatedAt: string;
+  requesterName: string;
+  requesterPhone: string;
+  requesterEmail: string;
   type: TicketType;
   status: TicketStatus;
   priority: TicketPriority;

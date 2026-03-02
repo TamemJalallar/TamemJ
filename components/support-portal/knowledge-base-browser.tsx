@@ -172,13 +172,7 @@ export function KnowledgeBaseBrowser({ articles, initialQuery = "" }: KnowledgeB
               }
               className="group rounded-2xl border border-line/70 bg-white p-5 shadow-soft transition hover:-translate-y-0.5 hover:shadow-card dark:border-slate-800 dark:bg-slate-950/70"
             >
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
-                    {article.category}
-                  </p>
-                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{article.product}</p>
-                </div>
+              <div className="flex items-start justify-end gap-3">
                 <span className="text-xs text-slate-400 transition group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300">
                   Open →
                 </span>
@@ -191,22 +185,6 @@ export function KnowledgeBaseBrowser({ articles, initialQuery = "" }: KnowledgeB
                 <SeverityBadge severity={article.severity} />
                 <AccessLevelBadge accessLevel={article.accessLevel} />
                 <EnvironmentBadge environment={article.environment} />
-              </div>
-
-              <div className="mt-4 flex flex-wrap gap-2">
-                {article.tags.slice(0, 4).map((tag) => (
-                  <span
-                    key={`${article.slug}-${tag}`}
-                    className="inline-flex items-center rounded-full border border-line/70 bg-white px-2.5 py-1 text-xs font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
-                  >
-                    #{tag}
-                  </span>
-                ))}
-                {article.tags.length > 4 ? (
-                  <span className="inline-flex items-center rounded-full border border-line/70 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
-                    +{article.tags.length - 4}
-                  </span>
-                ) : null}
               </div>
             </Link>
           ))}

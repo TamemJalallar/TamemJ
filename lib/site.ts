@@ -29,6 +29,8 @@ export const seoKeywords = [
   "developer tool downloads",
   "Microsoft Adobe Figma troubleshooting",
   "enterprise knowledge base articles",
+  "pc build guides",
+  "pc part picker guidance",
   "indie iOS developer",
   "tamemj.com"
 ];
