@@ -197,37 +197,37 @@ export function DownloadsBrowser({
     popularOnly;
 
   return (
-    <div className="space-y-8">
-      <section className="relative overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950 p-6 text-white shadow-card sm:p-8">
+    <div className="space-y-6">
+      <section className="relative overflow-hidden rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950 p-5 text-white shadow-card sm:p-6">
         <div className="pointer-events-none absolute -right-16 -top-20 h-52 w-52 rounded-full bg-cyan-300/20 blur-2xl" />
         <div className="pointer-events-none absolute -bottom-24 -left-20 h-56 w-56 rounded-full bg-sky-400/20 blur-3xl" />
 
-        <div className="relative grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
+        <div className="relative grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
           <div>
             <p className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-cyan-100">
               Downloads Hub
             </p>
-            <h1 className="mt-4 text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+            <h1 className="mt-3 text-balance text-2xl font-semibold tracking-tight text-white sm:text-3xl">
               Popular free downloads with trusted sources and direct binaries
             </h1>
-            <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-200 sm:text-base">
+            <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-200 sm:text-base">
               Browse high-signal software picks with Mac and Microsoft Store links, plus GitHub Releases
               and official direct download paths where available.
             </p>
-            <div className="mt-5 flex flex-wrap gap-2 text-xs text-slate-200">
-              <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1.5">
+            <div className="mt-4 flex flex-wrap gap-2 text-xs text-slate-200">
+              <span className="rounded-full border border-white/20 bg-white/10 px-2.5 py-1">
                 Store links first
               </span>
-              <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1.5">
+              <span className="rounded-full border border-white/20 bg-white/10 px-2.5 py-1">
                 Version + checksum metadata
               </span>
-              <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1.5">
+              <span className="rounded-full border border-white/20 bg-white/10 px-2.5 py-1">
                 Static-site friendly
               </span>
             </div>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-2.5 sm:grid-cols-2">
             <StatCard label="Visible Apps" value={String(stats.total)} />
             <StatCard label="Free Apps" value={String(stats.free)} />
             <StatCard label="Store Listings" value={String(stats.store)} />
@@ -237,16 +237,16 @@ export function DownloadsBrowser({
       </section>
 
       {amazonAffiliateUrl ? (
-        <section className="surface-card p-5 sm:p-6 dark:border-slate-700 dark:bg-slate-950">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <section className="surface-card p-4 sm:p-5 dark:border-slate-700 dark:bg-slate-950">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-3xl">
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
                 Recommended Gear
               </p>
-              <h2 className="mt-2 text-xl font-semibold text-slate-900 dark:text-slate-100">
+              <h2 className="mt-1.5 text-lg font-semibold text-slate-900 dark:text-slate-100">
                 Shop popular IT accessories
               </h2>
-              <p className="mt-2 text-sm leading-7 text-slate-600 dark:text-slate-300">
+              <p className="mt-1.5 text-sm leading-6 text-slate-600 dark:text-slate-300">
                 Monitors, docks, cables, and support-team essentials.
               </p>
               <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
@@ -258,7 +258,7 @@ export function DownloadsBrowser({
               href={amazonAffiliateUrl}
               target="_blank"
               rel="sponsored nofollow noreferrer"
-              className="btn-secondary shrink-0 !px-5 !py-3 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
+              className="btn-secondary shrink-0 !px-4 !py-2.5 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
             >
               Open Amazon Picks
             </a>
@@ -266,8 +266,8 @@ export function DownloadsBrowser({
         </section>
       ) : null}
 
-      <section className="surface-card p-5 sm:p-6 dark:border-slate-700 dark:bg-slate-950">
-        <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
+      <section className="surface-card p-4 sm:p-5 dark:border-slate-700 dark:bg-slate-950">
+        <div className="grid gap-3 lg:grid-cols-[1fr_auto] lg:items-end">
           <label className="block">
             <span className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
               Search Downloads
@@ -277,7 +277,7 @@ export function DownloadsBrowser({
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search by app, platform, category, or tag..."
-              className="mt-2 w-full rounded-2xl border border-line bg-white px-4 py-3 text-sm outline-none transition focus:border-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+              className="mt-2 w-full rounded-xl border border-line bg-white px-4 py-2.5 text-sm outline-none transition focus:border-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
             />
           </label>
 
@@ -288,7 +288,7 @@ export function DownloadsBrowser({
             <select
               value={sortBy}
               onChange={(event) => setSortBy(event.target.value as SortOption)}
-              className="mt-2 w-full rounded-2xl border border-line bg-white px-4 py-3 text-sm outline-none transition focus:border-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+              className="mt-2 w-full rounded-xl border border-line bg-white px-4 py-2.5 text-sm outline-none transition focus:border-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
             >
               {sortOptions.map((option) => (
                 <option key={option} value={option}>
@@ -299,7 +299,7 @@ export function DownloadsBrowser({
           </label>
         </div>
 
-        <div className="mt-5 grid gap-4 xl:grid-cols-3">
+        <div className="mt-4 grid gap-3 xl:grid-cols-3">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
               Platform
@@ -352,7 +352,7 @@ export function DownloadsBrowser({
           </div>
         </div>
 
-        <div className="mt-5 flex flex-wrap items-center gap-2">
+        <div className="mt-4 flex flex-wrap items-center gap-2">
           <FilterButton
             active={freeOnly}
             onClick={() => setFreeOnly((current) => !current)}
@@ -366,7 +366,7 @@ export function DownloadsBrowser({
             accent="amber"
           />
           {hasCustomFilters ? (
-            <button type="button" onClick={resetFilters} className="btn-secondary !px-4 !py-2 text-xs dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800">
+            <button type="button" onClick={resetFilters} className="btn-secondary !px-3.5 !py-1.5 text-xs dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800">
               Reset Filters
             </button>
           ) : null}
@@ -378,14 +378,14 @@ export function DownloadsBrowser({
       </section>
 
       {spotlight.length > 0 ? (
-        <section className="space-y-4">
+        <section className="space-y-3">
           <div className="flex flex-col gap-1">
-            <h2 className="text-2xl font-semibold tracking-tight">Featured Free Picks</h2>
+            <h2 className="text-xl font-semibold tracking-tight">Featured Free Picks</h2>
             <p className="text-sm sm:text-base">
               High-trust apps with strong adoption and reliable update channels.
             </p>
           </div>
-          <div className="grid gap-4 lg:grid-cols-2">
+          <div className="grid gap-3 lg:grid-cols-2">
             {spotlight.map((entry) => (
               <SpotlightCard key={entry.slug} entry={entry} />
             ))}
@@ -393,10 +393,10 @@ export function DownloadsBrowser({
         </section>
       ) : null}
 
-      <section id="all-downloads" className="space-y-4">
-        <div className="flex flex-wrap items-end justify-between gap-3">
+      <section id="all-downloads" className="space-y-3">
+        <div className="flex flex-wrap items-end justify-between gap-2.5">
           <div>
-            <h2 className="text-2xl font-semibold tracking-tight">All Downloads</h2>
+            <h2 className="text-xl font-semibold tracking-tight">All Downloads</h2>
             <p className="text-sm sm:text-base">Curated links across store listings, official sites, and release channels.</p>
           </div>
           <span className="rounded-full border border-line bg-white px-3 py-1 text-xs font-semibold text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
@@ -405,13 +405,13 @@ export function DownloadsBrowser({
         </div>
 
         {filtered.length > 0 ? (
-          <div className="grid gap-5 xl:grid-cols-2">
+          <div className="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
             {filtered.map((entry) => (
               <DownloadCard key={entry.slug} entry={entry} />
             ))}
           </div>
         ) : (
-          <div className="surface-card border-dashed p-6 dark:border-slate-700 dark:bg-slate-950">
+          <div className="surface-card border-dashed p-5 dark:border-slate-700 dark:bg-slate-950">
             <p className="text-sm text-slate-600 dark:text-slate-300">
               No downloads match the current filters. Reset filters and try a broader search.
             </p>
@@ -419,9 +419,9 @@ export function DownloadsBrowser({
         )}
       </section>
 
-      <section className="surface-card p-5 sm:p-6 dark:border-slate-700 dark:bg-slate-950">
-        <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Trust and legal checklist</h2>
-        <ul className="mt-4 space-y-2 pl-5 text-sm sm:text-base">
+      <section className="surface-card p-4 sm:p-5 dark:border-slate-700 dark:bg-slate-950">
+        <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Trust and legal checklist</h2>
+        <ul className="mt-3 space-y-1.5 pl-5 text-sm sm:text-base">
           <li className="list-disc">
             Prefer official Apple and Microsoft store pages when store distribution is available.
           </li>
@@ -469,7 +469,7 @@ function FilterButton({
     <button
       type="button"
       onClick={onClick}
-      className={cx("rounded-full border px-3 py-1.5 text-xs font-semibold transition", palette)}
+      className={cx("rounded-full border px-2.5 py-1 text-[11px] font-semibold transition", palette)}
     >
       {label}
     </button>
@@ -478,40 +478,40 @@ function FilterButton({
 
 function StatCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-white/20 bg-white/10 p-3 backdrop-blur-sm">
+    <div className="rounded-xl border border-white/20 bg-white/10 p-2.5 backdrop-blur-sm">
       <p className="text-xs uppercase tracking-[0.14em] text-cyan-100">{label}</p>
-      <p className="mt-2 text-2xl font-semibold text-white">{value}</p>
+      <p className="mt-1.5 text-xl font-semibold text-white">{value}</p>
     </div>
   );
 }
 
 function SpotlightCard({ entry }: { entry: DownloadEntry }) {
   return (
-    <article className="surface-card-strong p-5 dark:border-slate-700 dark:bg-slate-900">
-      <div className="flex items-start justify-between gap-3">
+    <article className="surface-card-strong p-4 dark:border-slate-700 dark:bg-slate-900">
+      <div className="flex items-start justify-between gap-2.5">
         <div>
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">{entry.name}</h3>
-          <p className="mt-2 text-sm leading-6">{entry.summary}</p>
+          <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">{entry.name}</h3>
+          <p className="mt-1.5 text-sm leading-5">{entry.summary}</p>
         </div>
         {isFreeEntry(entry) ? (
-          <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100">
+          <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100">
             Free
           </span>
         ) : null}
       </div>
 
-      <div className="mt-3 flex flex-wrap gap-2">
+      <div className="mt-2.5 flex flex-wrap gap-1.5">
         {entry.platforms.slice(0, 4).map((platform) => (
           <span
             key={`${entry.slug}-spotlight-${platform}`}
-            className="rounded-full border border-line bg-white px-2.5 py-1 text-xs font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+            className="rounded-full border border-line bg-white px-2 py-0.5 text-[11px] font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
           >
             {platform}
           </span>
         ))}
       </div>
 
-      <div className="mt-4 flex flex-wrap gap-2">
+      <div className="mt-3 flex flex-wrap gap-1.5">
         {entry.channels.slice(0, 3).map((channel) => (
           <a
             key={`${entry.slug}-${channel.type}-${channel.url}`}
@@ -519,7 +519,7 @@ function SpotlightCard({ entry }: { entry: DownloadEntry }) {
             target="_blank"
             rel="noreferrer"
             className={cx(
-              "inline-flex items-center justify-center rounded-full border px-3 py-1.5 text-xs font-semibold transition hover:opacity-90",
+              "inline-flex items-center justify-center rounded-full border px-2.5 py-1 text-[11px] font-semibold transition hover:opacity-90",
               channelChipTone(channel)
             )}
           >
@@ -536,29 +536,29 @@ function DownloadCard({ entry }: { entry: DownloadEntry }) {
   const hiddenTagCount = entry.tags.length - visibleTags.length;
 
   return (
-    <article id={entry.slug} className="surface-card-strong scroll-mt-24 overflow-hidden p-5 sm:p-6 dark:border-slate-700 dark:bg-slate-900">
-      <div className="pointer-events-none mb-4 h-1 rounded-full bg-gradient-to-r from-cyan-500 via-sky-500 to-slate-900" />
+    <article id={entry.slug} className="surface-card-strong scroll-mt-24 overflow-hidden p-4 sm:p-5 dark:border-slate-700 dark:bg-slate-900">
+      <div className="pointer-events-none mb-3 h-1 rounded-full bg-gradient-to-r from-cyan-500 via-sky-500 to-slate-900" />
 
-      <div className="flex flex-wrap items-start justify-between gap-3">
+      <div className="flex flex-wrap items-start justify-between gap-2.5">
         <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="rounded-full border border-line bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="rounded-full border border-line bg-slate-50 px-2 py-0.5 text-[11px] font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
               {entry.category}
             </span>
             {entry.popularityLabel ? (
-              <span className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700 dark:border-amber-700 dark:bg-amber-900/40 dark:text-amber-100">
+              <span className="rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-700 dark:border-amber-700 dark:bg-amber-900/40 dark:text-amber-100">
                 {entry.popularityLabel}
               </span>
             ) : null}
             {isFreeEntry(entry) ? (
-              <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100">
+              <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100">
                 Free
               </span>
             ) : null}
           </div>
 
-          <h3 className="mt-3 text-xl font-semibold text-slate-900 dark:text-slate-100">{entry.name}</h3>
-          <p className="mt-2 text-sm leading-6">{entry.summary}</p>
+          <h3 className="mt-2 text-lg font-semibold text-slate-900 dark:text-slate-100">{entry.name}</h3>
+          <p className="mt-1.5 text-sm leading-5">{entry.summary}</p>
         </div>
 
         <div className="text-right text-xs text-slate-500 dark:text-slate-400">
@@ -568,18 +568,18 @@ function DownloadCard({ entry }: { entry: DownloadEntry }) {
         </div>
       </div>
 
-      <div className="mt-3 flex flex-wrap gap-2">
+      <div className="mt-2.5 flex flex-wrap gap-1.5">
         {entry.platforms.map((platform) => (
           <span
             key={`${entry.slug}-${platform}`}
-            className="rounded-full border border-line bg-white px-2.5 py-1 text-xs font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+            className="rounded-full border border-line bg-white px-2 py-0.5 text-[11px] font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
           >
             {platform}
           </span>
         ))}
       </div>
 
-      <div className="mt-5 flex flex-wrap gap-2">
+      <div className="mt-3.5 flex flex-wrap gap-1.5">
         {entry.channels.map((channel) => (
           <a
             key={`${entry.slug}-${channel.type}-${channel.url}`}
@@ -587,7 +587,7 @@ function DownloadCard({ entry }: { entry: DownloadEntry }) {
             target="_blank"
             rel="noreferrer"
             className={cx(
-              "inline-flex items-center justify-center rounded-full border px-4 py-2 text-xs font-semibold transition hover:opacity-90",
+              "inline-flex items-center justify-center rounded-full border px-3 py-1.5 text-[11px] font-semibold transition hover:opacity-90",
               channelChipTone(channel)
             )}
           >
@@ -597,35 +597,35 @@ function DownloadCard({ entry }: { entry: DownloadEntry }) {
       </div>
 
       {entry.directDownloads && entry.directDownloads.length > 0 ? (
-        <div className="mt-5 rounded-2xl border border-line/80 bg-slate-50/70 p-4 dark:border-slate-700 dark:bg-slate-800/70">
-          <div className="flex items-center justify-between gap-3">
+        <div className="mt-3.5 rounded-xl border border-line/80 bg-slate-50/70 p-3 dark:border-slate-700 dark:bg-slate-800/70">
+          <div className="flex items-center justify-between gap-2">
             <h4 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Direct Downloads</h4>
-            <span className="rounded-full border border-line bg-white px-2.5 py-1 text-[11px] font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
+            <span className="rounded-full border border-line bg-white px-2 py-0.5 text-[10px] font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
               Version + hash metadata
             </span>
           </div>
 
-          <ul className="mt-3 space-y-2">
+          <ul className="mt-2.5 space-y-1.5">
             {entry.directDownloads.map((artifact) => (
-              <li key={`${entry.slug}-${artifact.label}-${artifact.platform}`} className="rounded-xl border border-line bg-white p-3 dark:border-slate-700 dark:bg-slate-900">
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <li key={`${entry.slug}-${artifact.label}-${artifact.platform}`} className="rounded-lg border border-line bg-white p-2.5 dark:border-slate-700 dark:bg-slate-900">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                   <div className="min-w-0">
-                    <p className="text-sm font-medium text-slate-900 dark:text-slate-100">{artifact.label}</p>
-                    <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                    <p className="text-xs font-semibold text-slate-900 dark:text-slate-100">{artifact.label}</p>
+                    <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">
                       {artifact.platform}
                       {artifact.fileType ? ` | ${artifact.fileType}` : ""}
                       {artifact.version ? ` | ${formatVersion(artifact.version)}` : ""}
                       {artifact.fileSize ? ` | ${artifact.fileSize}` : ""}
                       {artifact.host ? ` | ${artifact.host}` : ""}
                     </p>
-                    {artifact.notes ? <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{artifact.notes}</p> : null}
+                    {artifact.notes ? <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">{artifact.notes}</p> : null}
                     {artifact.checksumSha256 ? (
-                      <p className="mt-1 break-all font-mono text-[11px] text-slate-500 dark:text-slate-400">
+                      <p className="mt-1 break-all font-mono text-[10px] text-slate-500 dark:text-slate-400">
                         SHA-256: {artifact.checksumSha256}
                       </p>
                     ) : null}
                   </div>
-                  <a href={artifact.url} target="_blank" rel="noreferrer" className="btn-secondary shrink-0 !px-4 !py-2 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700">
+                  <a href={artifact.url} target="_blank" rel="noreferrer" className="btn-secondary shrink-0 !px-3 !py-1.5 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700">
                     Download
                   </a>
                 </div>
@@ -635,17 +635,17 @@ function DownloadCard({ entry }: { entry: DownloadEntry }) {
         </div>
       ) : null}
 
-      <div className="mt-4 flex flex-wrap gap-2">
+      <div className="mt-3 flex flex-wrap gap-1.5">
         {visibleTags.map((tag) => (
           <span
             key={`${entry.slug}-tag-${tag}`}
-            className="rounded-full border border-line bg-white px-2.5 py-1 text-[11px] font-medium text-slate-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
+            className="rounded-full border border-line bg-white px-2 py-0.5 text-[10px] font-medium text-slate-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
           >
             #{tag}
           </span>
         ))}
         {hiddenTagCount > 0 ? (
-          <span className="rounded-full border border-line bg-white px-2.5 py-1 text-[11px] font-medium text-slate-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+          <span className="rounded-full border border-line bg-white px-2 py-0.5 text-[10px] font-medium text-slate-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
             +{hiddenTagCount} more
           </span>
         ) : null}

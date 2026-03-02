@@ -186,7 +186,7 @@ export default function DownloadsPage() {
 
   return (
     <>
-      <section className="section-shell pt-10 sm:pt-14">
+      <section className="section-shell pt-8 sm:pt-10">
         <div className="page-shell">
           <AffiliateDisclosureBanner className="mb-6" />
           <DownloadsBrowser entries={downloads} amazonAffiliateUrl={amazonAffiliate?.url} />
