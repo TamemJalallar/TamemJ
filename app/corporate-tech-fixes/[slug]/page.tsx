@@ -14,6 +14,20 @@ interface CorporateFixPageProps {
 
 export const dynamicParams = false;
 
+function uniqueKeywords(keywords: string[]): string[] {
+  const seen = new Set<string>();
+  const result: string[] = [];
+
+  for (const keyword of keywords) {
+    const normalized = keyword.trim().toLowerCase();
+    if (!normalized || seen.has(normalized)) continue;
+    seen.add(normalized);
+    result.push(keyword.trim());
+  }
+
+  return result;
+}
+
 export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
   return getCorporateFixes().map((fix) => ({ slug: fix.slug }));
 }
@@ -33,9 +47,23 @@ export async function generateMetadata({
   return {
     title: `${fix.title} | Corporate Tech Fixes`,
     description: fix.description,
-    keywords: [...fix.tags, fix.category, "corporate IT", "enterprise support"],
+    keywords: uniqueKeywords([
+      ...fix.tags,
+      fix.category,
+      fix.title,
+      `${fix.category} troubleshooting`,
+      `${fix.accessLevel} IT guide`,
+      `severity ${fix.severity}`,
+      "corporate IT support",
+      "enterprise troubleshooting",
+      "it help desk runbook"
+    ]),
     alternates: {
       canonical: `/corporate-tech-fixes/${fix.slug}/`
+    },
+    robots: {
+      index: true,
+      follow: true
     },
     openGraph: buildOpenGraph(
       `${fix.title} | Corporate Tech Fixes`,

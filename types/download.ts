@@ -55,6 +55,7 @@ export interface DownloadReleaseMetadataStore {
 export interface DownloadEntry {
   slug: string;
   name: string;
+  iconUrl?: string;
   summary: string;
   category: string;
   audience: DownloadAudience;

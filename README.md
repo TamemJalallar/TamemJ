@@ -334,6 +334,70 @@ so the updated metadata is included in the generated site.
 - To update your Amazon link, change the `amazon-it-gear` URL value in `lib/affiliate-links.ts`
 - Disclosure UI component is shared via `components/affiliate/affiliate-disclosure-banner.tsx`
 
+## Accounts, Profiles, and Download Tracking
+
+User accounts and profile/download tracking are now supported in a static-hosting-compatible way through Supabase.
+
+Routes:
+
+- `/account` — sign in/create account, manage profile, view download history
+
+Files:
+
+- `components/account/account-provider.tsx` — client auth context + profile/download actions
+- `components/account/account-dashboard.tsx` — account UI
+- `lib/account.supabase.ts` — Supabase client + typed table rows
+- `lib/account.storage.ts` — local fallback tracking cache
+- `types/account.ts` — profile and download event models
+- `app/account/page.tsx` — account route
+- `components/downloads/downloads-browser.tsx` — download click tracking hooks
+
+Required environment variables:
+
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+
+Run once in Supabase SQL editor:
+
+```sql
+create table if not exists public.profiles (
+  id uuid primary key references auth.users(id) on delete cascade,
+  email text not null,
+  display_name text,
+  company text,
+  role text,
+  bio text,
+  avatar_url text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.download_events (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  app_slug text not null,
+  app_name text not null,
+  channel_label text not null,
+  channel_type text not null,
+  platform text,
+  url text not null,
+  created_at timestamptz not null default now()
+);
+
+alter table public.profiles enable row level security;
+alter table public.download_events enable row level security;
+
+create policy "users own profile read" on public.profiles
+for select using (auth.uid() = id);
+create policy "users own profile upsert" on public.profiles
+for all using (auth.uid() = id) with check (auth.uid() = id);
+
+create policy "users own download events read" on public.download_events
+for select using (auth.uid() = user_id);
+create policy "users own download events insert" on public.download_events
+for insert with check (auth.uid() = user_id);
+```
+
 ## ServiceNow-Style Support Portal (ITIL-lite Demo)
 
 The support portal now lives under `app/support/*` and includes:

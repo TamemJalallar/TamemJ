@@ -18,11 +18,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticEntries: MetadataRoute.Sitemap = [
     { url: url("/"), changeFrequency: "weekly", priority: 1, lastModified },
     { url: url("/apps/"), changeFrequency: "weekly", priority: 0.9, lastModified },
-    { url: url("/downloads/"), changeFrequency: "weekly", priority: 0.8, lastModified },
-    { url: url("/corporate-tech-fixes/"), changeFrequency: "weekly", priority: 0.9, lastModified },
+    { url: url("/downloads/"), changeFrequency: "daily", priority: 0.9, lastModified },
+    { url: url("/corporate-tech-fixes/"), changeFrequency: "daily", priority: 0.9, lastModified },
     { url: url("/pc-build-guides/"), changeFrequency: "weekly", priority: 0.9, lastModified },
     { url: url("/support/"), changeFrequency: "weekly", priority: 0.85, lastModified },
-    { url: url("/support/kb/"), changeFrequency: "daily", priority: 0.9, lastModified },
+    { url: url("/support/kb/"), changeFrequency: "daily", priority: 0.95, lastModified },
     { url: url("/support/catalog/"), changeFrequency: "weekly", priority: 0.8, lastModified },
     { url: url("/contact/"), changeFrequency: "monthly", priority: 0.6, lastModified },
     { url: url("/privacy/"), changeFrequency: "monthly", priority: 0.5, lastModified }
@@ -38,7 +38,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const corporateFixEntries: MetadataRoute.Sitemap = getCorporateFixes().map((fix) => ({
     url: url(`/corporate-tech-fixes/${fix.slug}/`),
     changeFrequency: "weekly",
-    priority: 0.8,
+    priority: 0.85,
     lastModified
   }));
 
@@ -51,7 +51,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const kbEntries: MetadataRoute.Sitemap = getKBArticles().map((article) => ({
     url: url(`/support/kb/${article.slug}/`),
-    changeFrequency: "monthly",
+    changeFrequency: "weekly",
     priority: 0.85,
     lastModified
   }));

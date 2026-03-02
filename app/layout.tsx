@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import type { ReactNode } from "react";
 import type { Organization, Person, SearchAction, WebSite, WithContext } from "schema-dts";
 import "./globals.css";
+import { AccountProvider } from "@/components/account/account-provider";
 import { SentryBootstrap } from "@/components/monitoring/sentry-bootstrap";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -44,6 +45,7 @@ export const metadata: Metadata = {
   },
   openGraph: buildOpenGraph(siteConfig.title, siteConfig.description, "/"),
   twitter: buildTwitter(siteConfig.title, siteConfig.description),
+  manifest: "/manifest.webmanifest",
   icons: {
     icon: "/favicon.svg"
   }
@@ -106,13 +108,15 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         />
       </head>
       <body className="font-sans antialiased">
-        <SentryBootstrap />
-        <div className="min-h-screen bg-mesh-soft">
-          <SiteHeader />
-          <main>{children}</main>
-          <SiteFooter />
-        </div>
-        <GlobalCommandPalette />
+        <AccountProvider>
+          <SentryBootstrap />
+          <div className="min-h-screen bg-mesh-soft">
+            <SiteHeader />
+            <main>{children}</main>
+            <SiteFooter />
+          </div>
+          <GlobalCommandPalette />
+        </AccountProvider>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}

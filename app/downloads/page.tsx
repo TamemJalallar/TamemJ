@@ -25,14 +25,38 @@ function isFreeEntry(entry: DownloadEntry): boolean {
   return (entry.pricing ?? "").toLowerCase().includes("free");
 }
 
+function downloadSeoScore(entry: DownloadEntry): number {
+  const popularity = (entry.popularityLabel ?? "").toLowerCase();
+  let score = 0;
+  if (popularity.includes("most used")) score += 8;
+  if (popularity.includes("popular")) score += 4;
+  if (entry.featuredOnGitHub) score += 3;
+  if (entry.platforms.includes("Windows")) score += 1;
+  if (entry.platforms.includes("macOS")) score += 1;
+  if (entry.platforms.includes("Web")) score += 1;
+  if (isFreeEntry(entry)) score += 1;
+  return score;
+}
+
 function buildDownloadKeywords(entries: DownloadEntry[]): string[] {
-  const topCategories = [...new Set(entries.map((entry) => entry.category))].slice(0, 8);
+  const topCategories = [...new Set(entries.map((entry) => entry.category))].sort((a, b) =>
+    a.localeCompare(b)
+  );
   const topPlatforms = [...new Set(entries.flatMap((entry) => entry.platforms))];
-  const topNames = entries.slice(0, 18).map((entry) => `${entry.name} download`);
+  const topDevelopers = [
+    ...new Set(entries.map((entry) => entry.developer).filter((value): value is string => Boolean(value)))
+  ].slice(0, 18);
+  const topNames = [...entries]
+    .sort((a, b) => downloadSeoScore(b) - downloadSeoScore(a) || a.name.localeCompare(b.name))
+    .slice(0, 36)
+    .map((entry) => `${entry.name} download`);
 
   return uniqueKeywords([
     "software downloads",
     "free app downloads",
+    "safe software downloads",
+    "official software download links",
+    "best free software",
     "Mac App Store links",
     "Microsoft Store links",
     "GitHub Releases downloads",
@@ -42,7 +66,9 @@ function buildDownloadKeywords(entries: DownloadEntry[]): string[] {
     "Linux downloads",
     "open source software",
     ...topCategories.map((category) => `${category} downloads`),
+    ...topCategories.map((category) => `${category} tools`),
     ...topPlatforms.map((platform) => `${platform} apps`),
+    ...topDevelopers.map((developer) => `${developer} software`),
     ...topNames
   ]);
 }

@@ -55,6 +55,14 @@ const quickItems: PaletteItem[] = [
     href: "/downloads/",
     group: "Quick",
     keywords: ["downloads", "software", "apps"]
+  },
+  {
+    id: "quick-account",
+    label: "Account",
+    description: "Open sign-in and profile dashboard",
+    href: "/account/",
+    group: "Quick",
+    keywords: ["account", "profile", "sign in", "auth"]
   }
 ];
 

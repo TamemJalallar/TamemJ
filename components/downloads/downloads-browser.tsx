@@ -23,6 +23,8 @@ import type {
   DownloadEntry,
   DownloadPlatform
 } from "@/types/download";
+import type { TrackDownloadInput } from "@/types/account";
+import { useAccount } from "@/components/account/account-provider";
 import { buildFuzzyIndex, runFuzzySearch } from "@/lib/fuzzy-search";
 
 function cx(...classes: Array<string | false | null | undefined>): string {
@@ -44,7 +46,7 @@ async function copyText(text: string): Promise<boolean> {
 
 const platformOrder: DownloadPlatform[] = ["macOS", "Windows", "Linux", "iOS", "Android", "Web"];
 const channelFilters = ["All", "Store", "Direct", "GitHub"] as const;
-const sortOptions = ["Best Match", "A-Z", "Most Platforms", "Most Download Options"] as const;
+const sortOptions = ["By Type", "Best Match", "Most Platforms", "Most Download Options", "A-Z"] as const;
 
 type ChannelFilter = (typeof channelFilters)[number];
 type SortOption = (typeof sortOptions)[number];
@@ -89,6 +91,18 @@ function formatVersion(version: string): string {
   return /^v/i.test(version) ? version : `v${version}`;
 }
 
+function getNameInitials(name: string): string {
+  const tokens = name.trim().split(/\s+/).filter(Boolean);
+  if (tokens.length === 0) {
+    return "?";
+  }
+
+  return tokens
+    .slice(0, 2)
+    .map((token) => token[0]?.toUpperCase() ?? "")
+    .join("");
+}
+
 function isFreeEntry(entry: DownloadEntry): boolean {
   return (entry.pricing ?? "").toLowerCase().includes("free");
 }
@@ -107,12 +121,54 @@ function isPopularEntry(entry: DownloadEntry): boolean {
   return Boolean(entry.featuredOnGitHub || entry.popularityLabel);
 }
 
+function popularityWeight(label?: string): number {
+  if (!label) return 0;
+  const normalized = label.toLowerCase();
+  if (normalized.includes("most used")) return 12;
+  if (normalized.includes("on github")) return 4;
+  if (normalized.includes("popular")) return 6;
+  return 4;
+}
+
+function getFeaturedDownloadLinks(entry: DownloadEntry): Array<{
+  label: string;
+  url: string;
+  platform: DownloadPlatform | null;
+}> {
+  const directArtifacts = entry.directDownloads ?? [];
+
+  if (directArtifacts.length > 0) {
+    return directArtifacts.slice(0, 4).map((artifact) => ({
+      label: artifact.label,
+      url: artifact.url,
+      platform: artifact.platform
+    }));
+  }
+
+  const primaryChannel =
+    entry.channels.find((channel) => channel.type === "Mac App Store" || channel.type === "Microsoft Store") ??
+    entry.channels[0];
+
+  if (!primaryChannel) {
+    return [];
+  }
+
+  return [
+    {
+      label: channelButtonLabel(primaryChannel),
+      url: primaryChannel.url,
+      platform: null
+    }
+  ];
+}
+
 function entryScore(entry: DownloadEntry): number {
   let score = 0;
-  if (entry.popularityLabel) score += 6;
-  if (entry.featuredOnGitHub) score += 4;
+  score += popularityWeight(entry.popularityLabel);
+  if (entry.featuredOnGitHub) score += 2;
   if (hasStoreChannel(entry)) score += 2;
   if (hasDirectDownloads(entry)) score += 2;
+  if (entry.platforms.length >= 4) score += 1;
   if (isFreeEntry(entry)) score += 1;
   return score;
 }
@@ -137,11 +193,12 @@ export function DownloadsBrowser({
   entries: DownloadEntry[];
   amazonAffiliateUrl?: string;
 }) {
+  const { user, trackDownload } = useAccount();
   const [query, setQuery] = useState("");
   const [platformFilter, setPlatformFilter] = useState<DownloadPlatform | "All">("All");
   const [categoryFilter, setCategoryFilter] = useState<string | "All">("All");
   const [channelFilter, setChannelFilter] = useState<ChannelFilter>("All");
-  const [sortBy, setSortBy] = useState<SortOption>("Best Match");
+  const [sortBy, setSortBy] = useState<SortOption>("By Type");
   const [freeOnly, setFreeOnly] = useState(true);
   const [popularOnly, setPopularOnly] = useState(false);
 
@@ -205,6 +262,9 @@ export function DownloadsBrowser({
     }
 
     return matches.sort((a, b) => {
+      if (sortBy === "By Type") {
+        return a.category.localeCompare(b.category) || a.name.localeCompare(b.name);
+      }
       if (sortBy === "A-Z") return a.name.localeCompare(b.name);
       if (sortBy === "Most Platforms") return b.platforms.length - a.platforms.length || a.name.localeCompare(b.name);
       if (sortBy === "Most Download Options") {
@@ -217,7 +277,28 @@ export function DownloadsBrowser({
   }, [categoryFilter, channelFilter, entries, freeOnly, platformFilter, popularOnly, query, sortBy]);
 
   const spotlight = useMemo(() => {
-    return filtered.filter((entry) => isPopularEntry(entry) || hasStoreChannel(entry)).slice(0, 4);
+    return [...filtered]
+      .filter((entry) => isPopularEntry(entry) || hasStoreChannel(entry))
+      .sort(
+        (a, b) =>
+          entryScore(b) - entryScore(a) ||
+          b.platforms.length - a.platforms.length ||
+          a.name.localeCompare(b.name)
+      )
+      .slice(0, 4);
+  }, [filtered]);
+
+  const groupedByType = useMemo(() => {
+    const map = new Map<string, DownloadEntry[]>();
+    for (const entry of filtered) {
+      const current = map.get(entry.category) ?? [];
+      current.push(entry);
+      map.set(entry.category, current);
+    }
+
+    return Array.from(map.entries())
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([category, items]) => ({ category, items }));
   }, [filtered]);
 
   const stats = useMemo(() => {
@@ -238,7 +319,7 @@ export function DownloadsBrowser({
     setPlatformFilter("All");
     setCategoryFilter("All");
     setChannelFilter("All");
-    setSortBy("Best Match");
+    setSortBy("By Type");
     setFreeOnly(true);
     setPopularOnly(false);
   }
@@ -248,9 +329,13 @@ export function DownloadsBrowser({
     platformFilter !== "All" ||
     categoryFilter !== "All" ||
     channelFilter !== "All" ||
-    sortBy !== "Best Match" ||
+    sortBy !== "By Type" ||
     !freeOnly ||
     popularOnly;
+
+  function handleTrackDownload(input: TrackDownloadInput): void {
+    void trackDownload(input);
+  }
 
   return (
     <div className="space-y-6">
@@ -294,6 +379,9 @@ export function DownloadsBrowser({
 
       <section className="surface-card p-4 sm:p-5 dark:border-slate-700 dark:bg-slate-950">
         <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">How to use this page</h2>
+        <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+          {user ? "Signed in: download history is being tracked to your profile." : "Tip: sign in to track your downloads in your profile."}
+        </p>
         <ul className="mt-3 space-y-2 pl-5 text-sm text-slate-700 dark:text-slate-200 sm:text-base">
           <li className="list-disc">Use search + filters to narrow by app, platform, category, and channel.</li>
           <li className="list-disc">
@@ -459,7 +547,7 @@ export function DownloadsBrowser({
           </div>
           <div className="grid gap-3 lg:grid-cols-2">
             {spotlight.map((entry) => (
-              <SpotlightCard key={entry.slug} entry={entry} />
+              <SpotlightCard key={entry.slug} entry={entry} onTrackDownload={handleTrackDownload} />
             ))}
           </div>
         </section>
@@ -469,7 +557,7 @@ export function DownloadsBrowser({
         <div className="flex flex-wrap items-end justify-between gap-2.5">
           <div>
             <h2 className="text-xl font-semibold tracking-tight">All Downloads</h2>
-            <p className="text-sm sm:text-base">Curated links across store listings, official sites, and release channels.</p>
+            <p className="text-sm sm:text-base">Organized by type/category with curated links across stores, official sites, and release channels.</p>
           </div>
           <span className="rounded-full border border-line bg-white px-3 py-1 text-xs font-semibold text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
             {filtered.length} Results
@@ -477,21 +565,42 @@ export function DownloadsBrowser({
         </div>
 
         {filtered.length > 0 ? (
-          <motion.div layout className="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
-            <AnimatePresence mode="popLayout">
-              {filtered.map((entry) => (
-                <motion.div
-                  key={entry.slug}
-                  layout
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.18 }}
-                >
-                  <DownloadCard entry={entry} />
+          <motion.div layout className="space-y-4">
+            {groupedByType.map((group) => (
+              <details
+                key={`group-${group.category}`}
+                open
+                className="group rounded-2xl border border-line/80 bg-white/70 p-3 shadow-soft dark:border-slate-700 dark:bg-slate-950"
+              >
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-xl px-1 py-1 text-left [&::-webkit-details-marker]:hidden">
+                  <h3 className="text-sm font-semibold uppercase tracking-[0.12em] text-slate-600 dark:text-slate-300">
+                    {group.category}
+                  </h3>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-slate-500 dark:text-slate-400">{group.items.length} apps</span>
+                    <span className="text-xs text-slate-500 transition group-open:rotate-180 dark:text-slate-400">
+                      ▾
+                    </span>
+                  </div>
+                </summary>
+                <motion.div layout className="mt-3 grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
+                  <AnimatePresence mode="popLayout">
+                    {group.items.map((entry) => (
+                      <motion.div
+                        key={entry.slug}
+                        layout
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -6 }}
+                        transition={{ duration: 0.18 }}
+                      >
+                        <DownloadCard entry={entry} onTrackDownload={handleTrackDownload} />
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
                 </motion.div>
-              ))}
-            </AnimatePresence>
+              </details>
+            ))}
           </motion.div>
         ) : (
           <div className="surface-card border-dashed p-5 dark:border-slate-700 dark:bg-slate-950">
@@ -568,13 +677,24 @@ function StatCard({ label, value }: { label: string; value: string }) {
   );
 }
 
-function SpotlightCard({ entry }: { entry: DownloadEntry }) {
+function SpotlightCard({
+  entry,
+  onTrackDownload
+}: {
+  entry: DownloadEntry;
+  onTrackDownload: (input: TrackDownloadInput) => void;
+}) {
+  const featuredDownloadLinks = getFeaturedDownloadLinks(entry);
+
   return (
     <article className="surface-card-strong p-4 dark:border-slate-700 dark:bg-slate-900">
       <div className="flex items-start justify-between gap-2.5">
-        <div>
-          <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">{entry.name}</h3>
-          <p className="mt-1.5 text-sm leading-5">{entry.summary}</p>
+        <div className="flex min-w-0 items-start gap-3">
+          <DownloadEntryIcon entry={entry} />
+          <div className="min-w-0">
+            <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">{entry.name}</h3>
+            <p className="mt-1.5 text-sm leading-5">{entry.summary}</p>
+          </div>
         </div>
         {isFreeEntry(entry) ? (
           <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100">
@@ -595,12 +715,46 @@ function SpotlightCard({ entry }: { entry: DownloadEntry }) {
       </div>
 
       <div className="mt-3 flex flex-wrap gap-1.5">
+        {featuredDownloadLinks.map((link) => (
+          <a
+            key={`${entry.slug}-featured-download-${link.label}-${link.url}`}
+            href={link.url}
+            target="_blank"
+            rel="noreferrer"
+            onClick={() =>
+              onTrackDownload({
+                appSlug: entry.slug,
+                appName: entry.name,
+                channelLabel: link.label,
+                channelType: link.platform ? "Direct Download" : "Primary Link",
+                platform: link.platform,
+                url: link.url
+              })
+            }
+            className="inline-flex items-center justify-center rounded-full border border-cyan-300 bg-cyan-50 px-2.5 py-1 text-[11px] font-semibold text-cyan-700 transition hover:bg-cyan-100 dark:border-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-100 dark:hover:bg-cyan-900/60"
+          >
+            Download{link.platform ? ` (${link.platform})` : ""}
+          </a>
+        ))}
+      </div>
+
+      <div className="mt-2 flex flex-wrap gap-1.5">
         {entry.channels.slice(0, 3).map((channel) => (
           <a
             key={`${entry.slug}-${channel.type}-${channel.url}`}
             href={channel.url}
             target="_blank"
             rel="noreferrer"
+            onClick={() =>
+              onTrackDownload({
+                appSlug: entry.slug,
+                appName: entry.name,
+                channelLabel: channelButtonLabel(channel),
+                channelType: channel.type,
+                platform: null,
+                url: channel.url
+              })
+            }
             className={cx(
               "inline-flex items-center justify-center rounded-full border px-2.5 py-1 text-[11px] font-semibold transition hover:opacity-90",
               channelChipTone(channel)
@@ -614,7 +768,13 @@ function SpotlightCard({ entry }: { entry: DownloadEntry }) {
   );
 }
 
-function DownloadCard({ entry }: { entry: DownloadEntry }) {
+function DownloadCard({
+  entry,
+  onTrackDownload
+}: {
+  entry: DownloadEntry;
+  onTrackDownload: (input: TrackDownloadInput) => void;
+}) {
   const directArtifacts = entry.directDownloads ?? [];
   const directPlatforms = [...new Set(directArtifacts.map((artifact) => artifact.platform))];
   const topRightPlatforms = directPlatforms.length > 0 ? directPlatforms : entry.platforms;
@@ -633,24 +793,29 @@ function DownloadCard({ entry }: { entry: DownloadEntry }) {
 
       <div className="flex flex-wrap items-start justify-between gap-2.5">
         <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-1.5">
-            <span className="rounded-full border border-line bg-slate-50 px-2 py-0.5 text-[11px] font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
-              {entry.category}
-            </span>
-            {entry.popularityLabel ? (
-              <span className="rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-700 dark:border-amber-700 dark:bg-amber-900/40 dark:text-amber-100">
-                {entry.popularityLabel}
-              </span>
-            ) : null}
-            {isFreeEntry(entry) ? (
-              <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100">
-                Free
-              </span>
-            ) : null}
-          </div>
+          <div className="flex items-start gap-3">
+            <DownloadEntryIcon entry={entry} />
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-1.5">
+                <span className="rounded-full border border-line bg-slate-50 px-2 py-0.5 text-[11px] font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                  {entry.category}
+                </span>
+                {entry.popularityLabel ? (
+                  <span className="rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-700 dark:border-amber-700 dark:bg-amber-900/40 dark:text-amber-100">
+                    {entry.popularityLabel}
+                  </span>
+                ) : null}
+                {isFreeEntry(entry) ? (
+                  <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100">
+                    Free
+                  </span>
+                ) : null}
+              </div>
 
-          <h3 className="mt-2 text-lg font-semibold text-slate-900 dark:text-slate-100">{entry.name}</h3>
-          <p className="mt-1.5 text-sm leading-5">{entry.summary}</p>
+              <h3 className="mt-2 text-lg font-semibold text-slate-900 dark:text-slate-100">{entry.name}</h3>
+              <p className="mt-1.5 text-sm leading-5">{entry.summary}</p>
+            </div>
+          </div>
         </div>
 
         <div className="flex max-w-[15rem] shrink-0 flex-col items-end gap-2">
@@ -658,8 +823,11 @@ function DownloadCard({ entry }: { entry: DownloadEntry }) {
             {topRightPlatforms.map((platform) => (
               <PlatformDownloadChip
                 key={`${entry.slug}-download-platform-${platform}`}
+                appSlug={entry.slug}
+                appName={entry.name}
                 platform={platform}
                 artifacts={directArtifactsByPlatform[platform] ?? []}
+                onTrackDownload={onTrackDownload}
               />
             ))}
           </div>
@@ -678,6 +846,16 @@ function DownloadCard({ entry }: { entry: DownloadEntry }) {
             href={channel.url}
             target="_blank"
             rel="noreferrer"
+            onClick={() =>
+              onTrackDownload({
+                appSlug: entry.slug,
+                appName: entry.name,
+                channelLabel: channelButtonLabel(channel),
+                channelType: channel.type,
+                platform: null,
+                url: channel.url
+              })
+            }
             className={cx(
               "inline-flex items-center justify-center rounded-full border px-3 py-1.5 text-[11px] font-semibold transition hover:opacity-90",
               channelChipTone(channel)
@@ -691,12 +869,43 @@ function DownloadCard({ entry }: { entry: DownloadEntry }) {
   );
 }
 
+function DownloadEntryIcon({ entry }: { entry: DownloadEntry }) {
+  const [imageErrored, setImageErrored] = useState(false);
+  const initials = getNameInitials(entry.name);
+  const showImage = Boolean(entry.iconUrl) && !imageErrored;
+
+  return (
+    <div className="shrink-0">
+      {showImage ? (
+        <img
+          src={entry.iconUrl}
+          alt={`${entry.name} icon`}
+          loading="lazy"
+          decoding="async"
+          onError={() => setImageErrored(true)}
+          className="h-11 w-11 rounded-xl border border-line/80 bg-white p-2 object-contain shadow-soft dark:border-slate-700 dark:bg-slate-900"
+        />
+      ) : (
+        <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-line/80 bg-slate-100 text-xs font-semibold text-slate-700 shadow-soft dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100">
+          {initials}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function PlatformDownloadChip({
+  appSlug,
+  appName,
   platform,
-  artifacts
+  artifacts,
+  onTrackDownload
 }: {
+  appSlug: string;
+  appName: string;
   platform: DownloadPlatform;
   artifacts: DirectDownloadArtifact[];
+  onTrackDownload: (input: TrackDownloadInput) => void;
 }) {
   const [open, setOpen] = useState(false);
   const [copiedChecksumKey, setCopiedChecksumKey] = useState<string | null>(null);
@@ -803,6 +1012,16 @@ function PlatformDownloadChip({
                       href={artifact.url}
                       target="_blank"
                       rel="noreferrer"
+                      onClick={() =>
+                        onTrackDownload({
+                          appSlug,
+                          appName,
+                          channelLabel: artifact.label,
+                          channelType: "Direct Download",
+                          platform,
+                          url: artifact.url
+                        })
+                      }
                       className="rounded-md border border-line bg-white px-2 py-1 text-[10px] font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
                     >
                       Download

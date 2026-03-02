@@ -11,6 +11,20 @@ interface PCBuildGuidePageProps {
 
 export const dynamicParams = false;
 
+function uniqueKeywords(keywords: string[]): string[] {
+  const seen = new Set<string>();
+  const result: string[] = [];
+
+  for (const keyword of keywords) {
+    const normalized = keyword.trim().toLowerCase();
+    if (!normalized || seen.has(normalized)) continue;
+    seen.add(normalized);
+    result.push(keyword.trim());
+  }
+
+  return result;
+}
+
 export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
   return getPCBuildGuides().map((guide) => ({ slug: guide.slug }));
 }
@@ -26,9 +40,23 @@ export async function generateMetadata({ params }: PCBuildGuidePageProps): Promi
   return {
     title: `${guide.title} | PC Build Guides`,
     description: guide.description,
-    keywords: [...guide.tags, ...guide.useCases, guide.category, guide.difficulty, guide.budgetBand],
+    keywords: uniqueKeywords([
+      ...guide.tags,
+      ...guide.useCases,
+      guide.title,
+      guide.category,
+      guide.difficulty,
+      guide.budgetBand,
+      "pc build guide",
+      "pc parts recommendations",
+      "custom pc build"
+    ]),
     alternates: {
       canonical: `/pc-build-guides/${guide.slug}/`
+    },
+    robots: {
+      index: true,
+      follow: true
     },
     openGraph: buildOpenGraph(
       `${guide.title} | PC Build Guides`,

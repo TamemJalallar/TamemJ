@@ -39,7 +39,7 @@ const downloadEntries: DownloadEntry[] = [
     name: "Xcode",
     summary:
       "Apple's IDE for macOS and Apple platform development. Distributed through the Mac App Store.",
-    category: "Developer Tools",
+    category: "Code Editors",
     audience: "Curated",
     developer: "Apple",
     platforms: ["macOS"],
@@ -435,7 +435,7 @@ const downloadEntries: DownloadEntry[] = [
     name: "Neovim",
     summary:
       "Modern extensible Vim-based editor with strong plugin ecosystem and cross-platform builds.",
-    category: "Developer Tools",
+    category: "Code Editors",
     audience: "Curated",
     developer: "Neovim",
     platforms: ["Windows", "macOS", "Linux"],
@@ -544,7 +544,7 @@ const downloadEntries: DownloadEntry[] = [
     name: "Visual Studio Code",
     summary:
       "Free cross-platform code editor with rich extension ecosystem and strong support for modern web and cloud workflows.",
-    category: "Developer Tools",
+    category: "Code Editors",
     audience: "Curated",
     developer: "Microsoft",
     platforms: ["Windows", "macOS", "Linux", "Web"],
@@ -604,7 +604,7 @@ const downloadEntries: DownloadEntry[] = [
     name: "Notepad++",
     summary:
       "Lightweight Windows source editor with tabbed editing, plugin support, and strong performance on older hardware.",
-    category: "Developer Tools",
+    category: "Code Editors",
     audience: "Curated",
     developer: "Notepad++ Team",
     platforms: ["Windows"],
@@ -818,8 +818,63 @@ const downloadEntries: DownloadEntry[] = [
     developer: "Mozilla",
     platforms: ["Windows", "macOS", "Linux", "iOS", "Android"],
     tags: ["browser", "privacy", "mozilla", "web", "free"],
+    popularityLabel: "Most used",
     pricing: "Free",
     channels: [{ type: "Website", url: "https://www.mozilla.org/firefox/new/" }]
+  },
+  {
+    slug: "google-chrome",
+    name: "Google Chrome",
+    summary:
+      "Widely used browser with strong performance, enterprise policy controls, and sync across desktop and mobile.",
+    category: "Browsers",
+    audience: "Curated",
+    developer: "Google",
+    platforms: ["Windows", "macOS", "Linux", "iOS", "Android"],
+    tags: ["browser", "google", "web", "sync", "free"],
+    popularityLabel: "Most used",
+    pricing: "Free",
+    channels: [{ type: "Website", url: "https://www.google.com/chrome/" }]
+  },
+  {
+    slug: "microsoft-edge",
+    name: "Microsoft Edge",
+    summary:
+      "Chromium-based browser with Microsoft 365 integration, enterprise policy support, and security-focused defaults.",
+    category: "Browsers",
+    audience: "Curated",
+    developer: "Microsoft",
+    platforms: ["Windows", "macOS", "iOS", "Android"],
+    tags: ["browser", "microsoft", "web", "enterprise", "free"],
+    popularityLabel: "Most used",
+    pricing: "Free",
+    channels: [{ type: "Website", url: "https://www.microsoft.com/edge/download" }]
+  },
+  {
+    slug: "opera-browser",
+    name: "Opera Browser",
+    summary:
+      "Cross-platform browser with integrated sidebar tools, ad blocking, and desktop/mobile sync support.",
+    category: "Browsers",
+    audience: "Curated",
+    developer: "Opera",
+    platforms: ["Windows", "macOS", "Linux", "iOS", "Android"],
+    tags: ["browser", "opera", "web", "productivity", "free"],
+    pricing: "Free",
+    channels: [{ type: "Website", url: "https://www.opera.com/download" }]
+  },
+  {
+    slug: "vivaldi-browser",
+    name: "Vivaldi Browser",
+    summary:
+      "Feature-rich browser focused on advanced tab management, customization, and productivity workflows.",
+    category: "Browsers",
+    audience: "Curated",
+    developer: "Vivaldi Technologies",
+    platforms: ["Windows", "macOS", "Linux", "iOS", "Android"],
+    tags: ["browser", "vivaldi", "web", "productivity", "free"],
+    pricing: "Free",
+    channels: [{ type: "Website", url: "https://vivaldi.com/download/" }]
   },
   {
     slug: "thunderbird",
@@ -1000,7 +1055,7 @@ const downloadEntries: DownloadEntry[] = [
     name: "Android Studio",
     summary:
       "Official Android IDE with emulator, profiler, and Gradle-based tooling for mobile app development.",
-    category: "Developer Tools",
+    category: "Code Editors",
     audience: "Curated",
     developer: "Google",
     platforms: ["Windows", "macOS", "Linux"],
@@ -1261,6 +1316,339 @@ const downloadEntries: DownloadEntry[] = [
     tags: ["figma", "design", "ui-ux", "collaboration", "free"],
     pricing: "Free",
     channels: [{ type: "Website", url: "https://www.figma.com/downloads/" }]
+  },
+  {
+    slug: "cursor-editor",
+    name: "Cursor",
+    summary:
+      "AI-first code editor built on VS Code foundations with chat, inline edits, and multi-file refactors.",
+    category: "Code Editors",
+    audience: "Curated",
+    developer: "Anysphere",
+    platforms: ["Windows", "macOS", "Linux"],
+    tags: ["code-editor", "developer", "ai", "ide", "free"],
+    popularityLabel: "Popular",
+    pricing: "Free tier",
+    channels: [{ type: "Website", url: "https://www.cursor.com/downloads" }]
+  },
+  {
+    slug: "zed-editor",
+    name: "Zed",
+    summary:
+      "High-performance code editor focused on speed, collaborative workflows, and modern developer ergonomics.",
+    category: "Code Editors",
+    audience: "Curated",
+    developer: "Zed Industries",
+    platforms: ["macOS", "Linux"],
+    tags: ["code-editor", "developer", "collaboration", "ide", "free"],
+    pricing: "Free",
+    channels: [{ type: "Website", url: "https://zed.dev/download" }]
+  },
+  {
+    slug: "vscodium",
+    name: "VSCodium",
+    summary:
+      "Community-driven, telemetry-disabled builds of VS Code for users who want an open-source editor distribution.",
+    category: "Code Editors",
+    audience: "Curated",
+    developer: "VSCodium",
+    platforms: ["Windows", "macOS", "Linux"],
+    tags: ["code-editor", "developer", "vscode", "open-source", "free"],
+    featuredOnGitHub: true,
+    sourceCodeUrl: "https://github.com/VSCodium/vscodium",
+    releaseNotesUrl: "https://github.com/VSCodium/vscodium/releases/latest",
+    license: "MIT",
+    pricing: "Free",
+    channels: [
+      { type: "Website", url: "https://vscodium.com/" },
+      { type: "GitHub Releases", url: "https://github.com/VSCodium/vscodium/releases/latest" },
+      { type: "Source Code", url: "https://github.com/VSCodium/vscodium" }
+    ],
+    directDownloads: [
+      {
+        label: "Windows installer",
+        platform: "Windows",
+        url: "https://github.com/VSCodium/vscodium/releases/latest",
+        host: "GitHub Releases",
+        fileType: "EXE"
+      },
+      {
+        label: "macOS package",
+        platform: "macOS",
+        url: "https://github.com/VSCodium/vscodium/releases/latest",
+        host: "GitHub Releases",
+        fileType: "ZIP"
+      }
+    ]
+  },
+  {
+    slug: "sublime-text",
+    name: "Sublime Text",
+    summary:
+      "Lightweight code editor with fast indexing, command palette workflows, and broad language/package support.",
+    category: "Code Editors",
+    audience: "Curated",
+    developer: "Sublime HQ",
+    platforms: ["Windows", "macOS", "Linux"],
+    tags: ["code-editor", "developer", "text-editor", "productivity", "free"],
+    pricing: "Free evaluation",
+    channels: [{ type: "Website", url: "https://www.sublimetext.com/download" }]
+  },
+  {
+    slug: "notion",
+    name: "Notion",
+    summary:
+      "Connected workspace for notes, docs, databases, and project tracking across desktop, mobile, and web.",
+    category: "Productivity",
+    audience: "Curated",
+    developer: "Notion Labs",
+    platforms: ["Windows", "macOS", "iOS", "Android", "Web"],
+    tags: ["notes", "docs", "project-management", "productivity", "free"],
+    popularityLabel: "Popular",
+    pricing: "Free tier",
+    channels: [{ type: "Website", url: "https://www.notion.com/desktop" }]
+  },
+  {
+    slug: "canva-desktop",
+    name: "Canva",
+    summary:
+      "Design platform for social graphics, documents, presentations, and templates with fast browser and desktop workflows.",
+    category: "Design",
+    audience: "Curated",
+    developer: "Canva",
+    platforms: ["Windows", "macOS", "iOS", "Android", "Web"],
+    tags: ["design", "templates", "graphics", "presentations", "free"],
+    popularityLabel: "Popular",
+    pricing: "Free tier",
+    channels: [{ type: "Website", url: "https://www.canva.com/download/" }]
+  },
+  {
+    slug: "penpot",
+    name: "Penpot",
+    summary:
+      "Open-source design and prototyping platform with team collaboration and self-hosting options.",
+    category: "Design",
+    audience: "Curated",
+    developer: "Kaleidos",
+    platforms: ["Web"],
+    tags: ["design", "prototyping", "open-source", "ui-ux", "free"],
+    featuredOnGitHub: true,
+    sourceCodeUrl: "https://github.com/penpot/penpot",
+    releaseNotesUrl: "https://github.com/penpot/penpot/releases/latest",
+    license: "MPL-2.0",
+    pricing: "Free",
+    channels: [
+      { type: "Website", url: "https://penpot.app/" },
+      { type: "Source Code", url: "https://github.com/penpot/penpot" }
+    ]
+  },
+  {
+    slug: "photopea",
+    name: "Photopea",
+    summary:
+      "Web-based image editor with PSD support for quick edits, mockups, and layered design workflows.",
+    category: "Design",
+    audience: "Curated",
+    developer: "Photopea",
+    platforms: ["Web"],
+    tags: ["image-editor", "design", "web", "psd", "free"],
+    pricing: "Free (ad-supported)",
+    channels: [{ type: "Website", url: "https://www.photopea.com/" }]
+  },
+  {
+    slug: "lunacy",
+    name: "Lunacy",
+    summary:
+      "Design app for vector UI work and rapid mockups, including built-in assets and collaboration features.",
+    category: "Design",
+    audience: "Curated",
+    developer: "Icons8",
+    platforms: ["Windows", "macOS", "Linux"],
+    tags: ["design", "ui-ux", "vector", "mockups", "free"],
+    pricing: "Free",
+    channels: [{ type: "Website", url: "https://icons8.com/lunacy" }]
+  },
+  {
+    slug: "heif-image-extensions",
+    name: "HEIF Image Extensions",
+    summary:
+      "Windows extension for viewing HEIF and HEIC image formats in Photos, File Explorer, and supported apps.",
+    category: "Media",
+    audience: "Curated",
+    developer: "Microsoft",
+    platforms: ["Windows"],
+    tags: ["heic", "heif", "windows", "media", "free"],
+    pricing: "Free",
+    channels: [{ type: "Microsoft Store", url: "https://apps.microsoft.com/detail/9PMMSR1CGPWG" }]
+  },
+  {
+    slug: "mpv-player",
+    name: "mpv",
+    summary:
+      "Lightweight, scriptable media player for high-quality playback with strong format support and keyboard control.",
+    category: "Media",
+    audience: "Curated",
+    developer: "mpv.io",
+    platforms: ["Windows", "macOS", "Linux"],
+    tags: ["media-player", "video", "audio", "open-source", "free"],
+    pricing: "Free",
+    channels: [{ type: "Website", url: "https://mpv.io/installation/" }]
+  },
+  {
+    slug: "shotcut",
+    name: "Shotcut",
+    summary:
+      "Open-source video editor for timeline-based editing, color correction, transitions, and cross-platform export.",
+    category: "Media",
+    audience: "Curated",
+    developer: "Meltytech",
+    platforms: ["Windows", "macOS", "Linux"],
+    tags: ["video-editor", "media", "editing", "open-source", "free"],
+    pricing: "Free",
+    channels: [{ type: "Website", url: "https://shotcut.org/download/" }]
+  },
+  {
+    slug: "kdenlive",
+    name: "Kdenlive",
+    summary:
+      "Feature-rich non-linear video editor for multi-track editing, effects, and production workflows.",
+    category: "Media",
+    audience: "Curated",
+    developer: "KDE Community",
+    platforms: ["Windows", "macOS", "Linux"],
+    tags: ["video-editor", "media", "kde", "open-source", "free"],
+    pricing: "Free",
+    channels: [{ type: "Website", url: "https://kdenlive.org/en/download/" }]
+  },
+  {
+    slug: "davinci-resolve",
+    name: "DaVinci Resolve",
+    summary:
+      "Professional video editing, color, audio, and visual effects suite with a widely used free edition.",
+    category: "Media",
+    audience: "Curated",
+    developer: "Blackmagic Design",
+    platforms: ["Windows", "macOS", "Linux"],
+    tags: ["video-editor", "color-grading", "media", "post-production", "free"],
+    pricing: "Free tier",
+    channels: [{ type: "Website", url: "https://www.blackmagicdesign.com/products/davinciresolve" }]
+  },
+  {
+    slug: "plex-media-server",
+    name: "Plex Media Server",
+    summary:
+      "Media server and streaming platform for organizing libraries and accessing media across devices.",
+    category: "Media",
+    audience: "Curated",
+    developer: "Plex",
+    platforms: ["Windows", "macOS", "Linux", "iOS", "Android", "Web"],
+    tags: ["media-server", "streaming", "library", "video", "free"],
+    pricing: "Free tier",
+    channels: [{ type: "Website", url: "https://www.plex.tv/media-server-downloads/" }]
+  },
+  {
+    slug: "wireguard",
+    name: "WireGuard",
+    summary:
+      "Modern VPN protocol and clients with strong performance, straightforward setup, and broad platform support.",
+    category: "Networking",
+    audience: "Curated",
+    developer: "WireGuard",
+    platforms: ["Windows", "macOS", "Linux", "iOS", "Android"],
+    tags: ["vpn", "networking", "security", "wireguard", "free"],
+    pricing: "Free",
+    channels: [{ type: "Website", url: "https://www.wireguard.com/install/" }]
+  },
+  {
+    slug: "openvpn-connect",
+    name: "OpenVPN Connect",
+    summary:
+      "Official OpenVPN client for secure remote access to enterprise and personal VPN profiles.",
+    category: "Networking",
+    audience: "Curated",
+    developer: "OpenVPN Inc.",
+    platforms: ["Windows", "macOS", "iOS", "Android"],
+    tags: ["vpn", "networking", "security", "remote-access", "free"],
+    pricing: "Free",
+    channels: [{ type: "Website", url: "https://openvpn.net/client/" }]
+  },
+  {
+    slug: "putty",
+    name: "PuTTY",
+    summary:
+      "Classic SSH and serial terminal client for Windows with lightweight deployment and broad protocol support.",
+    category: "Networking",
+    audience: "Curated",
+    developer: "Simon Tatham",
+    platforms: ["Windows"],
+    tags: ["ssh", "terminal", "networking", "windows", "free"],
+    pricing: "Free",
+    channels: [{ type: "Website", url: "https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html" }]
+  },
+  {
+    slug: "nmap",
+    name: "Nmap",
+    summary:
+      "Network discovery and security auditing toolkit for host discovery, service enumeration, and troubleshooting.",
+    category: "Networking",
+    audience: "Curated",
+    developer: "Nmap Project",
+    platforms: ["Windows", "macOS", "Linux"],
+    tags: ["networking", "security", "scanner", "diagnostics", "free"],
+    pricing: "Free",
+    channels: [{ type: "Website", url: "https://nmap.org/download.html" }]
+  },
+  {
+    slug: "filezilla-client",
+    name: "FileZilla Client",
+    summary:
+      "Cross-platform FTP, FTPS, and SFTP client for file transfers, site management, and remote publishing.",
+    category: "Networking",
+    audience: "Curated",
+    developer: "FileZilla Project",
+    platforms: ["Windows", "macOS", "Linux"],
+    tags: ["ftp", "sftp", "file-transfer", "networking", "free"],
+    pricing: "Free",
+    channels: [{ type: "Website", url: "https://filezilla-project.org/download.php?type=client" }]
+  },
+  {
+    slug: "angry-ip-scanner",
+    name: "Angry IP Scanner",
+    summary:
+      "Fast open-source network scanner for identifying live hosts, open ports, and basic service data.",
+    category: "Networking",
+    audience: "Curated",
+    developer: "Angry IP Scanner",
+    platforms: ["Windows", "macOS", "Linux"],
+    tags: ["networking", "scanner", "diagnostics", "open-source", "free"],
+    pricing: "Free",
+    channels: [{ type: "Website", url: "https://angryip.org/" }]
+  },
+  {
+    slug: "cloudflare-warp",
+    name: "Cloudflare WARP",
+    summary:
+      "Client app for secure DNS and private traffic routing using Cloudflare's global network.",
+    category: "Networking",
+    audience: "Curated",
+    developer: "Cloudflare",
+    platforms: ["Windows", "macOS", "Linux", "iOS", "Android"],
+    tags: ["networking", "dns", "privacy", "vpn", "free"],
+    pricing: "Free",
+    channels: [{ type: "Website", url: "https://one.one.one.one/" }]
+  },
+  {
+    slug: "winscp",
+    name: "WinSCP",
+    summary:
+      "Windows SFTP, SCP, and FTP client with scripting support and secure file transfer workflows.",
+    category: "Networking",
+    audience: "Curated",
+    developer: "WinSCP",
+    platforms: ["Windows"],
+    tags: ["sftp", "scp", "ftp", "networking", "free"],
+    pricing: "Free",
+    channels: [{ type: "Website", url: "https://winscp.net/eng/download.php" }]
   }
 ];
 
@@ -1351,8 +1739,85 @@ function cloneEntry(entry: DownloadEntry): DownloadEntry {
   };
 }
 
+const iconBySlug: Record<string, string> = {
+  "xcode": "https://cdn.simpleicons.org/xcode",
+  "cursor-editor": "https://cdn.simpleicons.org/cursor",
+  "zed-editor": "https://cdn.simpleicons.org/zedindustries",
+  "vscodium": "https://cdn.simpleicons.org/vscodium",
+  "sublime-text": "https://cdn.simpleicons.org/sublimetext",
+  "notion": "https://cdn.simpleicons.org/notion",
+  "canva-desktop": "https://cdn.simpleicons.org/canva",
+  "penpot": "https://cdn.simpleicons.org/penpot",
+  "photopea": "https://cdn.simpleicons.org/photopea",
+  "lunacy": "https://cdn.simpleicons.org/icons8",
+  "heif-image-extensions": "https://cdn.simpleicons.org/microsoft",
+  "mpv-player": "https://cdn.simpleicons.org/mpv",
+  "shotcut": "https://cdn.simpleicons.org/shotcut",
+  "kdenlive": "https://cdn.simpleicons.org/kdenlive",
+  "davinci-resolve": "https://cdn.simpleicons.org/davinciresolve",
+  "plex-media-server": "https://cdn.simpleicons.org/plex",
+  "wireguard": "https://cdn.simpleicons.org/wireguard",
+  "openvpn-connect": "https://cdn.simpleicons.org/openvpn",
+  "putty": "https://cdn.simpleicons.org/putty",
+  "filezilla-client": "https://cdn.simpleicons.org/filezilla",
+  "cloudflare-warp": "https://cdn.simpleicons.org/cloudflare",
+  "google-chrome": "https://cdn.simpleicons.org/googlechrome",
+  "microsoft-edge": "https://cdn.simpleicons.org/microsoftedge",
+  "opera-browser": "https://cdn.simpleicons.org/opera",
+  "vivaldi-browser": "https://cdn.simpleicons.org/vivaldi",
+  "firefox": "https://cdn.simpleicons.org/firefoxbrowser",
+  "thunderbird": "https://cdn.simpleicons.org/thunderbird",
+  "wireshark": "https://cdn.simpleicons.org/wireshark",
+  "inkscape": "https://cdn.simpleicons.org/inkscape",
+  "krita": "https://cdn.simpleicons.org/krita",
+  "blender": "https://cdn.simpleicons.org/blender",
+  "gimp": "https://cdn.simpleicons.org/gimp",
+  "libreoffice": "https://cdn.simpleicons.org/libreoffice",
+  "vlc-media-player": "https://cdn.simpleicons.org/vlcmediaplayer",
+  "brave-browser": "https://cdn.simpleicons.org/brave",
+  "obsidian": "https://cdn.simpleicons.org/obsidian",
+  "docker-desktop": "https://cdn.simpleicons.org/docker",
+  "postman": "https://cdn.simpleicons.org/postman",
+  "android-studio": "https://cdn.simpleicons.org/androidstudio",
+  "dbeaver-community": "https://cdn.simpleicons.org/dbeaver",
+  "tailscale": "https://cdn.simpleicons.org/tailscale",
+  "veracrypt": "https://cdn.simpleicons.org/veracrypt",
+  "figma-desktop-app": "https://cdn.simpleicons.org/figma"
+};
+
+function toGitHubOwnerAvatarUrl(sourceCodeUrl?: string): string | undefined {
+  if (!sourceCodeUrl) {
+    return undefined;
+  }
+
+  try {
+    const parsed = new URL(sourceCodeUrl);
+    if (parsed.hostname !== "github.com") {
+      return undefined;
+    }
+
+    const [owner] = parsed.pathname.split("/").filter(Boolean);
+    if (!owner) {
+      return undefined;
+    }
+
+    return `https://github.com/${owner}.png?size=96`;
+  } catch {
+    return undefined;
+  }
+}
+
+function applyIcon(entry: DownloadEntry): DownloadEntry {
+  const explicitIcon = iconBySlug[entry.slug];
+  const githubOwnerIcon = toGitHubOwnerAvatarUrl(entry.sourceCodeUrl);
+  return {
+    ...entry,
+    iconUrl: entry.iconUrl ?? explicitIcon ?? githubOwnerIcon
+  };
+}
+
 export function getDownloads(): DownloadEntry[] {
-  return downloadEntries.map(applyReleaseMetadata).map(cloneEntry);
+  return downloadEntries.map(applyReleaseMetadata).map(applyIcon).map(cloneEntry);
 }
 
 export function getFeaturedGitHubDownloads(): DownloadEntry[] {
