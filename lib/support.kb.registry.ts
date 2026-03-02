@@ -4337,6 +4337,1823 @@ const generalSeeds: KBSeed[] = [
           "# Windows\nipconfig /all\nResolve-DnsName intranet.company.local\nroute print\n\n# macOS\nscutil --dns\nnslookup intranet.company.local\nnetstat -rn"
       }
     ]
+  },
+  {
+    slug: "password-manager-autofill-not-working-chrome-edge-enterprise",
+    title: "Password Manager Autofill Not Working (Chrome / Edge)",
+    description:
+      "Troubleshoot enterprise browser autofill failures for password manager extensions without bypassing browser security policy, SSO controls, or MFA requirements.",
+    category: "Identity / MFA / SSO",
+    productFamily: "Okta",
+    product: "Password Manager Browser Extension",
+    environment: "Both",
+    severity: "Medium",
+    tags: ["1password", "password-manager", "autofill", "browser-extension", "chrome", "edge", "credential"],
+    symptoms: [
+      "Autofill prompt does not appear on supported sign-in pages.",
+      "Extension icon is present but does not fill username/password fields.",
+      "Issue affects one browser profile while another profile works."
+    ],
+    causes: [
+      "Extension is disabled, outdated, or blocked in the active browser profile.",
+      "Site URL mismatch between saved vault item and current login page.",
+      "Enterprise browser settings or privacy controls restrict extension interaction."
+    ],
+    remediations: [
+      "Confirm extension is enabled and signed in with the intended corporate account.",
+      "Validate saved item URL matches the login domain and not a different tenant/environment.",
+      "Test in a clean browser profile to isolate extension/policy conflicts safely.",
+      "Keep MFA and corporate SSO controls enabled during all troubleshooting."
+    ],
+    escalationCriteria: [
+      "Extension is blocked by enterprise policy and requires browser admin changes.",
+      "Autofill failure affects many users after browser or extension updates.",
+      "Users request insecure workarounds such as storing credentials in plain text."
+    ]
+  },
+  {
+    slug: "password-manager-shared-vault-access-not-updating",
+    title: "Password Manager Shared Vault Access Not Updating",
+    description:
+      "Resolve shared vault permission and sync delays using least-privilege identity checks and controlled access review workflows.",
+    category: "Identity / MFA / SSO",
+    productFamily: "Okta",
+    product: "1Password Shared Vaults",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    tags: ["1password", "shared-vault", "permissions", "access", "identity", "least-privilege"],
+    symptoms: [
+      "User was added to a vault/group but does not see expected items.",
+      "Vault access differs across desktop, browser extension, or web client.",
+      "Permission changes appear delayed after group updates."
+    ],
+    causes: [
+      "Group membership did not propagate fully across identity and vault systems.",
+      "User account context mismatch (wrong tenant/account signed in).",
+      "Role assignment grants insufficient vault permissions."
+    ],
+    remediations: [
+      "Verify requested access level and business justification before any permission changes.",
+      "Confirm user is signed in to the correct account and vault scope.",
+      "Recheck group membership and sync state after propagation window.",
+      "Document final permission outcome and keep least-privilege defaults."
+    ],
+    escalationCriteria: [
+      "Privileged/shared admin vault access is requested or changed unexpectedly.",
+      "Many users lose vault access after role/group updates.",
+      "Identity governance review is required for conflicting entitlement rules."
+    ]
+  },
+  {
+    slug: "password-manager-extension-blocked-by-browser-policy",
+    title: "Password Manager Extension Blocked by Browser Policy",
+    description:
+      "Troubleshoot cases where enterprise browser policy blocks password manager extensions and restore approved configuration safely.",
+    category: "Browsers",
+    productFamily: "Browser",
+    product: "Chrome / Edge Extension Policies",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    tags: ["1password", "browser-policy", "extension-blocked", "chrome", "edge", "security-policy"],
+    symptoms: [
+      "Users cannot install or enable approved password manager extensions.",
+      "Extension is installed but marked blocked by organization policy.",
+      "Behavior differs between managed and unmanaged browser profiles."
+    ],
+    causes: [
+      "Extension allow/blocklist policy changed in enterprise browser management.",
+      "Extension store ID/version mismatch in policy definition.",
+      "Profile is not receiving latest management policy sync."
+    ],
+    remediations: [
+      "Capture policy-block message, extension ID, and browser version.",
+      "Confirm device/profile is enrolled in expected browser management scope.",
+      "Validate allowlist entry for approved extension ID and update channel.",
+      "Retest after policy refresh using managed profile only."
+    ],
+    escalationCriteria: [
+      "Policy update is required in centralized browser management.",
+      "Approved extension is blocked across large user groups.",
+      "Request involves bypassing security policy enforcement."
+    ],
+    commands: [
+      {
+        title: "Inspect applied browser policies",
+        shell: "CLI",
+        content:
+          "# Chrome\n# Open chrome://policy and export screenshot/evidence\n\n# Edge\n# Open edge://policy and export screenshot/evidence"
+      }
+    ]
+  },
+  {
+    slug: "vpn-kill-switch-blocking-teams-outlook",
+    title: "VPN Kill Switch Blocking Teams / Outlook Traffic",
+    description:
+      "Handle VPN kill-switch behavior that blocks Microsoft collaboration apps after tunnel drops, while preserving secure remote-access controls.",
+    category: "Networking / VPN",
+    productFamily: "Networking",
+    product: "Corporate VPN",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    tags: ["vpn", "kill-switch", "teams", "outlook", "remote-work", "network"],
+    symptoms: [
+      "Teams and Outlook disconnect immediately when VPN reconnects or drops.",
+      "Network returns only after VPN client restart.",
+      "Issue is more common during unstable home/public connectivity."
+    ],
+    causes: [
+      "Kill-switch policy blocks all traffic until tunnel recovers fully.",
+      "VPN client service state remains partially disconnected after reconnect.",
+      "DNS/route state is not restored correctly when tunnel flaps."
+    ],
+    remediations: [
+      "Capture exact timing of tunnel drop/reconnect and affected apps.",
+      "Reconnect VPN using approved workflow and retest app connectivity.",
+      "Collect route/DNS state while failure is active for network support.",
+      "Do not disable kill-switch protections outside approved security policy."
+    ],
+    escalationCriteria: [
+      "Kill-switch behavior disrupts many users on same VPN profile/client version.",
+      "Temporary policy tuning is needed for business-critical collaboration traffic.",
+      "Users request disabling secure tunnel enforcement permanently."
+    ]
+  },
+  {
+    slug: "vpn-connected-saas-apps-blocked-ip-reputation-geo",
+    title: "VPN Connected but SaaS Apps Blocked (IP Reputation / Geo Policy)",
+    description:
+      "Troubleshoot SaaS sign-in or access blocks when traffic exits via VPN egress ranges flagged by IP reputation or geolocation controls.",
+    category: "Networking / VPN",
+    productFamily: "Networking",
+    product: "Corporate VPN",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    tags: ["vpn", "saas", "ip-reputation", "geolocation", "access-block", "privacy"],
+    symptoms: [
+      "SaaS applications reject login while VPN is active but work off VPN.",
+      "Users see unusual location/risk alerts during authentication.",
+      "Specific apps fail while others continue to work."
+    ],
+    causes: [
+      "SaaS risk engines flag shared VPN egress IP ranges.",
+      "Geolocation-based policy blocks current VPN exit region.",
+      "Conditional access/trust policy mismatch between SaaS and VPN routing."
+    ],
+    remediations: [
+      "Capture blocked app, error text, timestamp, and apparent sign-in location.",
+      "Compare behavior on approved alternate egress profile if available.",
+      "Coordinate with SaaS admin to validate trusted IP/location configuration.",
+      "Avoid routing around corporate policy via unauthorized personal tunnels."
+    ],
+    escalationCriteria: [
+      "Multiple users are blocked in the same region/egress profile.",
+      "SaaS trust policy needs updates for approved enterprise egress ranges.",
+      "Security review is required due to high-risk sign-in detections."
+    ]
+  },
+  {
+    slug: "public-wifi-safe-remote-work-connectivity-checklist",
+    title: "Public Wi-Fi Safe Remote Work Connectivity Checklist",
+    description:
+      "Use a security-first checklist for working on public Wi-Fi with enterprise policy compliance, safe VPN usage, and escalation boundaries.",
+    category: "Networking / VPN",
+    productFamily: "Networking",
+    product: "Remote Work Connectivity",
+    environment: "Both",
+    severity: "Medium",
+    tags: ["public-wifi", "remote-work", "vpn", "privacy", "security", "travel", "network"],
+    symptoms: [
+      "User reports unstable access to corporate apps on hotel/airport/cafe Wi-Fi.",
+      "Session drops and re-auth prompts occur frequently.",
+      "User asks for quick workarounds that may reduce security posture."
+    ],
+    causes: [
+      "High-latency and captive-portal behavior on untrusted networks.",
+      "Interference/content filtering on public Wi-Fi path.",
+      "VPN tunnel instability during roaming between networks."
+    ],
+    remediations: [
+      "Verify captive portal is completed before starting corporate app sessions.",
+      "Use approved VPN profile and confirm policy-required security agents are active.",
+      "Prefer trusted tether/hotspot fallback only if allowed by company policy.",
+      "Capture timing/location evidence when recurring failures require escalation."
+    ],
+    escalationCriteria: [
+      "Frequent connectivity failures affect executive/traveling teams.",
+      "Public-network issues expose repeated security risk prompts or lockouts.",
+      "Users request bypassing MFA, VPN, or endpoint controls for convenience."
+    ]
+  },
+  {
+    slug: "endpoint-security-false-positive-blocking-business-app",
+    title: "Endpoint Security False Positive Blocking Business App",
+    description:
+      "Triage endpoint protection false positives that block approved applications without disabling enterprise security controls.",
+    category: "Windows",
+    productFamily: "Windows",
+    product: "Endpoint Protection",
+    environment: "Windows",
+    severity: "High",
+    accessLevel: "Admin Required",
+    tags: ["malwarebytes", "false-positive", "endpoint", "security", "threat", "application-block"],
+    symptoms: [
+      "Approved business app is quarantined or blocked at launch.",
+      "Alert appears after definition update or policy change.",
+      "Users cannot complete business workflow due to block action."
+    ],
+    causes: [
+      "Detection signature flags a benign binary or installer component.",
+      "Application update changed hash/signature and no longer matches allow rules.",
+      "Policy is too strict for current app behavior."
+    ],
+    remediations: [
+      "Capture detection name, file path/hash, and policy version from endpoint logs.",
+      "Validate the app package source and publisher signature before exception review.",
+      "Use controlled allowlist/exception process with security-team approval.",
+      "Re-test after policy/signature update and remove temporary exceptions when possible."
+    ],
+    escalationCriteria: [
+      "False positive impacts multiple users or critical business applications.",
+      "Potential true-positive uncertainty requires incident triage before restoration.",
+      "Exception request affects sensitive/high-risk execution paths."
+    ]
+  },
+  {
+    slug: "endpoint-security-agent-high-cpu-after-update",
+    title: "Endpoint Security Agent High CPU After Update",
+    description:
+      "Diagnose sustained high CPU from endpoint security agents after updates using safe evidence collection and security-team escalation workflow.",
+    category: "Windows",
+    productFamily: "Windows",
+    product: "Endpoint Security Agent",
+    environment: "Windows",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    tags: ["malwarebytes", "endpoint", "high-cpu", "security-agent", "performance", "windows"],
+    symptoms: [
+      "CPU usage remains high for extended periods after security update.",
+      "Device becomes sluggish and user productivity drops.",
+      "Issue may affect a cohort on same agent/signature version."
+    ],
+    causes: [
+      "Post-update scanning backlog or repeated scan loop.",
+      "Conflict between agent module and specific application workload.",
+      "Corrupt local cache/signature state."
+    ],
+    remediations: [
+      "Capture process CPU trend, agent version, and definition/signature timestamp.",
+      "Confirm whether CPU stabilizes after expected initial scan window.",
+      "Collect agent logs using approved support workflow.",
+      "Escalate to endpoint security team for policy/module tuning."
+    ],
+    escalationCriteria: [
+      "Sustained impact affects many devices after same update rollout.",
+      "High CPU is accompanied by app crashes or endpoint instability.",
+      "Any fix would require disabling core protection modules."
+    ]
+  },
+  {
+    slug: "ransomware-safe-onedrive-sharepoint-file-recovery",
+    title: "Ransomware-Safe OneDrive / SharePoint File Recovery",
+    description:
+      "Execute safe Microsoft 365 recovery steps for suspicious encryption or mass-file changes without violating incident-response policy.",
+    category: "Microsoft 365",
+    productFamily: "Microsoft",
+    product: "OneDrive / SharePoint Recovery",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "20-45 min",
+    tags: ["ransomware", "onedrive", "sharepoint", "recovery", "version-history", "security"],
+    symptoms: [
+      "Large sets of files are renamed/encrypted unexpectedly.",
+      "Users report inaccessible content after suspicious activity.",
+      "Cloud sync propagates unwanted file changes quickly."
+    ],
+    causes: [
+      "Compromised endpoint or account performed bulk malicious file operations.",
+      "Unintended automation/script changed many files.",
+      "Recovery window is shrinking as sync propagates."
+    ],
+    remediations: [
+      "Initiate security incident process before broad restoration actions.",
+      "Contain impacted account/device per security-team instructions.",
+      "Use Microsoft 365 version history/restore features through approved admin workflow.",
+      "Validate restored data integrity with content owners before closing incident."
+    ],
+    escalationCriteria: [
+      "Active compromise indicators are present.",
+      "Recovery involves privileged/legal/regulatory content.",
+      "Cross-tenant or multi-site impact requires formal incident command."
+    ]
+  },
+  {
+    slug: "usb-c-dock-dual-monitors-not-detected-windows-macos",
+    title: "USB-C Dock Dual Monitors Not Detected (Windows / macOS)",
+    description:
+      "Troubleshoot dual-display detection failures on managed dock setups with safe cable, firmware, and display path validation.",
+    category: "AV / Conference Rooms",
+    productFamily: "AV",
+    product: "USB-C Docking Station",
+    environment: "Both",
+    severity: "Medium",
+    tags: ["dock", "dual-monitor", "usb-c", "displayport", "hdmi", "adapter"],
+    symptoms: [
+      "Only one external monitor is detected through dock.",
+      "Displays work when connected directly but not via dock.",
+      "Issue appears after OS/dock firmware updates or cable swaps."
+    ],
+    causes: [
+      "Unsupported cable/adapter combination or bandwidth limitation.",
+      "Dock firmware/driver mismatch after updates.",
+      "Display arrangement settings or refresh-rate limits not supported."
+    ],
+    remediations: [
+      "Document dock model, monitor models, cable types, and port mapping.",
+      "Test known-good cables and certified adapter path from support inventory.",
+      "Validate display settings/resolution-refresh combinations on both monitors.",
+      "Escalate for firmware/driver package review if issue persists."
+    ],
+    escalationCriteria: [
+      "Same dock model fails across multiple users after update rollout.",
+      "Firmware rollback/update requires endpoint engineering approval.",
+      "Users request unsupported daisy-chain or adapter bypass configurations."
+    ]
+  },
+  {
+    slug: "teams-usb-headset-microphone-not-detected-after-sleep",
+    title: "Teams USB Headset/Microphone Not Detected After Sleep",
+    description:
+      "Fix post-sleep USB audio device detection issues in Teams using safe endpoint and app-level checks before driver changes.",
+    category: "Microsoft 365",
+    productFamily: "Microsoft",
+    product: "Microsoft Teams",
+    environment: "Both",
+    severity: "Medium",
+    tags: ["teams", "usb", "headset", "microphone", "audio", "sleep-wake"],
+    symptoms: [
+      "Headset works before sleep but Teams cannot detect it after wake.",
+      "Microphone appears in OS settings but not in Teams device list.",
+      "Replugging headset temporarily restores function."
+    ],
+    causes: [
+      "USB audio endpoint is not re-enumerated cleanly after sleep/wake.",
+      "Teams retains stale audio device reference.",
+      "Dock/port power state causes intermittent endpoint availability."
+    ],
+    remediations: [
+      "Reconnect headset and relaunch Teams to refresh device enumeration.",
+      "Confirm default input/output device in OS and in Teams settings.",
+      "Test direct USB connection versus dock path for isolation.",
+      "Collect device model and reproducible steps for support escalation."
+    ],
+    escalationCriteria: [
+      "Issue affects many users with the same headset or dock model.",
+      "Driver/firmware update is required and needs admin packaging.",
+      "Business-critical meeting workflows are repeatedly disrupted."
+    ]
+  },
+  {
+    slug: "home-office-ups-sizing-runtime-planning",
+    title: "Home Office UPS Sizing and Runtime Planning",
+    description:
+      "Plan UPS capacity for remote-work setups to reduce outage-related disruptions while preserving safe shutdown and data-protection practices.",
+    category: "Windows",
+    productFamily: "Windows",
+    product: "UPS Power Backup",
+    environment: "Both",
+    severity: "Low",
+    tags: ["ups", "backup-power", "remote-work", "surge-protection", "runtime", "home-office"],
+    symptoms: [
+      "Brief power events interrupt calls, VPN sessions, or unsaved work.",
+      "Users are unsure which devices to place on UPS battery outlets.",
+      "Runtime is shorter than expected during outages."
+    ],
+    causes: [
+      "UPS watt/VA rating is too small for actual load.",
+      "Non-critical peripherals consume battery output.",
+      "Battery health degraded and replacement cycle missed."
+    ],
+    remediations: [
+      "Inventory essential load (laptop/dock/monitor/router) and estimate total watt draw.",
+      "Prioritize critical devices on battery-backed outlets; move non-critical devices to surge-only.",
+      "Test graceful shutdown runtime periodically and document baseline.",
+      "Replace aged batteries per manufacturer guidance and enterprise safety policy."
+    ],
+    escalationCriteria: [
+      "Frequent outages impact regulated workflows and require continuity planning.",
+      "Electrical safety concerns are identified in home-office setup.",
+      "Team-wide hardware standardization for remote resilience is requested."
+    ]
+  },
+  {
+    slug: "premiere-pro-scratch-disk-full-export-fails-managed-device",
+    title: "Premiere Pro Scratch Disk Full / Export Fails (Managed Device)",
+    description:
+      "Resolve Premiere Pro scratch-disk and export failures using safe storage triage on managed endpoints before deleting project data.",
+    category: "Adobe",
+    productFamily: "Adobe",
+    product: "Adobe Premiere Pro",
+    environment: "Both",
+    severity: "Medium",
+    tags: ["adobe", "premiere-pro", "scratch-disk", "export-fail", "storage", "creative-cloud"],
+    symptoms: [
+      "Exports fail with low disk/scratch error messages.",
+      "Timeline performance drops sharply near export time.",
+      "Premiere reports insufficient space despite free disk capacity elsewhere."
+    ],
+    causes: [
+      "Scratch/cache location points to constrained system volume.",
+      "Media cache growth consumed available local storage.",
+      "Temporary export path is blocked by permissions or endpoint policy."
+    ],
+    remediations: [
+      "Capture current scratch disk path and available free space per volume.",
+      "Use approved media-cache cleanup workflow and retest short export sample.",
+      "Move scratch/export destination to approved high-capacity local volume.",
+      "Avoid deleting source media/project files without owner confirmation."
+    ],
+    escalationCriteria: [
+      "Storage constraints affect multiple creative users on same device profile.",
+      "Endpoint storage policy blocks required cache/export operations.",
+      "Device workload sizing no longer meets creative team requirements."
+    ]
+  },
+  {
+    slug: "after-effects-disk-cache-growth-storage-pressure",
+    title: "After Effects Disk Cache Growth Causing Storage Pressure",
+    description:
+      "Troubleshoot After Effects disk-cache growth safely on enterprise-managed devices to restore performance without data-loss risk.",
+    category: "Adobe",
+    productFamily: "Adobe",
+    product: "Adobe After Effects",
+    environment: "Both",
+    severity: "Medium",
+    tags: ["adobe", "after-effects", "disk-cache", "storage", "performance", "render"],
+    symptoms: [
+      "After Effects performance degrades as cache size grows.",
+      "System storage fills quickly during renders/previews.",
+      "Projects fail to preview/render due to low free space."
+    ],
+    causes: [
+      "Disk cache location is too small for project workload.",
+      "Cache cleanup policy not applied regularly.",
+      "Concurrent creative apps consume shared storage pool."
+    ],
+    remediations: [
+      "Review current cache settings and location against approved standards.",
+      "Clear disk cache using app controls and verify free-space recovery.",
+      "Set cache size/location to enterprise-approved capacity target.",
+      "Coordinate with user on long-term project storage hygiene."
+    ],
+    escalationCriteria: [
+      "Creative fleet devices repeatedly exceed local storage limits.",
+      "Policy changes are required for cache location or device profile.",
+      "Potential data-loss risk exists due to aggressive manual cleanup attempts."
+    ]
+  },
+  {
+    slug: "phishing-link-clicked-immediate-containment-checklist",
+    title: "Phishing Link Clicked: Immediate Containment Checklist",
+    description:
+      "Provide an enterprise-safe immediate response checklist when a user clicks a suspected phishing link, without deleting forensic evidence or bypassing incident policy.",
+    category: "Identity / MFA / SSO",
+    productFamily: "Okta",
+    product: "Security Incident Triage",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "10-20 min",
+    tags: ["phishing", "security", "incident-response", "credential", "mfa", "containment"],
+    symptoms: [
+      "User clicked a suspicious URL received by email or chat.",
+      "Unexpected credential prompt or MFA push appears after click.",
+      "Browser redirects to unknown domains or fake sign-in pages."
+    ],
+    causes: [
+      "Credential-harvesting or token-theft phishing campaign.",
+      "Malicious redirect site mimicking corporate sign-in flow.",
+      "User session/cookie capture attempt."
+    ],
+    remediations: [
+      "Stop active interaction with suspicious page and capture URL/screenshot for evidence.",
+      "Initiate security incident process and follow approved containment guidance immediately.",
+      "Have user change password via approved portal and invalidate sessions through identity admin workflow.",
+      "Run managed endpoint security checks and review mailbox sign-in activity with security team."
+    ],
+    escalationCriteria: [
+      "Credential entry or MFA approval may have occurred on suspicious site.",
+      "Privileged account or sensitive system access is involved.",
+      "Multiple users report similar phishing pattern within a short window."
+    ]
+  },
+  {
+    slug: "browser-password-breach-warning-corporate-account",
+    title: "Browser Password Breach Warning for Corporate Account",
+    description:
+      "Handle browser leak warnings for corporate credentials using identity-safe reset workflow and managed password policy compliance.",
+    category: "Browsers",
+    productFamily: "Browser",
+    product: "Chrome / Edge Password Security",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    tags: ["password", "breach-warning", "chrome", "edge", "identity", "security"],
+    symptoms: [
+      "Browser warns that a saved corporate password was found in a data breach.",
+      "User stored corporate credentials in browser profile unexpectedly.",
+      "Repeated warning appears after password changes."
+    ],
+    causes: [
+      "Credential reused on external site that was breached.",
+      "Outdated password still stored in browser/extension vault.",
+      "Compromised credential pair remains active in one account path."
+    ],
+    remediations: [
+      "Force password reset using approved corporate identity flow and MFA confirmation.",
+      "Remove old leaked credential from unmanaged browser store and confirm approved vault usage.",
+      "Review recent sign-in activity for risky sessions and revoke as needed.",
+      "Educate user on approved credential storage standards for enterprise accounts."
+    ],
+    escalationCriteria: [
+      "Suspicious sign-ins or impossible-travel alerts are present.",
+      "Leaked credential belongs to privileged/admin account.",
+      "Potential compromise spans multiple identities or shared accounts."
+    ]
+  },
+  {
+    slug: "secure-home-router-for-remote-work-connectivity",
+    title: "Secure Home Router Baseline for Remote Work Connectivity",
+    description:
+      "Set a safe baseline for home router configuration to improve remote-work stability without weakening enterprise security requirements.",
+    category: "Networking / VPN",
+    productFamily: "Networking",
+    product: "Home Router / Wi-Fi",
+    environment: "Both",
+    severity: "Medium",
+    tags: ["router", "home-wifi", "remote-work", "vpn", "security", "network"],
+    symptoms: [
+      "Remote workers report recurring VPN drops or unstable call quality at home.",
+      "Wi-Fi dead zones or interference affect business app reliability.",
+      "Users ask for ad-hoc fixes that reduce security posture."
+    ],
+    causes: [
+      "Outdated firmware or unstable router hardware.",
+      "Crowded channels/interference from nearby networks.",
+      "Home network misconfiguration causing packet loss or DNS instability."
+    ],
+    remediations: [
+      "Update router firmware through vendor-approved UI and reboot during maintenance window.",
+      "Use WPA2/WPA3, strong admin credentials, and disable unnecessary remote administration.",
+      "Place critical work devices on 5 GHz where signal quality supports it and optimize channel selection.",
+      "Retest VPN and collaboration app quality after baseline improvements."
+    ],
+    escalationCriteria: [
+      "Business-critical users remain unstable after baseline changes.",
+      "Home environment requires enterprise networking support program guidance.",
+      "User requests disabling VPN or endpoint protections to improve connectivity."
+    ]
+  },
+  {
+    slug: "conference-room-usb-camera-flicker-freeze-teams-zoom",
+    title: "Conference Room USB Camera Flicker/Freeze (Teams/Zoom)",
+    description:
+      "Troubleshoot conference-room camera instability using safe AV path checks, cable validation, and firmware/version evidence collection.",
+    category: "AV / Conference Rooms",
+    productFamily: "AV",
+    product: "Conference Room USB Camera",
+    environment: "Both",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    tags: ["conference-room", "camera", "usb", "teams", "zoom", "av"],
+    symptoms: [
+      "Camera feed flickers, freezes, or drops during meetings.",
+      "Issue appears only at specific resolutions/frame rates.",
+      "Camera is detected by OS but unstable in meeting app."
+    ],
+    causes: [
+      "USB bandwidth/power instability in room device chain.",
+      "Cable quality or hub/dock path causing signal degradation.",
+      "Firmware/driver mismatch after endpoint or camera update."
+    ],
+    remediations: [
+      "Capture room hardware chain (camera, hub/dock, cables, host device) and app version.",
+      "Test known-good direct connection path and certified cable set.",
+      "Lower meeting resolution/frame rate temporarily to validate bandwidth constraint hypothesis.",
+      "Coordinate firmware/driver validation via approved AV support workflow."
+    ],
+    escalationCriteria: [
+      "Multiple rooms with same camera model fail after update.",
+      "Firmware rollback/update requires managed AV change control.",
+      "Critical executive/client-facing meeting rooms are impacted."
+    ]
+  },
+  {
+    slug: "docking-station-ethernet-not-detected-after-reboot",
+    title: "Docking Station Ethernet Not Detected After Reboot",
+    description:
+      "Troubleshoot missing wired Ethernet adapters on docked endpoints after reboot using safe adapter-state and firmware checks.",
+    category: "Windows",
+    productFamily: "Windows",
+    product: "USB-C Dock Ethernet Adapter",
+    environment: "Windows",
+    severity: "Medium",
+    tags: ["dock", "ethernet", "usb-c", "adapter", "network", "windows"],
+    symptoms: [
+      "Wired connection does not appear after reboot while dock is connected.",
+      "Wi-Fi works but LAN adapter is missing/intermittent.",
+      "Unplug/replug temporarily restores Ethernet."
+    ],
+    causes: [
+      "Dock Ethernet adapter not enumerated correctly during startup.",
+      "Power management or driver state issue for USB network device.",
+      "Dock firmware and endpoint driver mismatch."
+    ],
+    remediations: [
+      "Verify adapter presence in Device Manager and network settings immediately after reboot.",
+      "Test with known-good dock cable/port and direct host connection path.",
+      "Collect adapter hardware IDs and driver versions for endpoint engineering.",
+      "Apply approved firmware/driver package updates and retest boot cycle."
+    ],
+    escalationCriteria: [
+      "Issue affects multiple users sharing same dock model/firmware.",
+      "Driver packaging update is required across managed fleet.",
+      "Workaround requires unsupported device manager changes."
+    ],
+    commands: [
+      {
+        title: "Inspect network adapter state after reboot",
+        shell: "PowerShell",
+        content: "Get-NetAdapter | Select-Object Name, Status, LinkSpeed, InterfaceDescription"
+      }
+    ]
+  },
+  {
+    slug: "teams-meeting-echo-audio-feedback-conference-room",
+    title: "Teams Meeting Echo/Audio Feedback in Conference Room",
+    description:
+      "Resolve persistent room echo and feedback loops with safe mic/speaker path isolation and AV configuration checks.",
+    category: "AV / Conference Rooms",
+    productFamily: "AV",
+    product: "Microsoft Teams Rooms Audio",
+    environment: "Both",
+    severity: "Medium",
+    tags: ["teams", "conference-room", "echo", "feedback", "microphone", "speaker"],
+    symptoms: [
+      "Participants hear echo or delayed audio feedback from room endpoint.",
+      "Issue increases when room volume is raised.",
+      "Only some rooms or device combinations are affected."
+    ],
+    causes: [
+      "Microphone pickup overlaps room speaker output path.",
+      "Duplicate audio devices active in meeting app settings.",
+      "Room DSP or echo-cancellation configuration mismatch."
+    ],
+    remediations: [
+      "Confirm selected meeting-room microphone and speaker pair in app settings.",
+      "Reduce speaker gain and test with single known-good mic array path.",
+      "Check room audio processing/echo-cancellation profile against standard template.",
+      "Document room ID, device chain, and reproducible test call results."
+    ],
+    escalationCriteria: [
+      "Same room profile fails across recurring meetings.",
+      "DSP/room controller configuration updates are required.",
+      "Executive or client-briefing rooms are affected."
+    ]
+  },
+  {
+    slug: "remote-worker-webcam-image-quality-low-light-noise",
+    title: "Remote Worker Webcam Quality Poor in Low Light",
+    description:
+      "Improve webcam clarity for remote calls using safe lighting, positioning, and supported device settings without bypassing policy controls.",
+    category: "AV / Conference Rooms",
+    productFamily: "AV",
+    product: "USB Webcam",
+    environment: "Both",
+    severity: "Low",
+    tags: ["webcam", "video-quality", "low-light", "remote-work", "meetings", "usb"],
+    symptoms: [
+      "Video appears noisy, grainy, or blurry in meetings.",
+      "Auto-exposure continuously hunts/flickers in darker rooms.",
+      "Quality differs significantly between users despite same app."
+    ],
+    causes: [
+      "Insufficient front-facing lighting and webcam placement.",
+      "Unsupported resolution/frame-rate settings for current bandwidth.",
+      "Older webcam hardware with low-light limitations."
+    ],
+    remediations: [
+      "Position a neutral front light source and avoid bright backlighting behind the user.",
+      "Use supported resolution settings appropriate for network conditions.",
+      "Validate USB bandwidth path and avoid unstable hubs for camera connection.",
+      "Recommend approved webcam hardware upgrades when baseline quality remains poor."
+    ],
+    escalationCriteria: [
+      "Meeting quality affects client-facing communication standards.",
+      "Standardized hardware refresh guidance is needed for remote teams.",
+      "Users request unsupported third-party virtual camera software."
+    ]
+  },
+  {
+    slug: "acrobat-pdf-too-large-for-email-or-upload-safe-reduction",
+    title: "Acrobat PDF Too Large for Email/Upload (Safe Reduction)",
+    description:
+      "Reduce oversized PDFs safely for business sharing while preserving required quality, metadata, and compliance requirements.",
+    category: "Adobe",
+    productFamily: "Adobe",
+    product: "Adobe Acrobat",
+    environment: "Both",
+    severity: "Low",
+    tags: ["adobe", "acrobat", "pdf", "optimize", "compression", "upload"],
+    symptoms: [
+      "PDF cannot be emailed or uploaded due to size limits.",
+      "Users manually downsample in ways that hurt required readability.",
+      "Repeated 413/attachment-limit errors occur on standard workflows."
+    ],
+    causes: [
+      "High-resolution embedded images and duplicate resources.",
+      "Scanned PDFs saved without optimization.",
+      "Unnecessary metadata/attachments inflate file size."
+    ],
+    remediations: [
+      "Use Acrobat's optimization workflow with a documented quality baseline.",
+      "Target only non-critical image compression to preserve business readability.",
+      "Verify resulting file opens correctly and required content remains intact.",
+      "Use approved enterprise sharing channel for files that must remain high fidelity."
+    ],
+    escalationCriteria: [
+      "Compression would violate legal/regulatory document fidelity requirements.",
+      "Business process repeatedly exceeds platform attachment limits and needs redesign.",
+      "Sensitive documents require approved DLP-aware transfer route."
+    ]
+  },
+  {
+    slug: "creative-cloud-desktop-update-stuck-download-loop",
+    title: "Creative Cloud Desktop Update Stuck or Download Loop",
+    description:
+      "Troubleshoot recurring Creative Cloud app update loops in managed environments using safe cache and network checks.",
+    category: "Adobe",
+    productFamily: "Adobe",
+    product: "Adobe Creative Cloud",
+    environment: "Both",
+    severity: "Medium",
+    tags: ["adobe", "creative-cloud", "update", "download-loop", "install", "cache"],
+    symptoms: [
+      "Update progress stalls or restarts repeatedly in Creative Cloud Desktop.",
+      "App version does not change after 'successful' update.",
+      "Issue recurs after reboot/sign-out."
+    ],
+    causes: [
+      "Corrupt local update cache or package state.",
+      "Proxy/content filtering interrupting download segments.",
+      "Managed package/channel mismatch in software distribution."
+    ],
+    remediations: [
+      "Capture app version, update target version, and exact error text.",
+      "Run approved Creative Cloud cache cleanup workflow and retry update.",
+      "Validate network path/proxy access to Adobe update endpoints.",
+      "Escalate if package channel assignment in endpoint management is inconsistent."
+    ],
+    escalationCriteria: [
+      "Update loops affect multiple users in same deployment ring.",
+      "Packaging team intervention is required for managed app channel fix.",
+      "Users request manual installer bypass outside approved process."
+    ]
+  },
+  {
+    slug: "figma-desktop-high-memory-usage-large-design-files",
+    title: "Figma Desktop High Memory Usage on Large Design Files",
+    description:
+      "Triage Figma desktop memory pressure on complex files using safe project-scope and workstation checks before invasive resets.",
+    category: "Figma",
+    productFamily: "Figma",
+    product: "Figma Desktop App",
+    environment: "Both",
+    severity: "Medium",
+    tags: ["figma", "memory", "performance", "large-files", "desktop-app", "design-system"],
+    symptoms: [
+      "Figma desktop consumes high RAM and becomes unresponsive on large files.",
+      "Performance degrades after prolonged editing sessions.",
+      "Issue is worst on files with many components/pages/assets."
+    ],
+    causes: [
+      "Large file complexity and excessive component/instance nesting.",
+      "Limited endpoint memory resources for current workload.",
+      "Background apps competing for RAM on creative workstation."
+    ],
+    remediations: [
+      "Capture file scope metrics (pages/components/assets) and workstation specs.",
+      "Split very large files into logical modules where collaboration model permits.",
+      "Close non-essential high-memory apps before long editing sessions.",
+      "Coordinate with design ops for file-architecture best practices."
+    ],
+    escalationCriteria: [
+      "High-memory impact affects many designers on standard hardware profile.",
+      "Workstation tier no longer matches workload requirements.",
+      "Potential data-loss risk from repeated app crashes."
+    ]
+  },
+  {
+    slug: "figma-fonts-missing-on-vdi-or-shared-workstations",
+    title: "Figma Fonts Missing on VDI or Shared Workstations",
+    description:
+      "Troubleshoot missing Figma fonts in virtual or shared enterprise environments while maintaining approved font licensing and deployment policy.",
+    category: "Figma",
+    productFamily: "Figma",
+    product: "Figma Fonts",
+    environment: "Both",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    tags: ["figma", "fonts", "vdi", "shared-workstation", "permissions", "licensing"],
+    symptoms: [
+      "Design files show missing fonts on VDI or shared desktops.",
+      "Fonts appear on local machine but not virtual session.",
+      "Substituted fonts break layout consistency."
+    ],
+    causes: [
+      "Font service/agent not installed or blocked in virtual environment.",
+      "User permission scope for licensed fonts is incomplete.",
+      "Session isolation/profile reset removes expected local font state."
+    ],
+    remediations: [
+      "Confirm whether missing fonts are custom, licensed, or enterprise-standard sets.",
+      "Validate font service/agent state in VDI image and user session scope.",
+      "Align font deployment with licensing and endpoint management policy.",
+      "Reopen affected file after font sync and verify component layout integrity."
+    ],
+    escalationCriteria: [
+      "Licensed font entitlement conflicts require vendor/admin review.",
+      "VDI base image changes are needed across shared workstation pool.",
+      "Design-critical brand assets are blocked by unresolved font availability."
+    ]
+  },
+  {
+    slug: "windows-external-ssd-not-detected-usb-c-thunderbolt",
+    title: "Windows External SSD Not Detected (USB-C / Thunderbolt)",
+    description:
+      "Troubleshoot missing external SSD detection on managed Windows devices using safe cable, power, and storage-state checks before formatting actions.",
+    category: "Windows",
+    productFamily: "Windows",
+    product: "Windows External Storage",
+    environment: "Windows",
+    severity: "Medium",
+    tags: ["windows", "external-ssd", "usb-c", "thunderbolt", "storage", "adapter"],
+    symptoms: [
+      "External SSD powers on but does not appear in File Explorer.",
+      "Drive appears intermittently after reconnecting cable or dock.",
+      "Device is visible in one USB port but not another."
+    ],
+    causes: [
+      "Cable/adapter power delivery or data path limitation.",
+      "Driver/firmware mismatch for USB/TB controller.",
+      "Disk is offline or missing drive letter assignment."
+    ],
+    remediations: [
+      "Test with known-good cable and direct host connection (no dock) for isolation.",
+      "Check Disk Management for offline/unlettered volumes before any partition changes.",
+      "Confirm approved controller/firmware and storage driver state.",
+      "Avoid formatting or initializing unknown disks until data-ownership is confirmed."
+    ],
+    escalationCriteria: [
+      "Potential data-loss risk exists on business-critical removable storage.",
+      "Controller firmware/package update is required across endpoint fleet.",
+      "Drive hardware failure is suspected and forensic handling may be needed."
+    ],
+    commands: [
+      {
+        title: "Inspect external disk and USB controller state",
+        shell: "PowerShell",
+        content:
+          "Get-Disk | Select-Object Number,FriendlyName,OperationalStatus,PartitionStyle,IsOffline\nGet-PnpDevice -Class DiskDrive,USB | Select-Object Status,Class,FriendlyName"
+      }
+    ]
+  },
+  {
+    slug: "windows-bluetooth-headset-handsfree-low-audio-quality",
+    title: "Windows Bluetooth Headset Stuck in Hands-Free Low Quality Mode",
+    description:
+      "Fix Windows Bluetooth headset quality degradation in meeting apps while preserving approved audio-device and endpoint security settings.",
+    category: "Windows",
+    productFamily: "Windows",
+    product: "Windows Bluetooth Audio",
+    environment: "Windows",
+    severity: "Low",
+    tags: ["windows", "bluetooth", "headset", "audio-quality", "hands-free", "meetings"],
+    symptoms: [
+      "Audio quality drops to narrowband/robotic during calls.",
+      "Headset profile switches unexpectedly between stereo and hands-free.",
+      "Issue appears mostly in Teams/Zoom calls."
+    ],
+    causes: [
+      "Hands-free telephony profile forced as default output path.",
+      "Multiple audio endpoints selected inconsistently across apps/OS.",
+      "Bluetooth interference or outdated adapter/headset firmware."
+    ],
+    remediations: [
+      "Confirm app and OS are using intended Bluetooth input/output endpoints.",
+      "Disable unused duplicate audio profiles in endpoint settings where policy allows.",
+      "Test wired or USB dongle path to isolate Bluetooth transport limits.",
+      "Capture headset model/firmware and adapter details for support baseline."
+    ],
+    escalationCriteria: [
+      "Issue affects broad headset model cohort after update rollout.",
+      "Driver/firmware package update requires endpoint engineering deployment.",
+      "Critical conferencing workflows are repeatedly impacted."
+    ]
+  },
+  {
+    slug: "windows-webcam-not-detected-after-quality-update",
+    title: "Windows Webcam Not Detected After Quality Update",
+    description:
+      "Troubleshoot webcam disappearance after Windows updates using safe privacy, driver, and hardware path checks before rollback requests.",
+    category: "Windows",
+    productFamily: "Windows",
+    product: "Windows Camera Devices",
+    environment: "Windows",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    tags: ["windows", "webcam", "camera", "update", "driver", "privacy"],
+    symptoms: [
+      "Meeting apps report camera not found after Windows update.",
+      "Camera device is missing or disabled in Device Manager.",
+      "Built-in camera fails while external USB camera works (or vice versa)."
+    ],
+    causes: [
+      "Driver package replaced or disabled during update process.",
+      "Camera privacy control toggled by policy or OS setting changes.",
+      "Hardware enumeration issue on boot/dock chain."
+    ],
+    remediations: [
+      "Validate camera privacy permissions in Windows settings and per app.",
+      "Check Device Manager status and collect hardware/driver version details.",
+      "Test camera in built-in Camera app and collaboration app for scope isolation.",
+      "Escalate driver rollback/update only through approved endpoint packaging workflow."
+    ],
+    escalationCriteria: [
+      "Same update build breaks camera on multiple endpoint models.",
+      "Camera driver remediation requires managed package deployment.",
+      "User requests unsupported local security/privacy control bypass."
+    ]
+  },
+  {
+    slug: "windows-multi-monitor-flicker-after-dock-firmware-update",
+    title: "Windows Multi-Monitor Flicker After Dock Firmware Update",
+    description:
+      "Diagnose post-update display flicker on docked Windows setups using safe cable, refresh-rate, and firmware baseline checks.",
+    category: "Windows",
+    productFamily: "Windows",
+    product: "Windows Multi-Monitor Display",
+    environment: "Windows",
+    severity: "Medium",
+    tags: ["windows", "dock", "monitor", "flicker", "displayport", "firmware"],
+    symptoms: [
+      "External displays flicker or reconnect repeatedly while docked.",
+      "Problem started after dock firmware or graphics driver updates.",
+      "Flicker occurs only at higher resolution/refresh settings."
+    ],
+    causes: [
+      "Dock firmware and GPU driver compatibility regression.",
+      "Cable path bandwidth limitation for active display mode.",
+      "Display timing negotiation instability after update."
+    ],
+    remediations: [
+      "Capture dock firmware, GPU driver, monitor model, and cable type matrix.",
+      "Test stable baseline resolution/refresh then reintroduce target mode incrementally.",
+      "Swap to certified cables and avoid mixed adapter chains.",
+      "Coordinate approved firmware/driver rollback or update through endpoint support."
+    ],
+    escalationCriteria: [
+      "Issue affects many users on same dock firmware version.",
+      "Rollback/change control approval is required for room/fleet stability.",
+      "Executive or production-critical display workflows are impacted."
+    ]
+  },
+  {
+    slug: "windows-ethernet-poor-speed-negotiation-on-dock",
+    title: "Windows Dock Ethernet Link Speed Negotiates Too Low",
+    description:
+      "Troubleshoot docked Ethernet links negotiating at low speed with safe NIC, cable, and switch-path diagnostics.",
+    category: "Windows",
+    productFamily: "Windows",
+    product: "Windows Wired Networking",
+    environment: "Windows",
+    severity: "Medium",
+    tags: ["windows", "ethernet", "dock", "link-speed", "network", "adapter"],
+    symptoms: [
+      "Dock Ethernet links at 100 Mbps instead of expected 1 Gbps.",
+      "Large uploads/downloads are unusually slow when docked.",
+      "Wi-Fi may perform better than wired unexpectedly."
+    ],
+    causes: [
+      "Cable quality/damage or port mismatch on upstream switch/router.",
+      "Dock NIC driver/firmware mismatch.",
+      "Power management or speed/duplex negotiation issues."
+    ],
+    remediations: [
+      "Capture negotiated speed, adapter model, and cable/port path.",
+      "Test known-good Cat5e/Cat6 cable and alternate switch/router port.",
+      "Validate approved dock NIC driver and disable problematic power-saving settings if runbook allows.",
+      "Retest throughput after each controlled change."
+    ],
+    escalationCriteria: [
+      "Low-speed negotiation affects many devices on same dock model.",
+      "Network switch infrastructure issue is suspected.",
+      "Driver/firmware packaging change is required for managed fleet."
+    ],
+    commands: [
+      {
+        title: "Check Ethernet negotiation and adapter details",
+        shell: "PowerShell",
+        content: "Get-NetAdapter | Select-Object Name,Status,LinkSpeed,InterfaceDescription"
+      }
+    ]
+  },
+  {
+    slug: "windows-home-router-qos-for-teams-zoom-calls",
+    title: "Windows Home Router QoS Baseline for Teams/Zoom Calls",
+    description:
+      "Set a policy-safe home-network baseline to improve call quality for remote Windows users without weakening enterprise controls.",
+    category: "Windows",
+    productFamily: "Windows",
+    product: "Remote Work Call Quality",
+    environment: "Windows",
+    severity: "Low",
+    tags: ["windows", "router", "qos", "teams", "zoom", "remote-work", "network"],
+    symptoms: [
+      "Calls degrade when household streaming/uploads are active.",
+      "Meeting audio/video drops during peak home network usage.",
+      "Users report frequent jitter and packet loss on Wi-Fi."
+    ],
+    causes: [
+      "Home router lacks proper traffic prioritization for real-time media.",
+      "Wi-Fi congestion/interference on primary work path.",
+      "Background sync/backup traffic saturates upstream bandwidth."
+    ],
+    remediations: [
+      "Use wired connection for primary workstation when feasible.",
+      "Enable router QoS/media prioritization for conferencing traffic per vendor guidance.",
+      "Schedule heavy backup/sync tasks outside critical meeting windows.",
+      "Retest call stability and packet-loss metrics after changes."
+    ],
+    escalationCriteria: [
+      "Critical users continue to fail call-quality standards after baseline tuning.",
+      "Team-wide remote networking kit standardization is required.",
+      "Users request bypassing VPN/security controls to improve call quality."
+    ]
+  },
+  {
+    slug: "macos-thunderbolt-dock-dual-display-flicker-after-update",
+    title: "macOS Thunderbolt Dock Dual Display Flicker After Update",
+    description:
+      "Troubleshoot dual-display flicker on docked Macs after macOS/dock updates using safe path validation and AV baseline checks.",
+    category: "macOS",
+    productFamily: "Apple",
+    product: "macOS Thunderbolt Docking",
+    environment: "macOS",
+    severity: "Medium",
+    tags: ["macos", "thunderbolt", "dock", "dual-monitor", "flicker", "display"],
+    symptoms: [
+      "One or both external displays flicker or blank intermittently.",
+      "Issue appears after macOS update or dock firmware revision.",
+      "Flicker is worse at higher refresh/resolution modes."
+    ],
+    causes: [
+      "Dock firmware/display controller compatibility change.",
+      "Cable/adapter path bandwidth constraints.",
+      "Display mode negotiation instability in current OS build."
+    ],
+    remediations: [
+      "Capture Mac model/chipset, macOS build, dock firmware, and monitor mode details.",
+      "Test direct monitor connection and certified cable set to isolate dock path.",
+      "Apply conservative display mode baseline then increment toward target settings.",
+      "Coordinate approved firmware/OS mitigation via endpoint engineering."
+    ],
+    escalationCriteria: [
+      "Same dock/OS combination fails across multiple Mac models.",
+      "Rollback or coordinated update campaign is required.",
+      "Critical creative/executive display workflows are impacted."
+    ]
+  },
+  {
+    slug: "macos-external-ssd-not-mounting-after-macos-update",
+    title: "macOS External SSD Not Mounting After macOS Update",
+    description:
+      "Diagnose external SSD mount failures post-update with safe disk-state checks before repair/erase actions.",
+    category: "macOS",
+    productFamily: "Apple",
+    product: "macOS External Storage",
+    environment: "macOS",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    tags: ["macos", "external-ssd", "mount", "disk-utility", "usb-c", "thunderbolt"],
+    symptoms: [
+      "External SSD no longer mounts after macOS update.",
+      "Drive appears in System Information but not Finder.",
+      "Volume mounts read-only or fails with filesystem errors."
+    ],
+    causes: [
+      "Filesystem metadata inconsistency after update/reconnect.",
+      "USB/TB bridge compatibility issue with current OS build.",
+      "Power/cable path limitations or enclosure firmware issue."
+    ],
+    remediations: [
+      "Check disk visibility in Disk Utility and capture volume state before modification.",
+      "Test alternate cable/port and direct connection path.",
+      "Use read-only-safe verification workflow before any repair command.",
+      "Escalate for data-protection handling when business-critical content is at risk."
+    ],
+    escalationCriteria: [
+      "Disk may contain critical unrecovered project/business data.",
+      "Repair steps could risk data integrity without validated backup.",
+      "Multiple users with same enclosure model are impacted after OS update."
+    ],
+    commands: [
+      {
+        title: "Inspect disk and mount state",
+        shell: "Terminal",
+        content: "diskutil list\ndiskutil info /dev/disk2 2>/dev/null || true"
+      }
+    ]
+  },
+  {
+    slug: "macos-bluetooth-headset-audio-stutter-in-meetings",
+    title: "macOS Bluetooth Headset Audio Stutter in Meetings",
+    description:
+      "Resolve Bluetooth headset stutter/latency in Teams/Zoom on managed Macs using safe radio-path and endpoint checks.",
+    category: "macOS",
+    productFamily: "Apple",
+    product: "macOS Bluetooth Audio",
+    environment: "macOS",
+    severity: "Low",
+    tags: ["macos", "bluetooth", "headset", "audio", "teams", "zoom"],
+    symptoms: [
+      "Audio stutters or cuts out during calls using Bluetooth headset.",
+      "Call quality improves when using wired/USB headset.",
+      "Issue appears in specific office/home interference zones."
+    ],
+    causes: [
+      "Bluetooth interference and weak radio path to headset.",
+      "Concurrent high-bandwidth wireless peripherals on same band.",
+      "Firmware mismatch in headset or macOS Bluetooth stack."
+    ],
+    remediations: [
+      "Test with reduced interference (distance, fewer nearby wireless devices).",
+      "Validate selected input/output endpoints in meeting app and macOS sound settings.",
+      "Compare behavior with wired/USB audio to isolate Bluetooth path.",
+      "Capture reproducible conditions and headset firmware details for support."
+    ],
+    escalationCriteria: [
+      "Fleet-wide impact on a common headset model after OS update.",
+      "Firmware rollout is needed through managed accessory support.",
+      "Critical meeting workflows cannot rely on current audio path."
+    ]
+  },
+  {
+    slug: "macos-webcam-not-detected-teams-zoom-after-permission-reset",
+    title: "macOS Webcam Not Detected in Teams/Zoom After Permission Reset",
+    description:
+      "Troubleshoot webcam detection failures after privacy permission changes while preserving macOS TCC security policy.",
+    category: "macOS",
+    productFamily: "Apple",
+    product: "macOS Camera Permissions",
+    environment: "macOS",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    tags: ["macos", "webcam", "camera", "teams", "zoom", "privacy", "tcc"],
+    symptoms: [
+      "Meeting apps cannot access camera after settings or OS changes.",
+      "Camera works in one app but not another.",
+      "Camera permission prompt no longer appears when expected."
+    ],
+    causes: [
+      "TCC privacy entry missing, stale, or managed by profile.",
+      "App path/signature changed after update and old permission no longer applies.",
+      "External camera enumeration conflict through dock/hub path."
+    ],
+    remediations: [
+      "Review Privacy & Security camera permissions for affected apps.",
+      "Fully quit/relaunch app after permission changes and retest.",
+      "Test built-in camera vs external USB camera to isolate hardware path.",
+      "Escalate TCC/profile remediation through managed endpoint process."
+    ],
+    escalationCriteria: [
+      "Permission controls are locked by MDM and require policy update.",
+      "Issue affects many managed Macs after app/OS rollout.",
+      "Users request disabling privacy controls as workaround."
+    ]
+  },
+  {
+    slug: "macos-ethernet-usb-c-adapter-no-ip-after-sleep",
+    title: "macOS USB-C Ethernet Adapter Gets No IP After Sleep/Wake",
+    description:
+      "Fix post-sleep wired networking failures on USB-C Ethernet adapters with safe interface and DHCP path checks.",
+    category: "macOS",
+    productFamily: "Apple",
+    product: "macOS Wired Networking",
+    environment: "macOS",
+    severity: "Medium",
+    tags: ["macos", "ethernet", "usb-c", "sleep-wake", "dhcp", "adapter"],
+    symptoms: [
+      "Ethernet adapter shows connected but no usable IP after wake.",
+      "Replugging adapter restores network temporarily.",
+      "Issue recurs after repeated sleep/wake cycles."
+    ],
+    causes: [
+      "Adapter interface state stale after power transition.",
+      "DHCP lease/renew process fails on wake.",
+      "Adapter firmware or macOS driver interaction issue."
+    ],
+    remediations: [
+      "Capture adapter status and IP assignment immediately after wake.",
+      "Toggle network service and retest DHCP assignment.",
+      "Test alternate adapter/cable path and direct host connection.",
+      "Escalate for adapter firmware/driver standard review."
+    ],
+    escalationCriteria: [
+      "Issue affects multiple users on same adapter model.",
+      "Network infrastructure lease behavior requires engineering review.",
+      "Managed hardware standard needs update for reliable wired connectivity."
+    ],
+    commands: [
+      {
+        title: "Check interface and IP state after wake",
+        shell: "Terminal",
+        content: "ifconfig | grep -A4 en\nipconfig getifaddr en5 2>/dev/null || true"
+      }
+    ]
+  },
+  {
+    slug: "macos-battery-health-degradation-remote-work-lifecycle",
+    title: "macOS Battery Health Degradation and Remote Work Lifecycle Planning",
+    description:
+      "Assess Mac battery wear and runtime decline with safe diagnostics to inform replacement planning and reduce meeting/work interruption risk.",
+    category: "macOS",
+    productFamily: "Apple",
+    product: "Mac Battery Health",
+    environment: "macOS",
+    severity: "Low",
+    tags: ["macos", "battery-health", "remote-work", "runtime", "lifecycle", "power"],
+    symptoms: [
+      "Mac battery drains quickly during normal remote-work usage.",
+      "Unexpected shutdowns occur at moderate battery percentages.",
+      "Users rely on constant charging and lose mobility during meetings."
+    ],
+    causes: [
+      "Battery cycle count and health have reached service threshold.",
+      "High sustained workload raises thermal and power draw.",
+      "Aging battery no longer supports expected runtime profile."
+    ],
+    remediations: [
+      "Capture battery health metrics and cycle count from system diagnostics.",
+      "Validate workload and background process impact on runtime expectations.",
+      "Recommend replacement planning when health is below support threshold.",
+      "Pair with UPS/power continuity guidance for critical remote users."
+    ],
+    escalationCriteria: [
+      "Battery health is below policy threshold for business continuity.",
+      "Large cohort of same model shows accelerated battery decline.",
+      "Hardware refresh/replacement approval is required."
+    ],
+    commands: [
+      {
+        title: "Battery condition and cycle diagnostics",
+        shell: "Terminal",
+        content: "system_profiler SPPowerDataType | grep -E \"Cycle Count|Condition|Maximum Capacity\""
+      }
+    ]
+  },
+  {
+    slug: "macos-home-wifi-channel-interference-video-call-instability",
+    title: "macOS Home Wi-Fi Channel Interference During Video Calls",
+    description:
+      "Troubleshoot macOS call instability caused by home Wi-Fi congestion/interference using safe channel and placement optimization guidance.",
+    category: "macOS",
+    productFamily: "Apple",
+    product: "macOS Wi-Fi",
+    environment: "macOS",
+    severity: "Low",
+    tags: ["macos", "wifi", "interference", "video-calls", "remote-work", "router"],
+    symptoms: [
+      "Video calls drop frames and freeze at predictable times.",
+      "Latency spikes occur when nearby devices are active.",
+      "Issue improves when moving closer to router."
+    ],
+    causes: [
+      "Channel congestion in apartment/high-density environments.",
+      "Weak signal due to router placement and physical barriers.",
+      "Mixed legacy/high-throughput device contention on same band."
+    ],
+    remediations: [
+      "Capture affected time windows, app behavior, and signal quality context.",
+      "Prefer 5 GHz/6 GHz where supported and reposition workstation for stronger signal.",
+      "Tune router channel selection via vendor-recommended settings.",
+      "Use wired/mesh backhaul for persistent high-impact call reliability issues."
+    ],
+    escalationCriteria: [
+      "Call quality remains below business threshold after baseline tuning.",
+      "Remote-work kit upgrade recommendations are required for impacted roles.",
+      "Users request insecure bypasses of enterprise VPN/security controls."
+    ]
+  },
+  {
+    slug: "windows-rdp-lag-over-home-network-vpn",
+    title: "Windows RDP Lag Over Home Network + VPN",
+    description:
+      "Troubleshoot remote desktop latency and session stutter for Windows users on VPN/home networks using safe evidence collection and routing checks.",
+    category: "Windows",
+    productFamily: "Windows",
+    product: "Windows Remote Desktop",
+    environment: "Windows",
+    severity: "Medium",
+    tags: ["windows", "rdp", "latency", "vpn", "remote-work", "network"],
+    symptoms: [
+      "RDP session input lags, freezes, or has delayed screen refresh.",
+      "Performance worsens during peak home network usage.",
+      "Issue improves when switching network path."
+    ],
+    causes: [
+      "High jitter/packet loss on home Wi-Fi path.",
+      "VPN overhead and routing path congestion.",
+      "Display quality settings exceed available network capacity."
+    ],
+    remediations: [
+      "Capture latency/jitter on both local and VPN-active paths.",
+      "Use wired connection where possible and reduce RDP visual effects for testing.",
+      "Validate VPN profile behavior and compare with approved alternate profile if available.",
+      "Attach reproducible timing and network metrics to escalation ticket."
+    ],
+    escalationCriteria: [
+      "Multiple remote users on same VPN profile are impacted.",
+      "Routing or egress congestion requires network engineering review.",
+      "Business-critical remote operations are blocked by sustained latency."
+    ],
+    commands: [
+      {
+        title: "RDP path latency diagnostics",
+        shell: "CMD",
+        content: "ping -n 20 <rdp-hostname>\ntracert <rdp-hostname>"
+      }
+    ]
+  },
+  {
+    slug: "windows-laptop-thermal-throttling-during-video-meetings",
+    title: "Windows Laptop Thermal Throttling During Video Meetings",
+    description:
+      "Diagnose meeting-time performance drops caused by thermal throttling on managed Windows laptops with safe workload and hardware checks.",
+    category: "Windows",
+    productFamily: "Windows",
+    product: "Windows Device Performance",
+    environment: "Windows",
+    severity: "Medium",
+    tags: ["windows", "thermal", "throttling", "video-calls", "cooling", "performance"],
+    symptoms: [
+      "CPU frequency drops and call quality degrades during long meetings.",
+      "Fan noise spikes and system responsiveness declines.",
+      "Issue is more noticeable when camera/screen share is active."
+    ],
+    causes: [
+      "Thermal limits reached under sustained conferencing workload.",
+      "Blocked airflow, dust buildup, or high ambient temperature.",
+      "Background processes increasing heat during calls."
+    ],
+    remediations: [
+      "Collect CPU/temperature trend during call workload with approved monitoring tools.",
+      "Improve ventilation and use stable desk placement (avoid soft surfaces).",
+      "Close non-essential high-load apps before meetings.",
+      "Escalate for hardware servicing or workload-tier upgrade planning."
+    ],
+    escalationCriteria: [
+      "Thermal throttling is repeatable across same device model cohort.",
+      "Hardware health concern requires device repair/replacement workflow.",
+      "User role needs higher-performance endpoint standard."
+    ]
+  },
+  {
+    slug: "windows-usb-c-dock-not-charging-laptop-consistently",
+    title: "Windows USB-C Dock Not Charging Laptop Consistently",
+    description:
+      "Troubleshoot intermittent dock charging issues on Windows laptops with safe power-path, firmware, and cable validation.",
+    category: "Windows",
+    productFamily: "Windows",
+    product: "USB-C Dock Power Delivery",
+    environment: "Windows",
+    severity: "Medium",
+    tags: ["windows", "usb-c", "dock", "charging", "power-delivery", "adapter"],
+    symptoms: [
+      "Laptop battery drains while docked.",
+      "Charging state toggles on/off during normal use.",
+      "Issue varies by cable or dock port."
+    ],
+    causes: [
+      "Dock power budget is insufficient for current workload/peripherals.",
+      "USB-C cable does not support required PD wattage.",
+      "Dock/BIOS/firmware compatibility issue."
+    ],
+    remediations: [
+      "Verify dock wattage requirements against laptop power demand profile.",
+      "Use certified PD-capable cable and approved power adapter path.",
+      "Reduce high-power peripherals temporarily to validate power-budget hypothesis.",
+      "Capture firmware/BIOS versions for endpoint escalation."
+    ],
+    escalationCriteria: [
+      "Charging instability affects same dock model across users.",
+      "Firmware/BIOS update rollout is required.",
+      "Power-path workaround would violate approved hardware standard."
+    ]
+  },
+  {
+    slug: "windows-nvme-free-space-pressure-onedrive-cache-growth",
+    title: "Windows NVMe Free Space Pressure from Sync/Cache Growth",
+    description:
+      "Address low free-space issues on Windows NVMe drives caused by sync/cache growth using safe cleanup and storage planning.",
+    category: "Windows",
+    productFamily: "Windows",
+    product: "Windows Storage Management",
+    environment: "Windows",
+    severity: "Medium",
+    tags: ["windows", "nvme", "storage", "onedrive", "cache", "free-space"],
+    symptoms: [
+      "System drive fills rapidly and apps fail updates/exports.",
+      "OneDrive/cache-heavy workflows consume unexpectedly large space.",
+      "Performance degrades under low free-space conditions."
+    ],
+    causes: [
+      "Large sync scope with local pinning behavior.",
+      "Application cache/temp growth without rotation.",
+      "Device storage tier undersized for workload."
+    ],
+    remediations: [
+      "Capture largest directories and identify business-critical vs temporary data.",
+      "Apply approved cache cleanup and OneDrive files-on-demand policy guidance.",
+      "Move large non-critical local artifacts to approved storage locations.",
+      "Plan endpoint storage tier upgrade when workload consistently exceeds baseline."
+    ],
+    escalationCriteria: [
+      "Low-space condition impacts multiple users in same role profile.",
+      "Policy tuning for sync/cache behavior is required.",
+      "Data-loss risk exists if users attempt ad hoc deletions."
+    ],
+    commands: [
+      {
+        title: "Largest directories quick scan",
+        shell: "PowerShell",
+        content:
+          "Get-ChildItem C:\\ -Directory -ErrorAction SilentlyContinue | ForEach-Object { $_.FullName; (Get-ChildItem $_.FullName -Recurse -ErrorAction SilentlyContinue | Measure-Object Length -Sum).Sum }"
+      }
+    ]
+  },
+  {
+    slug: "macos-airpods-microphone-switching-between-devices-calls",
+    title: "macOS AirPods Microphone Switching Between Devices During Calls",
+    description:
+      "Troubleshoot AirPods input switching across Apple devices during meetings while maintaining approved conferencing standards.",
+    category: "macOS",
+    productFamily: "Apple",
+    product: "AirPods / macOS Audio",
+    environment: "macOS",
+    severity: "Low",
+    tags: ["macos", "airpods", "microphone", "bluetooth", "teams", "zoom", "audio"],
+    symptoms: [
+      "Microphone input switches away from Mac during live call.",
+      "Call participants hear dropouts or sudden volume changes.",
+      "Issue occurs when iPhone/iPad nearby receives notifications/calls."
+    ],
+    causes: [
+      "Automatic device switching behavior across Apple ecosystem.",
+      "Competing active audio sessions on nearby devices.",
+      "Bluetooth path instability during roaming."
+    ],
+    remediations: [
+      "Disable automatic switching for meeting-critical sessions where policy allows.",
+      "Set fixed input/output devices in meeting app before joining calls.",
+      "Keep non-essential paired devices idle during important meetings.",
+      "Capture reproducible steps and device firmware details if persistent."
+    ],
+    escalationCriteria: [
+      "Issue affects many users with same accessory firmware generation.",
+      "Accessory standardization guidance is needed for meeting reliability.",
+      "Business-critical conferencing quality remains below threshold."
+    ]
+  },
+  {
+    slug: "macos-thunderbolt-storage-disconnects-under-load",
+    title: "macOS Thunderbolt Storage Disconnects Under Load",
+    description:
+      "Investigate intermittent Thunderbolt storage disconnects during large file operations with safe cable/power/path diagnostics.",
+    category: "macOS",
+    productFamily: "Apple",
+    product: "Thunderbolt External Storage",
+    environment: "macOS",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    tags: ["macos", "thunderbolt", "storage", "disconnect", "external-drive", "transfer"],
+    symptoms: [
+      "Drive disconnects during large copy/export workloads.",
+      "Finder reports device ejected improperly.",
+      "Issue is worse with dock chains or bus-powered enclosures."
+    ],
+    causes: [
+      "Cable or enclosure stability limits under sustained throughput.",
+      "Power delivery insufficiency in dock/hub path.",
+      "Controller/firmware compatibility regression."
+    ],
+    remediations: [
+      "Test direct connection path with certified Thunderbolt cable.",
+      "Validate enclosure power requirements and avoid overloaded hub chains.",
+      "Capture disconnect timing against workload profile for engineering review.",
+      "Preserve data safety by avoiding repeated forced reconnect cycles."
+    ],
+    escalationCriteria: [
+      "Disconnects threaten data integrity on business-critical volumes.",
+      "Hardware firmware issue affects multiple users/devices.",
+      "Storage platform standard needs revision."
+    ],
+    commands: [
+      {
+        title: "Disk state before/after disconnect",
+        shell: "Terminal",
+        content: "diskutil list\nlog show --last 15m --predicate 'process == \"kernel\"' | grep -i -E \"thunderbolt|disk|eject\""
+      }
+    ]
+  },
+  {
+    slug: "macos-fan-noise-high-during-teams-zoom-screen-share",
+    title: "macOS Fan Noise High During Teams/Zoom Screen Share",
+    description:
+      "Reduce excessive fan activity and performance dips during screen sharing with safe workload and display settings tuning.",
+    category: "macOS",
+    productFamily: "Apple",
+    product: "macOS Meeting Performance",
+    environment: "macOS",
+    severity: "Low",
+    tags: ["macos", "fan-noise", "screen-share", "teams", "zoom", "performance"],
+    symptoms: [
+      "Fans ramp quickly when sharing screen in meetings.",
+      "System responsiveness drops during long calls.",
+      "Battery drains rapidly during conferencing."
+    ],
+    causes: [
+      "Combined camera + screen encoding workload exceeds thermal envelope.",
+      "High-resolution/refresh external display increases render load.",
+      "Background indexing/sync processes add CPU pressure."
+    ],
+    remediations: [
+      "Close heavy background apps before starting screen share sessions.",
+      "Lower shared content resolution/frame complexity where acceptable.",
+      "Use power adapter during long calls and maintain unobstructed airflow.",
+      "Collect reproducible workload profile for endpoint performance tuning."
+    ],
+    escalationCriteria: [
+      "Thermal/performance issues affect multiple users on same hardware tier.",
+      "Meeting workload exceeds current endpoint profile standards.",
+      "Hardware refresh planning is required for call-heavy roles."
+    ]
+  },
+  {
+    slug: "macos-displaylink-adapter-not-working-after-macos-upgrade",
+    title: "macOS DisplayLink Adapter Not Working After macOS Upgrade",
+    description:
+      "Troubleshoot DisplayLink post-upgrade failures using safe permission and driver lifecycle checks in managed Mac environments.",
+    category: "macOS",
+    productFamily: "Apple",
+    product: "DisplayLink Adapter",
+    environment: "macOS",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    tags: ["macos", "displaylink", "adapter", "monitor", "upgrade", "driver"],
+    symptoms: [
+      "External monitors via DisplayLink fail after macOS upgrade.",
+      "Adapter is recognized but no video output appears.",
+      "Screen recording permission prompts recur or never appear."
+    ],
+    causes: [
+      "DisplayLink service/driver not compatible with new OS build.",
+      "Required privacy permissions not retained post-upgrade.",
+      "Managed software deployment lags behind OS update."
+    ],
+    remediations: [
+      "Verify approved DisplayLink version for current macOS build.",
+      "Check privacy permissions and relaunch service after updates.",
+      "Test adapter path with certified cables and known-good monitor.",
+      "Escalate package updates through endpoint software management."
+    ],
+    escalationCriteria: [
+      "Fleet-wide monitor outage follows OS upgrade cycle.",
+      "Managed package update is required for compatibility restoration.",
+      "Users request unsupported driver bypass/install methods."
+    ]
+  },
+  {
+    slug: "photoshop-canvas-lag-gpu-acceleration-managed-device",
+    title: "Photoshop Canvas Lag with GPU Acceleration (Managed Device)",
+    description:
+      "Troubleshoot Photoshop responsiveness issues linked to GPU acceleration settings on enterprise-managed creative endpoints.",
+    category: "Adobe",
+    productFamily: "Adobe",
+    product: "Adobe Photoshop",
+    environment: "Both",
+    severity: "Medium",
+    tags: ["adobe", "photoshop", "gpu", "canvas-lag", "performance", "creative-cloud"],
+    symptoms: [
+      "Brush strokes and pan/zoom feel delayed on large files.",
+      "GPU-intensive features cause intermittent freezes.",
+      "Performance changes after graphics driver or app update."
+    ],
+    causes: [
+      "GPU driver compatibility issue with current Photoshop build.",
+      "Insufficient VRAM/resources for active project complexity.",
+      "Conflicting background graphics workloads."
+    ],
+    remediations: [
+      "Capture Photoshop and GPU driver versions plus repro steps.",
+      "Test approved performance preferences and GPU feature toggles.",
+      "Validate endpoint workload suitability for creative tier standards.",
+      "Escalate driver/package optimization through endpoint engineering."
+    ],
+    escalationCriteria: [
+      "Issue appears after rollout and affects multiple creative users.",
+      "Driver/profile change is required in managed fleet.",
+      "Business-critical design workflows are materially blocked."
+    ]
+  },
+  {
+    slug: "lightroom-classic-catalog-slow-external-drive-workflow",
+    title: "Lightroom Classic Catalog Slow on External Drive Workflow",
+    description:
+      "Improve Lightroom Classic catalog performance on external-drive workflows using safe storage path, cache, and preview management.",
+    category: "Adobe",
+    productFamily: "Adobe",
+    product: "Adobe Lightroom Classic",
+    environment: "Both",
+    severity: "Medium",
+    tags: ["adobe", "lightroom", "catalog", "external-drive", "performance", "storage"],
+    symptoms: [
+      "Catalog operations are slow when images are on external drives.",
+      "Preview generation and module switching lag significantly.",
+      "Performance degrades over time with large libraries."
+    ],
+    causes: [
+      "External drive throughput/latency constraints.",
+      "Catalog/preview cache on slow or constrained volume.",
+      "Library size and preview settings not aligned to hardware tier."
+    ],
+    remediations: [
+      "Capture catalog location, preview cache location, and storage interface details.",
+      "Move catalog/preview cache to faster approved local storage when possible.",
+      "Optimize previews/catalog per Adobe best-practice workflow.",
+      "Validate external drive health and cable path stability."
+    ],
+    escalationCriteria: [
+      "Performance constraints affect broad creative team workflows.",
+      "Storage architecture changes are needed for photo production standards.",
+      "Potential catalog corruption/data-integrity concerns emerge."
+    ]
+  },
+  {
+    slug: "figma-browser-tab-crashes-large-prototype-presentation",
+    title: "Figma Browser Tab Crashes on Large Prototype Presentation",
+    description:
+      "Troubleshoot browser crashes on complex Figma prototypes using safe browser/GPU/resource checks and prototype optimization guidance.",
+    category: "Figma",
+    productFamily: "Figma",
+    product: "Figma Web",
+    environment: "Both",
+    severity: "Medium",
+    tags: ["figma", "browser", "crash", "prototype", "performance", "webgl"],
+    symptoms: [
+      "Browser tab crashes when opening or presenting large prototypes.",
+      "Issue is more common on specific browsers/profiles.",
+      "Design handoff reviews are disrupted by repeated reloads."
+    ],
+    causes: [
+      "High memory/GPU load from large prototype assets/interactions.",
+      "Browser profile/extension overhead increases instability.",
+      "Graphics acceleration path conflict in current browser build."
+    ],
+    remediations: [
+      "Reproduce in clean browser profile and compare against baseline browser.",
+      "Reduce prototype complexity in presentation path (heavy embeds/videos/transitions).",
+      "Capture browser crash context and hardware profile for support.",
+      "Coordinate with design ops on prototype optimization patterns."
+    ],
+    escalationCriteria: [
+      "Crashes affect many users across same browser version.",
+      "GPU/browser policy tuning requires endpoint management changes.",
+      "Critical design review timelines are impacted."
+    ]
+  },
+  {
+    slug: "figma-dev-mode-access-denied-org-permission-model",
+    title: "Figma Dev Mode Access Denied (Org Permission Model)",
+    description:
+      "Resolve Figma Dev Mode access denials by validating org licensing, role assignments, and project-level permissions with least-privilege controls.",
+    category: "Figma",
+    productFamily: "Figma",
+    product: "Figma Dev Mode",
+    environment: "Both",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    tags: ["figma", "dev-mode", "permissions", "access-denied", "licensing", "roles"],
+    symptoms: [
+      "Users can open files but Dev Mode is unavailable or denied.",
+      "Team members have inconsistent Dev Mode access in same project.",
+      "Access changed after org role/licensing updates."
+    ],
+    causes: [
+      "Dev Mode entitlement missing for user role or team plan.",
+      "Project permissions do not align with expected developer access.",
+      "SSO/group mapping update removed required role assignment."
+    ],
+    remediations: [
+      "Confirm expected user role and licensing entitlement for Dev Mode features.",
+      "Validate team/project permission inheritance and explicit overrides.",
+      "Reconcile SSO/group mappings with current org access model.",
+      "Re-test access after controlled role update and document outcome."
+    ],
+    escalationCriteria: [
+      "Org-wide entitlement mismatch affects engineering/design collaboration.",
+      "License plan or procurement changes are required.",
+      "Access request involves sensitive unreleased product assets."
+    ]
+  },
+  {
+    slug: "dns-filter-blocks-adobe-figma-endpoints-enterprise-network",
+    title: "DNS Filter Blocks Adobe/Figma Endpoints on Enterprise Network",
+    description:
+      "Troubleshoot content-filter or DNS-policy blocks impacting Adobe and Figma workflows without bypassing security controls.",
+    category: "Networking / VPN",
+    productFamily: "Networking",
+    product: "Enterprise DNS Filtering",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    tags: ["dns", "filtering", "adobe", "figma", "network", "security-policy"],
+    symptoms: [
+      "Creative apps fail sign-in/sync only on corporate network.",
+      "Endpoints resolve to block pages or fail with DNS errors.",
+      "Issue disappears on alternative approved network."
+    ],
+    causes: [
+      "New DNS policy/category blocking required vendor domains.",
+      "TLS inspection/filter path incompatible with app endpoint behavior.",
+      "Resolver mismatch between VPN and local network context."
+    ],
+    remediations: [
+      "Capture failing domain requests and timestamps from affected workflows.",
+      "Compare DNS resolution and reachability on approved alternate path.",
+      "Submit allowlist review request with least-privilege domain scope.",
+      "Validate post-change behavior and monitor for over-broad exceptions."
+    ],
+    escalationCriteria: [
+      "Policy block impacts broad design/creative teams.",
+      "Security architecture approval is required for domain exceptions.",
+      "Users request unmanaged DNS/VPN bypass workarounds."
+    ],
+    commands: [
+      {
+        title: "Compare DNS resolution for vendor endpoints",
+        shell: "CLI",
+        content:
+          "# Windows\nnslookup adobe.com\nnslookup figma.com\n\n# macOS\nscutil --dns | head -80\nnslookup adobe.com\nnslookup figma.com"
+      }
+    ]
+  },
+  {
+    slug: "home-mesh-wifi-roaming-causes-vpn-session-drops",
+    title: "Home Mesh Wi-Fi Roaming Causes VPN Session Drops",
+    description:
+      "Diagnose VPN disconnects triggered by home mesh node roaming events and stabilize remote-work connectivity with safe configuration guidance.",
+    category: "Networking / VPN",
+    productFamily: "Networking",
+    product: "Home Mesh Wi-Fi + VPN",
+    environment: "Both",
+    severity: "Medium",
+    tags: ["mesh-wifi", "vpn", "roaming", "remote-work", "network", "stability"],
+    symptoms: [
+      "VPN disconnects when moving between rooms or mesh nodes.",
+      "Calls and remote sessions drop during Wi-Fi handoff.",
+      "Issue is repeatable in homes with multiple mesh access points."
+    ],
+    causes: [
+      "Aggressive roaming/handoff behavior interrupts tunnel continuity.",
+      "Node backhaul quality fluctuations increase packet loss.",
+      "VPN keepalive sensitivity to short path interruptions."
+    ],
+    remediations: [
+      "Capture disconnect timing relative to movement/roaming events.",
+      "Prefer stable primary node connection for critical work sessions.",
+      "Tune mesh roaming aggressiveness per vendor guidance where supported.",
+      "Validate VPN profile resilience and reconnect behavior after network transitions."
+    ],
+    escalationCriteria: [
+      "Role-critical users remain unstable after baseline mesh tuning.",
+      "Remote-work network kit guidance requires update at scale.",
+      "Users request disabling VPN protections to mask roaming issues."
+    ]
   }
 ];
 

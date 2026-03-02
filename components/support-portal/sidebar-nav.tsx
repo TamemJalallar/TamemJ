@@ -6,8 +6,6 @@ import { SupportIcon } from "@/components/support-portal/icons";
 
 interface SidebarNavProps {
   collapsed: boolean;
-  adminEnabled: boolean;
-  onToggleAdmin: (enabled: boolean) => void;
   onCloseMobile?: () => void;
 }
 
@@ -24,12 +22,8 @@ const baseNavItems = [
   { href: "/support/analytics", label: "Analytics", icon: "analytics" as const }
 ];
 
-export function SidebarNav({ collapsed, adminEnabled, onToggleAdmin, onCloseMobile }: SidebarNavProps) {
+export function SidebarNav({ collapsed, onCloseMobile }: SidebarNavProps) {
   const pathname = usePathname();
-
-  const navItems = adminEnabled
-    ? [...baseNavItems, { href: "/support/admin", label: "Admin", icon: "admin" as const }]
-    : baseNavItems;
 
   return (
     <div className="flex h-full flex-col">
@@ -50,7 +44,7 @@ export function SidebarNav({ collapsed, adminEnabled, onToggleAdmin, onCloseMobi
       <div className="flex-1 overflow-y-auto p-3">
         <p className={cx("mb-2 px-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400", collapsed && "lg:hidden")}>Portal</p>
         <nav aria-label="Support portal navigation" className="space-y-1">
-          {navItems.map((item) => {
+          {baseNavItems.map((item) => {
             const isActive = item.href === "/support" ? pathname === "/support" : pathname?.startsWith(item.href);
 
             return (
@@ -73,30 +67,6 @@ export function SidebarNav({ collapsed, adminEnabled, onToggleAdmin, onCloseMobi
             );
           })}
         </nav>
-      </div>
-
-      <div className={cx("border-t border-line/70 p-3 dark:border-slate-800", collapsed && "lg:px-2")}> 
-        <div className={cx("rounded-xl border border-line/80 bg-white p-3 dark:border-slate-800 dark:bg-slate-900", collapsed && "lg:p-2")}> 
-          {!collapsed ? (
-            <div className="mb-2">
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">Admin Mode</p>
-              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">Local toggle reveals Admin tools and reset controls.</p>
-            </div>
-          ) : null}
-          <label className={cx("flex cursor-pointer items-center justify-between gap-3", collapsed && "lg:justify-center")}> 
-            {!collapsed ? <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Enable Admin</span> : null}
-            <input
-              type="checkbox"
-              checked={adminEnabled}
-              onChange={(event) => onToggleAdmin(event.target.checked)}
-              className="peer sr-only"
-              aria-label="Enable admin mode"
-            />
-            <span className="relative inline-flex h-6 w-11 shrink-0 items-center rounded-full bg-slate-300 transition peer-checked:bg-slate-900 dark:bg-slate-700 dark:peer-checked:bg-slate-100">
-              <span className="inline-flex h-5 w-5 translate-x-0.5 rounded-full bg-white transition peer-checked:translate-x-5 dark:bg-slate-900 dark:peer-checked:bg-slate-900" />
-            </span>
-          </label>
-        </div>
       </div>
     </div>
   );

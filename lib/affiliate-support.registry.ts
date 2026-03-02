@@ -29,8 +29,31 @@ const affiliateSupportMappings: AffiliateSupportMapping[] = [
     supportDocSlug: "amazon-associates-affiliate-setup-and-link-compliance",
     priority: 70,
     rule: {
+      slugs: [
+        "usb-c-dock-dual-monitors-not-detected-windows-macos",
+        "teams-usb-headset-microphone-not-detected-after-sleep",
+        "home-office-ups-sizing-runtime-planning",
+        "conference-room-usb-camera-flicker-freeze-teams-zoom",
+        "docking-station-ethernet-not-detected-after-reboot",
+        "teams-meeting-echo-audio-feedback-conference-room",
+        "remote-worker-webcam-image-quality-low-light-noise",
+        "secure-home-router-for-remote-work-connectivity",
+        "windows-external-ssd-not-detected-usb-c-thunderbolt",
+        "windows-bluetooth-headset-handsfree-low-audio-quality",
+        "windows-webcam-not-detected-after-quality-update",
+        "windows-multi-monitor-flicker-after-dock-firmware-update",
+        "windows-ethernet-poor-speed-negotiation-on-dock",
+        "windows-home-router-qos-for-teams-zoom-calls",
+        "macos-thunderbolt-dock-dual-display-flicker-after-update",
+        "macos-external-ssd-not-mounting-after-macos-update",
+        "macos-bluetooth-headset-audio-stutter-in-meetings",
+        "macos-webcam-not-detected-teams-zoom-after-permission-reset",
+        "macos-ethernet-usb-c-adapter-no-ip-after-sleep",
+        "macos-battery-health-degradation-remote-work-lifecycle",
+        "macos-home-wifi-channel-interference-video-call-instability"
+      ],
       categories: ["Windows", "macOS", "Networking / VPN", "Printers / Scanners", "AV / Conference Rooms"],
-      tags: ["dock", "monitor", "keyboard", "printer", "usb", "adapter", "wifi", "network"]
+      tags: ["dock", "monitor", "keyboard", "printer", "usb", "adapter", "wifi", "network", "headset", "ups"]
     }
   },
   {
@@ -38,6 +61,12 @@ const affiliateSupportMappings: AffiliateSupportMapping[] = [
     supportDocSlug: "adobe-affiliate-partnerize-setup-and-attribution-validation",
     priority: 100,
     rule: {
+      slugs: [
+        "premiere-pro-scratch-disk-full-export-fails-managed-device",
+        "after-effects-disk-cache-growth-storage-pressure",
+        "acrobat-pdf-too-large-for-email-or-upload-safe-reduction",
+        "creative-cloud-desktop-update-stuck-download-loop"
+      ],
       productFamilies: ["Adobe"],
       categories: ["Adobe"]
     }
@@ -47,6 +76,12 @@ const affiliateSupportMappings: AffiliateSupportMapping[] = [
     supportDocSlug: "onepassword-affiliate-cj-setup-and-conversion-testing",
     priority: 95,
     rule: {
+      slugs: [
+        "password-manager-autofill-not-working-chrome-edge-enterprise",
+        "password-manager-shared-vault-access-not-updating",
+        "password-manager-extension-blocked-by-browser-policy",
+        "browser-password-breach-warning-corporate-account"
+      ],
       categories: ["Identity / MFA / SSO"],
       tags: ["mfa", "identity", "security", "password", "credential", "sso"],
       productFamilies: ["Microsoft", "Okta"]
@@ -57,6 +92,13 @@ const affiliateSupportMappings: AffiliateSupportMapping[] = [
     supportDocSlug: "malwarebytes-affiliate-setup-and-security-safe-promotion",
     priority: 90,
     rule: {
+      slugs: [
+        "endpoint-security-false-positive-blocking-business-app",
+        "endpoint-security-agent-high-cpu-after-update",
+        "ransomware-safe-onedrive-sharepoint-file-recovery",
+        "phishing-link-clicked-immediate-containment-checklist",
+        "browser-password-breach-warning-corporate-account"
+      ],
       categories: ["Windows", "macOS", "Browsers", "Identity / MFA / SSO"],
       tags: ["security", "malware", "phishing", "browser", "endpoint", "threat"]
     }
@@ -75,6 +117,14 @@ const affiliateSupportMappings: AffiliateSupportMapping[] = [
     supportDocSlug: "surfshark-affiliate-placement-and-policy-compliant-positioning",
     priority: 65,
     rule: {
+      slugs: [
+        "vpn-kill-switch-blocking-teams-outlook",
+        "vpn-connected-saas-apps-blocked-ip-reputation-geo",
+        "public-wifi-safe-remote-work-connectivity-checklist",
+        "secure-home-router-for-remote-work-connectivity",
+        "windows-home-router-qos-for-teams-zoom-calls",
+        "macos-home-wifi-channel-interference-video-call-instability"
+      ],
       categories: ["Networking / VPN", "Browsers"],
       tags: ["vpn", "privacy", "public-wifi", "remote-work", "network"]
     }
@@ -84,6 +134,13 @@ const affiliateSupportMappings: AffiliateSupportMapping[] = [
     supportDocSlug: "proton-partners-affiliate-setup-and-privacy-safe-messaging",
     priority: 75,
     rule: {
+      slugs: [
+        "public-wifi-safe-remote-work-connectivity-checklist",
+        "vpn-connected-saas-apps-blocked-ip-reputation-geo",
+        "ransomware-safe-onedrive-sharepoint-file-recovery",
+        "browser-password-breach-warning-corporate-account",
+        "secure-home-router-for-remote-work-connectivity"
+      ],
       categories: ["Identity / MFA / SSO", "Networking / VPN", "Business / Partnerships"],
       tags: ["privacy", "security", "email", "encryption"]
     }
@@ -95,7 +152,16 @@ const affiliateSupportMappings: AffiliateSupportMapping[] = [
     rule: {
       productFamilies: ["Apple", "Mobile"],
       categories: ["macOS", "iOS", "Business / Partnerships"],
-      tags: ["apple", "ios", "macos", "app-store"]
+      slugs: [
+        "macos-thunderbolt-dock-dual-display-flicker-after-update",
+        "macos-external-ssd-not-mounting-after-macos-update",
+        "macos-bluetooth-headset-audio-stutter-in-meetings",
+        "macos-webcam-not-detected-teams-zoom-after-permission-reset",
+        "macos-ethernet-usb-c-adapter-no-ip-after-sleep",
+        "macos-battery-health-degradation-remote-work-lifecycle",
+        "macos-home-wifi-channel-interference-video-call-instability"
+      ],
+      tags: ["apple", "ios", "macos", "app-store", "thunderbolt", "battery-health", "webcam"]
     }
   }
 ];

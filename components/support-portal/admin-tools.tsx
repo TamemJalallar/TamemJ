@@ -11,6 +11,10 @@ import {
 } from "@/lib/support-portal.storage";
 import { resetSupportAnalytics, trackAdminAction } from "@/lib/support-portal.analytics";
 
+function cx(...classes: Array<string | false | null | undefined>): string {
+  return classes.filter(Boolean).join(" ");
+}
+
 export function AdminTools() {
   const [adminEnabled, setAdminEnabledState] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -28,28 +32,58 @@ export function AdminTools() {
     <div className="space-y-5">
       <SupportPageHeader
         title="Admin Tools"
-        description="Local-only demo utilities for seeding tickets and resetting portal analytics/state. Admin mode visibility is controlled by a local sidebar toggle."
+        description="Local-only demo utilities for seeding tickets and resetting portal analytics/state. Admin controls are available only on /support/admin."
         breadcrumbs={[{ label: "Support Portal", href: "/support" }, { label: "Admin" }]}
       />
 
-      {!adminEnabled ? (
-        <section className="rounded-2xl border border-line/70 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-950/70">
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Admin Mode Disabled</h2>
-          <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-            Enable Admin Mode from the support portal sidebar to reveal admin navigation and use reset/seed tools.
-          </p>
+      <section className="rounded-2xl border border-line/70 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-6">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Admin Mode</h2>
+            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+              Toggle local admin mode to unlock reset and seed tools in this browser.
+            </p>
+            <p className="mt-2 text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+              Status: {adminEnabled ? "Enabled" : "Disabled"}
+            </p>
+          </div>
           <button
             type="button"
+            role="switch"
+            aria-checked={adminEnabled}
+            aria-label="Enable admin mode"
             onClick={() => {
-              setSupportAdminEnabled(true);
-              setAdminEnabledState(true);
-              trackAdminAction("enable_admin_mode_from_admin_page");
-              flashMessage("Admin mode enabled locally.");
+              const nextEnabled = !adminEnabled;
+              setSupportAdminEnabled(nextEnabled);
+              setAdminEnabledState(nextEnabled);
+              trackAdminAction(
+                nextEnabled ? "enable_admin_mode_from_admin_page" : "disable_admin_mode_from_admin_page"
+              );
+              flashMessage(nextEnabled ? "Admin mode enabled locally." : "Admin mode disabled locally.");
             }}
-            className="btn-primary mt-4"
+            className={cx(
+              "relative inline-flex h-8 w-14 shrink-0 items-center rounded-full border transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/70 focus-visible:ring-offset-2 dark:focus-visible:ring-slate-500/70 dark:focus-visible:ring-offset-slate-950",
+              adminEnabled
+                ? "border-emerald-500 bg-emerald-500/90 dark:border-emerald-400 dark:bg-emerald-400"
+                : "border-slate-300 bg-slate-300 dark:border-slate-600 dark:bg-slate-700"
+            )}
           >
-            Enable Admin Mode (Local)
+            <span
+              className={cx(
+                "inline-flex h-6 w-6 transform rounded-full bg-white shadow-md transition-transform duration-200 ease-out dark:bg-slate-950",
+                adminEnabled ? "translate-x-7" : "translate-x-1"
+              )}
+            />
           </button>
+        </div>
+      </section>
+
+      {!adminEnabled ? (
+        <section className="rounded-2xl border border-line/70 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-950/70">
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Admin Tools Locked</h2>
+          <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+            Enable Admin Mode above to use seed/reset tools.
+          </p>
         </section>
       ) : (
         <div className="grid gap-5 lg:grid-cols-2">

@@ -7,7 +7,6 @@ import { SidebarNav } from "@/components/support-portal/sidebar-nav";
 import { SupportIcon } from "@/components/support-portal/icons";
 import {
   getSupportPortalState,
-  setSupportAdminEnabled,
   setSupportSidebarCollapsed
 } from "@/lib/support-portal.storage";
 
@@ -18,23 +17,16 @@ function cx(...classes: Array<string | false | null | undefined>): string {
 export function SupportPortalShell({ children }: { children: ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
-  const [adminEnabled, setAdminEnabled] = useState(false);
 
   useEffect(() => {
     const state = getSupportPortalState();
     setCollapsed(state.sidebarCollapsed);
-    setAdminEnabled(state.adminEnabled);
   }, []);
 
   function handleToggleCollapse() {
     const next = !collapsed;
     setCollapsed(next);
     setSupportSidebarCollapsed(next);
-  }
-
-  function handleToggleAdmin(enabled: boolean) {
-    setAdminEnabled(enabled);
-    setSupportAdminEnabled(enabled);
   }
 
   return (
@@ -60,11 +52,7 @@ export function SupportPortalShell({ children }: { children: ReactNode }) {
                 </button>
               </div>
               <div className="h-[calc(100%-3.5rem)]">
-                <SidebarNav
-                  collapsed={collapsed}
-                  adminEnabled={adminEnabled}
-                  onToggleAdmin={handleToggleAdmin}
-                />
+                <SidebarNav collapsed={collapsed} />
               </div>
             </aside>
           </div>
@@ -119,8 +107,6 @@ export function SupportPortalShell({ children }: { children: ReactNode }) {
               </div>
               <SidebarNav
                 collapsed={false}
-                adminEnabled={adminEnabled}
-                onToggleAdmin={handleToggleAdmin}
                 onCloseMobile={() => setMobileOpen(false)}
               />
             </div>

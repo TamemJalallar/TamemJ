@@ -452,7 +452,7 @@ Tracked event types include:
 - `ticket_comment_added`
 - `admin_action`
 
-Reset options are available in `/support/admin` (after enabling Admin Mode from the sidebar):
+Reset options are available in `/support/admin` (after enabling Admin Mode on the admin page):
 
 - Reset Analytics
 - Reset KB Helpful Votes

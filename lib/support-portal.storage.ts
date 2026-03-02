@@ -102,6 +102,36 @@ function saveStoredTickets(tickets: Ticket[]): void {
   writeLocalJson(STORAGE_KEYS.tickets, tickets);
 }
 
+function createSimplifiedTicketId(type: Ticket["type"], existingTickets: Ticket[]): string {
+  const prefix = type === "Incident" ? "INC" : "REQ";
+  const startNumber = type === "Incident" ? 1000 : 2000;
+  const idPattern = new RegExp(`^${prefix}-(\\d+)$`);
+  const usedIds = new Set(existingTickets.map((ticket) => ticket.id));
+  let maxNumber = startNumber - 1;
+
+  for (const ticket of existingTickets) {
+    const match = ticket.id.match(idPattern);
+    if (!match) {
+      continue;
+    }
+
+    const parsed = Number.parseInt(match[1], 10);
+    if (Number.isFinite(parsed) && parsed > maxNumber) {
+      maxNumber = parsed;
+    }
+  }
+
+  let nextNumber = maxNumber + 1;
+  let candidate = `${prefix}-${nextNumber}`;
+
+  while (usedIds.has(candidate)) {
+    nextNumber += 1;
+    candidate = `${prefix}-${nextNumber}`;
+  }
+
+  return candidate;
+}
+
 export interface CreateTicketInput {
   requesterName: string;
   requesterPhone: string;
@@ -123,9 +153,11 @@ export interface CreateTicketInput {
 
 export function createTicket(input: CreateTicketInput): Ticket {
   const now = new Date().toISOString();
+  const current = getStoredTickets();
+  const ticketId = createSimplifiedTicketId(input.type, current);
 
   const createdTicket: Ticket = {
-    id: createLocalId(input.type === "Incident" ? "INC" : "REQ"),
+    id: ticketId,
     createdAt: now,
     updatedAt: now,
     requesterName: input.requesterName.trim(),
@@ -159,7 +191,6 @@ export function createTicket(input: CreateTicketInput): Ticket {
     ]
   };
 
-  const current = getStoredTickets();
   saveStoredTickets([createdTicket, ...current]);
   return createdTicket;
 }
