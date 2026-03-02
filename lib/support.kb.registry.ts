@@ -6620,6 +6620,1011 @@ const generalSeeds: KBSeed[] = [
       "Issue affects many Android users in meetings.",
       "High-visibility customer/leadership meetings are impacted."
     ]
+  },
+  {
+    slug: "kandji-macos-device-not-checking-in",
+    title: "Kandji macOS Device Not Checking In",
+    description:
+      "Troubleshoot Kandji-managed Mac endpoints that stop reporting/checking in by validating MDM enrollment state, local agent health, and network reachability before reenrollment.",
+    category: "macOS",
+    productFamily: "Apple",
+    product: "Kandji (macOS)",
+    environment: "macOS",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "20-40 min",
+    tags: ["kandji", "mdm", "macos", "check-in", "enrollment", "compliance"],
+    symptoms: [
+      "Device shows stale check-in or offline status in Kandji.",
+      "Blueprint changes and compliance updates are not reflected on the device.",
+      "Endpoint appears healthy locally but not reporting in admin console."
+    ],
+    causes: [
+      "Local MDM enrollment state is degraded or stale.",
+      "Kandji agent/service health issue after update or reboot cycle.",
+      "Network/proxy path blocks required management endpoints."
+    ],
+    remediations: [
+      "Confirm user connectivity and collect last known successful check-in time.",
+      "Validate MDM enrollment and profile status before any unenroll action.",
+      "Collect local process/log evidence and compare against known-good managed device.",
+      "Re-sync/repair through approved endpoint workflow; avoid unmanaged reenrollment shortcuts."
+    ],
+    escalationCriteria: [
+      "Multiple Kandji-managed devices stop checking in at the same time.",
+      "Blueprint critical controls (security/compliance) are not applying.",
+      "Reenrollment or profile replacement is required under endpoint change control."
+    ],
+    commands: [
+      {
+        title: "Check enrollment status and MDM profile state",
+        shell: "Terminal",
+        content:
+          "profiles status -type enrollment\nprofiles show -type enrollment"
+      },
+      {
+        title: "Collect agent/process and MDM client diagnostics",
+        shell: "Terminal",
+        content:
+          "ps aux | grep -i kandji | grep -v grep\nlog show --last 30m --predicate 'process == \"mdmclient\"' --style compact | tail -120"
+      }
+    ]
+  },
+  {
+    slug: "kandji-blueprint-assignment-not-applied",
+    title: "Kandji Blueprint Assignment Not Applied to Device",
+    description:
+      "Resolve Kandji blueprint assignment mismatches where expected apps/settings are not reaching a managed Mac after enrollment or role changes.",
+    category: "macOS",
+    productFamily: "Apple",
+    product: "Kandji Blueprints",
+    environment: "macOS",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "20-35 min",
+    tags: ["kandji", "blueprint", "assignment", "macos", "policy", "mdm"],
+    symptoms: [
+      "Newly enrolled Mac is missing expected baseline apps or settings.",
+      "Device appears in Kandji but does not match assigned blueprint posture.",
+      "Security controls in blueprint are delayed or not visible on endpoint."
+    ],
+    causes: [
+      "Device record is scoped incorrectly to a different blueprint.",
+      "Assignment conditions or inventory attributes are not matching expected rules.",
+      "Policy/install queue delayed due to agent sync or dependency ordering."
+    ],
+    remediations: [
+      "Verify expected blueprint and dynamic assignment logic for the device record.",
+      "Reconcile inventory attributes used for assignment criteria (department, serial, role).",
+      "Run approved policy sync and confirm required apps/profiles reach endpoint.",
+      "Document which blueprint controls are missing for risk visibility."
+    ],
+    escalationCriteria: [
+      "Security baseline controls are not applied on newly deployed fleet devices.",
+      "Assignment logic changes are required for multiple departments.",
+      "Endpoint remains out of policy after controlled reassignment and sync."
+    ]
+  },
+  {
+    slug: "kandji-os-update-enforcement-deferral-loop",
+    title: "Kandji OS Update Enforcement in Deferral Loop",
+    description:
+      "Troubleshoot macOS update enforcement loops in Kandji where devices remain deferred/noncompliant despite user prompts and restart attempts.",
+    category: "macOS",
+    productFamily: "Apple",
+    product: "Kandji OS Updates",
+    environment: "macOS",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    estimatedTime: "20-30 min",
+    tags: ["kandji", "macos", "updates", "deferral", "compliance", "restart"],
+    symptoms: [
+      "Users repeatedly receive update prompts and remain noncompliant.",
+      "Device reports pending updates long after restart attempts.",
+      "Update policy deadlines pass without successful install completion."
+    ],
+    causes: [
+      "Insufficient free disk space or power/network prerequisites not met.",
+      "OS update channel mismatch (major vs minor) against policy requirements.",
+      "Deferred update state not clearing due to install failures or user interruption."
+    ],
+    remediations: [
+      "Validate free storage, power state, and reliable network before enforcing update.",
+      "Confirm required update version and policy scope align to hardware eligibility.",
+      "Collect install logs and retry through approved update workflow.",
+      "Coordinate user communication for enforced restart windows."
+    ],
+    escalationCriteria: [
+      "Large cohort remains noncompliant after the same update rollout.",
+      "Critical security patch cannot be enforced by policy.",
+      "Update policy or rollout cadence requires platform engineering change."
+    ]
+  },
+  {
+    slug: "kandji-filevault-recovery-key-not-escrowed",
+    title: "Kandji FileVault Recovery Key Not Escrowed",
+    description:
+      "Address missing FileVault key escrow reporting in Kandji using safe validation steps before forcing encryption state resets.",
+    category: "macOS",
+    productFamily: "Apple",
+    product: "Kandji FileVault Management",
+    environment: "macOS",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "25-45 min",
+    tags: ["kandji", "filevault", "escrow", "recovery-key", "security", "macos"],
+    symptoms: [
+      "Device is encrypted but recovery key is missing in Kandji console.",
+      "Compliance checks fail for encryption escrow control.",
+      "Security operations cannot confirm recoverability posture."
+    ],
+    causes: [
+      "Escrow workflow failed during initial encryption or post-rotation.",
+      "Endpoint lost policy/apply state during key rotation window.",
+      "Device/user workflow completed encryption outside managed policy sequence."
+    ],
+    remediations: [
+      "Confirm current FileVault state and user ownership context on endpoint.",
+      "Validate escrow policy deployment state and key-rotation requirements.",
+      "Use approved key rotation/escrow remediation path via MDM policy.",
+      "Document completion evidence in ticket for auditability."
+    ],
+    escalationCriteria: [
+      "Security-required escrow posture remains unmet after policy remediation.",
+      "Large device set shows missing escrow after enrollment/update wave.",
+      "Manual recovery-key handling outside policy is requested."
+    ],
+    commands: [
+      {
+        title: "Validate FileVault status and user encryption state",
+        shell: "Terminal",
+        content:
+          "sudo fdesetup status\nsudo fdesetup list"
+      }
+    ]
+  },
+  {
+    slug: "kandji-privacy-or-system-extension-profile-not-applying",
+    title: "Kandji Privacy/System Extension Profile Not Applying",
+    description:
+      "Troubleshoot Kandji-delivered PPPC or system extension profiles not applying on managed Macs without bypassing corporate security controls.",
+    category: "macOS",
+    productFamily: "Apple",
+    product: "Kandji Profiles (PPPC / System Extensions)",
+    environment: "macOS",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "20-35 min",
+    tags: ["kandji", "pppc", "system-extension", "privacy", "macos", "security-controls"],
+    symptoms: [
+      "Approved app is blocked by missing permissions on managed Mac.",
+      "Security/network extension remains in pending or blocked state.",
+      "Users are prompted for controls that should be silently managed."
+    ],
+    causes: [
+      "Profile payload mismatch for app bundle/team identifier.",
+      "Profile conflict with existing local or legacy management payload.",
+      "OS update changed extension/permission behavior requiring policy update."
+    ],
+    remediations: [
+      "Verify profile payload identifiers and deployment scope in Kandji.",
+      "Check endpoint profile install status and conflict indicators.",
+      "Re-push corrected profile through approved blueprint/policy path.",
+      "Retest affected workflow after restart/login cycle where required."
+    ],
+    escalationCriteria: [
+      "Security tooling remains blocked in production endpoints.",
+      "Policy template updates are required for all managed Macs.",
+      "User requests manual security override or unmanaged exception."
+    ],
+    commands: [
+      {
+        title: "Inspect installed configuration profiles and extension status",
+        shell: "Terminal",
+        content:
+          "profiles list\nsystemextensionsctl list"
+      }
+    ]
+  },
+  {
+    slug: "kandji-ios-device-compliance-status-stale",
+    title: "Kandji iOS Device Compliance Status Stale",
+    description:
+      "Troubleshoot iOS Kandji-managed devices showing stale compliance/enrollment status that blocks corporate app access.",
+    category: "iOS",
+    productFamily: "Apple",
+    product: "Kandji iOS Device Management",
+    environment: "iOS",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "15-30 min",
+    tags: ["kandji", "ios", "compliance", "mdm", "enrollment", "mobile"],
+    symptoms: [
+      "Device appears enrolled but compliance is outdated or unknown.",
+      "User is blocked from managed apps by device posture checks.",
+      "Recent policy changes do not reflect on iPhone/iPad."
+    ],
+    causes: [
+      "Managed profile sync not completing on device.",
+      "Network or authentication state blocking management refresh.",
+      "Enrollment/profile state drift after device restore or OS upgrade."
+    ],
+    remediations: [
+      "Confirm managed profile presence and account sign-in validity.",
+      "Trigger manual sync/check from management app where available.",
+      "Re-evaluate compliance conditions against updated device state.",
+      "Escalate before profile removal or reenrollment to avoid managed data loss."
+    ],
+    escalationCriteria: [
+      "Broad iOS cohort fails compliance after policy rollout.",
+      "Conditional access remains blocked after sync validation.",
+      "Reenrollment of executive/high-risk devices is required."
+    ]
+  },
+  {
+    slug: "jamf-pro-policy-not-running-on-managed-mac",
+    title: "Jamf Pro Policy Not Running on Managed Mac",
+    description:
+      "Troubleshoot Jamf policy execution failures on macOS endpoints using safe connectivity and agent checks before invasive reenrollment actions.",
+    category: "macOS",
+    productFamily: "Apple",
+    product: "Jamf Pro Policies",
+    environment: "macOS",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "20-35 min",
+    tags: ["jamf", "jamf-pro", "policy", "macos", "mdm", "agent"],
+    symptoms: [
+      "Required baseline/configuration policies do not execute on device.",
+      "Expected app installs/config scripts never trigger.",
+      "Jamf inventory appears stale or incomplete."
+    ],
+    causes: [
+      "Jamf binary/agent communication issue with Jamf Pro server.",
+      "Policy scope/trigger mismatch for the device.",
+      "Network/certificate/proxy constraints interrupt policy execution."
+    ],
+    remediations: [
+      "Validate device scope and trigger conditions for affected policy.",
+      "Confirm endpoint can reach Jamf Pro infrastructure.",
+      "Run approved policy/inventory refresh diagnostics.",
+      "Capture logs before any reenroll action for root-cause analysis."
+    ],
+    escalationCriteria: [
+      "Security-critical policies fail across multiple managed Macs.",
+      "Server-side Jamf infrastructure issue is suspected.",
+      "Reenrollment is required and must be coordinated with endpoint team."
+    ],
+    commands: [
+      {
+        title: "Validate Jamf binary and server connectivity",
+        shell: "Terminal",
+        content:
+          "which jamf\nsudo jamf checkJSSConnection"
+      },
+      {
+        title: "Trigger policy and inventory update (approved diagnostics)",
+        shell: "Terminal",
+        content:
+          "sudo jamf policy -verbose\nsudo jamf recon"
+      }
+    ]
+  },
+  {
+    slug: "jamf-self-service-install-stuck-or-failing",
+    title: "Jamf Self Service Install Stuck or Failing",
+    description:
+      "Troubleshoot Jamf Self Service app/package installation failures on managed Macs while preserving compliance and software governance controls.",
+    category: "macOS",
+    productFamily: "Apple",
+    product: "Jamf Self Service",
+    environment: "macOS",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    estimatedTime: "15-30 min",
+    tags: ["jamf", "self-service", "install", "package", "macos", "software-delivery"],
+    symptoms: [
+      "Self Service shows install pending indefinitely.",
+      "Install fails with generic error or retries repeatedly.",
+      "User cannot install approved productivity/security software."
+    ],
+    causes: [
+      "Policy/script/package dependency failed in install chain.",
+      "Device inventory/scope mismatch excludes expected package build.",
+      "Network or distribution point issue interrupts package fetch."
+    ],
+    remediations: [
+      "Validate item scope, policy trigger, and package version assignment.",
+      "Collect Self Service/Jamf logs with timestamped failure details.",
+      "Retry installation after policy/inventory refresh in approved workflow.",
+      "Escalate before manual app sideloading outside managed catalog."
+    ],
+    escalationCriteria: [
+      "Core software package fails for multiple endpoints.",
+      "Distribution point/content delivery issue is suspected.",
+      "User requests unmanaged installation as workaround."
+    ]
+  },
+  {
+    slug: "jamf-connect-login-loop-after-password-change",
+    title: "Jamf Connect Login Loop After Password Change",
+    description:
+      "Resolve Jamf Connect login loops after identity password updates by reconciling local account credentials with IdP state in a secure enterprise workflow.",
+    category: "Identity / MFA / SSO",
+    productFamily: "Apple",
+    product: "Jamf Connect",
+    environment: "macOS",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "20-40 min",
+    tags: ["jamf-connect", "sso", "login-loop", "password-change", "identity", "macos"],
+    symptoms: [
+      "User enters valid credentials but returns to login screen repeatedly.",
+      "Issue starts shortly after IdP password reset or MFA change.",
+      "Local account unlock/sign-in behavior is inconsistent."
+    ],
+    causes: [
+      "Credential sync mismatch between local account and cloud identity.",
+      "Token/session issue after password or factor changes.",
+      "Jamf Connect configuration not aligned with current IdP policy."
+    ],
+    remediations: [
+      "Confirm password change event timing and affected identity provider account.",
+      "Validate Jamf Connect configuration profile and version on endpoint.",
+      "Use approved credential sync/reset workflow documented by endpoint identity team.",
+      "Record exact loop behavior and timestamps for authentication log correlation."
+    ],
+    escalationCriteria: [
+      "Executive or privileged account cannot authenticate.",
+      "Loop affects multiple users after identity policy change.",
+      "IdP/Jamf Connect configuration update is required."
+    ]
+  },
+  {
+    slug: "jamf-mdm-profile-missing-after-device-migration",
+    title: "Jamf MDM Profile Missing or Unverified After Device Migration",
+    description:
+      "Troubleshoot missing/unverified Jamf MDM profile state after macOS migration, restore, or hardware replacement events.",
+    category: "macOS",
+    productFamily: "Apple",
+    product: "Jamf MDM Enrollment",
+    environment: "macOS",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "20-40 min",
+    tags: ["jamf", "mdm", "enrollment", "migration", "macos", "device-lifecycle"],
+    symptoms: [
+      "Jamf profile is missing, invalid, or not user-approved on migrated device.",
+      "Policies and management commands stop applying after restore/migration.",
+      "Device appears in Jamf with inconsistent management posture."
+    ],
+    causes: [
+      "Migration/restore disrupted profile trust or enrollment relationship.",
+      "Automated device enrollment state mismatch with device record.",
+      "User-approved MDM requirements not satisfied post-migration."
+    ],
+    remediations: [
+      "Confirm enrollment source (ADE/manual) and expected management model.",
+      "Validate local profile state and device record alignment in Jamf Pro.",
+      "Follow approved reenrollment playbook for migrated devices.",
+      "Preserve encryption/compliance artifacts before enrollment reset."
+    ],
+    escalationCriteria: [
+      "Multiple post-migration devices lose managed posture.",
+      "Security controls no longer enforce due to missing profile.",
+      "Enrollment reset requires endpoint engineering oversight."
+    ],
+    commands: [
+      {
+        title: "Check enrollment and profile state",
+        shell: "Terminal",
+        content:
+          "profiles status -type enrollment\nprofiles show -type enrollment"
+      }
+    ]
+  },
+  {
+    slug: "jamf-filevault-personal-recovery-key-not-escrowed",
+    title: "Jamf FileVault Personal Recovery Key Not Escrowed",
+    description:
+      "Address Jamf-reported FileVault escrow failures with controlled key-validation and policy remediation steps appropriate for audited enterprise environments.",
+    category: "macOS",
+    productFamily: "Apple",
+    product: "Jamf FileVault Management",
+    environment: "macOS",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "25-45 min",
+    tags: ["jamf", "filevault", "escrow", "recovery-key", "security", "macos"],
+    symptoms: [
+      "FileVault is enabled but personal recovery key is not in Jamf.",
+      "Compliance posture fails encryption escrow control.",
+      "Security team cannot validate key recoverability for endpoint."
+    ],
+    causes: [
+      "Escrow payload/policy not applied during encryption lifecycle.",
+      "Key rotation failed due to policy timing or user session state.",
+      "Device encrypted outside managed Jamf escrow workflow."
+    ],
+    remediations: [
+      "Confirm current encryption and PRK state on endpoint.",
+      "Validate Jamf encryption escrow profile/policy assignment.",
+      "Execute approved key rotation and escrow confirmation workflow.",
+      "Capture evidence in ticket for compliance and audit traceability."
+    ],
+    escalationCriteria: [
+      "Security-required escrow state remains unresolved.",
+      "Fleet-level escrow failures appear after policy change.",
+      "Manual key handling outside approved process is requested."
+    ],
+    commands: [
+      {
+        title: "Validate encryption and FileVault context",
+        shell: "Terminal",
+        content:
+          "sudo fdesetup status\nsudo fdesetup list"
+      }
+    ]
+  },
+  {
+    slug: "jamf-ios-managed-apps-not-installing",
+    title: "Jamf iOS Managed Apps Not Installing",
+    description:
+      "Troubleshoot Jamf-managed iOS app deployment failures where assigned apps remain pending or unavailable on corporate devices.",
+    category: "iOS",
+    productFamily: "Apple",
+    product: "Jamf iOS App Deployment",
+    environment: "iOS",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    estimatedTime: "15-30 min",
+    tags: ["jamf", "ios", "managed-apps", "deployment", "mdm", "mobile"],
+    symptoms: [
+      "Required managed app remains pending or never appears on device.",
+      "App assignments show successful in admin console but not on endpoint.",
+      "User cannot access business workflow dependent on managed app."
+    ],
+    causes: [
+      "App assignment scope/license availability issue.",
+      "Device management sync delays or stale APNs communication state.",
+      "Device restrictions/storage constraints block install completion."
+    ],
+    remediations: [
+      "Validate app assignment scope and available licenses for target group.",
+      "Force management sync/check-in from device and admin console.",
+      "Confirm iOS storage/connectivity prerequisites and supervised state expectations.",
+      "Escalate before removing management profile or unmanaged app sideloading."
+    ],
+    escalationCriteria: [
+      "Multiple iOS devices fail same managed app deployment.",
+      "APNs communication/tenant app licensing issue is suspected.",
+      "Critical business application rollout is blocked."
+    ]
+  },
+  {
+    slug: "intune-windows-device-not-checking-in-or-compliance-stale",
+    title: "Intune Windows Device Not Checking In or Compliance Is Stale",
+    description:
+      "Troubleshoot Intune-managed Windows devices that stop syncing or remain noncompliant by validating enrollment, scheduled tasks, and management extension health.",
+    category: "Windows",
+    productFamily: "Microsoft",
+    product: "Microsoft Intune (Windows Device Management)",
+    environment: "Windows",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "20-35 min",
+    tags: ["intune", "windows", "compliance", "check-in", "mdm", "sync"],
+    symptoms: [
+      "Device last check-in time is stale in Intune admin center.",
+      "Compliance status remains Unknown or Noncompliant after remediation.",
+      "Conditional Access blocks user sign-in despite recent device use."
+    ],
+    causes: [
+      "Enrollment metadata or device registration state is unhealthy.",
+      "Enterprise management scheduled tasks are disabled or failing.",
+      "Local Intune Management Extension is not processing policy queue."
+    ],
+    remediations: [
+      "Confirm the device is assigned to the correct user and Intune scope.",
+      "Run manual sync from Windows Settings and collect timestamped behavior.",
+      "Validate enterprise management scheduled tasks and Intune extension service state.",
+      "Escalate before unenrolling/re-enrolling when device is tied to Conditional Access."
+    ],
+    escalationCriteria: [
+      "Multiple Windows devices stop checking in after policy rollout.",
+      "Security compliance controls are not reporting for regulated users.",
+      "Re-enrollment is required for executive or high-risk user devices."
+    ],
+    commands: [
+      {
+        title: "Check registration and enterprise management task state",
+        shell: "PowerShell",
+        content:
+          "dsregcmd /status\nGet-ScheduledTask -TaskPath \"\\\\Microsoft\\\\Windows\\\\EnterpriseMgmt\\\\\" | Select-Object TaskName, State"
+      },
+      {
+        title: "Check Intune Management Extension service and recent logs",
+        shell: "PowerShell",
+        content:
+          "Get-Service IntuneManagementExtension | Select-Object Name, Status, StartType\nGet-Content \"C:\\ProgramData\\Microsoft\\IntuneManagementExtension\\Logs\\IntuneManagementExtension.log\" -Tail 150"
+      }
+    ]
+  },
+  {
+    slug: "intune-company-portal-sign-in-or-sync-failure",
+    title: "Intune Company Portal Sign-In or Sync Failure",
+    description:
+      "Troubleshoot Company Portal authentication and sync failures across corporate endpoints without bypassing enrollment and compliance controls.",
+    category: "Microsoft 365",
+    productFamily: "Microsoft",
+    product: "Intune Company Portal",
+    environment: "Both",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    estimatedTime: "15-30 min",
+    tags: ["intune", "company-portal", "sign-in", "sync", "enrollment", "device-management"],
+    symptoms: [
+      "Company Portal opens but cannot sign in with corporate account.",
+      "Device sync requests fail or spin indefinitely.",
+      "User cannot complete required compliance actions."
+    ],
+    causes: [
+      "Token/session mismatch after password, MFA, or policy change.",
+      "Device registration state drift between local endpoint and Entra ID.",
+      "Network/proxy inspection interrupts required sign-in endpoints."
+    ],
+    remediations: [
+      "Confirm account can sign in to portal.office.com and My Apps with the same identity.",
+      "Validate device date/time and network path to Microsoft identity endpoints.",
+      "Re-run sync from Company Portal and capture exact error code/message.",
+      "Coordinate with identity and endpoint teams before clearing app/work profile state."
+    ],
+    escalationCriteria: [
+      "Issue affects many users after Conditional Access or MFA policy change.",
+      "Company Portal fails on both corporate network and trusted off-network.",
+      "Enrollment reset is required for production-critical devices."
+    ],
+    commands: [
+      {
+        title: "Validate Company Portal app presence and registration context",
+        shell: "CLI",
+        content:
+          "# Windows (PowerShell)\nGet-AppxPackage *CompanyPortal* | Select-Object Name, Version, Status\ndsregcmd /status\n\n# macOS (Terminal)\nmdls -name kMDItemVersion \"/Applications/Company Portal.app\" 2>/dev/null || echo \"Company Portal app not found\""
+      }
+    ]
+  },
+  {
+    slug: "intune-win32-app-install-stuck-pending-or-failed",
+    title: "Intune Win32 App Install Stuck (Pending or Failed)",
+    description:
+      "Diagnose Win32 application deployment failures in Intune by validating assignment scope, dependency order, and management extension logs.",
+    category: "Windows",
+    productFamily: "Microsoft",
+    product: "Microsoft Intune Win32 App Deployment",
+    environment: "Windows",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    estimatedTime: "20-40 min",
+    tags: ["intune", "win32", "application", "deployment", "ime", "windows"],
+    symptoms: [
+      "Required app remains in Pending install state for extended periods.",
+      "Install reports failed with generic detection or requirement errors.",
+      "Users cannot launch business-critical software after assignment."
+    ],
+    causes: [
+      "Detection rule mismatch marks installed state incorrectly.",
+      "App dependency/supersedence order blocks installation sequence.",
+      "Intune Management Extension processing queue is delayed or unhealthy."
+    ],
+    remediations: [
+      "Validate app assignment group targeting and required intent.",
+      "Review detection and requirement rules against actual device state.",
+      "Collect Intune Management Extension logs for failed app GUID and install code.",
+      "Escalate before manual software install outside managed package process."
+    ],
+    escalationCriteria: [
+      "Failure impacts a required baseline app across many users.",
+      "Security patch or critical line-of-business app deployment is blocked.",
+      "Package content or detection logic needs engineering-level change."
+    ],
+    commands: [
+      {
+        title: "Collect Intune Win32 deployment diagnostics",
+        shell: "PowerShell",
+        content:
+          "Get-Service IntuneManagementExtension | Select-Object Name, Status\nGet-Content \"C:\\ProgramData\\Microsoft\\IntuneManagementExtension\\Logs\\IntuneManagementExtension.log\" -Tail 250"
+      }
+    ]
+  },
+  {
+    slug: "intune-configuration-profile-conflict-or-error-65000",
+    title: "Intune Configuration Profile Conflict or Error 65000",
+    description:
+      "Troubleshoot profile conflicts and Error 65000 in Intune by identifying overlapping policy settings and reconciling assignment scope safely.",
+    category: "Windows",
+    productFamily: "Microsoft",
+    product: "Microsoft Intune Configuration Profiles",
+    environment: "Windows",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "20-35 min",
+    tags: ["intune", "configuration-profile", "error-65000", "policy-conflict", "windows"],
+    symptoms: [
+      "Configuration profile status shows Error 65000 or Conflict.",
+      "Security baseline settings are partially applied.",
+      "Users report inconsistent behavior across similar managed devices."
+    ],
+    causes: [
+      "Multiple profiles target the same CSP setting with different values.",
+      "Endpoint security baseline conflicts with custom settings catalog policies.",
+      "Device receives stale assignment after group changes."
+    ],
+    remediations: [
+      "Identify conflicting settings and consolidate where possible.",
+      "Review assignment precedence for baselines, endpoint security, and custom profiles.",
+      "Re-sync device after policy scope correction and verify result in Intune reports.",
+      "Document control impact before changing security-related settings."
+    ],
+    escalationCriteria: [
+      "Conflict involves security controls required by policy or compliance.",
+      "Large device groups show repeat Error 65000 after recent deployment.",
+      "Profile architecture needs redesign by endpoint engineering."
+    ],
+    commands: [
+      {
+        title: "Review DeviceManagement event channel for policy failures",
+        shell: "PowerShell",
+        content:
+          "Get-WinEvent -LogName \"Microsoft-Windows-DeviceManagement-Enterprise-Diagnostics-Provider/Admin\" -MaxEvents 60 | Select-Object TimeCreated, Id, LevelDisplayName, Message"
+      }
+    ]
+  },
+  {
+    slug: "intune-bitlocker-recovery-key-not-escrowed",
+    title: "Intune BitLocker Recovery Key Not Escrowed",
+    description:
+      "Address missing BitLocker key escrow in Intune/Entra by validating encryption state, protector type, and policy assignment before key rotation actions.",
+    category: "Windows",
+    productFamily: "Microsoft",
+    product: "Microsoft Intune BitLocker Management",
+    environment: "Windows",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "25-45 min",
+    tags: ["intune", "bitlocker", "escrow", "recovery-key", "security", "entra"],
+    symptoms: [
+      "Drive is encrypted but recovery key is unavailable in Intune/Entra.",
+      "Compliance checks fail on encryption escrow requirement.",
+      "Security team cannot verify recoverability for endpoint."
+    ],
+    causes: [
+      "BitLocker policy applied after encryption occurred outside managed flow.",
+      "Escrow operation failed during key rotation or device registration issue.",
+      "Protector configuration is not aligned with escrow policy requirements."
+    ],
+    remediations: [
+      "Confirm BitLocker status, protector configuration, and join state.",
+      "Validate encryption policy assignment and key escrow settings in Intune.",
+      "Use approved enterprise runbook for controlled key rotation and escrow verification.",
+      "Record audit evidence in ticket once escrow is confirmed."
+    ],
+    escalationCriteria: [
+      "Recovery key escrow remains missing after controlled remediation.",
+      "Security-critical device groups show widespread escrow failure.",
+      "Manual key handling outside approved security process is requested."
+    ],
+    commands: [
+      {
+        title: "Check BitLocker and registration status",
+        shell: "PowerShell",
+        content:
+          "Get-BitLockerVolume -MountPoint \"C:\" | Select-Object MountPoint, ProtectionStatus, VolumeStatus, KeyProtector\ndsregcmd /status"
+      }
+    ]
+  },
+  {
+    slug: "intune-autopilot-enrollment-fails-during-oobe",
+    title: "Intune Autopilot Enrollment Fails During OOBE",
+    description:
+      "Troubleshoot Windows Autopilot enrollment failures during setup by validating hardware hash assignment, enrollment restrictions, and network requirements.",
+    category: "Windows",
+    productFamily: "Microsoft",
+    product: "Windows Autopilot / Intune",
+    environment: "Windows",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "30-60 min",
+    tags: ["intune", "autopilot", "oobe", "enrollment", "windows", "provisioning"],
+    symptoms: [
+      "Device fails enrollment during Out-of-Box Experience setup.",
+      "User receives generic setup error before reaching desktop.",
+      "Autopilot profile does not appear to apply to device."
+    ],
+    causes: [
+      "Hardware hash/device record is not imported or assigned correctly.",
+      "Enrollment restriction or licensing prerequisites are unmet.",
+      "Network path blocks enrollment and profile download endpoints."
+    ],
+    remediations: [
+      "Verify device record, profile assignment, and user license prerequisites.",
+      "Confirm OOBE network path allows required Microsoft enrollment endpoints.",
+      "Collect Autopilot diagnostic events and enrollment error codes.",
+      "Escalate before bypassing Autopilot flow on corporate-managed hardware."
+    ],
+    escalationCriteria: [
+      "Provisioning batch for new hires fails at scale.",
+      "Enrollment restrictions or profile assignment logic requires redesign.",
+      "Executive onboarding timeline is blocked by repeat enrollment failures."
+    ],
+    commands: [
+      {
+        title: "Collect Autopilot diagnostics from event logs",
+        shell: "PowerShell",
+        content:
+          "Get-WinEvent -LogName \"Microsoft-Windows-ModernDeployment-Diagnostics-Provider/Autopilot\" -MaxEvents 50 | Select-Object TimeCreated, Id, LevelDisplayName, Message"
+      }
+    ]
+  },
+  {
+    slug: "intune-ios-device-noncompliant-despite-remediation",
+    title: "Intune iOS Device Noncompliant Despite Remediation",
+    description:
+      "Resolve persistent iOS noncompliance in Intune by validating device health attestation, profile sync state, and compliance rule intent.",
+    category: "iOS",
+    productFamily: "Microsoft",
+    product: "Microsoft Intune (iOS/iPadOS)",
+    environment: "iOS",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "15-30 min",
+    tags: ["intune", "ios", "compliance", "company-portal", "conditional-access", "mobile"],
+    symptoms: [
+      "iPhone/iPad remains Noncompliant after user completes required actions.",
+      "Corporate apps are blocked by Conditional Access device policy.",
+      "Compliance details show stale or unclear failure reasons."
+    ],
+    causes: [
+      "Management profile sync delays after OS update or network interruption.",
+      "Compliance rule thresholds do not match current enterprise baseline.",
+      "Device ownership/enrollment type mismatch affects policy interpretation."
+    ],
+    remediations: [
+      "Trigger manual sync from Company Portal and confirm latest check-in timestamp.",
+      "Review specific compliance rule failure and verify expected policy intent.",
+      "Confirm device is on supported iOS version and required security settings are enabled.",
+      "Escalate before profile removal to prevent managed app/data disruption."
+    ],
+    escalationCriteria: [
+      "Large iOS cohorts become noncompliant after policy change.",
+      "Security baselines need adjustment for production mobile fleet.",
+      "Executive or high-risk user access remains blocked."
+    ]
+  },
+  {
+    slug: "intune-android-work-profile-deployment-fails",
+    title: "Intune Android Work Profile Deployment Fails",
+    description:
+      "Troubleshoot Android Enterprise work profile provisioning failures while preserving managed data separation and compliance requirements.",
+    category: "Android",
+    productFamily: "Microsoft",
+    product: "Microsoft Intune (Android Enterprise)",
+    environment: "Android",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "20-35 min",
+    tags: ["intune", "android", "work-profile", "enrollment", "company-portal", "managed-google-play"],
+    symptoms: [
+      "Work profile setup fails before completion in Company Portal.",
+      "Managed apps do not appear after enrollment attempt.",
+      "User receives policy or account restriction error during provisioning."
+    ],
+    causes: [
+      "Android Enterprise binding or managed Google Play configuration issue.",
+      "Enrollment restrictions block device model/OS/version.",
+      "Existing work profile artifacts conflict with new enrollment attempt."
+    ],
+    remediations: [
+      "Validate device eligibility and Android Enterprise enrollment restrictions.",
+      "Confirm managed Google Play is healthy and app assignments are scoped correctly.",
+      "Capture exact provisioning error text and stage of failure.",
+      "Use approved cleanup/re-enrollment workflow only after admin review."
+    ],
+    escalationCriteria: [
+      "Work profile failures occur across many Android models/users.",
+      "Tenant-level Android Enterprise integration appears degraded.",
+      "Security/compliance requirements prevent temporary unmanaged use."
+    ]
+  },
+  {
+    slug: "entra-conditional-access-policy-blocking-legitimate-user",
+    title: "Entra Conditional Access Policy Blocking Legitimate User",
+    description:
+      "Investigate unexpected Entra Conditional Access blocks by correlating sign-in logs, device state, and policy conditions without weakening controls.",
+    category: "Identity / MFA / SSO",
+    productFamily: "Microsoft",
+    product: "Microsoft Entra Conditional Access",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "20-40 min",
+    tags: ["entra", "conditional-access", "sign-in", "mfa", "device-compliance", "identity"],
+    symptoms: [
+      "User sign-in is blocked with Conditional Access policy message.",
+      "User claims compliant device and valid MFA but still denied.",
+      "Issue occurs in one app but not others."
+    ],
+    causes: [
+      "Policy condition mismatch on device platform, app, or location.",
+      "Stale device compliance state or registration mismatch.",
+      "Session/risk conditions trigger additional access requirements."
+    ],
+    remediations: [
+      "Review Entra sign-in logs for exact blocked policy and failure condition.",
+      "Validate user, device, and app are in intended assignment scope.",
+      "Confirm device compliance/reporting is current in Intune and Entra.",
+      "Apply least-privilege policy adjustments only through change control."
+    ],
+    escalationCriteria: [
+      "Security policy exceptions are requested for privileged users.",
+      "Multiple users are blocked by same policy unexpectedly.",
+      "Potential risky sign-in or compromised credential indicators appear."
+    ],
+    commands: [
+      {
+        title: "Capture endpoint identity state before policy escalation",
+        shell: "CLI",
+        content:
+          "# Windows\nw32tm /query /status\ndsregcmd /status\n\n# macOS\ndate\nscutil --dns"
+      }
+    ]
+  },
+  {
+    slug: "entra-mfa-method-reset-done-but-prompt-loop-continues",
+    title: "Entra MFA Method Reset Complete but Prompt Loop Continues",
+    description:
+      "Resolve post-reset MFA prompt loops by validating authentication methods, session revocation timing, and app token refresh behavior.",
+    category: "Identity / MFA / SSO",
+    productFamily: "Microsoft",
+    product: "Microsoft Entra MFA",
+    environment: "Both",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    estimatedTime: "15-30 min",
+    tags: ["entra", "mfa", "authenticator", "prompt-loop", "identity", "token"],
+    symptoms: [
+      "User is repeatedly prompted for MFA after method reset.",
+      "New authenticator registration succeeds but app access still loops.",
+      "Behavior differs between browser and desktop/mobile apps."
+    ],
+    causes: [
+      "Stale sessions/tokens remain active across devices and app brokers.",
+      "Authentication methods policy requires additional factor not completed.",
+      "Conditional Access sign-in frequency or session controls trigger re-prompt."
+    ],
+    remediations: [
+      "Confirm the newly registered MFA method is marked usable and default where required.",
+      "Sign out of affected apps and web sessions, then perform fresh sign-in.",
+      "Validate no stale blocked method remains in authentication methods list.",
+      "Escalate to identity team if prompt loop persists after full token refresh."
+    ],
+    escalationCriteria: [
+      "Privileged/admin accounts are stuck in MFA loops.",
+      "Many users report identical behavior after policy update.",
+      "Risk policy or authentication strength settings need tenant-level review."
+    ]
+  },
+  {
+    slug: "entra-hybrid-join-state-invalid-dsregcmd-errors",
+    title: "Entra Hybrid Join State Invalid (dsregcmd Errors)",
+    description:
+      "Troubleshoot broken Entra hybrid join state on Windows devices using dsregcmd and event log evidence before rejoin operations.",
+    category: "Identity / MFA / SSO",
+    productFamily: "Microsoft",
+    product: "Microsoft Entra Hybrid Join",
+    environment: "Windows",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "25-45 min",
+    tags: ["entra", "hybrid-join", "dsregcmd", "windows", "sso", "device-registration"],
+    symptoms: [
+      "dsregcmd shows AzureAdJoined:NO or inconsistent tenant details.",
+      "Users experience SSO failures across Microsoft 365 apps.",
+      "Device compliance state cannot be correlated to Entra object."
+    ],
+    causes: [
+      "Device registration task failed or device object drifted in Entra.",
+      "Network/proxy or certificate path interrupts device registration endpoint access.",
+      "AD/Entra sync timing and object mismatch after domain or device changes."
+    ],
+    remediations: [
+      "Collect dsregcmd status output and registration-related event logs.",
+      "Validate device object health in both on-prem AD and Entra ID.",
+      "Confirm time sync, proxy settings, and certificate trust prerequisites.",
+      "Use controlled rejoin workflow only after identity engineering review."
+    ],
+    escalationCriteria: [
+      "Hybrid join failures affect large domain-joined device cohorts.",
+      "Device identity mismatch impacts Conditional Access and compliance.",
+      "Rejoin/re-registration requires coordinated directory operations."
+    ],
+    commands: [
+      {
+        title: "Collect join-state diagnostics",
+        shell: "PowerShell",
+        content:
+          "dsregcmd /status\nGet-WinEvent -LogName \"Microsoft-Windows-User Device Registration/Admin\" -MaxEvents 50 | Select-Object TimeCreated, Id, LevelDisplayName, Message"
+      }
+    ]
+  },
+  {
+    slug: "entra-group-based-licensing-not-applied",
+    title: "Entra Group-Based Licensing Not Applied",
+    description:
+      "Troubleshoot delayed or missing Entra group-based license assignments that block Microsoft service access for users.",
+    category: "Identity / MFA / SSO",
+    productFamily: "Microsoft",
+    product: "Microsoft Entra Group-Based Licensing",
+    environment: "Both",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    estimatedTime: "15-30 min",
+    tags: ["entra", "licensing", "group-based-licensing", "microsoft-365", "identity"],
+    symptoms: [
+      "User added to licensed group but service access is unavailable.",
+      "License assignment errors appear in Entra portal.",
+      "New hire onboarding is delayed by missing SKU assignment."
+    ],
+    causes: [
+      "Insufficient available licenses in target subscription.",
+      "Nested or dynamic group processing delay.",
+      "Conflicting direct/group license assignments produce assignment errors."
+    ],
+    remediations: [
+      "Validate user is in the intended licensing group and group processing is complete.",
+      "Confirm available license quantity for required SKU.",
+      "Review assignment error details and resolve conflicting plan dependencies.",
+      "Document provisioning timeline expectation for onboarding stakeholders."
+    ],
+    escalationCriteria: [
+      "License exhaustion affects onboarding or production access at scale.",
+      "Automation for group assignment is failing.",
+      "High-priority users require immediate service restoration."
+    ]
+  },
+  {
+    slug: "entra-b2b-guest-cannot-access-shared-resources",
+    title: "Entra B2B Guest Cannot Access Shared Resources",
+    description:
+      "Troubleshoot cross-tenant guest access failures for SharePoint, Teams, and other shared apps while preserving external sharing governance.",
+    category: "Identity / MFA / SSO",
+    productFamily: "Microsoft",
+    product: "Microsoft Entra External Identities (B2B)",
+    environment: "Both",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    estimatedTime: "20-35 min",
+    tags: ["entra", "b2b", "guest", "cross-tenant", "sharepoint", "teams"],
+    symptoms: [
+      "Guest user receives access denied for shared site/team/file.",
+      "Invitation appears accepted but access still blocked.",
+      "Guest can access one workload but not another."
+    ],
+    causes: [
+      "Cross-tenant access settings conflict with guest policy.",
+      "Resource-level permissions are missing or inherited incorrectly.",
+      "Conditional Access for guests requires compliant controls not met."
+    ],
+    remediations: [
+      "Confirm guest object is active and mapped to the intended external identity.",
+      "Validate both tenant-level external collaboration policy and resource permissions.",
+      "Review guest sign-in logs for specific block reason and policy.",
+      "Coordinate with security before broadening guest access scope."
+    ],
+    escalationCriteria: [
+      "Executive/client collaboration workflow is blocked.",
+      "Cross-tenant trust/policy updates are required.",
+      "Potential data exposure risk appears during troubleshooting."
+    ]
   }
 ];
 

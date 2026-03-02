@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { IncidentForm } from "@/components/support-portal/incident-form";
 
 export const metadata: Metadata = {
-  title: "Submit Incident",
+  title: "Incident Form",
   description:
-    "Submit a demo incident with ITIL-lite intake fields, impact/urgency, and automatic priority calculation. Stored locally in the browser.",
+    "Submit an incident using the ITIL-lite incident form with required requester info, category/application mapping, impact/urgency, and automatic priority.",
   alternates: { canonical: "/support/incident/new/" },
   robots: { index: false, follow: false }
 };

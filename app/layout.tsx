@@ -22,7 +22,16 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   keywords: seoKeywords,
   applicationName: "tamemj.com",
+  authors: [{ name: siteConfig.name, url: siteConfig.url }],
+  creator: siteConfig.name,
+  publisher: siteConfig.name,
   category: "Technology",
+  referrer: "origin-when-cross-origin",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false
+  },
   alternates: {
     canonical: "/"
   },

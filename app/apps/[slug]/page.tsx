@@ -108,14 +108,20 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
     operatingSystem: "iOS",
     description: app.shortDescription,
     url: toAbsoluteUrl(`/apps/${app.slug}/`),
-    image: app.icon,
-    screenshot: app.screenshots.map((screenshot) => screenshot.src),
+    image: toAbsoluteUrl(app.icon),
+    screenshot: app.screenshots.map((screenshot) => toAbsoluteUrl(screenshot.src)),
     downloadUrl: app.appStoreUrl,
-    offers: {
-      "@type": "Offer",
-      price: app.pricing.toLowerCase().includes("free") ? "0" : undefined,
-      priceCurrency: "USD"
-    }
+    isAccessibleForFree: app.pricing.toLowerCase().includes("free"),
+    ...(app.pricing.toLowerCase().includes("free")
+      ? {
+          offers: {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "USD",
+            availability: "https://schema.org/InStock"
+          }
+        }
+      : {})
   };
 
   const breadcrumbSchema = buildBreadcrumbJsonLd([

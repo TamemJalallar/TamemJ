@@ -2,19 +2,39 @@ import type { Metadata } from "next";
 import { AppCard } from "@/components/app-card";
 import { SectionHeading } from "@/components/section-heading";
 import { getApps } from "@/lib/apps";
-import { buildCollectionPageJsonLd, buildOpenGraph, buildTwitter } from "@/lib/seo";
+import { buildBreadcrumbJsonLd, buildCollectionPageJsonLd, buildOpenGraph, buildTwitter } from "@/lib/seo";
+
+function uniqueKeywords(keywords: string[]): string[] {
+  const seen = new Set<string>();
+  const result: string[] = [];
+
+  for (const keyword of keywords) {
+    const normalized = keyword.trim().toLowerCase();
+    if (!normalized || seen.has(normalized)) continue;
+    seen.add(normalized);
+    result.push(keyword.trim());
+  }
+
+  return result;
+}
+
+const seoApps = getApps();
+const topCategories = [...new Set(seoApps.map((app) => app.category))].slice(0, 8);
+const topAppKeywords = seoApps.slice(0, 12).map((app) => `${app.name} app`);
 
 export const metadata: Metadata = {
   title: "Apps",
   description:
     "Browse iOS apps by Tamem J, including upcoming and published iPhone apps.",
-  keywords: [
+  keywords: uniqueKeywords([
     "iOS apps",
     "iPhone apps",
     "app portfolio",
     "App Store apps",
-    "mobile apps by Tamem J"
-  ],
+    "mobile apps by Tamem J",
+    ...topCategories.map((category) => `${category} app`),
+    ...topAppKeywords
+  ]),
   alternates: {
     canonical: "/apps/"
   },
@@ -41,6 +61,10 @@ export default function AppsPage() {
       path: `/apps/${app.slug}/`
     }))
   );
+  const breadcrumbSchema = buildBreadcrumbJsonLd([
+    { name: "Home", path: "/" },
+    { name: "Apps", path: "/apps/" }
+  ]);
 
   return (
     <>
@@ -72,6 +96,10 @@ export default function AppsPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(appsCollectionSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
     </>
   );

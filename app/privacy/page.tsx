@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
+import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -70,6 +70,10 @@ export default function PrivacyPage() {
     url: toAbsoluteUrl("/privacy/"),
     description: "Privacy policy for iOS apps developed by Tamem J."
   };
+  const breadcrumbSchema = buildBreadcrumbJsonLd([
+    { name: "Home", path: "/" },
+    { name: "Privacy Policy", path: "/privacy/" }
+  ]);
 
   return (
     <>
@@ -103,6 +107,10 @@ export default function PrivacyPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(privacySchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
     </>
   );

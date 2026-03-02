@@ -8,7 +8,13 @@ import {
   getPCBuildGuides,
   getPCBuildGuideTags
 } from "@/lib/pc-build-guides.registry";
-import { buildCollectionPageJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
+import {
+  buildBreadcrumbJsonLd,
+  buildCollectionPageJsonLd,
+  buildOpenGraph,
+  buildTwitter,
+  toAbsoluteUrl
+} from "@/lib/seo";
 
 const guides = getPCBuildGuides();
 
@@ -77,6 +83,10 @@ export default function PCBuildGuidesPage() {
       audienceType: "PC builders, IT professionals, and power users"
     }
   };
+  const breadcrumbSchema = buildBreadcrumbJsonLd([
+    { name: "Home", path: "/" },
+    { name: "PC Build Guides", path: "/pc-build-guides/" }
+  ]);
 
   return (
     <>
@@ -117,6 +127,10 @@ export default function PCBuildGuidesPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
     </>
   );

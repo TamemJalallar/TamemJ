@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/contact-form";
-import { buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
+import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -34,6 +34,10 @@ export default function ContactPage() {
     url: toAbsoluteUrl("/contact/"),
     description: "Contact Tamem J for app support, partnerships, or general inquiries."
   };
+  const breadcrumbSchema = buildBreadcrumbJsonLd([
+    { name: "Home", path: "/" },
+    { name: "Contact", path: "/contact/" }
+  ]);
 
   return (
     <>
@@ -74,6 +78,10 @@ export default function ContactPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(contactSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
     </>
   );

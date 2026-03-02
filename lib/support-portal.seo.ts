@@ -139,9 +139,19 @@ export function buildKbIndexJsonLd(articles: KBArticle[]): Record<string, unknow
 }
 
 export function buildSupportCatalogIndexMetadata(): Metadata {
+  return buildSupportCatalogIndexMetadataWithItems([]);
+}
+
+export function buildSupportCatalogIndexMetadataWithItems(items: CatalogItem[]): Metadata {
+  const categories = [...new Set(items.map((item) => item.category))];
+  const products = [...new Set(items.map((item) => item.product))];
+  const itemCount = items.length;
+
   const title = "Service Catalog";
   const description =
-    "Request common IT services including software installs, access requests, mailbox changes, VPN access, device support, and conference room assistance.";
+    itemCount > 0
+      ? `Request IT services from ${itemCount} catalog items, including software installs, mailbox and access changes, VPN support, device lifecycle requests, and conference room assistance.`
+      : "Request common IT services including software installs, access requests, mailbox changes, VPN access, device support, and conference room assistance.";
 
   return {
     title,
@@ -152,11 +162,44 @@ export function buildSupportCatalogIndexMetadata(): Metadata {
       "software install request",
       "VPN access request",
       "shared mailbox request",
-      "device replacement request"
+      "device replacement request",
+      ...categories.map((category) => `${category} service request`),
+      ...products.map((product) => `${product} support request`)
     ]),
     alternates: { canonical: "/support/catalog/" },
     openGraph: buildSupportOpenGraph(`${title} | Support Portal`, description, "/support/catalog/"),
     twitter: buildSupportTwitter(`${title} | Support Portal`, description)
+  };
+}
+
+export function buildCatalogIndexJsonLd(items: CatalogItem[]): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Support Service Catalog",
+    description: `IT service catalog with ${items.length} request templates.`,
+    url: toAbsoluteSupportUrl("/support/catalog/"),
+    isPartOf: {
+      "@type": "WebSite",
+      name: "Tamem J Support Portal",
+      url: toAbsoluteSupportUrl("/support/")
+    },
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: items.length,
+      itemListElement: items.map((item, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        item: {
+          "@type": "Service",
+          name: item.title,
+          description: item.description,
+          category: item.category,
+          serviceType: item.product,
+          url: toAbsoluteSupportUrl(`/support/catalog/${item.slug}/`)
+        }
+      }))
+    }
   };
 }
 

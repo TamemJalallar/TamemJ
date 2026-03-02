@@ -8,14 +8,36 @@ import {
   getCorporateFixes,
   getCorporateFixTags
 } from "@/lib/corporate-fixes.registry";
-import { buildCollectionPageJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
-import { siteConfig } from "@/lib/site";
+import {
+  buildBreadcrumbJsonLd,
+  buildCollectionPageJsonLd,
+  buildOpenGraph,
+  buildTwitter,
+  toAbsoluteUrl
+} from "@/lib/seo";
+
+function uniqueKeywords(keywords: string[]): string[] {
+  const seen = new Set<string>();
+  const result: string[] = [];
+
+  for (const keyword of keywords) {
+    const normalized = keyword.trim().toLowerCase();
+    if (!normalized || seen.has(normalized)) continue;
+    seen.add(normalized);
+    result.push(keyword.trim());
+  }
+
+  return result;
+}
+
+const seoFixCategories = getCorporateFixCategories().slice(0, 10);
+const seoFixTags = getCorporateFixTags().slice(0, 24);
 
 export const metadata: Metadata = {
   title: "Corporate Tech Fixes",
   description:
     "Enterprise-safe IT troubleshooting guides with structured step-by-step fixes for Windows, macOS, Microsoft 365, networking, printers, and security incidents.",
-  keywords: [
+  keywords: uniqueKeywords([
     "corporate IT support",
     "enterprise troubleshooting",
     "IT runbook",
@@ -25,8 +47,10 @@ export const metadata: Metadata = {
     "network troubleshooting",
     "SharePoint access denied",
     "OneDrive sync issue",
-    "Teams microphone issue"
-  ],
+    "Teams microphone issue",
+    ...seoFixCategories.map((category) => `${category} troubleshooting`),
+    ...seoFixTags
+  ]),
   alternates: {
     canonical: "/corporate-tech-fixes/"
   },
@@ -62,6 +86,10 @@ export default function CorporateTechFixesPage() {
     description:
       "Enterprise-safe IT troubleshooting guides with structured step-by-step fixes for common corporate issues."
   };
+  const breadcrumbSchema = buildBreadcrumbJsonLd([
+    { name: "Home", path: "/" },
+    { name: "Corporate Tech Fixes", path: "/corporate-tech-fixes/" }
+  ]);
 
   return (
     <>
@@ -102,6 +130,10 @@ export default function CorporateTechFixesPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(portalSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
     </>
   );

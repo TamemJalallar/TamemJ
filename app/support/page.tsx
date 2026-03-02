@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SupportForm } from "@/components/support-form";
 import { SupportPortalHome } from "@/components/support-portal/support-portal-home";
 import { getApps } from "@/lib/apps";
+import { buildBreadcrumbJsonLd } from "@/lib/seo";
 import { toAbsoluteSupportUrl } from "@/lib/support-portal.seo";
 import { siteConfig } from "@/lib/site";
 import { buildSupportOpenGraph, buildSupportTwitter } from "@/lib/support-portal.seo";
@@ -74,6 +75,10 @@ export default function SupportPage() {
     description:
       "ServiceNow-style support portal demo with a knowledge base, service catalog, incident forms, local ticketing, analytics, and iOS app support."
   };
+  const breadcrumbSchema = buildBreadcrumbJsonLd([
+    { name: "Home", path: "/" },
+    { name: "Support Portal", path: "/support/" }
+  ]);
 
   return (
     <>
@@ -160,6 +165,10 @@ export default function SupportPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(supportPageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
     </>
   );

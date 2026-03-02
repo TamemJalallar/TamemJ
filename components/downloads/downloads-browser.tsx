@@ -1,7 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { DownloadChannelLink, DownloadEntry, DownloadPlatform } from "@/types/download";
+import type {
+  DirectDownloadArtifact,
+  DownloadChannelLink,
+  DownloadEntry,
+  DownloadPlatform
+} from "@/types/download";
 
 function cx(...classes: Array<string | false | null | undefined>): string {
   return classes.filter(Boolean).join(" ");
@@ -532,15 +537,24 @@ function SpotlightCard({ entry }: { entry: DownloadEntry }) {
 }
 
 function DownloadCard({ entry }: { entry: DownloadEntry }) {
-  const visibleTags = entry.tags.slice(0, 4);
-  const hiddenTagCount = entry.tags.length - visibleTags.length;
+  const directArtifacts = entry.directDownloads ?? [];
+  const directPlatforms = [...new Set(directArtifacts.map((artifact) => artifact.platform))];
+  const topRightPlatforms = directPlatforms.length > 0 ? directPlatforms : entry.platforms;
+  const directArtifactsByPlatform = directArtifacts.reduce(
+    (accumulator, artifact) => {
+      const current = accumulator[artifact.platform] ?? [];
+      accumulator[artifact.platform] = [...current, artifact];
+      return accumulator;
+    },
+    {} as Partial<Record<DownloadPlatform, DirectDownloadArtifact[]>>
+  );
 
   return (
-    <article id={entry.slug} className="surface-card-strong scroll-mt-24 overflow-hidden p-4 sm:p-5 dark:border-slate-700 dark:bg-slate-900">
+    <article id={entry.slug} className="surface-card-strong scroll-mt-24 overflow-visible p-4 sm:p-5 dark:border-slate-700 dark:bg-slate-900">
       <div className="pointer-events-none mb-3 h-1 rounded-full bg-gradient-to-r from-cyan-500 via-sky-500 to-slate-900" />
 
       <div className="flex flex-wrap items-start justify-between gap-2.5">
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-1.5">
             <span className="rounded-full border border-line bg-slate-50 px-2 py-0.5 text-[11px] font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
               {entry.category}
@@ -561,22 +575,22 @@ function DownloadCard({ entry }: { entry: DownloadEntry }) {
           <p className="mt-1.5 text-sm leading-5">{entry.summary}</p>
         </div>
 
-        <div className="text-right text-xs text-slate-500 dark:text-slate-400">
-          {entry.developer ? <p>{entry.developer}</p> : null}
-          {entry.license ? <p className="mt-1">License: {entry.license}</p> : null}
-          {entry.pricing ? <p className="mt-1">{entry.pricing}</p> : null}
+        <div className="flex max-w-[15rem] shrink-0 flex-col items-end gap-2">
+          <div className="flex flex-wrap justify-end gap-1">
+            {topRightPlatforms.map((platform) => (
+              <PlatformDownloadChip
+                key={`${entry.slug}-download-platform-${platform}`}
+                platform={platform}
+                artifacts={directArtifactsByPlatform[platform] ?? []}
+              />
+            ))}
+          </div>
+          <div className="text-right text-[11px] text-slate-500 dark:text-slate-400">
+            {entry.developer ? <p>{entry.developer}</p> : null}
+            {entry.license ? <p className="mt-0.5">License: {entry.license}</p> : null}
+            {entry.pricing ? <p className="mt-0.5">{entry.pricing}</p> : null}
+          </div>
         </div>
-      </div>
-
-      <div className="mt-2.5 flex flex-wrap gap-1.5">
-        {entry.platforms.map((platform) => (
-          <span
-            key={`${entry.slug}-${platform}`}
-            className="rounded-full border border-line bg-white px-2 py-0.5 text-[11px] font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
-          >
-            {platform}
-          </span>
-        ))}
       </div>
 
       <div className="mt-3.5 flex flex-wrap gap-1.5">
@@ -595,61 +609,71 @@ function DownloadCard({ entry }: { entry: DownloadEntry }) {
           </a>
         ))}
       </div>
-
-      {entry.directDownloads && entry.directDownloads.length > 0 ? (
-        <div className="mt-3.5 rounded-xl border border-line/80 bg-slate-50/70 p-3 dark:border-slate-700 dark:bg-slate-800/70">
-          <div className="flex items-center justify-between gap-2">
-            <h4 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Direct Downloads</h4>
-            <span className="rounded-full border border-line bg-white px-2 py-0.5 text-[10px] font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
-              Version + hash metadata
-            </span>
-          </div>
-
-          <ul className="mt-2.5 space-y-1.5">
-            {entry.directDownloads.map((artifact) => (
-              <li key={`${entry.slug}-${artifact.label}-${artifact.platform}`} className="rounded-lg border border-line bg-white p-2.5 dark:border-slate-700 dark:bg-slate-900">
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="min-w-0">
-                    <p className="text-xs font-semibold text-slate-900 dark:text-slate-100">{artifact.label}</p>
-                    <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">
-                      {artifact.platform}
-                      {artifact.fileType ? ` | ${artifact.fileType}` : ""}
-                      {artifact.version ? ` | ${formatVersion(artifact.version)}` : ""}
-                      {artifact.fileSize ? ` | ${artifact.fileSize}` : ""}
-                      {artifact.host ? ` | ${artifact.host}` : ""}
-                    </p>
-                    {artifact.notes ? <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">{artifact.notes}</p> : null}
-                    {artifact.checksumSha256 ? (
-                      <p className="mt-1 break-all font-mono text-[10px] text-slate-500 dark:text-slate-400">
-                        SHA-256: {artifact.checksumSha256}
-                      </p>
-                    ) : null}
-                  </div>
-                  <a href={artifact.url} target="_blank" rel="noreferrer" className="btn-secondary shrink-0 !px-3 !py-1.5 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700">
-                    Download
-                  </a>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
-
-      <div className="mt-3 flex flex-wrap gap-1.5">
-        {visibleTags.map((tag) => (
-          <span
-            key={`${entry.slug}-tag-${tag}`}
-            className="rounded-full border border-line bg-white px-2 py-0.5 text-[10px] font-medium text-slate-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
-          >
-            #{tag}
-          </span>
-        ))}
-        {hiddenTagCount > 0 ? (
-          <span className="rounded-full border border-line bg-white px-2 py-0.5 text-[10px] font-medium text-slate-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
-            +{hiddenTagCount} more
-          </span>
-        ) : null}
-      </div>
     </article>
+  );
+}
+
+function PlatformDownloadChip({
+  platform,
+  artifacts
+}: {
+  platform: DownloadPlatform;
+  artifacts: DirectDownloadArtifact[];
+}) {
+  if (artifacts.length === 0) {
+    return (
+      <span className="rounded-full border border-line bg-white px-2 py-0.5 text-[10px] font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
+        {platform}
+      </span>
+    );
+  }
+
+  return (
+    <div className="group relative">
+      <button
+        type="button"
+        className="rounded-full border border-cyan-300 bg-cyan-50 px-2 py-0.5 text-[10px] font-semibold text-cyan-700 transition hover:bg-cyan-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-1 dark:border-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-100 dark:hover:bg-cyan-900/60"
+        aria-label={`Show ${platform} download details`}
+      >
+        {platform}
+      </button>
+      <div className="pointer-events-none invisible absolute right-0 top-full z-20 mt-1 w-[19rem] rounded-lg border border-line bg-white p-2 opacity-0 shadow-card transition group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:visible group-focus-within:opacity-100 dark:border-slate-700 dark:bg-slate-900">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+          {platform} Downloads
+        </p>
+        <ul className="mt-1.5 space-y-1.5">
+          {artifacts.map((artifact) => (
+            <li
+              key={`${platform}-${artifact.label}-${artifact.url}`}
+              className="rounded-md border border-line/80 bg-slate-50/80 p-2 dark:border-slate-700 dark:bg-slate-800/80"
+            >
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <p className="truncate text-[11px] font-semibold text-slate-900 dark:text-slate-100">
+                    {artifact.label}
+                  </p>
+                  <p className="mt-0.5 text-[10px] text-slate-500 dark:text-slate-400">
+                    {artifact.fileType ? `${artifact.fileType}` : "Installer"}
+                    {artifact.version ? ` | ${formatVersion(artifact.version)}` : ""}
+                    {artifact.fileSize ? ` | ${artifact.fileSize}` : ""}
+                  </p>
+                  {artifact.checksumSha256 ? (
+                    <p className="mt-0.5 text-[10px] text-slate-500 dark:text-slate-400">SHA-256 available</p>
+                  ) : null}
+                </div>
+                <a
+                  href={artifact.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="pointer-events-auto rounded-md border border-line bg-white px-2 py-1 text-[10px] font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
+                >
+                  Download
+                </a>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 }
