@@ -600,6 +600,7 @@ The footer supports optional crypto donation addresses. Configure these build-ti
 Behavior:
 
 - Any configured address appears in the footer donation card with `Copy`, `Open Wallet`, and explorer links.
+- Each donation method also includes a `Show QR` action so users can scan from phone wallets.
 - If none are configured, the donation card renders a placeholder message.
 
 Example local `.env.local`:
