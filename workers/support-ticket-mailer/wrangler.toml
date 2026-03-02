@@ -5,7 +5,7 @@ workers_dev = true
 
 [vars]
 SUPPORT_EMAIL_TO = "noreply@tamemj.com"
-SUPPORT_EMAIL_FROM = "TamemJ Support <tickets@tamemj.com>"
+SUPPORT_EMAIL_FROM = "TamemJ Support <Owner@tamemj.com>"
 ALLOWED_ORIGIN = "https://tamemj.com"
 TURNSTILE_EXPECTED_HOSTNAME = "tamemj.com"
 RATE_LIMIT_MAX_PER_MINUTE = "6"

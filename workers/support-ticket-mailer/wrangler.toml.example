@@ -12,4 +12,4 @@ RATE_LIMIT_MAX_PER_MINUTE = "6"
 
 [[kv_namespaces]]
 binding = "RATE_LIMIT_KV"
-id = "<YOUR_RATE_LIMIT_KV_NAMESPACE_ID>"
+id = "1fca1f80257b4b7a91176577de3507e2"
