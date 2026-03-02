@@ -20,6 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NEXT_PUBLIC_CORPORATE_FIXES_BUILDER_AUTH_MODE: cloudflare-access
+      NEXT_PUBLIC_SUPPORT_TICKET_EMAIL_TO: noreply@tamemj.com
+      NEXT_PUBLIC_SUPPORT_TICKET_EMAIL_ENDPOINT: ${{ secrets.NEXT_PUBLIC_SUPPORT_TICKET_EMAIL_ENDPOINT }}
+      NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ secrets.NEXT_PUBLIC_TURNSTILE_SITE_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
