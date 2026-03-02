@@ -613,7 +613,7 @@ export function DownloadsBrowser({
 
       <section className="surface-card p-4 sm:p-5 dark:border-slate-700 dark:bg-slate-950">
         <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Trust and legal checklist</h2>
-        <ul className="mt-3 space-y-1.5 pl-5 text-sm sm:text-base">
+        <ul className="mt-3 space-y-1.5 pl-5 text-sm text-slate-800 dark:text-slate-100 sm:text-base">
           <li className="list-disc">
             Prefer official Apple and Microsoft store pages when store distribution is available.
           </li>

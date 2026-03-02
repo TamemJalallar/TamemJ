@@ -14,22 +14,25 @@ export function AffiliateDisclosureBanner({
   return (
     <div
       className={cx(
-        "rounded-2xl border border-amber-200/80 bg-amber-50/70 p-4 text-sm shadow-soft dark:border-amber-900/60 dark:bg-amber-950/20",
+        "rounded-2xl border border-amber-300 bg-amber-100 p-4 text-sm shadow-soft dark:border-amber-700 dark:bg-amber-900/45",
         className
       )}
       role="note"
       aria-label="Affiliate disclosure"
     >
-      <p className="font-semibold text-amber-900 dark:text-amber-200">Affiliate Disclosure</p>
-      <p className="mt-1 leading-7 text-amber-800 dark:text-amber-100">
+      <p className="font-semibold text-amber-950 dark:text-amber-50">Affiliate Disclosure</p>
+      <p className="mt-1 leading-7 text-amber-900 dark:text-amber-100">
         Some recommendations may include affiliate links. If you purchase through these links, the site
         may earn a commission at no additional cost to you. Recommendations are still selected for fit,
         safety, and support relevance.
       </p>
       {!compact ? (
-        <p className="mt-2 text-amber-800 dark:text-amber-100">
+        <p className="mt-2 text-amber-900 dark:text-amber-100">
           Link governance and support mappings are documented in the affiliate support guides in{" "}
-          <Link href="/support/kb/" className="font-semibold underline decoration-amber-600/60 underline-offset-4">
+          <Link
+            href="/support/kb/"
+            className="font-semibold underline decoration-amber-700 underline-offset-4 dark:decoration-amber-300"
+          >
             Support KB
           </Link>
           .
