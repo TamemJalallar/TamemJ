@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
-import { AppCard } from "@/components/app-card";
 import { SectionHeading } from "@/components/section-heading";
-import { getFeaturedApps } from "@/lib/apps";
 import { buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 
@@ -11,12 +8,14 @@ export const metadata: Metadata = {
   title: "Home",
   description: siteConfig.description,
   keywords: [
-    "iOS developer portfolio",
-    "iPhone app developer",
-    "app support portal",
+    "IT troubleshooting guides",
+    "enterprise IT support",
     "corporate tech fixes",
-    "app downloads",
-    "pc build guides"
+    "Microsoft 365 troubleshooting",
+    "PowerShell scripts",
+    "IT knowledge base",
+    "helpdesk resources",
+    "sysadmin tools"
   ],
   alternates: {
     canonical: "/"
@@ -25,22 +24,54 @@ export const metadata: Metadata = {
   twitter: buildTwitter(siteConfig.title, siteConfig.description)
 };
 
+const stats = [
+  { value: "210+", label: "Troubleshooting Guides" },
+  { value: "11", label: "IT Categories" },
+  { value: "76+", label: "Curated Downloads" },
+  { value: "Free", label: "No Sign-Up Required" }
+];
+
+const quickLinks = [
+  {
+    href: "/corporate-tech-fixes",
+    title: "Corporate Tech Fixes",
+    description: "Enterprise-safe troubleshooting guides for Microsoft 365, Intune, Entra, Jamf, and more.",
+    eyebrow: "Knowledge Base"
+  },
+  {
+    href: "/support/kb",
+    title: "KB Articles",
+    description: "Searchable knowledge base articles with symptoms, causes, and step-by-step remediations.",
+    eyebrow: "Support Portal"
+  },
+  {
+    href: "/downloads",
+    title: "Software Downloads",
+    description: "Curated, verified download links for productivity, developer, and IT tools.",
+    eyebrow: "Downloads"
+  },
+  {
+    href: "/pc-build-guides",
+    title: "PC Build Guides",
+    description: "Hardware recommendations and build configurations for workstation and gaming setups.",
+    eyebrow: "Hardware"
+  }
+];
+
 export default function HomePage() {
-  const featuredApps = getFeaturedApps();
-  const hasFeaturedApps = featuredApps.length > 0;
   const collectionSchema = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "Tamem J Portfolio",
+    name: siteConfig.title,
     description: siteConfig.description,
     url: siteConfig.url,
     mainEntity: {
       "@type": "ItemList",
-      itemListElement: featuredApps.map((app, index) => ({
+      itemListElement: quickLinks.map((link, index) => ({
         "@type": "ListItem",
         position: index + 1,
-        name: app.name,
-        url: toAbsoluteUrl(`/apps/${app.slug}/`)
+        name: link.title,
+        url: toAbsoluteUrl(link.href)
       }))
     }
   };
@@ -50,97 +81,40 @@ export default function HomePage() {
       <section className="section-shell pt-10 sm:pt-14 lg:pt-20">
         <div className="page-shell">
           <div className="surface-card-strong overflow-hidden p-6 sm:p-8 lg:p-12">
-            <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-              <div>
-                <span className="eyebrow">Independent iOS Developer</span>
-                <h1 className="mt-5 text-balance text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
-                  {siteConfig.name}
-                </h1>
-                <p className="mt-4 text-balance text-lg text-slate-700 sm:text-xl">
-                  {siteConfig.tagline}
-                </p>
-                <p className="mt-6 max-w-xl text-base sm:text-lg">
-                  Clean, focused iPhone apps built with a strong emphasis on usability,
-                  performance, and thoughtful interface design.
-                </p>
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                  <Link href="/apps" className="btn-primary">
-                    View My Apps
-                  </Link>
-                  <Link href="/support" className="btn-secondary">
-                    App Support
-                  </Link>
-                  <Link href="/pc-build-guides" className="btn-secondary">
-                    PC Build Guides
-                  </Link>
-                </div>
+            <div className="max-w-3xl">
+              <span className="eyebrow">IT Knowledge Base & Tools</span>
+              <h1 className="mt-5 text-balance text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
+                Enterprise IT Troubleshooting Guides
+              </h1>
+              <p className="mt-4 text-balance text-lg text-slate-700 dark:text-slate-300 sm:text-xl">
+                {siteConfig.tagline}
+              </p>
+              <p className="mt-6 max-w-xl text-base sm:text-lg">
+                Step-by-step fixes for Microsoft 365, Intune, Entra ID, Jamf, Okta, and
+                endpoint management — built for helpdesk engineers and sysadmins.
+              </p>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <Link href="/corporate-tech-fixes" className="btn-primary">
+                  Browse Tech Fixes
+                </Link>
+                <Link href="/support/kb" className="btn-secondary">
+                  Search KB Articles
+                </Link>
+                <Link href="/downloads" className="btn-secondary">
+                  Downloads
+                </Link>
               </div>
-              <div className="grid grid-cols-2 gap-4 sm:gap-5">
-                <div className="col-span-2 surface-card overflow-hidden p-3 sm:p-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
-                    Profile Visuals
-                  </p>
-                  <div className="mt-3">
-                    <figure className="overflow-hidden rounded-xl border border-line/80 bg-slate-100">
-                      <div className="relative aspect-[4/5]">
-                        <Image
-                          src="/images/site/profile-cartoon.png"
-                          alt="Tamem J illustrated portrait"
-                          fill
-                          priority
-                          sizes="(max-width: 1024px) 100vw, 40vw"
-                          className="object-cover object-center"
-                        />
-                      </div>
-                    </figure>
-                  </div>
-                </div>
-                {hasFeaturedApps ? (
-                  <>
-                    {featuredApps.slice(0, 2).map((app) => (
-                      <div
-                        key={app.slug}
-                        className="surface-card p-4 transition hover:-translate-y-0.5 hover:shadow-card"
-                      >
-                        <p className="text-xs uppercase tracking-[0.14em] text-slate-500">
-                          {app.category}
-                        </p>
-                        <h2 className="mt-2 text-lg font-semibold">{app.name}</h2>
-                        <p className="mt-2 text-sm text-slate-600">{app.shortDescription}</p>
-                      </div>
-                    ))}
-                  </>
-                ) : (
-                  <>
-                    <div className="surface-card border-dashed p-4 sm:p-5">
-                      <p className="text-xs uppercase tracking-[0.14em] text-slate-500">
-                        Launching Soon
-                      </p>
-                      <h2 className="mt-2 text-lg font-semibold">First app in progress</h2>
-                      <p className="mt-2 text-sm text-slate-600">
-                        App previews will appear here once the first iOS app is published.
-                      </p>
-                    </div>
-                    <div className="surface-card border-dashed p-4 sm:p-5">
-                      <p className="text-xs uppercase tracking-[0.14em] text-slate-500">
-                        Apps Hub
-                      </p>
-                      <h2 className="mt-2 text-lg font-semibold">Ready for future releases</h2>
-                      <p className="mt-2 text-sm text-slate-600">
-                        Support pages and privacy policy pages are already structured to scale.
-                      </p>
-                    </div>
-                  </>
-                )}
-                <div className="col-span-2 surface-card border-dashed p-4 sm:p-5">
-                  <p className="text-sm font-medium text-slate-900">
-                    Focused on useful, beautifully designed apps for everyday life.
-                  </p>
-                  <p className="mt-2 text-sm text-slate-600">
-                    Portfolio, privacy policy, and support resources for all apps in one place.
+            </div>
+
+            <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
+              {stats.map((stat) => (
+                <div key={stat.label} className="surface-card p-4 text-center">
+                  <p className="text-2xl font-bold text-accent sm:text-3xl">{stat.value}</p>
+                  <p className="mt-1 text-xs font-medium uppercase tracking-wide text-muted">
+                    {stat.label}
                   </p>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
@@ -149,26 +123,29 @@ export default function HomePage() {
       <section className="section-shell pt-4 sm:pt-6">
         <div className="page-shell">
           <SectionHeading
-            eyebrow="Featured Apps"
-            title="Simple iOS apps with clean interfaces"
-            description="A curated set of iPhone apps designed for speed, clarity, and everyday usefulness."
+            eyebrow="Explore"
+            title="Everything in one place"
+            description="Troubleshooting guides, knowledge base articles, curated downloads, and hardware build guides."
           />
-          {hasFeaturedApps ? (
-            <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-              {featuredApps.map((app) => (
-                <AppCard key={app.slug} app={app} variant="featured" />
-              ))}
-            </div>
-          ) : (
-            <div className="surface-card mt-8 border-dashed p-6 sm:p-8">
-              <h3 className="text-lg font-semibold text-slate-900">No featured apps yet</h3>
-              <p className="mt-2 text-sm sm:text-base">
-                This section will automatically populate after apps are added to
-                <code className="mx-1 rounded bg-slate-100 px-1.5 py-0.5 text-xs">data/apps.json</code>
-                and marked as featured.
-              </p>
-            </div>
-          )}
+          <div className="mt-8 grid gap-5 md:grid-cols-2">
+            {quickLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="surface-card group p-6 transition hover:-translate-y-0.5 hover:shadow-card"
+              >
+                <p className="text-xs font-medium uppercase tracking-[0.14em] text-accent">
+                  {link.eyebrow}
+                </p>
+                <h2 className="mt-2 text-lg font-semibold group-hover:text-accent">
+                  {link.title}
+                </h2>
+                <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+                  {link.description}
+                </p>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -177,13 +154,14 @@ export default function HomePage() {
           <div className="surface-card p-6 sm:p-8">
             <SectionHeading
               eyebrow="About"
-              title="Built with a product-first mindset"
-              description="Independent iOS developer focused on creating clean, functional applications that simplify everyday life."
+              title="Built for IT professionals"
+              description="A centralized resource hub for enterprise IT troubleshooting, maintained by an IT Solutions Engineer."
             />
             <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <p className="max-w-2xl text-sm sm:text-base">
-                Every app emphasizes clear information hierarchy, fast interactions, and a
-                minimal interface that feels at home on iPhone.
+                Every guide is written from real-world support experience with enterprise
+                environments — Microsoft 365, endpoint management, identity providers, and
+                beyond.
               </p>
               <Link href="/contact" className="btn-secondary">
                 Contact

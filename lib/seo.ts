@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { BreadcrumbList, CollectionPage, WithContext } from "schema-dts";
 import { siteConfig } from "@/lib/site";
 
-const defaultOgImage = "/images/site/og-image.svg";
+const defaultOgImage = "/images/site/og-image.png";
 
 export type SeoPageType = "website" | "article";
 
@@ -26,7 +26,7 @@ export function buildOpenGraph(
     description,
     url: path,
     type,
-    siteName: "Tamem J",
+    siteName: "TamemJ",
     images: [
       {
         url: defaultOgImage,

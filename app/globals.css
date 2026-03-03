@@ -11,6 +11,15 @@
   --accent: 14 116 144;
 }
 
+.dark {
+  --bg: 15 23 42;
+  --fg: 226 232 240;
+  --line: 51 65 85;
+  --card: 30 41 59;
+  --muted: 148 163 184;
+  --accent: 34 211 238;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -51,7 +60,7 @@ body {
   }
 
   p {
-    @apply text-slate-600 leading-7;
+    @apply text-slate-600 leading-7 dark:text-slate-400;
   }
 }
 
@@ -69,11 +78,11 @@ body {
   }
 
   .surface-card-strong {
-    @apply rounded-2xl border border-line/80 bg-white shadow-card;
+    @apply rounded-2xl border border-line/80 bg-white shadow-card dark:bg-card;
   }
 
   .eyebrow {
-    @apply inline-flex items-center rounded-full border border-line bg-white px-3 py-1 text-xs font-medium uppercase tracking-[0.14em] text-slate-500;
+    @apply inline-flex items-center rounded-full border border-line bg-white px-3 py-1 text-xs font-medium uppercase tracking-[0.14em] text-slate-500 dark:bg-card dark:text-slate-400;
   }
 
   .section-title {
@@ -85,19 +94,19 @@ body {
   }
 
   .nav-link {
-    @apply rounded-full px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-white hover:text-slate-900;
+    @apply rounded-full px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-white hover:text-slate-900 dark:text-slate-400 dark:hover:bg-card dark:hover:text-slate-100;
   }
 
   .nav-link-active {
-    @apply bg-white text-slate-900 shadow-soft;
+    @apply bg-white text-slate-900 shadow-soft dark:bg-card dark:text-slate-100;
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800;
+    @apply inline-flex items-center justify-center rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center rounded-full border border-line bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:border-slate-300 hover:bg-slate-50;
+    @apply inline-flex items-center justify-center rounded-full border border-line bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:border-slate-300 hover:bg-slate-50 dark:bg-card dark:text-slate-100 dark:hover:bg-slate-700;
   }
 }
 

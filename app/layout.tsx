@@ -47,9 +47,13 @@ export const metadata: Metadata = {
   twitter: buildTwitter(siteConfig.title, siteConfig.description),
   manifest: "/manifest.webmanifest",
   icons: {
-    icon: [{ url: "/favicon.ico", type: "image/x-icon" }],
+    icon: [
+      { url: "/favicon.ico", type: "image/x-icon", sizes: "48x48" },
+      { url: "/icons/icon-192.png", type: "image/png", sizes: "192x192" },
+      { url: "/icons/icon-512.png", type: "image/png", sizes: "512x512" }
+    ],
     shortcut: "/favicon.ico",
-    apple: "/favicon.ico"
+    apple: "/icons/apple-touch-icon.png"
   }
 };
 
@@ -92,7 +96,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
     "@type": "Person",
     name: siteConfig.name,
     url: siteConfig.url,
-    jobTitle: "iOS App Developer",
+    jobTitle: "IT Solutions Engineer",
     email: siteConfig.email,
     worksFor: {
       "@type": "Organization",
@@ -102,14 +106,24 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
   };
 
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
       <head>
         <meta
           name="impact-site-verification"
           {...({ value: "6f0bde00-6698-4a2c-9ce5-4830ca1e13b5" } as any)}
         />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8852243900182779"
+          crossOrigin="anonymous"
+        />
       </head>
       <body className="font-sans antialiased">
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("theme");if(t==="dark"||(t!=="light"&&matchMedia("(prefers-color-scheme:dark)").matches))document.documentElement.classList.add("dark")}catch(e){}})();`
+          }}
+        />
         <AccountProvider>
           <SentryBootstrap />
           <div className="min-h-screen bg-mesh-soft">
