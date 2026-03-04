@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { AppCard } from "@/components/app-card";
 import { SectionHeading } from "@/components/section-heading";
 import { getApps } from "@/lib/apps";
+import { appsSectionEnabled } from "@/lib/apps-visibility";
 import { buildBreadcrumbJsonLd, buildCollectionPageJsonLd, buildOpenGraph, buildTwitter } from "@/lib/seo";
 
 function uniqueKeywords(keywords: string[]): string[] {
@@ -50,6 +52,10 @@ export const metadata: Metadata = {
 };
 
 export default function AppsPage() {
+  if (!appsSectionEnabled) {
+    notFound();
+  }
+
   const apps = getApps();
   const hasApps = apps.length > 0;
   const appsCollectionSchema = buildCollectionPageJsonLd(

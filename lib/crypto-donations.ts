@@ -1,4 +1,13 @@
-export type CryptoDonationSymbol = "BTC" | "ETH" | "SHIB" | "BNB" | "SOL" | "LTC" | "XRP";
+export type CryptoDonationSymbol =
+  | "BTC"
+  | "ETH"
+  | "SHIB"
+  | "BNB"
+  | "SOL"
+  | "LTC"
+  | "XRP"
+  | "XMR"
+  | "DOGE";
 
 export interface CryptoDonationMethod {
   key: string;
@@ -27,7 +36,9 @@ function buildWalletUri(symbol: CryptoDonationSymbol, address: string): string {
   if (symbol === "BNB") return `ethereum:${address}`;
   if (symbol === "SOL") return `solana:${address}`;
   if (symbol === "LTC") return `litecoin:${address}`;
-  return `xrpl:${address}`;
+  if (symbol === "XRP") return `xrpl:${address}`;
+  if (symbol === "XMR") return `monero:${address}`;
+  return `dogecoin:${address}`;
 }
 
 function buildExplorerUrl(symbol: CryptoDonationSymbol, address: string): string {
@@ -37,7 +48,9 @@ function buildExplorerUrl(symbol: CryptoDonationSymbol, address: string): string
   if (symbol === "BNB") return `https://bscscan.com/address/${encodeURIComponent(address)}`;
   if (symbol === "SOL") return `https://solscan.io/account/${encodeURIComponent(address)}`;
   if (symbol === "LTC") return `https://blockchair.com/litecoin/address/${encodeURIComponent(address)}`;
-  return `https://xrpscan.com/account/${encodeURIComponent(address)}`;
+  if (symbol === "XRP") return `https://xrpscan.com/account/${encodeURIComponent(address)}`;
+  if (symbol === "XMR") return `https://xmrchain.net/search?value=${encodeURIComponent(address)}`;
+  return `https://blockchair.com/dogecoin/address/${encodeURIComponent(address)}`;
 }
 
 export function getCryptoDonationMethods(): CryptoDonationMethod[] {
@@ -100,6 +113,22 @@ export function getCryptoDonationMethods(): CryptoDonationMethod[] {
       address: process.env.NEXT_PUBLIC_DONATION_XRP_ADDRESS?.trim() ?? "",
       iconSrc: "/images/crypto/xrp.svg",
       iconAlt: "XRP icon"
+    },
+    {
+      key: "xmr",
+      symbol: "XMR",
+      network: "Monero",
+      address: process.env.NEXT_PUBLIC_DONATION_XMR_ADDRESS?.trim() ?? "",
+      iconSrc: "/images/crypto/xmr.svg",
+      iconAlt: "Monero icon"
+    },
+    {
+      key: "doge",
+      symbol: "DOGE",
+      network: "Dogecoin",
+      address: process.env.NEXT_PUBLIC_DONATION_DOGE_ADDRESS?.trim() ?? "",
+      iconSrc: "/images/crypto/doge.svg",
+      iconAlt: "Dogecoin icon"
     }
   ];
 

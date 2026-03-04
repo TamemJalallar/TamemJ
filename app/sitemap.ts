@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getApps } from "@/lib/apps";
+import { appsSectionEnabled } from "@/lib/apps-visibility";
 import { getAiAgentCategories, getAiAgentCategorySlug, getAiAgentsRegistry } from "@/lib/aiAgents.registry";
 import { getCorporateFixes } from "@/lib/corporate-fixes.registry";
 import { getDownloadAssets } from "@/lib/download-assets.registry";
@@ -25,10 +26,13 @@ function parseDateInput(value?: string): Date | undefined {
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const generatedAt = new Date();
+  const appsIndexEntry: MetadataRoute.Sitemap = [
+    { url: url("/apps/"), changeFrequency: "weekly", priority: 0.9, lastModified: generatedAt }
+  ];
 
   const staticEntries: MetadataRoute.Sitemap = [
     { url: url("/"), changeFrequency: "weekly", priority: 1, lastModified: generatedAt },
-    { url: url("/apps/"), changeFrequency: "weekly", priority: 0.9, lastModified: generatedAt },
+    ...(appsSectionEnabled ? appsIndexEntry : []),
     { url: url("/downloads/"), changeFrequency: "daily", priority: 0.9, lastModified: generatedAt },
     { url: url("/downloads/assets/"), changeFrequency: "weekly", priority: 0.88, lastModified: generatedAt },
     { url: url("/ai-agents/"), changeFrequency: "weekly", priority: 0.85, lastModified: generatedAt },
@@ -50,12 +54,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: url("/privacy/"), changeFrequency: "monthly", priority: 0.5, lastModified: generatedAt }
   ];
 
-  const appEntries: MetadataRoute.Sitemap = getApps().map((app) => ({
-    url: url(`/apps/${app.slug}/`),
-    changeFrequency: "monthly",
-    priority: 0.7,
-    lastModified: generatedAt
-  }));
+  const appEntries: MetadataRoute.Sitemap = appsSectionEnabled
+    ? getApps().map((app) => ({
+        url: url(`/apps/${app.slug}/`),
+        changeFrequency: "monthly",
+        priority: 0.7,
+        lastModified: generatedAt
+      }))
+    : [];
 
   const aiAgentEntries: MetadataRoute.Sitemap = getAiAgentsRegistry().map((agent) => ({
     url: url(`/ai-agents/${agent.slug}/`),

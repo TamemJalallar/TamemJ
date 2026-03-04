@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { AccountNavLabel } from "@/components/account-nav-label";
 import { NavLink } from "@/components/nav-link";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { appsSectionEnabled } from "@/lib/apps-visibility";
 
 const primaryNavItems = [
   { href: "/corporate-tech-fixes", label: "Fixes" },
@@ -16,7 +17,7 @@ const primaryNavItems = [
   { href: "/guides", label: "Guides" },
   { href: "/pc-build-guides", label: "PC Builds" },
   { href: "/support", label: "Support" },
-  { href: "/apps", label: "Apps" }
+  ...(appsSectionEnabled ? [{ href: "/apps", label: "Apps" }] : [])
 ] as const;
 
 export function SiteHeader() {

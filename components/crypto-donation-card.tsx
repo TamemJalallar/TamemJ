@@ -26,6 +26,9 @@ async function copyToClipboard(value: string): Promise<boolean> {
   }
 }
 
+const actionButtonClass =
+  "inline-flex min-h-9 items-center justify-center whitespace-nowrap rounded-full border border-line px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:border-slate-500 dark:hover:bg-slate-800";
+
 export function CryptoDonationCard({ methods }: CryptoDonationCardProps) {
   const [copiedKey, setCopiedKey] = useState<string>("");
   const [openQrKey, setOpenQrKey] = useState<string>("");
@@ -138,13 +141,13 @@ export function CryptoDonationCard({ methods }: CryptoDonationCardProps) {
               <p className="mt-1 font-mono text-xs text-slate-600 dark:text-slate-300" title={method.address}>
                 {shortenAddress(method.address)}
               </p>
-              <div className="mt-2 flex items-center gap-2">
+              <div className="mt-2 flex flex-wrap items-center justify-center gap-2">
                 <button
                   type="button"
                   onClick={() => {
                     void handleCopyAddress(method);
                   }}
-                  className="rounded-full border border-line px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:border-slate-500 dark:hover:bg-slate-800"
+                  className={actionButtonClass}
                 >
                   {copiedKey === method.key ? "Copied" : "Copy"}
                 </button>
@@ -158,21 +161,21 @@ export function CryptoDonationCard({ methods }: CryptoDonationCardProps) {
                       void handleOpenQr(method);
                     }
                   }}
-                  className="rounded-full border border-line px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:border-slate-500 dark:hover:bg-slate-800"
+                  className={actionButtonClass}
                 >
                   {openQrKey === method.key ? "Hide QR" : "Show QR"}
                 </button>
                 <a
                   href={method.walletUri}
-                  className="rounded-full border border-line px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:border-slate-500 dark:hover:bg-slate-800"
+                  className={actionButtonClass}
                 >
                   Open Wallet
                 </a>
                 <a
                   href={method.explorerUrl}
                   target="_blank"
-                  rel="noreferrer"
-                  className="text-xs font-medium text-cyan-700 hover:text-cyan-800 dark:text-cyan-300 dark:hover:text-cyan-200"
+                  rel="noopener noreferrer"
+                  className={actionButtonClass}
                 >
                   Explorer
                 </a>
@@ -271,7 +274,7 @@ export function CryptoDonationCard({ methods }: CryptoDonationCardProps) {
               <a
                 href={activeQrMethod.explorerUrl}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="text-xs font-medium text-cyan-700 hover:text-cyan-800 dark:text-cyan-300 dark:hover:text-cyan-200"
               >
                 View on Explorer

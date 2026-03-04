@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { AppStoreButton } from "@/components/app-store-button";
 import { ScreenshotCarousel } from "@/components/screenshot-carousel";
 import { getAppBySlug, getApps } from "@/lib/apps";
+import { appsSectionEnabled } from "@/lib/apps-visibility";
 import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 
 const STATIC_EXPORT_PLACEHOLDER_SLUG = "__site-build-placeholder__";
@@ -18,6 +19,10 @@ interface AppPageProps {
 export const dynamicParams = false;
 
 export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
+  if (!appsSectionEnabled) {
+    return [{ slug: STATIC_EXPORT_PLACEHOLDER_SLUG }];
+  }
+
   const apps = getApps();
 
   if (apps.length === 0) {
@@ -28,6 +33,16 @@ export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
 }
 
 export async function generateMetadata({ params }: AppPageProps): Promise<Metadata> {
+  if (!appsSectionEnabled) {
+    return {
+      title: "Not Found",
+      robots: {
+        index: false,
+        follow: false
+      }
+    };
+  }
+
   const { slug } = await params;
   const app = getAppBySlug(slug);
 
@@ -68,6 +83,10 @@ export async function generateMetadata({ params }: AppPageProps): Promise<Metada
 }
 
 export default async function IndividualAppPage({ params }: AppPageProps) {
+  if (!appsSectionEnabled) {
+    notFound();
+  }
+
   const { slug } = await params;
   const app = getAppBySlug(slug);
 

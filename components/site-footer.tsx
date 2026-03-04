@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { appsSectionEnabled } from "@/lib/apps-visibility";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
@@ -10,12 +11,14 @@ export function SiteFooter() {
           <p className="text-sm text-slate-500 dark:text-slate-400">© {year} Tamem J. All rights reserved.</p>
 
           <nav aria-label="Footer links" className="flex flex-wrap gap-2">
-            <Link
-              href="/apps"
-              className="nav-link dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-slate-100"
-            >
-              Apps
-            </Link>
+            {appsSectionEnabled ? (
+              <Link
+                href="/apps"
+                className="nav-link dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-slate-100"
+              >
+                Apps
+              </Link>
+            ) : null}
             <Link
               href="/downloads"
               className="nav-link dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-slate-100"
