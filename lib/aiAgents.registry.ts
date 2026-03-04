@@ -5906,6 +5906,60 @@ export function getAiAgentBySlug(slug: string): AiAgentPrompt | undefined {
   return aiAgents.find((agent) => agent.slug === slug);
 }
 
+function toCategorySlug(category: string): string {
+  return category
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .replace(/-{2,}/g, "-");
+}
+
+const aiAgentCategories = [...new Set(aiAgents.map((agent) => agent.category))].sort((a, b) =>
+  a.localeCompare(b)
+);
+const aiAgentCategorySlugMap = new Map(aiAgentCategories.map((category) => [toCategorySlug(category), category]));
+
+export function getAiAgentCategories(): string[] {
+  return [...aiAgentCategories];
+}
+
+export function getAiAgentCategorySlug(category: string): string {
+  return toCategorySlug(category);
+}
+
+export function getAiAgentCategoryBySlug(slug: string): string | undefined {
+  return aiAgentCategorySlugMap.get(slug);
+}
+
+export function getAiAgentsByCategory(category: string): AiAgentPrompt[] {
+  return aiAgents
+    .filter((agent) => agent.category === category)
+    .map((agent) => ({ ...agent, tags: [...agent.tags] }));
+}
+
+export function getRelatedAiAgents(slug: string, limit = 8): AiAgentPrompt[] {
+  const current = getAiAgentBySlug(slug);
+  if (!current) return [];
+
+  const currentTags = new Set(current.tags);
+  const scored = aiAgents
+    .filter((agent) => agent.slug !== slug)
+    .map((agent) => {
+      const sharedTagCount = agent.tags.filter((tag) => currentTags.has(tag)).length;
+      const sameCategory = agent.category === current.category ? 1 : 0;
+      const sameLevel = agent.expertiseLevel === current.expertiseLevel ? 1 : 0;
+      const score = sameCategory * 4 + sharedTagCount * 2 + sameLevel;
+      return { agent, score };
+    })
+    .filter((entry) => entry.score > 0)
+    .sort((a, b) => b.score - a.score || a.agent.title.localeCompare(b.agent.title))
+    .slice(0, limit)
+    .map((entry) => ({ ...entry.agent, tags: [...entry.agent.tags] }));
+
+  return scored;
+}
+
 export function buildAiAgentPromptForPlatform(
   agent: AiAgentPrompt,
   platform: AiAgentPlatform

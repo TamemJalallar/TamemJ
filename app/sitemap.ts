@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getApps } from "@/lib/apps";
+import { getAiAgentCategories, getAiAgentCategorySlug, getAiAgentsRegistry } from "@/lib/aiAgents.registry";
 import { getCorporateFixes } from "@/lib/corporate-fixes.registry";
 import { getDownloadAssets } from "@/lib/download-assets.registry";
 import { getPCBuildGuides } from "@/lib/pc-build-guides.registry";
@@ -39,6 +40,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: url(`/apps/${app.slug}/`),
     changeFrequency: "monthly",
     priority: 0.7,
+    lastModified
+  }));
+
+  const aiAgentEntries: MetadataRoute.Sitemap = getAiAgentsRegistry().map((agent) => ({
+    url: url(`/ai-agents/${agent.slug}/`),
+    changeFrequency: "monthly",
+    priority: 0.82,
+    lastModified
+  }));
+
+  const aiAgentCategoryEntries: MetadataRoute.Sitemap = getAiAgentCategories().map((category) => ({
+    url: url(`/ai-agents/category/${getAiAgentCategorySlug(category)}/`),
+    changeFrequency: "weekly",
+    priority: 0.86,
     lastModified
   }));
 
@@ -87,6 +102,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     ...staticEntries,
     ...appEntries,
+    ...aiAgentEntries,
+    ...aiAgentCategoryEntries,
     ...downloadAssetEntries,
     ...guideEntries,
     ...corporateFixEntries,

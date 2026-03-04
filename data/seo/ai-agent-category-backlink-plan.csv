@@ -1,0 +1,11 @@
+priority,category,url,anchor_text_primary,anchor_text_alternative,target_site_type,status,notes
+P1,Technology,https://tamemj.com/ai-agents/category/technology/,technology ai agents,software engineering ai agent prompts,Dev blogs and engineering newsletters,Planned,Start with guest posts and curated resource pages
+P1,Cloud Engineering,https://tamemj.com/ai-agents/category/cloud-engineering/,cloud engineering ai agents,cloud architect prompt library,Cloud communities and architecture blogs,Planned,Pitch architecture checklist content
+P1,Cybersecurity,https://tamemj.com/ai-agents/category/cybersecurity/,cybersecurity ai agents,security analyst system prompts,Security newsletters and SOC communities,Planned,Lead with incident response use cases
+P1,DevOps,https://tamemj.com/ai-agents/category/devops/,devops ai agents,ci cd ai prompts,DevOps blogs and tooling communities,Planned,Reference deployment and SRE workflows
+P1,IT Support,https://tamemj.com/ai-agents/category/it-support/,it support ai agents,helpdesk ai prompt templates,Helpdesk communities and MSP blogs,Planned,Link with ticketing and troubleshooting examples
+P2,SEO,https://tamemj.com/ai-agents/category/seo/,seo ai agents,seo strategist system prompt,SEO newsletters and growth communities,Planned,Use case: content briefs and audits
+P2,Marketing,https://tamemj.com/ai-agents/category/marketing/,marketing ai agents,content marketing ai prompts,Marketing publications and creator communities,Planned,Pair with funnel and campaign examples
+P2,Product Management,https://tamemj.com/ai-agents/category/product-management/,product management ai agents,product manager prompt library,Product communities and PM newsletters,Planned,Pitch roadmap and PRD use cases
+P2,Finance,https://tamemj.com/ai-agents/category/finance/,finance ai agents,financial analyst ai prompts,Finance ops blogs and startup finance communities,Planned,Lead with forecasting and budgeting workflows
+P2,Legal,https://tamemj.com/ai-agents/category/legal/,legal ai agents,contract analyst ai prompts,Legal ops communities and compliance forums,Planned,Use contract review and policy drafting examples

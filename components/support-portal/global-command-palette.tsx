@@ -226,7 +226,7 @@ export function GlobalCommandPalette() {
       id: `ai-agent-${agent.slug}`,
       label: agent.title,
       description: `${agent.category} • ${agent.expertiseLevel}`,
-      href: `/ai-agents/#${agent.slug}`,
+      href: `/ai-agents/${agent.slug}/`,
       group: "AI Agents",
       keywords: [agent.role, agent.category, agent.expertiseLevel, ...agent.tags]
     }));

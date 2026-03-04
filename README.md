@@ -324,6 +324,39 @@ The registry includes:
 
 The guide pages auto-link to relevant support KB articles and download assets using keyword-based matching.
 
+### AI Agents SEO Enhancements
+
+The AI Agents area is optimized with:
+
+- Static detail routes: `/ai-agents/[slug]`
+- Static category routes: `/ai-agents/category/[slug]`
+- Category + detail URL coverage in `app/sitemap.ts`
+- Structured data on index/category/detail pages (CollectionPage, ItemList, FAQPage, TechArticle, BreadcrumbList)
+- Internal crawl links from the index and agent cards to category/detail pages
+
+To reduce thin-template signals, editorial intros are maintained in:
+
+- `lib/ai-agents.editorial.ts`
+
+Current scope:
+
+- 20 high-value agent pages have unique editorial intros
+- Intros render directly on `/ai-agents/[slug]` pages and are included in TechArticle schema body text
+
+### Category-First Backlink Execution (AI Agents)
+
+Backlink planning is tracked in:
+
+- `data/seo/ai-agent-category-backlink-plan.csv`
+- `data/seo/category-backlink-outreach-templates.md`
+
+Execution rule:
+
+1. Build links to category pages first (not the homepage)
+2. Prioritize the P1 rows in the CSV first
+3. Use the provided anchor text variants to diversify link profile naturally
+4. After category URLs gain impressions, then build selected links to top detail pages
+
 ### Auto-Sync GitHub Release Metadata (Version, Size, SHA-256)
 
 For GitHub-hosted direct downloads, use the sync tool to prefill metadata and direct asset URLs:

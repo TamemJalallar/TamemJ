@@ -1,9 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useDeferredValue, useEffect, useMemo, useState } from "react";
 import {
   aiAgentPlatforms,
   buildAiAgentPromptForPlatform,
+  getAiAgentCategorySlug,
   getAiAgentsRegistry,
   type AiAgentPlatform,
   type AiAgentExpertiseLevel,
@@ -150,9 +152,9 @@ export function AiAgentsBrowser() {
     <div className="space-y-5">
       <section className="surface-card-strong p-5 sm:p-6">
         <p className="eyebrow">AI Agent Library</p>
-        <h2 className="mt-3 text-2xl font-semibold text-slate-900 dark:text-slate-100 sm:text-3xl">
+        <h1 className="mt-3 text-2xl font-semibold text-slate-900 dark:text-slate-100 sm:text-3xl">
           Copy-ready system prompts for {allAgents.length}+ professional AI agents
-        </h2>
+        </h1>
         <p className="mt-2 max-w-4xl text-sm leading-7 text-slate-600 dark:text-slate-300">
           Search and filter specialized AI agent prompts across finance, legal, technology, design, marketing,
           business, healthcare, data, and operations. Each profile includes role instructions, reasoning style,
@@ -268,9 +270,12 @@ export function AiAgentsBrowser() {
               className="rounded-2xl border border-line/80 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950/70"
             >
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="rounded-full border border-line/80 bg-slate-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
+                <Link
+                  href={`/ai-agents/category/${getAiAgentCategorySlug(agent.category)}/`}
+                  className="rounded-full border border-line/80 bg-slate-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-600 transition hover:border-slate-300 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:bg-slate-800"
+                >
                   {agent.category}
-                </span>
+                </Link>
                 <span
                   className={cx(
                     "rounded-full border px-2.5 py-1 text-[11px] font-semibold",
@@ -281,7 +286,11 @@ export function AiAgentsBrowser() {
                 </span>
               </div>
 
-              <h3 className="mt-3 text-lg font-semibold text-slate-900 dark:text-slate-100">{agent.title}</h3>
+              <h3 className="mt-3 text-lg font-semibold text-slate-900 dark:text-slate-100">
+                <Link href={`/ai-agents/${agent.slug}/`} className="hover:underline">
+                  {agent.title}
+                </Link>
+              </h3>
               <p className="mt-1 text-xs font-semibold uppercase tracking-[0.11em] text-slate-500 dark:text-slate-400">
                 {agent.role}
               </p>
@@ -324,6 +333,9 @@ export function AiAgentsBrowser() {
                 >
                   {expanded ? "Hide Full Prompt" : "Show Full Prompt"}
                 </button>
+                <Link href={`/ai-agents/${agent.slug}/`} className="btn-secondary !px-4 !py-2 text-xs">
+                  Open Detail
+                </Link>
               </div>
             </article>
           );
