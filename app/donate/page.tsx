@@ -38,6 +38,34 @@ export default function DonatePage() {
           </p>
         </div>
 
+        <div className="mt-6 rounded-2xl border border-amber-200/80 bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 p-5 shadow-soft dark:border-amber-900/50 dark:from-amber-950/30 dark:via-orange-950/20 dark:to-rose-950/20 sm:p-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-700 dark:text-amber-200">
+            Quick Support Option
+          </p>
+          <h2 className="mt-2 text-xl font-semibold text-slate-900 dark:text-slate-100">
+            Buy Me a Coffee
+          </h2>
+          <p className="mt-2 max-w-3xl text-sm text-slate-700 dark:text-slate-300">
+            If you want a quick way to support the project, you can contribute here.
+          </p>
+
+          <div className="mt-4">
+            <a
+              href="https://buymeacoffee.com/tamemj"
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-xl border border-amber-300 bg-gradient-to-r from-amber-400 via-orange-400 to-rose-400 px-5 py-3 text-sm font-semibold text-slate-950 shadow-[0_10px_24px_-12px_rgba(245,158,11,0.65)] transition hover:-translate-y-0.5 hover:shadow-[0_14px_30px_-12px_rgba(251,146,60,0.7)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-amber-700 dark:text-slate-900 dark:focus-visible:ring-offset-slate-950"
+            >
+              <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-white/0 via-white/35 to-white/0 transition duration-700 group-hover:translate-x-full" />
+              <span className="relative inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/90 text-base">
+                ☕
+              </span>
+              <span className="relative">Support on Buy Me a Coffee</span>
+              <span className="relative text-base leading-none">→</span>
+            </a>
+          </div>
+        </div>
+
         <div className="mt-6">
           <CryptoDonationCard methods={methods} />
         </div>
