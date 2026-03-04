@@ -17,8 +17,7 @@ export const aiAgentPlatforms = [
   "Claude",
   "Grok/xAI",
   "Perplexity",
-  "MetaAI",
-  "Adobe GenAI"
+  "Google Gemini"
 ] as const;
 
 export type AiAgentPlatform = (typeof aiAgentPlatforms)[number];
@@ -32,10 +31,8 @@ const platformPromptGuidance: Record<AiAgentPlatform, string> = {
     "Be direct and pragmatic, challenge weak assumptions early, and prioritize fast, execution-ready recommendations.",
   Perplexity:
     "Prefer source-oriented reasoning, identify where verification is required, and call out confidence and uncertainty.",
-  MetaAI:
-    "Use highly readable language, compact steps, and user-friendly explanations while preserving technical accuracy.",
-  "Adobe GenAI":
-    "Optimize for creative and visual clarity, with structured directions suitable for design-oriented and content-heavy workflows."
+  "Google Gemini":
+    "Use clear structured sections, synthesize context across multiple constraints, and keep recommendations precise and implementation-ready."
 };
 
 export const aiAgents: AiAgentPrompt[] = [

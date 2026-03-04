@@ -159,7 +159,7 @@ export function AiAgentsBrowser() {
           Search and filter specialized AI agent prompts across finance, legal, technology, design, marketing,
           business, healthcare, data, and operations. Each profile includes role instructions, reasoning style,
           output rules, constraints, and example tasks. Select a platform to generate prompts tuned for Claude,
-          ChatGPT, Grok/xAI, Perplexity, MetaAI, or Adobe GenAI.
+          ChatGPT, Grok/xAI, Perplexity, or Google Gemini.
         </p>
 
         <div className="mt-4 grid gap-3 sm:grid-cols-3">

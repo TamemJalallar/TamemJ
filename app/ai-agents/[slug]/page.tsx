@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: AiAgentDetailPageProps): Prom
   }
 
   const title = `${agent.title} AI Agent Prompt | ${agent.category}`;
-  const description = `Copy-ready ${agent.expertiseLevel.toLowerCase()} ${agent.role} system prompt with platform variants for ChatGPT, Claude, Grok/xAI, Perplexity, MetaAI, and Adobe GenAI.`;
+  const description = `Copy-ready ${agent.expertiseLevel.toLowerCase()} ${agent.role} system prompt with platform variants for ChatGPT, Claude, Grok/xAI, Perplexity, and Google Gemini.`;
   const path = `/ai-agents/${agent.slug}/`;
   const keywords = uniqueKeywords([
     `${agent.title} ai agent`,

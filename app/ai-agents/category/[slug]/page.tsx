@@ -53,7 +53,7 @@ export async function generateMetadata({ params }: AiAgentCategoryPageProps): Pr
   const categoryAgents = getAiAgentsByCategory(category);
   const tags = categoryAgents.flatMap((agent) => agent.tags).slice(0, 40);
   const roles = categoryAgents.map((agent) => agent.role).slice(0, 24);
-  const description = `Browse ${categoryAgents.length} ${category} AI agent prompts with platform variants for ChatGPT, Claude, Grok/xAI, Perplexity, MetaAI, and Adobe GenAI.`;
+  const description = `Browse ${categoryAgents.length} ${category} AI agent prompts with platform variants for ChatGPT, Claude, Grok/xAI, Perplexity, and Google Gemini.`;
 
   return {
     title: `${category} AI Agent Prompts`,

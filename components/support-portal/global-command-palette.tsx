@@ -95,8 +95,7 @@ const quickItems: PaletteItem[] = [
       "claude",
       "grok",
       "perplexity",
-      "metaai",
-      "adobe genai"
+      "google gemini"
     ]
   },
   {

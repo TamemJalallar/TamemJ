@@ -27,7 +27,7 @@ function uniqueKeywords(keywords: string[]): string[] {
 export const metadata: Metadata = {
   title: "AI Agents Library (300+ System Prompts)",
   description:
-    "Discover 300+ copy-ready AI agent system prompts with platform-specific variants for ChatGPT, Claude, Grok/xAI, Perplexity, MetaAI, and Adobe GenAI.",
+    "Discover 300+ copy-ready AI agent system prompts with platform-specific variants for ChatGPT, Claude, Grok/xAI, Perplexity, and Google Gemini.",
   keywords: uniqueKeywords([
     "ai agents",
     "ai agents library",
@@ -39,8 +39,7 @@ export const metadata: Metadata = {
     "chatgpt agents",
     "claude agents",
     "perplexity agents",
-    "meta ai agents",
-    "adobe genai prompts",
+    "google gemini prompts",
     "grok xai prompts",
     "system prompts",
     "ai agent prompts",
@@ -48,8 +47,7 @@ export const metadata: Metadata = {
     "claude system prompts",
     "grok system prompts",
     "perplexity prompts",
-    "metaai prompts",
-    "adobe genai prompts",
+    "google gemini prompts",
     "professional ai roles",
     "technology ai agent",
     "finance ai assistant",
@@ -63,12 +61,12 @@ export const metadata: Metadata = {
   },
   openGraph: buildOpenGraph(
     "AI Agents Library | 300+ Professional System Prompts",
-    "Copy-ready system prompts for 300+ specialized AI agents with platform-specific output for ChatGPT, Claude, Grok/xAI, Perplexity, MetaAI, and Adobe GenAI.",
+    "Copy-ready system prompts for 300+ specialized AI agents with platform-specific output for ChatGPT, Claude, Grok/xAI, Perplexity, and Google Gemini.",
     "/ai-agents/"
   ),
   twitter: buildTwitter(
     "AI Agents Library | 300+ Professional System Prompts",
-    "Copy-ready system prompts for 300+ specialized AI agents with platform-specific output for ChatGPT, Claude, Grok/xAI, Perplexity, MetaAI, and Adobe GenAI."
+    "Copy-ready system prompts for 300+ specialized AI agents with platform-specific output for ChatGPT, Claude, Grok/xAI, Perplexity, and Google Gemini."
   )
 };
 
@@ -137,7 +135,7 @@ export default function AiAgentsPage() {
         name: "Which AI platforms are supported?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Each agent can be generated for ChatGPT, Claude, Grok/xAI, Perplexity, MetaAI, and Adobe GenAI."
+          text: "Each agent can be generated for ChatGPT, Claude, Grok/xAI, Perplexity, and Google Gemini."
         }
       },
       {
