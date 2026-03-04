@@ -11,7 +11,7 @@ interface PaletteItem {
   label: string;
   description: string;
   href: string;
-  group: "Quick" | "Knowledge Base" | "Catalog" | "Downloads" | "Guides";
+  group: "Quick" | "Knowledge Base" | "Catalog" | "Downloads" | "Guides" | "AI Agents";
   keywords: string[];
 }
 
@@ -89,6 +89,14 @@ const quickItems: PaletteItem[] = [
     keywords: ["prompts", "chatgpt", "claude", "perplexity", "grok", "meta ai", "adobe genai"]
   },
   {
+    id: "quick-ai-agents",
+    label: "AI Agents",
+    description: "Browse copy-ready professional AI agent system prompts",
+    href: "/ai-agents/",
+    group: "Quick",
+    keywords: ["ai agents", "system prompts", "roles", "prompt library"]
+  },
+  {
     id: "quick-revenue-roadmap",
     label: "Revenue Scaling Roadmap",
     description: "Open 0-24 month growth and monetization plan",
@@ -156,12 +164,14 @@ export function GlobalCommandPalette() {
 
     setLoadingRegistry(true);
 
-    const [kbModule, catalogModule, downloadsModule, downloadAssetsModule, seoContentModule] = await Promise.all([
+    const [kbModule, catalogModule, downloadsModule, downloadAssetsModule, seoContentModule, aiAgentsModule] =
+      await Promise.all([
       import("@/lib/support.kb.registry"),
       import("@/lib/support.catalog.registry"),
       import("@/lib/downloads.registry"),
       import("@/lib/download-assets.registry"),
-      import("@/lib/seo-content.registry")
+      import("@/lib/seo-content.registry"),
+      import("@/lib/aiAgents.registry")
     ]);
 
     const kbItems: PaletteItem[] = kbModule.getKBArticles().map((article) => ({
@@ -209,8 +219,24 @@ export function GlobalCommandPalette() {
       keywords: [...guide.targetKeywords, ...guide.relatedTerms]
     }));
 
+    const aiAgentItems: PaletteItem[] = aiAgentsModule.getAiAgentsRegistry().map((agent) => ({
+      id: `ai-agent-${agent.slug}`,
+      label: agent.title,
+      description: `${agent.category} • ${agent.expertiseLevel}`,
+      href: `/ai-agents/#${agent.slug}`,
+      group: "AI Agents",
+      keywords: [agent.role, agent.category, agent.expertiseLevel, ...agent.tags]
+    }));
+
     startTransition(() => {
-      setDynamicItems([...kbItems, ...catalogItems, ...downloadItems, ...downloadAssetItems, ...guideItems]);
+      setDynamicItems([
+        ...kbItems,
+        ...catalogItems,
+        ...downloadItems,
+        ...downloadAssetItems,
+        ...guideItems,
+        ...aiAgentItems
+      ]);
     });
     setLoadingRegistry(false);
   }, [dynamicItems.length, loadingRegistry]);
@@ -276,7 +302,7 @@ export function GlobalCommandPalette() {
           <Command.Input
             value={query}
             onValueChange={setQuery}
-            placeholder="Search KBs, downloads, catalog items, tickets, and forms..."
+            placeholder="Search KBs, downloads, AI agents, catalog items, tickets, and forms..."
             className="h-10 w-full rounded-lg border border-line bg-white px-3 text-sm outline-none focus:border-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
           />
         </div>

@@ -140,6 +140,9 @@ export default function HomePage() {
               <Link href="/ai-prompts" className="btn-secondary !px-4 !py-2 text-xs sm:text-sm">
                 Open AI Prompts
               </Link>
+              <Link href="/ai-agents" className="btn-secondary !px-4 !py-2 text-xs sm:text-sm">
+                Open AI Agents
+              </Link>
               <Link href="/downloads" className="btn-secondary !px-4 !py-2 text-xs sm:text-sm">
                 View Downloads
               </Link>

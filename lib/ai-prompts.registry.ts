@@ -23,6 +23,7 @@ export interface AiPromptField {
   label: string;
   placeholder: string;
   defaultValue: string;
+  defaultByExpertise?: Partial<Record<AiPromptExpertise, string>>;
   required: boolean;
   multiline?: boolean;
 }
@@ -62,6 +63,37 @@ const expertiseGuidanceByLevel: Record<AiPromptExpertise, string> = {
     "Keep response concise and technical, focus on architecture-level decisions, edge cases, and risk controls."
 };
 
+const expertiseInstructionProfile: Record<AiPromptExpertise, string[]> = {
+  Beginner: [
+    "Assume no prior context; define acronyms and platform-specific terms.",
+    "Use step-by-step sequencing with expected outcome after each step.",
+    "Add a short glossary section for key terms.",
+    "Prefer safer defaults and call out what not to do."
+  ],
+  Hobbyist: [
+    "Assume basic technical familiarity but explain advanced concepts briefly.",
+    "Provide a practical path first, then optional advanced improvements.",
+    "Use examples that can be adapted without enterprise-scale infrastructure.",
+    "Include common mistakes and quick recovery steps."
+  ],
+  Intermediate: [
+    "Assume operational familiarity and focus on tradeoffs and implementation details.",
+    "Use concise sections with clear decision points and alternatives.",
+    "Highlight dependencies, risks, and verification checks.",
+    "Limit introductory explanations to only what is required for execution."
+  ],
+  Expert: [
+    "Skip foundational explanations and focus on architecture and failure modes.",
+    "Provide compact, implementation-ready output with minimal narrative.",
+    "Emphasize edge cases, rollback strategy, and operational risk controls.",
+    "Challenge weak assumptions and present defensible alternatives."
+  ]
+};
+
+export function getAiPromptExpertiseProfile(expertise: AiPromptExpertise): string[] {
+  return [...expertiseInstructionProfile[expertise]];
+}
+
 const templates: AiPromptTemplate[] = [
   {
     slug: "app-development-plan",
@@ -76,6 +108,12 @@ const templates: AiPromptTemplate[] = [
         label: "App Type",
         placeholder: "Web app, mobile app, desktop utility, API service, etc.",
         defaultValue: "Web application",
+        defaultByExpertise: {
+          Beginner: "Simple web application",
+          Hobbyist: "Personal productivity web app",
+          Intermediate: "Production-ready web platform",
+          Expert: "Multi-tenant web platform with API-first design"
+        },
         required: true
       },
       {
@@ -83,6 +121,12 @@ const templates: AiPromptTemplate[] = [
         label: "Target Users",
         placeholder: "Who will use the app and in what context?",
         defaultValue: "IT administrators and support engineers",
+        defaultByExpertise: {
+          Beginner: "Non-technical internal users who need guided workflows",
+          Hobbyist: "Small internal team with mixed technical ability",
+          Intermediate: "IT administrators and support engineers across departments",
+          Expert: "Enterprise IT operations teams across multiple business units"
+        },
         required: true
       },
       {
@@ -90,6 +134,13 @@ const templates: AiPromptTemplate[] = [
         label: "Preferred Stack",
         placeholder: "Frameworks, languages, databases, and hosting choices",
         defaultValue: "Next.js, TypeScript, Tailwind, static hosting",
+        defaultByExpertise: {
+          Beginner: "Next.js + TypeScript + Tailwind + Supabase Auth",
+          Hobbyist: "Next.js + TypeScript + Tailwind + local storage analytics",
+          Intermediate: "Next.js App Router, TypeScript, Tailwind, Supabase, Cloudflare Worker APIs",
+          Expert:
+            "Next.js App Router, TypeScript, Supabase/Postgres, Cloudflare Workers, CI/CD with staged environments"
+        },
         required: true
       },
       {
@@ -97,6 +148,14 @@ const templates: AiPromptTemplate[] = [
         label: "Must-Have Features",
         placeholder: "List required capabilities",
         defaultValue: "Authentication, role-based access, search, analytics",
+        defaultByExpertise: {
+          Beginner: "User login\nGuided onboarding\nSearch\nSimple dashboard",
+          Hobbyist: "Authentication\nRole-based access\nSearch and filters\nUsage dashboard",
+          Intermediate:
+            "SSO-ready auth, RBAC, searchable KB, incident intake, analytics dashboards, exportable reports",
+          Expert:
+            "RBAC/ABAC, audit logs, policy controls, resilient search, event tracking pipeline, observability + SLOs"
+        },
         required: true,
         multiline: true
       },
@@ -105,6 +164,14 @@ const templates: AiPromptTemplate[] = [
         label: "Constraints",
         placeholder: "Budget, timeline, compliance, deployment constraints",
         defaultValue: "GitHub Pages compatibility, low cost, enterprise-safe",
+        defaultByExpertise: {
+          Beginner: "Keep setup simple, low cost, and easy to maintain.",
+          Hobbyist: "Keep cost low, use managed services first, avoid complex infrastructure.",
+          Intermediate:
+            "GitHub Pages + Cloudflare compatibility, enterprise-safe patterns, predictable deployment process.",
+          Expert:
+            "SOC2-aligned controls, least-privilege access, deterministic release process, documented rollback automation."
+        },
         required: false,
         multiline: true
       }
@@ -130,6 +197,12 @@ const templates: AiPromptTemplate[] = [
         label: "Issue Summary",
         placeholder: "Describe the incident or error",
         defaultValue: "VPN connected but no internet access",
+        defaultByExpertise: {
+          Beginner: "User cannot access internet after connecting VPN",
+          Hobbyist: "VPN shows connected, but SaaS apps and websites fail intermittently",
+          Intermediate: "VPN connected, but no external internet and no internal resources",
+          Expert: "Post-connect route/DNS path failure after VPN tunnel establishment"
+        },
         required: true
       },
       {
@@ -137,6 +210,12 @@ const templates: AiPromptTemplate[] = [
         label: "Environment",
         placeholder: "Windows, macOS, mobile, cloud tenant, etc.",
         defaultValue: "Windows and macOS endpoints in enterprise environment",
+        defaultByExpertise: {
+          Beginner: "Windows laptops in a corporate environment",
+          Hobbyist: "Windows and macOS endpoints on hybrid office/home networks",
+          Intermediate: "Windows 11 + macOS managed endpoints with enterprise VPN client",
+          Expert: "Managed multi-platform endpoints with split-tunnel policy and central identity controls"
+        },
         required: true
       },
       {
@@ -144,6 +223,12 @@ const templates: AiPromptTemplate[] = [
         label: "Impact Scope",
         placeholder: "Single user, team, department, all users, etc.",
         defaultValue: "Multiple users in one office location",
+        defaultByExpertise: {
+          Beginner: "Single user",
+          Hobbyist: "Small team (5-10 users)",
+          Intermediate: "Department-wide issue affecting one site",
+          Expert: "Multi-site or tenant-wide incident pattern with partial service impact"
+        },
         required: true
       },
       {
@@ -151,6 +236,13 @@ const templates: AiPromptTemplate[] = [
         label: "Security/Policy Constraints",
         placeholder: "Any rules that must be respected",
         defaultValue: "No policy bypass, no credential sharing, no unsafe registry changes",
+        defaultByExpertise: {
+          Beginner: "Do not disable security tools or share passwords.",
+          Hobbyist: "No local admin shortcuts that bypass corporate policies.",
+          Intermediate: "No policy bypass, no credential sharing, no unmanaged DNS overrides.",
+          Expert:
+            "Maintain policy integrity, preserve forensic evidence where relevant, and require security sign-off for identity/policy exceptions."
+        },
         required: false,
         multiline: true
       }
@@ -176,6 +268,12 @@ const templates: AiPromptTemplate[] = [
         label: "Automation Goal",
         placeholder: "What should the script do?",
         defaultValue: "Export Entra ID MFA status report for all users",
+        defaultByExpertise: {
+          Beginner: "Generate a basic user MFA status CSV report",
+          Hobbyist: "Generate MFA status report with summary counts by method",
+          Intermediate: "Export MFA status for all users with method and registration state",
+          Expert: "Produce tenant-scale MFA posture report with diff tracking and exception flags"
+        },
         required: true
       },
       {
@@ -183,6 +281,12 @@ const templates: AiPromptTemplate[] = [
         label: "Data Sources/APIs",
         placeholder: "Graph API, AD module, Exchange Online, files, etc.",
         defaultValue: "Microsoft Graph with least-privilege scopes",
+        defaultByExpertise: {
+          Beginner: "Microsoft Graph only",
+          Hobbyist: "Microsoft Graph + CSV export for reporting",
+          Intermediate: "Microsoft Graph with delegated/app permissions and pagination handling",
+          Expert: "Microsoft Graph + secure secret store + structured output sink for analytics pipeline"
+        },
         required: true
       },
       {
@@ -190,6 +294,12 @@ const templates: AiPromptTemplate[] = [
         label: "Execution Context",
         placeholder: "Local admin, scheduled task, CI pipeline, Automation Account, etc.",
         defaultValue: "Scheduled task on managed admin workstation",
+        defaultByExpertise: {
+          Beginner: "Manual run from local PowerShell terminal",
+          Hobbyist: "Scheduled task on a managed workstation",
+          Intermediate: "Scheduled task with service account and controlled output path",
+          Expert: "Automated run in CI/automation worker with secrets manager integration"
+        },
         required: true
       },
       {
@@ -197,6 +307,13 @@ const templates: AiPromptTemplate[] = [
         label: "Safety Requirements",
         placeholder: "Read-only mode, dry-run, approvals, logging policy",
         defaultValue: "Dry-run flag, structured logging, no destructive actions by default",
+        defaultByExpertise: {
+          Beginner: "Read-only by default, clear console output, avoid destructive operations.",
+          Hobbyist: "Read-only mode, error handling, and timestamped log file output.",
+          Intermediate: "Dry-run mode, structured logs, retry policy, and explicit permission checks.",
+          Expert:
+            "Idempotent operations, strict input validation, structured telemetry, failure classification, and rollback-safe design."
+        },
         required: true,
         multiline: true
       }
@@ -222,6 +339,12 @@ const templates: AiPromptTemplate[] = [
         label: "KB Topic",
         placeholder: "Main troubleshooting topic",
         defaultValue: "Outlook search not returning results",
+        defaultByExpertise: {
+          Beginner: "Outlook cannot find recent emails",
+          Hobbyist: "Outlook search returns incomplete results",
+          Intermediate: "Outlook search not returning expected results across desktop clients",
+          Expert: "Outlook indexing/search regression across hybrid mailbox profiles"
+        },
         required: true
       },
       {
@@ -229,6 +352,12 @@ const templates: AiPromptTemplate[] = [
         label: "Platform Scope",
         placeholder: "Windows, macOS, both, mobile, etc.",
         defaultValue: "Windows and macOS",
+        defaultByExpertise: {
+          Beginner: "Windows",
+          Hobbyist: "Windows and macOS",
+          Intermediate: "Windows 11 and macOS managed endpoints",
+          Expert: "Cross-platform managed endpoints (Windows/macOS) with policy constraints"
+        },
         required: true
       },
       {
@@ -236,6 +365,12 @@ const templates: AiPromptTemplate[] = [
         label: "Access Level",
         placeholder: "User safe, admin required, mixed",
         defaultValue: "Mixed (user-safe first, admin escalation second)",
+        defaultByExpertise: {
+          Beginner: "User Safe",
+          Hobbyist: "Mixed, prioritize user-safe first",
+          Intermediate: "Mixed (user-safe first, admin escalation second)",
+          Expert: "Tiered: L1 user-safe, L2 admin-only, L3 security escalation"
+        },
         required: true
       },
       {
@@ -243,6 +378,12 @@ const templates: AiPromptTemplate[] = [
         label: "Commands to Include",
         placeholder: "PowerShell/Terminal commands to include if applicable",
         defaultValue: "Indexing status checks and cache validation commands",
+        defaultByExpertise: {
+          Beginner: "Simple non-destructive verification commands only",
+          Hobbyist: "Diagnostic commands with plain-language explanation",
+          Intermediate: "Indexing status checks and cache validation commands",
+          Expert: "Diagnostic command blocks with output interpretation and escalation markers"
+        },
         required: false
       }
     ],
@@ -267,6 +408,12 @@ const templates: AiPromptTemplate[] = [
         label: "Incident Type",
         placeholder: "Email outage, VPN issue, sign-in outage, etc.",
         defaultValue: "Microsoft 365 sign-in degradation",
+        defaultByExpertise: {
+          Beginner: "Email access issue",
+          Hobbyist: "Microsoft 365 sign-in issue",
+          Intermediate: "Microsoft 365 sign-in degradation",
+          Expert: "Identity-related sign-in degradation with regional impact"
+        },
         required: true
       },
       {
@@ -274,6 +421,12 @@ const templates: AiPromptTemplate[] = [
         label: "Current Status",
         placeholder: "Investigation, mitigation in progress, resolved, etc.",
         defaultValue: "Mitigation in progress",
+        defaultByExpertise: {
+          Beginner: "Investigating",
+          Hobbyist: "Investigation with initial mitigation actions",
+          Intermediate: "Mitigation in progress",
+          Expert: "Mitigation active, blast-radius narrowing, monitoring for stabilization"
+        },
         required: true
       },
       {
@@ -281,6 +434,12 @@ const templates: AiPromptTemplate[] = [
         label: "Affected Audience",
         placeholder: "Who is impacted?",
         defaultValue: "Users in North America region",
+        defaultByExpertise: {
+          Beginner: "A small group of users",
+          Hobbyist: "Multiple users in one team",
+          Intermediate: "Users in North America region",
+          Expert: "Users in affected regions and dependent downstream support teams"
+        },
         required: true
       },
       {
@@ -288,6 +447,12 @@ const templates: AiPromptTemplate[] = [
         label: "Next Update Time",
         placeholder: "When the next communication should be sent",
         defaultValue: "30 minutes",
+        defaultByExpertise: {
+          Beginner: "60 minutes",
+          Hobbyist: "45 minutes",
+          Intermediate: "30 minutes",
+          Expert: "15 minutes or earlier on major status change"
+        },
         required: true
       }
     ],
@@ -313,9 +478,20 @@ export function getAiPromptTemplateBySlug(slug: string): AiPromptTemplate | unde
   return templates.find((template) => template.slug === slug);
 }
 
-export function createPromptInputDefaults(template: AiPromptTemplate): Record<string, string> {
+function resolvePromptFieldDefaultValue(field: AiPromptField, expertise: AiPromptExpertise): string {
+  const specialized = field.defaultByExpertise?.[expertise];
+  if (typeof specialized === "string" && specialized.trim().length > 0) {
+    return specialized;
+  }
+  return field.defaultValue;
+}
+
+export function createPromptInputDefaults(
+  template: AiPromptTemplate,
+  expertise: AiPromptExpertise = "Beginner"
+): Record<string, string> {
   return template.fields.reduce<Record<string, string>>((acc, field) => {
-    acc[field.key] = field.defaultValue;
+    acc[field.key] = resolvePromptFieldDefaultValue(field, expertise);
     return acc;
   }, {});
 }
@@ -341,6 +517,7 @@ export function buildAiPrompt({ template, provider, expertise, values }: BuildAi
     .map((field) => field.label);
 
   const requirements = template.outputRequirements.map((item, index) => `${index + 1}. ${item}`);
+  const expertiseRules = expertiseInstructionProfile[expertise].map((item, index) => `${index + 1}. ${item}`);
   const missingFieldsLine =
     requiredMissing.length > 0
       ? `\nMissing required context fields: ${requiredMissing.join(", ")}. Ask focused follow-up questions before final output.`
@@ -360,6 +537,9 @@ export function buildAiPrompt({ template, provider, expertise, values }: BuildAi
     "",
     "Output requirements:",
     ...requirements,
+    "",
+    "Expertise-level output rules:",
+    ...expertiseRules,
     "",
     "Execution rules:",
     "- Keep the response practical and implementation-ready.",
@@ -885,6 +1065,8 @@ export function buildAiLibraryPrompt({
   provider,
   expertise
 }: BuildAiLibraryPromptInput): string {
+  const expertiseRules = expertiseInstructionProfile[expertise].map((entry, index) => `${index + 1}. ${entry}`);
+
   return [
     `You are my ${provider} assistant.`,
     `Task: ${item.title}`,
@@ -896,6 +1078,9 @@ export function buildAiLibraryPrompt({
     "",
     "Prompt:",
     item.prompt,
+    "",
+    "Expertise-level output rules:",
+    ...expertiseRules,
     "",
     "Output requirements:",
     "1. Provide a practical, implementation-ready response.",

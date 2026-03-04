@@ -1,12 +1,26 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  FloatingPortal,
+  autoUpdate,
+  flip,
+  offset,
+  shift,
+  useDismiss,
+  useFloating,
+  useFocus,
+  useHover,
+  useInteractions,
+  useRole
+} from "@floating-ui/react";
 import {
   aiPromptExpertiseLevels,
   aiPromptProviders,
   buildAiLibraryPrompt,
   buildAiPrompt,
   createPromptInputDefaults,
+  getAiPromptExpertiseProfile,
   getAiPromptLibraryCategories,
   getAiPromptLibraryItems,
   getAiPromptTemplateBySlug,
@@ -46,6 +60,60 @@ function providerShortLabel(provider: AiPromptProvider): string {
 const templates = getAiPromptTemplates();
 const libraryItems = getAiPromptLibraryItems();
 const libraryCategories = getAiPromptLibraryCategories();
+type ExpertiseSyncMode = "preserve" | "reseed";
+
+const expertiseDescriptions: Record<AiPromptExpertise, string> = {
+  Beginner: "Plain language, guided steps, and term definitions.",
+  Hobbyist: "Practical implementation first, with optional advanced notes.",
+  Intermediate: "Operational detail with tradeoffs, risks, and verification.",
+  Expert: "Concise technical output focused on architecture and failure modes."
+};
+
+const ONBOARDING_HINT_STORAGE_KEY = "aiPrompts:builder:onboardingSeen:v1";
+const ONBOARDING_HINT_AUTO_DISMISS_MS = 10000;
+
+function MiniInfoTooltip({ label }: { label: string }) {
+  const [open, setOpen] = useState(false);
+  const { refs, floatingStyles, context } = useFloating({
+    open,
+    onOpenChange: setOpen,
+    placement: "top",
+    whileElementsMounted: autoUpdate,
+    middleware: [offset(8), flip({ padding: 8 }), shift({ padding: 8 })]
+  });
+  const hover = useHover(context, { move: false, delay: { open: 120, close: 80 } });
+  const focus = useFocus(context);
+  const dismiss = useDismiss(context);
+  const role = useRole(context, { role: "tooltip" });
+  const { getReferenceProps, getFloatingProps } = useInteractions([hover, focus, dismiss, role]);
+
+  return (
+    <>
+      <span
+        ref={refs.setReference}
+        {...getReferenceProps({
+          tabIndex: 0,
+          "aria-label": label
+        })}
+        className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-line/80 bg-white text-[10px] font-bold text-slate-600 outline-none transition hover:bg-slate-100 focus-visible:ring-2 focus-visible:ring-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
+      >
+        ?
+      </span>
+      {open ? (
+        <FloatingPortal>
+          <div
+            ref={refs.setFloating}
+            style={floatingStyles}
+            {...getFloatingProps()}
+            className="z-50 max-w-[16rem] rounded-md border border-line bg-white px-2 py-1.5 text-[11px] leading-5 text-slate-700 shadow-card dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+          >
+            {label}
+          </div>
+        </FloatingPortal>
+      ) : null}
+    </>
+  );
+}
 
 export function AiPromptsBuilder() {
   const initialTemplate = templates[0];
@@ -54,21 +122,59 @@ export function AiPromptsBuilder() {
   const [selectedProvider, setSelectedProvider] = useState<AiPromptProvider>("ChatGPT");
   const [selectedExpertise, setSelectedExpertise] = useState<AiPromptExpertise>("Beginner");
   const [inputValues, setInputValues] = useState<Record<string, string>>(
-    initialTemplate ? createPromptInputDefaults(initialTemplate) : {}
+    initialTemplate ? createPromptInputDefaults(initialTemplate, "Beginner") : {}
   );
   const [copyState, setCopyState] = useState<"idle" | "success" | "error">("idle");
   const [libraryQuery, setLibraryQuery] = useState("");
   const [libraryCategory, setLibraryCategory] = useState<string>("All");
   const [libraryCopyKey, setLibraryCopyKey] = useState<string>("");
   const [libraryCopyState, setLibraryCopyState] = useState<"idle" | "success" | "error">("idle");
+  const [expertiseSyncMode, setExpertiseSyncMode] = useState<ExpertiseSyncMode>("preserve");
+  const [showOnboardingHint, setShowOnboardingHint] = useState(false);
 
   const selectedTemplate = getAiPromptTemplateBySlug(selectedTemplateSlug) ?? initialTemplate;
+  const previousExpertiseRef = useRef<AiPromptExpertise>(selectedExpertise);
+  const previousTemplateSlugRef = useRef<string>(selectedTemplate?.slug ?? "");
 
   useEffect(() => {
-    if (!selectedTemplate) return;
-    setInputValues(createPromptInputDefaults(selectedTemplate));
-    setCopyState("idle");
-  }, [selectedTemplate?.slug]);
+    if (!selectedTemplate || viewMode !== "builder") return;
+    const templateChanged = previousTemplateSlugRef.current !== selectedTemplate.slug;
+    const expertiseChanged = previousExpertiseRef.current !== selectedExpertise;
+
+    if (templateChanged || (expertiseChanged && expertiseSyncMode === "reseed")) {
+      setInputValues(createPromptInputDefaults(selectedTemplate, selectedExpertise));
+      setCopyState("idle");
+    }
+
+    previousTemplateSlugRef.current = selectedTemplate.slug;
+    previousExpertiseRef.current = selectedExpertise;
+  }, [expertiseSyncMode, selectedExpertise, selectedTemplate, viewMode]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const seen = window.localStorage.getItem(ONBOARDING_HINT_STORAGE_KEY);
+      if (seen !== "1") {
+        setShowOnboardingHint(true);
+      }
+    } catch {
+      // no-op: keep UX functional if storage is unavailable
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!showOnboardingHint || typeof window === "undefined") return;
+    const timeoutId = window.setTimeout(() => {
+      setShowOnboardingHint(false);
+      try {
+        window.localStorage.setItem(ONBOARDING_HINT_STORAGE_KEY, "1");
+      } catch {
+        // no-op
+      }
+    }, ONBOARDING_HINT_AUTO_DISMISS_MS);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [showOnboardingHint]);
 
   const filteredLibraryItems = useMemo(() => {
     const normalized = libraryQuery.trim().toLowerCase();
@@ -84,6 +190,11 @@ export function AiPromptsBuilder() {
       })
       .sort((a, b) => a.category.localeCompare(b.category) || a.title.localeCompare(b.title));
   }, [libraryCategory, libraryQuery]);
+
+  const expertiseProfile = useMemo(
+    () => getAiPromptExpertiseProfile(selectedExpertise),
+    [selectedExpertise]
+  );
 
   if (!selectedTemplate) {
     return (
@@ -114,8 +225,18 @@ export function AiPromptsBuilder() {
   }
 
   function handleResetBuilder() {
-    setInputValues(createPromptInputDefaults(selectedTemplate));
+    setInputValues(createPromptInputDefaults(selectedTemplate, selectedExpertise));
     setCopyState("idle");
+  }
+
+  function dismissOnboardingHint() {
+    setShowOnboardingHint(false);
+    if (typeof window === "undefined") return;
+    try {
+      window.localStorage.setItem(ONBOARDING_HINT_STORAGE_KEY, "1");
+    } catch {
+      // no-op
+    }
   }
 
   async function handleCopyLibraryPrompt(itemSlug: string, provider: AiPromptProvider) {
@@ -176,11 +297,53 @@ export function AiPromptsBuilder() {
         </div>
       </section>
 
+      {showOnboardingHint ? (
+        <section className="rounded-xl border border-cyan-200 bg-cyan-50/80 p-4 shadow-soft dark:border-cyan-900 dark:bg-cyan-950/30">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-cyan-700 dark:text-cyan-200">
+                First-Time Tip
+              </p>
+              <p className="mt-1 text-sm leading-6 text-cyan-900 dark:text-cyan-100">
+                Pick an expertise level to control depth and tone. Use <span className="font-semibold">Keep my inputs</span>{" "}
+                if you do not want field values replaced when switching levels.
+              </p>
+              <p className="mt-1 text-xs text-cyan-700 dark:text-cyan-300">
+                This hint auto-dismisses after a few seconds.
+              </p>
+            </div>
+            <button type="button" onClick={dismissOnboardingHint} className="btn-secondary">
+              Got it
+            </button>
+          </div>
+        </section>
+      ) : null}
+
       {viewMode === "builder" ? (
         <section className="grid gap-5 xl:grid-cols-[1fr_1fr]">
           <div className="space-y-5">
             <article className="surface-card p-5 sm:p-6">
               <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Configuration</h3>
+
+              <div className="mt-4 rounded-xl border border-line/80 bg-slate-50/80 p-3 dark:border-slate-700 dark:bg-slate-900/60">
+                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                  Quick Start
+                </p>
+                <ol className="mt-2 grid gap-2 text-xs text-slate-600 dark:text-slate-300 sm:grid-cols-4">
+                  <li className="rounded-lg border border-line/70 bg-white/90 px-2.5 py-2 dark:border-slate-700 dark:bg-slate-950/70">
+                    1. Pick template
+                  </li>
+                  <li className="rounded-lg border border-line/70 bg-white/90 px-2.5 py-2 dark:border-slate-700 dark:bg-slate-950/70">
+                    2. Choose model
+                  </li>
+                  <li className="rounded-lg border border-line/70 bg-white/90 px-2.5 py-2 dark:border-slate-700 dark:bg-slate-950/70">
+                    3. Select skill level
+                  </li>
+                  <li className="rounded-lg border border-line/70 bg-white/90 px-2.5 py-2 dark:border-slate-700 dark:bg-slate-950/70">
+                    4. Fill fields and copy
+                  </li>
+                </ol>
+              </div>
 
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
                 <label className="space-y-1">
@@ -218,22 +381,89 @@ export function AiPromptsBuilder() {
                 </label>
               </div>
 
-              <label className="mt-3 block space-y-1">
-                <span className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+              <div className="mt-3">
+                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
                   Expertise Level
-                </span>
-                <select
-                  value={selectedExpertise}
-                  onChange={(event) => setSelectedExpertise(event.target.value as AiPromptExpertise)}
-                  className="h-11 w-full rounded-xl border border-line bg-white px-3 text-sm text-slate-900 outline-none transition focus:border-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
-                >
+                </p>
+                <div className="mt-2 grid gap-2 sm:grid-cols-4">
                   {aiPromptExpertiseLevels.map((level) => (
-                    <option key={level} value={level}>
-                      {level}
-                    </option>
+                    <div key={level} className="relative">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedExpertise(level)}
+                        className={cx(
+                          "w-full rounded-lg border px-3 py-2 pr-8 text-left text-xs font-semibold transition",
+                          selectedExpertise === level
+                            ? "border-slate-300 bg-slate-900 text-white dark:border-slate-300 dark:bg-slate-100 dark:text-slate-900"
+                            : "border-line/80 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
+                        )}
+                        title={expertiseDescriptions[level]}
+                      >
+                        {level}
+                      </button>
+                      <div className="absolute right-2 top-2">
+                        <MiniInfoTooltip label={expertiseDescriptions[level]} />
+                      </div>
+                    </div>
                   ))}
-                </select>
-              </label>
+                </div>
+                <p className="mt-2 text-xs text-slate-600 dark:text-slate-300">
+                  {expertiseDescriptions[selectedExpertise]}
+                </p>
+              </div>
+
+              <div className="mt-3 rounded-xl border border-line/80 bg-slate-50/80 p-3 dark:border-slate-700 dark:bg-slate-900/60">
+                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                  When skill level changes
+                </p>
+                <div className="mt-2 inline-flex rounded-lg border border-line/80 bg-white p-1 dark:border-slate-700 dark:bg-slate-900">
+                  <button
+                    type="button"
+                    onClick={() => setExpertiseSyncMode("preserve")}
+                    className={cx(
+                      "rounded-md px-2.5 py-1.5 text-xs font-semibold transition",
+                      expertiseSyncMode === "preserve"
+                        ? "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900"
+                        : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+                    )}
+                  >
+                    Keep my inputs
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setExpertiseSyncMode("reseed")}
+                    className={cx(
+                      "rounded-md px-2.5 py-1.5 text-xs font-semibold transition",
+                      expertiseSyncMode === "reseed"
+                        ? "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900"
+                        : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+                    )}
+                  >
+                    Use level defaults
+                  </button>
+                </div>
+                <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                  {expertiseSyncMode === "preserve"
+                    ? "Your custom field values stay as-is when you switch levels."
+                    : "Switching levels replaces fields with that level's defaults."}
+                </p>
+              </div>
+
+              <div className="mt-4 rounded-xl border border-line/80 bg-slate-50/80 p-3 dark:border-slate-700 dark:bg-slate-900/60">
+                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                  Active Skill Profile: {selectedExpertise}
+                </p>
+                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                  The generated prompt includes these level-specific instructions.
+                </p>
+                <ul className="mt-2 space-y-1 text-xs text-slate-600 dark:text-slate-300">
+                  {expertiseProfile.map((rule) => (
+                    <li key={`builder-${selectedExpertise}-${rule}`} className="leading-6">
+                      • {rule}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </article>
 
             <article className="surface-card p-5 sm:p-6">
@@ -363,6 +593,22 @@ export function AiPromptsBuilder() {
                   Reset
                 </button>
               </div>
+            </div>
+
+            <div className="mt-4 rounded-xl border border-line/80 bg-slate-50/80 p-3 dark:border-slate-700 dark:bg-slate-900/60">
+              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                Active Skill Profile: {selectedExpertise}
+              </p>
+              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                {expertiseDescriptions[selectedExpertise]}
+              </p>
+              <ul className="mt-2 space-y-1 text-xs text-slate-600 dark:text-slate-300">
+                {expertiseProfile.map((rule) => (
+                  <li key={`library-${selectedExpertise}-${rule}`} className="leading-6">
+                    • {rule}
+                  </li>
+                ))}
+              </ul>
             </div>
           </article>
 
