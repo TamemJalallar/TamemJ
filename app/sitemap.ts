@@ -3,6 +3,7 @@ import { getApps } from "@/lib/apps";
 import { getAiAgentCategories, getAiAgentCategorySlug, getAiAgentsRegistry } from "@/lib/aiAgents.registry";
 import { getCorporateFixes } from "@/lib/corporate-fixes.registry";
 import { getDownloadAssets } from "@/lib/download-assets.registry";
+import { getGenAIPrompts } from "@/lib/genai-prompts";
 import { getPCBuildGuides } from "@/lib/pc-build-guides.registry";
 import { getPillarContentIdeas } from "@/lib/seo-content.registry";
 import { siteConfig } from "@/lib/site";
@@ -24,6 +25,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: url("/downloads/"), changeFrequency: "daily", priority: 0.9, lastModified },
     { url: url("/downloads/assets/"), changeFrequency: "weekly", priority: 0.88, lastModified },
     { url: url("/ai-agents/"), changeFrequency: "weekly", priority: 0.85, lastModified },
+    { url: url("/genai-prompts/"), changeFrequency: "weekly", priority: 0.86, lastModified },
     { url: url("/guides/"), changeFrequency: "weekly", priority: 0.9, lastModified },
     { url: url("/guides/revenue-scaling-roadmap/"), changeFrequency: "monthly", priority: 0.86, lastModified },
     { url: url("/corporate-tech-fixes/"), changeFrequency: "daily", priority: 0.9, lastModified },
@@ -54,6 +56,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: url(`/ai-agents/category/${getAiAgentCategorySlug(category)}/`),
     changeFrequency: "weekly",
     priority: 0.86,
+    lastModified
+  }));
+
+  const genAIPromptEntries: MetadataRoute.Sitemap = getGenAIPrompts().map((prompt) => ({
+    url: url(`/genai-prompts/${prompt.slug}/`),
+    changeFrequency: "monthly",
+    priority: 0.82,
     lastModified
   }));
 
@@ -104,6 +113,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...appEntries,
     ...aiAgentEntries,
     ...aiAgentCategoryEntries,
+    ...genAIPromptEntries,
     ...downloadAssetEntries,
     ...guideEntries,
     ...corporateFixEntries,

@@ -12,6 +12,7 @@ const primaryNavItems = [
   { href: "/downloads", label: "Downloads" },
   { href: "/support/kb", label: "KB" },
   { href: "/ai-agents", label: "AI Agents" },
+  { href: "/genai-prompts", label: "GenAI Prompts" },
   { href: "/guides", label: "Guides" },
   { href: "/pc-build-guides", label: "PC Builds" },
   { href: "/support", label: "Support" },

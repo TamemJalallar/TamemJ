@@ -11,7 +11,7 @@ interface PaletteItem {
   label: string;
   description: string;
   href: string;
-  group: "Quick" | "Knowledge Base" | "Catalog" | "Downloads" | "Guides" | "AI Agents";
+  group: "Quick" | "Knowledge Base" | "Catalog" | "Downloads" | "Guides" | "AI Agents" | "GenAI Prompts";
   keywords: string[];
 }
 
@@ -100,6 +100,21 @@ const quickItems: PaletteItem[] = [
     ]
   },
   {
+    id: "quick-genai-prompts",
+    label: "GenAI Prompts",
+    description: "Browse Meta AI and Adobe GenAI prompt library",
+    href: "/genai-prompts/",
+    group: "Quick",
+    keywords: [
+      "genai prompts",
+      "meta ai prompts",
+      "adobe genai prompts",
+      "firefly prompts",
+      "generative fill prompts",
+      "text-to-image prompts"
+    ]
+  },
+  {
     id: "quick-revenue-roadmap",
     label: "Revenue Scaling Roadmap",
     description: "Open 0-24 month growth and monetization plan",
@@ -167,14 +182,23 @@ export function GlobalCommandPalette() {
 
     setLoadingRegistry(true);
 
-    const [kbModule, catalogModule, downloadsModule, downloadAssetsModule, seoContentModule, aiAgentsModule] =
+    const [
+      kbModule,
+      catalogModule,
+      downloadsModule,
+      downloadAssetsModule,
+      seoContentModule,
+      aiAgentsModule,
+      genAIPromptsModule
+    ] =
       await Promise.all([
       import("@/lib/support.kb.registry"),
       import("@/lib/support.catalog.registry"),
       import("@/lib/downloads.registry"),
       import("@/lib/download-assets.registry"),
       import("@/lib/seo-content.registry"),
-      import("@/lib/aiAgents.registry")
+      import("@/lib/aiAgents.registry"),
+      import("@/lib/genai-prompts")
     ]);
 
     const kbItems: PaletteItem[] = kbModule.getKBArticles().map((article) => ({
@@ -231,6 +255,15 @@ export function GlobalCommandPalette() {
       keywords: [agent.role, agent.category, agent.expertiseLevel, ...agent.tags]
     }));
 
+    const genAIPromptItems: PaletteItem[] = genAIPromptsModule.getGenAIPrompts().map((prompt) => ({
+      id: `genai-prompt-${prompt.slug}`,
+      label: prompt.title,
+      description: `${prompt.platform} • ${prompt.tool} • ${prompt.complexity}`,
+      href: `/genai-prompts/${prompt.slug}/`,
+      group: "GenAI Prompts",
+      keywords: [prompt.platform, prompt.tool, prompt.category, prompt.complexity, ...prompt.tags]
+    }));
+
     startTransition(() => {
       setDynamicItems([
         ...kbItems,
@@ -238,7 +271,8 @@ export function GlobalCommandPalette() {
         ...downloadItems,
         ...downloadAssetItems,
         ...guideItems,
-        ...aiAgentItems
+        ...aiAgentItems,
+        ...genAIPromptItems
       ]);
     });
     setLoadingRegistry(false);

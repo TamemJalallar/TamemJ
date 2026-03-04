@@ -41,6 +41,12 @@ export function SiteFooter() {
               AI Agents
             </Link>
             <Link
+              href="/genai-prompts"
+              className="nav-link dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-slate-100"
+            >
+              GenAI Prompts
+            </Link>
+            <Link
               href="/support"
               className="nav-link dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-slate-100"
             >
