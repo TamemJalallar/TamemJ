@@ -81,6 +81,14 @@ const quickItems: PaletteItem[] = [
     keywords: ["guides", "pillar", "clusters", "seo", "content"]
   },
   {
+    id: "quick-ai-prompts",
+    label: "AI Prompts",
+    description: "Open the multi-model prompt builder",
+    href: "/ai-prompts/",
+    group: "Quick",
+    keywords: ["prompts", "chatgpt", "claude", "perplexity", "grok", "meta ai", "adobe genai"]
+  },
+  {
     id: "quick-revenue-roadmap",
     label: "Revenue Scaling Roadmap",
     description: "Open 0-24 month growth and monetization plan",
