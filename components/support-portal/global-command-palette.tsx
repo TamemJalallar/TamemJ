@@ -11,7 +11,7 @@ interface PaletteItem {
   label: string;
   description: string;
   href: string;
-  group: "Quick" | "Knowledge Base" | "Catalog" | "Downloads";
+  group: "Quick" | "Knowledge Base" | "Catalog" | "Downloads" | "Guides";
   keywords: string[];
 }
 
@@ -57,12 +57,36 @@ const quickItems: PaletteItem[] = [
     keywords: ["downloads", "software", "apps"]
   },
   {
+    id: "quick-download-assets",
+    label: "IT Download Assets",
+    description: "Open scripts, templates, and checklists",
+    href: "/downloads/assets/",
+    group: "Quick",
+    keywords: ["downloads", "assets", "scripts", "templates", "checklists"]
+  },
+  {
     id: "quick-account",
     label: "Account",
     description: "Open sign-in and profile dashboard",
     href: "/account/",
     group: "Quick",
     keywords: ["account", "profile", "sign in", "auth"]
+  },
+  {
+    id: "quick-guides",
+    label: "IT Pillar Guides",
+    description: "Open SEO pillar and cluster guide pages",
+    href: "/guides/",
+    group: "Quick",
+    keywords: ["guides", "pillar", "clusters", "seo", "content"]
+  },
+  {
+    id: "quick-revenue-roadmap",
+    label: "Revenue Scaling Roadmap",
+    description: "Open 0-24 month growth and monetization plan",
+    href: "/guides/revenue-scaling-roadmap/",
+    group: "Quick",
+    keywords: ["revenue", "roadmap", "adsense", "affiliates", "gumroad", "saas"]
   }
 ];
 
@@ -124,10 +148,12 @@ export function GlobalCommandPalette() {
 
     setLoadingRegistry(true);
 
-    const [kbModule, catalogModule, downloadsModule] = await Promise.all([
+    const [kbModule, catalogModule, downloadsModule, downloadAssetsModule, seoContentModule] = await Promise.all([
       import("@/lib/support.kb.registry"),
       import("@/lib/support.catalog.registry"),
-      import("@/lib/downloads.registry")
+      import("@/lib/downloads.registry"),
+      import("@/lib/download-assets.registry"),
+      import("@/lib/seo-content.registry")
     ]);
 
     const kbItems: PaletteItem[] = kbModule.getKBArticles().map((article) => ({
@@ -157,8 +183,26 @@ export function GlobalCommandPalette() {
       keywords: [item.category, ...item.tags, ...item.platforms]
     }));
 
+    const downloadAssetItems: PaletteItem[] = downloadAssetsModule.getDownloadAssets().map((asset) => ({
+      id: `download-asset-${asset.slug}`,
+      label: asset.title,
+      description: `${asset.category} • ${asset.format.toUpperCase()} • ${asset.access}`,
+      href: `/downloads/assets/${asset.slug}/`,
+      group: "Downloads",
+      keywords: [asset.category, asset.format, asset.access, asset.searchDemand, ...asset.tags]
+    }));
+
+    const guideItems: PaletteItem[] = seoContentModule.getPillarContentIdeas().map((guide) => ({
+      id: `guide-${guide.slug}`,
+      label: guide.title,
+      description: "IT Pillar Guide",
+      href: `/guides/${guide.slug}/`,
+      group: "Guides",
+      keywords: [...guide.targetKeywords, ...guide.relatedTerms]
+    }));
+
     startTransition(() => {
-      setDynamicItems([...kbItems, ...catalogItems, ...downloadItems]);
+      setDynamicItems([...kbItems, ...catalogItems, ...downloadItems, ...downloadAssetItems, ...guideItems]);
     });
     setLoadingRegistry(false);
   }, [dynamicItems.length, loadingRegistry]);

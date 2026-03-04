@@ -1,6 +1,7 @@
 import publishedCorporateFixesStore from "@/data/corporate-fixes.published.json";
+import { supportAuthorProfile } from "@/lib/site";
 import { getKBArticles } from "@/lib/support.kb.registry";
-import type { KBArticle } from "@/types/support";
+import type { KBArticle, KBArticleAuthor } from "@/types/support";
 
 export type CorporateFixCategory =
   | "Windows"
@@ -37,6 +38,9 @@ export interface CorporateTechFix {
   tags: string[];
   description: string;
   steps: CorporateFixStep[];
+  lastVerified?: string;
+  testedOn?: string[];
+  author?: KBArticleAuthor;
 }
 
 interface PublishedCorporateFixesStore {
@@ -153,7 +157,34 @@ function normalizePublishedCorporateFix(value: unknown): CorporateTechFix | null
     estimatedTime: candidate.estimatedTime.trim(),
     tags: normalizeTags(candidate.tags.filter((tag): tag is string => typeof tag === "string")),
     description: candidate.description.trim(),
-    steps
+    steps,
+    lastVerified:
+      typeof candidate.lastVerified === "string" ? candidate.lastVerified.trim() : undefined,
+    testedOn:
+      Array.isArray(candidate.testedOn) && candidate.testedOn.length > 0
+        ? [...new Set(candidate.testedOn.filter((item): item is string => typeof item === "string"))]
+        : undefined,
+    author:
+      candidate.author && typeof candidate.author === "object"
+        ? {
+            name:
+              typeof candidate.author.name === "string" && candidate.author.name.trim().length > 0
+                ? candidate.author.name.trim()
+                : supportAuthorProfile.name,
+            title:
+              typeof candidate.author.title === "string" && candidate.author.title.trim().length > 0
+                ? candidate.author.title.trim()
+                : supportAuthorProfile.title,
+            credentials:
+              Array.isArray(candidate.author.credentials) && candidate.author.credentials.length > 0
+                ? [...new Set(candidate.author.credentials.filter((item): item is string => typeof item === "string"))]
+                : [...supportAuthorProfile.credentials],
+            bio:
+              typeof candidate.author.bio === "string" && candidate.author.bio.trim().length > 0
+                ? candidate.author.bio.trim()
+                : supportAuthorProfile.bio
+          }
+        : undefined
   };
 }
 
@@ -302,7 +333,13 @@ function convertKBArticleToCorporateFix(article: KBArticle): CorporateTechFix {
     tags: normalizeCorporateTags(article),
     description:
       `${article.description} This troubleshooting guide is mirrored from the Support Portal knowledge base for quick access in Corporate Tech Fixes.`,
-    steps: buildCorporateStepsFromKBArticle(article)
+    steps: buildCorporateStepsFromKBArticle(article),
+    lastVerified: article.lastVerified,
+    testedOn: [...article.testedOn],
+    author: {
+      ...article.author,
+      credentials: [...article.author.credentials]
+    }
   };
 }
 
@@ -889,7 +926,14 @@ export function getCorporateFixes(): CorporateTechFix[] {
   return corporateFixRegistry.map((fix) => ({
     ...fix,
     tags: [...fix.tags],
-    steps: fix.steps.map((step) => ({ ...step }))
+    steps: fix.steps.map((step) => ({ ...step })),
+    testedOn: fix.testedOn ? [...fix.testedOn] : undefined,
+    author: fix.author
+      ? {
+          ...fix.author,
+          credentials: [...fix.author.credentials]
+        }
+      : undefined
   }));
 }
 

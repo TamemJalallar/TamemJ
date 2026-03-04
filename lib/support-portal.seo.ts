@@ -6,6 +6,7 @@ import type {
   TechArticle,
   WithContext
 } from "schema-dts";
+import { getTopSeoKeywordOpportunities } from "@/lib/seo-content.registry";
 import { siteConfig } from "@/lib/site";
 import type { CatalogItem, KBArticle } from "@/types/support";
 
@@ -37,6 +38,15 @@ function uniqueKeywords(keywords: string[]): string[] {
   }
 
   return result;
+}
+
+function normalizeDateInput(value: string): string | undefined {
+  const parsed = Date.parse(value);
+  if (Number.isNaN(parsed)) {
+    return undefined;
+  }
+
+  return new Date(parsed).toISOString();
 }
 
 export function toAbsoluteSupportUrl(path: string): string {
@@ -83,6 +93,7 @@ export function buildSupportKbIndexMetadataWithArticles(articles: KBArticle[]): 
   const productFamilies = [...new Set(articles.map((article) => article.productFamily))];
   const categories = [...new Set(articles.map((article) => article.category))];
   const articleCount = articles.length;
+  const seoOpportunityKeywords = getTopSeoKeywordOpportunities(40).map((entry) => entry.keyword);
 
   const title = "Knowledge Base";
   const description =
@@ -105,6 +116,7 @@ export function buildSupportKbIndexMetadataWithArticles(articles: KBArticle[]): 
       "macOS support",
       "affiliate operations support",
       "affiliate link governance",
+      ...seoOpportunityKeywords,
       ...productFamilies.map((family) => `${family} support`),
       ...categories.map((category) => `${category} troubleshooting`)
     ]),
@@ -228,6 +240,7 @@ export function buildKbArticleMetadata(article: KBArticle): Metadata {
     title,
     description,
     category: article.category,
+    authors: [{ name: article.author.name }],
     keywords,
     alternates: { canonical: path },
     robots: { index: true, follow: true },
@@ -239,7 +252,9 @@ export function buildKbArticleMetadata(article: KBArticle): Metadata {
       "support:environment": article.environment,
       "support:estimated-time": article.estimatedTime,
       "support:product": article.product,
-      "support:product-family": article.productFamily
+      "support:product-family": article.productFamily,
+      "support:last-verified": article.lastVerified,
+      "support:tested-on": article.testedOn.join(", ")
     }
   };
 }
@@ -291,6 +306,8 @@ export function buildBreadcrumbJsonLd(items: BreadcrumbItem[]): WithContext<Brea
 }
 
 export function buildKbArticleJsonLd(article: KBArticle): WithContext<TechArticle> {
+  const isoLastVerified = normalizeDateInput(article.lastVerified);
+
   return {
     "@context": "https://schema.org",
     "@type": "TechArticle",
@@ -319,6 +336,13 @@ export function buildKbArticleJsonLd(article: KBArticle): WithContext<TechArticl
       name: siteConfig.name,
       url: siteConfig.url
     },
+    author: {
+      "@type": "Person",
+      name: article.author.name,
+      jobTitle: article.author.title
+    },
+    dateModified: isoLastVerified,
+    datePublished: isoLastVerified,
     inLanguage: "en",
     abstract: article.description
   };

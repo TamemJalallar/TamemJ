@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { FixGuide } from "@/components/corporate-fixes/fix-guide";
 import { EnterpriseSupportBanner } from "@/components/corporate-fixes/fix-shared";
 import { getCorporateFixBySlug, getCorporateFixes } from "@/lib/corporate-fixes.registry";
+import { supportAuthorProfile } from "@/lib/site";
 import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 
 interface CorporateFixPageProps {
@@ -44,9 +45,16 @@ export async function generateMetadata({
     };
   }
 
+  const authorName = fix.author?.name ?? supportAuthorProfile.name;
+  const testedOnMeta =
+    fix.testedOn && fix.testedOn.length > 0
+      ? fix.testedOn.join(", ")
+      : "Windows 11 23H2, macOS Sequoia 15";
+
   return {
     title: `${fix.title} | Corporate Tech Fixes`,
     description: fix.description,
+    authors: [{ name: authorName }],
     keywords: uniqueKeywords([
       ...fix.tags,
       fix.category,
@@ -71,7 +79,14 @@ export async function generateMetadata({
       `/corporate-tech-fixes/${fix.slug}/`,
       "article"
     ),
-    twitter: buildTwitter(`${fix.title} | Corporate Tech Fixes`, fix.description)
+    twitter: buildTwitter(`${fix.title} | Corporate Tech Fixes`, fix.description),
+    other: {
+      "support:severity": fix.severity,
+      "support:access-level": fix.accessLevel,
+      "support:estimated-time": fix.estimatedTime,
+      "support:last-verified": fix.lastVerified ?? "March 3, 2026",
+      "support:tested-on": testedOnMeta
+    }
   };
 }
 
@@ -83,6 +98,20 @@ export default async function CorporateFixDetailPage({ params }: CorporateFixPag
     notFound();
   }
 
+  const author = fix.author ?? {
+    name: supportAuthorProfile.name,
+    title: supportAuthorProfile.title,
+    credentials: [...supportAuthorProfile.credentials]
+  };
+  const lastVerified = fix.lastVerified ?? "March 3, 2026";
+  const parsedLastVerified = Date.parse(lastVerified);
+  const isoLastVerified = Number.isNaN(parsedLastVerified)
+    ? undefined
+    : new Date(parsedLastVerified).toISOString();
+  const testedOn = fix.testedOn && fix.testedOn.length > 0
+    ? fix.testedOn
+    : ["Windows 11 23H2", "macOS Sequoia 15"];
+
   const fixArticleSchema = {
     "@context": "https://schema.org",
     "@type": "TechArticle",
@@ -93,6 +122,17 @@ export default async function CorporateFixDetailPage({ params }: CorporateFixPag
     timeRequired: fix.estimatedTime,
     url: toAbsoluteUrl(`/corporate-tech-fixes/${fix.slug}/`),
     inLanguage: "en",
+    author: {
+      "@type": "Person",
+      name: author.name,
+      jobTitle: author.title
+    },
+    dateModified: isoLastVerified,
+    datePublished: isoLastVerified,
+    mentions: testedOn.map((entry) => ({
+      "@type": "Thing",
+      name: entry
+    })),
     audience: {
       "@type": "Audience",
       audienceType: "Enterprise IT support and help desk analysts"

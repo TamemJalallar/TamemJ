@@ -20,7 +20,7 @@ export interface DirectDownloadArtifact {
   label: string;
   platform: DownloadPlatform;
   url: string;
-  host: "GitHub Releases" | "Cloudflare R2" | "Other";
+  host: string;
   version?: string;
   fileType?: string;
   fileSize?: string;
@@ -70,4 +70,32 @@ export interface DownloadEntry {
   pricing?: string;
   channels: DownloadChannelLink[];
   directDownloads?: DirectDownloadArtifact[];
+}
+
+export type DownloadAssetFormat = "ps1" | "xlsx" | "pdf" | "docx";
+export type DownloadAssetCategory = "Scripts" | "Templates" | "Checklists" | "Runbooks";
+export type DownloadAssetAccess = "Free" | "Email gate" | "Premium";
+export type DownloadAssetSearchDemand = "High" | "Medium" | "Low";
+
+export interface DownloadAsset {
+  slug: string;
+  title: string;
+  description: string;
+  format: DownloadAssetFormat;
+  category: DownloadAssetCategory;
+  access: DownloadAssetAccess;
+  monetization: string;
+  searchDemand: DownloadAssetSearchDemand;
+  priceLabel?: string;
+  tags: string[];
+}
+
+export interface DownloadAssetBundle {
+  slug: string;
+  title: string;
+  description: string;
+  itemSlugs: string[];
+  access: DownloadAssetAccess;
+  monetization: string;
+  priceLabel?: string;
 }

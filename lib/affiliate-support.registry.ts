@@ -151,6 +151,24 @@ const affiliateSupportMappings: AffiliateSupportMapping[] = [
     }
   },
   {
+    affiliateKey: "surfshark-antivirus-affiliate",
+    supportDocSlug: "surfshark-affiliate-placement-and-policy-compliant-positioning",
+    priority: 64,
+    rule: {
+      categories: ["Networking / VPN", "Browsers", "Windows", "macOS"],
+      tags: ["antivirus", "malware", "security", "vpn", "privacy", "endpoint"]
+    }
+  },
+  {
+    affiliateKey: "surfshark-adblock-affiliate",
+    supportDocSlug: "surfshark-affiliate-placement-and-policy-compliant-positioning",
+    priority: 62,
+    rule: {
+      categories: ["Networking / VPN", "Browsers"],
+      tags: ["adblock", "browser", "privacy", "tracking", "public-wifi", "vpn"]
+    }
+  },
+  {
     affiliateKey: "proton-partners",
     supportDocSlug: "proton-partners-affiliate-setup-and-privacy-safe-messaging",
     priority: 75,

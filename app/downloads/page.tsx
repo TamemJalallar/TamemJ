@@ -3,6 +3,7 @@ import type { FAQPage, ItemList, WebPage, WithContext } from "schema-dts";
 import { AffiliateDisclosureBanner } from "@/components/affiliate/affiliate-disclosure-banner";
 import { DownloadsBrowser } from "@/components/downloads/downloads-browser";
 import { getAffiliateLinkByKey, getAffiliateLinksByKeys } from "@/lib/affiliate-links";
+import { getDownloadAssetBundles, getDownloadAssetStats } from "@/lib/download-assets.registry";
 import { getDownloads } from "@/lib/downloads.registry";
 import { buildBreadcrumbJsonLd, buildCollectionPageJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 import type { DownloadEntry } from "@/types/download";
@@ -75,13 +76,22 @@ function buildDownloadKeywords(entries: DownloadEntry[]): string[] {
 
 export async function generateMetadata(): Promise<Metadata> {
   const downloads = getDownloads();
+  const assetStats = getDownloadAssetStats();
   const freeCount = downloads.filter(isFreeEntry).length;
-  const description = `Browse ${downloads.length} curated software downloads with official store links, GitHub Releases, and direct binaries. Includes ${freeCount} free apps for macOS, Windows, Linux, iOS, Android, and web tools.`;
+  const description = `Browse ${downloads.length} curated software downloads with official store links, GitHub Releases, and direct binaries. Includes ${freeCount} free apps and ${assetStats.total} IT templates/scripts/checklists for enterprise support teams.`;
 
   return {
     title: "Downloads",
     description,
-    keywords: buildDownloadKeywords(downloads),
+    keywords: uniqueKeywords([
+      ...buildDownloadKeywords(downloads),
+      "it download assets",
+      "powershell scripts download",
+      "it templates download",
+      "it checklist download",
+      "it runbook template",
+      "it admin toolkit"
+    ]),
     category: "Software",
     alternates: {
       canonical: "/downloads/"
@@ -97,6 +107,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function DownloadsPage() {
   const downloads = getDownloads();
+  const assetStats = getDownloadAssetStats();
+  const assetBundles = getDownloadAssetBundles();
   const freeCount = downloads.filter(isFreeEntry).length;
   const amazonAffiliate = getAffiliateLinkByKey("amazon-it-gear");
   const amazonFeaturedProductLinks = getAffiliateLinksByKeys([
@@ -209,6 +221,14 @@ export default function DownloadsPage() {
           "@type": "Answer",
           text: "Some recommendation sections may use affiliate links. Disclosures are shown near those links, and purchase price does not change."
         }
+      },
+      {
+        "@type": "Question",
+        name: "Do you provide IT scripts and templates?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Yes. The IT Download Assets section includes PowerShell scripts, templates, checklists, and runbooks for enterprise operations and support workflows."
+        }
       }
     ]
   };
@@ -223,6 +243,39 @@ export default function DownloadsPage() {
       <section className="section-shell pt-8 sm:pt-10">
         <div className="page-shell">
           <AffiliateDisclosureBanner className="mb-6" />
+          <div className="mb-6 rounded-2xl border border-line/80 bg-white/85 p-5 shadow-soft dark:border-slate-700 dark:bg-slate-950/70">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+                  New: IT Admin Download Assets
+                </p>
+                <h2 className="mt-2 text-xl font-semibold text-slate-900 dark:text-slate-100">
+                  {assetStats.total} scripts, templates, checklists, and runbooks
+                </h2>
+                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                  Includes {assetStats.byAccess.free} free assets, {assetStats.byAccess.emailGate} email-gated assets, and {assetStats.byAccess.premium} premium assets.
+                </p>
+              </div>
+              <a href="/downloads/assets" className="btn-secondary !px-4 !py-2.5">
+                Browse IT Assets
+              </a>
+            </div>
+            <div className="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+              {assetBundles.map((bundle) => (
+                <a
+                  key={bundle.slug}
+                  href={`/downloads/assets#${bundle.slug}`}
+                  className="rounded-xl border border-line/80 bg-slate-50 px-3 py-2 text-sm text-slate-700 transition hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-800"
+                >
+                  <span className="font-medium">{bundle.title}</span>
+                  <span className="mt-0.5 block text-xs text-slate-500 dark:text-slate-400">
+                    {bundle.itemSlugs.length} assets
+                    {bundle.priceLabel ? ` • ${bundle.priceLabel}` : ""}
+                  </span>
+                </a>
+              ))}
+            </div>
+          </div>
           <DownloadsBrowser
             entries={downloads}
             amazonAffiliateUrl={amazonAffiliate?.url}

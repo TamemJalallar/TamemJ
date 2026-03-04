@@ -10,10 +10,48 @@ import { CodeBlock } from "@/components/support-portal/code-block";
 import { TroubleshootingDecisionTree } from "@/components/support-portal/troubleshooting-decision-tree";
 import { AccessLevelBadge, EnvironmentBadge, SeverityBadge } from "@/components/support-portal/badges";
 import { getKBHelpfulVote, setKBHelpfulVote } from "@/lib/support-portal.storage";
-import { trackKBArticleView, trackKBHelpfulVote } from "@/lib/support-portal.analytics";
+import {
+  getSupportAnalyticsStore,
+  subscribeToAnalyticsEvents,
+  trackKBArticleView,
+  trackKBHelpfulVote
+} from "@/lib/support-portal.analytics";
 
 function cx(...classes: Array<string | false | null | undefined>): string {
   return classes.filter(Boolean).join(" ");
+}
+
+interface HelpfulSummary {
+  yes: number;
+  no: number;
+  ratio: number | null;
+}
+
+function summarizeHelpfulVotesForSlug(slug: string): HelpfulSummary {
+  const store = getSupportAnalyticsStore();
+  let yes = 0;
+  let no = 0;
+
+  for (const event of store.events) {
+    if (event.type !== "kb_helpful_vote") {
+      continue;
+    }
+
+    if (String(event.payload.slug ?? "") !== slug) {
+      continue;
+    }
+
+    const vote = String(event.payload.vote ?? "").toLowerCase();
+    if (vote === "yes") yes += 1;
+    if (vote === "no") no += 1;
+  }
+
+  const total = yes + no;
+  return {
+    yes,
+    no,
+    ratio: total > 0 ? yes / total : null
+  };
 }
 
 export function KnowledgeBaseArticleView({
@@ -26,10 +64,22 @@ export function KnowledgeBaseArticleView({
   recommendedAffiliates: KBRecommendedAffiliate[];
 }) {
   const [helpfulVote, setHelpfulVote] = useState<"yes" | "no" | null>(null);
+  const [helpfulSummary, setHelpfulSummary] = useState<HelpfulSummary>({
+    yes: 0,
+    no: 0,
+    ratio: null
+  });
   const [viewTracked, setViewTracked] = useState(false);
 
   useEffect(() => {
     setHelpfulVote(getKBHelpfulVote(article.slug));
+    setHelpfulSummary(summarizeHelpfulVotesForSlug(article.slug));
+
+    const unsubscribe = subscribeToAnalyticsEvents(() => {
+      setHelpfulSummary(summarizeHelpfulVotesForSlug(article.slug));
+    });
+
+    return () => unsubscribe();
   }, [article.slug]);
 
   useEffect(() => {
@@ -65,7 +115,14 @@ export function KnowledgeBaseArticleView({
     setKBHelpfulVote(article.slug, nextVote);
     setHelpfulVote(nextVote);
     trackKBHelpfulVote({ slug: article.slug, title: article.title, vote: nextVote });
+    setHelpfulSummary(summarizeHelpfulVotesForSlug(article.slug));
   }
+
+  const helpfulTotalVotes = helpfulSummary.yes + helpfulSummary.no;
+  const helpfulRatioText =
+    helpfulSummary.ratio === null
+      ? "No ratings yet"
+      : `${Math.round(helpfulSummary.ratio * 100)}% helpful`;
 
   return (
     <div className="space-y-5">
@@ -93,6 +150,55 @@ export function KnowledgeBaseArticleView({
           <span className="inline-flex items-center rounded-full border border-line/70 bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
             {article.productFamily} • {article.product}
           </span>
+        </div>
+
+        <div className="mt-4 grid gap-3 lg:grid-cols-2">
+          <div className="rounded-2xl border border-line/70 bg-slate-50/70 p-4 dark:border-slate-800 dark:bg-slate-900/70">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+              Author & Verification
+            </p>
+            <p className="mt-2 text-sm font-semibold text-slate-900 dark:text-slate-100">
+              {article.author.name}
+            </p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">{article.author.title}</p>
+            <p className="mt-2 text-xs text-slate-600 dark:text-slate-300">
+              Last verified: {article.lastVerified}
+            </p>
+            {article.author.bio ? (
+              <p className="mt-2 text-xs leading-6 text-slate-600 dark:text-slate-300">
+                {article.author.bio}
+              </p>
+            ) : null}
+            <div className="mt-2 flex flex-wrap gap-2">
+              {article.testedOn.map((environment) => (
+                <span
+                  key={`${article.slug}-${environment}`}
+                  className="inline-flex items-center rounded-full border border-line/70 bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+                >
+                  Tested on {environment}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-line/70 bg-slate-50/70 p-4 dark:border-slate-800 dark:bg-slate-900/70">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+              Trust Signals
+            </p>
+            <p className="mt-2 text-sm font-semibold text-slate-900 dark:text-slate-100">
+              {helpfulRatioText}
+            </p>
+            <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+              {helpfulTotalVotes} total helpfulness vote{helpfulTotalVotes === 1 ? "" : "s"}
+            </p>
+            <ul className="mt-2 space-y-1 text-xs text-slate-600 dark:text-slate-300">
+              {article.author.credentials.slice(0, 3).map((credential) => (
+                <li key={`${article.slug}-${credential}`} className="leading-6">
+                  • {credential}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         <div className="mt-4 grid gap-4 lg:grid-cols-2">

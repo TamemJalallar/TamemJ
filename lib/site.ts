@@ -38,3 +38,15 @@ export const seoKeywords = [
   "macOS enterprise support",
   "tamemj.com"
 ];
+
+export const supportAuthorProfile = {
+  name: "Tamem J",
+  title: "IT Solutions Engineer",
+  credentials: [
+    "Enterprise Microsoft 365 Administration",
+    "Endpoint Management (Intune, Jamf, Kandji)",
+    "Identity & Access (Entra ID, Okta)",
+    "ITIL-aligned Incident & Knowledge Management"
+  ],
+  bio: "Runbooks and troubleshooting guides are reviewed for enterprise-safe usage and avoid security bypass patterns."
+} as const;

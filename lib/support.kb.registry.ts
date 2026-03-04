@@ -1,5 +1,6 @@
 import type {
   KBArticle,
+  KBArticleAuthor,
   KBCommand,
   KBProductFamily,
   KBResolutionStep,
@@ -7,6 +8,17 @@ import type {
   SupportEnvironment,
   SupportSeverity
 } from "@/types/support";
+import { supportAuthorProfile } from "@/lib/site";
+
+const DEFAULT_LAST_VERIFIED = "March 3, 2026";
+
+const DEFAULT_TESTED_ON_BY_ENVIRONMENT: Record<SupportEnvironment, string[]> = {
+  Windows: ["Windows 11 23H2", "Windows 10 22H2"],
+  macOS: ["macOS Sequoia 15", "macOS Sonoma 14"],
+  iOS: ["iOS 18"],
+  Android: ["Android 15"],
+  Both: ["Windows 11 23H2", "macOS Sequoia 15"]
+};
 
 interface KBSeed {
   slug: string;
@@ -25,6 +37,9 @@ interface KBSeed {
   remediations: string[];
   escalationCriteria: string[];
   commands?: KBCommand[];
+  lastVerified?: string;
+  testedOn?: string[];
+  author?: KBArticleAuthor;
 }
 
 function toMultilineList(items: string[]): string {
@@ -165,6 +180,7 @@ function buildResolutionSteps(seed: KBSeed, commands: KBCommand[]): KBResolution
 
 function buildArticle(seed: KBSeed): KBArticle {
   const commands = seed.commands && seed.commands.length > 0 ? seed.commands : getFallbackCommands(seed);
+  const environment = seed.environment ?? "Both";
 
   return {
     slug: seed.slug,
@@ -175,7 +191,7 @@ function buildArticle(seed: KBSeed): KBArticle {
     product: seed.product,
     severity: seed.severity ?? "Medium",
     accessLevel: seed.accessLevel ?? "User Safe",
-    environment: seed.environment ?? "Both",
+    environment,
     estimatedTime: seed.estimatedTime ?? "10-20 min",
     tags: [...new Set(seed.tags.map(normalizeTag))],
     symptoms: seed.symptoms,
@@ -183,7 +199,18 @@ function buildArticle(seed: KBSeed): KBArticle {
     resolutionSteps: buildResolutionSteps(seed, commands),
     commands,
     escalationCriteria: seed.escalationCriteria,
-    relatedArticleSlugs: []
+    relatedArticleSlugs: [],
+    lastVerified: seed.lastVerified ?? DEFAULT_LAST_VERIFIED,
+    testedOn:
+      seed.testedOn && seed.testedOn.length > 0
+        ? [...new Set(seed.testedOn)]
+        : DEFAULT_TESTED_ON_BY_ENVIRONMENT[environment],
+    author: seed.author ?? {
+      name: supportAuthorProfile.name,
+      title: supportAuthorProfile.title,
+      credentials: [...supportAuthorProfile.credentials],
+      bio: supportAuthorProfile.bio
+    }
   };
 }
 
@@ -7641,7 +7668,12 @@ export function getKBArticles(): KBArticle[] {
     resolutionSteps: article.resolutionSteps.map((step) => ({ ...step })),
     commands: article.commands.map((command) => ({ ...command })),
     escalationCriteria: [...article.escalationCriteria],
-    relatedArticleSlugs: [...article.relatedArticleSlugs]
+    relatedArticleSlugs: [...article.relatedArticleSlugs],
+    testedOn: [...article.testedOn],
+    author: {
+      ...article.author,
+      credentials: [...article.author.credentials]
+    }
   }));
 }
 

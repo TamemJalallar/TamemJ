@@ -38,6 +38,13 @@ export type KBProductFamily =
 
 export type SupportStepType = "info" | "command" | "warning";
 
+export interface KBArticleAuthor {
+  name: string;
+  title: string;
+  credentials: string[];
+  bio?: string;
+}
+
 export interface KBResolutionStep {
   title: string;
   type: SupportStepType;
@@ -70,6 +77,9 @@ export interface KBArticle {
   commands: KBCommand[];
   escalationCriteria: string[];
   relatedArticleSlugs: string[];
+  lastVerified: string;
+  testedOn: string[];
+  author: KBArticleAuthor;
 }
 
 export interface CatalogFieldOption {

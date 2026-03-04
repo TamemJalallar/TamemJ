@@ -270,6 +270,60 @@ The downloads page is registry-driven and lives at:
 3. Add `directDownloads` rows if you want per-platform download buttons and metadata (file type, version, size, checksum)
 4. Rebuild and test `/downloads`
 
+## IT Download Assets (Scripts, Templates, Checklists, Runbooks)
+
+The IT asset library is separate from app/software downloads and is used for enterprise support collateral:
+
+- Index page: `app/downloads/assets/page.tsx`
+- Detail page: `app/downloads/assets/[slug]/page.tsx`
+- Browser UI: `components/downloads/download-assets-browser.tsx`
+- Registry: `lib/download-assets.registry.ts`
+- Shared types: `types/download.ts`
+
+### What It Supports
+
+- 25 structured assets (PowerShell scripts, Excel templates, PDF checklists, DOCX runbooks)
+- Access segmentation (`Free`, `Email gate`, `Premium`)
+- Monetization tagging (`AdSense on page`, `Lead magnet`, `Affiliate`, `Direct revenue`)
+- Search demand tagging (`High`, `Medium`, `Low`)
+- Bundle definitions:
+  - `it-admin-starter-kit`
+  - `security-compliance-bundle`
+  - `powershell-admin-toolkit`
+  - `m365-admin-bundle`
+
+### How to Add an Asset
+
+1. Add an entry to `assetsRegistry` in `lib/download-assets.registry.ts`
+2. Ensure each entry includes:
+   - `slug`, `title`, `description`
+   - `format`, `category`, `access`, `monetization`, `searchDemand`
+   - `tags`
+3. If needed, add the asset slug to a bundle in `bundleRegistry`
+4. Rebuild and test:
+   - `/downloads/`
+   - `/downloads/assets/`
+   - `/downloads/assets/[slug]/`
+
+## SEO Pillar Guides and Clusters
+
+Keyword opportunity and pillar strategy content is now registry-driven:
+
+- Registry: `lib/seo-content.registry.ts`
+- Index page: `app/guides/page.tsx`
+- Detail page: `app/guides/[slug]/page.tsx`
+- Revenue plan page: `app/guides/revenue-scaling-roadmap/page.tsx`
+
+The registry includes:
+
+- High-RPM troubleshooting keywords
+- Long-tail error message keywords
+- Affiliate-intent comparison keywords
+- 10 pillar page definitions
+- 5 content clusters
+
+The guide pages auto-link to relevant support KB articles and download assets using keyword-based matching.
+
 ### Auto-Sync GitHub Release Metadata (Version, Size, SHA-256)
 
 For GitHub-hosted direct downloads, use the sync tool to prefill metadata and direct asset URLs:

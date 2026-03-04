@@ -115,11 +115,31 @@ export const affiliateLinks: AffiliateLink[] = [
   {
     key: "surfshark-affiliate",
     program: "Surfshark Affiliate",
-    label: "Surfshark",
-    description: "Consumer VPN and online privacy tooling for remote work and safe browsing guidance.",
-    url: "https://surfshark.com/affiliate",
+    label: "Surfshark VPN",
+    description: "Consumer VPN offer for privacy, secure remote work, and safe browsing guidance.",
+    url: "https://get.surfshark.net/aff_c?offer_id=926&aff_id=45089",
     network: "Impact",
-    status: "Applied",
+    status: "Active",
+    platform: "Surfshark"
+  },
+  {
+    key: "surfshark-antivirus-affiliate",
+    program: "Surfshark Affiliate",
+    label: "Surfshark Antivirus",
+    description: "Consumer antivirus offer for endpoint protection and malware defense guidance.",
+    url: "https://get.surfshark.net/aff_c?offer_id=934&aff_id=45089",
+    network: "Impact",
+    status: "Active",
+    platform: "Surfshark"
+  },
+  {
+    key: "surfshark-adblock-affiliate",
+    program: "Surfshark Affiliate",
+    label: "Surfshark Adblock",
+    description: "Ad and tracker blocking offer for cleaner browsing and privacy-focused workflows.",
+    url: "https://get.surfshark.net/aff_c?offer_id=1498&aff_id=45089",
+    network: "Impact",
+    status: "Active",
     platform: "Surfshark"
   },
   {

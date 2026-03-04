@@ -1,3 +1,6 @@
+import type { DownloadEntry } from "@/types/download";
+
+const downloadsRegistry: DownloadEntry[] = [
 // ── Communication ──────────────────────────────────────────────────────────
 {
   slug: "discord",
@@ -541,3 +544,8 @@
     }
   ]
 },
+];
+
+export function getDownloads(): DownloadEntry[] {
+  return downloadsRegistry;
+}
