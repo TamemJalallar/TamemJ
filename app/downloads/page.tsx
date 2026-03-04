@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import type { FAQPage, ItemList, WebPage, WithContext } from "schema-dts";
 import { AffiliateDisclosureBanner } from "@/components/affiliate/affiliate-disclosure-banner";
 import { DownloadsBrowser } from "@/components/downloads/downloads-browser";
@@ -107,6 +108,14 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function DownloadsPage() {
   const downloads = getDownloads();
+  const groupedByCategory = [...new Set(downloads.map((entry) => entry.category))]
+    .sort((a, b) => a.localeCompare(b))
+    .map((category) => ({
+      category,
+      entries: downloads
+        .filter((entry) => entry.category === category)
+        .sort((a, b) => a.name.localeCompare(b.name))
+    }));
   const assetStats = getDownloadAssetStats();
   const assetBundles = getDownloadAssetBundles();
   const freeCount = downloads.filter(isFreeEntry).length;
@@ -284,6 +293,36 @@ export default function DownloadsPage() {
               url: entry.url
             }))}
           />
+
+          <section className="mt-6 surface-card p-5 sm:p-6">
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Full Downloads Index</h2>
+            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+              Crawlable index of all curated software download entries grouped by type.
+            </p>
+            <div className="mt-4 space-y-3">
+              {groupedByCategory.map((group) => (
+                <details
+                  key={group.category}
+                  className="rounded-xl border border-line/80 bg-white p-4 dark:border-slate-700 dark:bg-slate-900"
+                >
+                  <summary className="cursor-pointer list-none text-sm font-semibold text-slate-900 dark:text-slate-100">
+                    {group.category} ({group.entries.length})
+                  </summary>
+                  <div className="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+                    {group.entries.map((entry) => (
+                      <Link
+                        key={entry.slug}
+                        href={`/downloads/#${entry.slug}`}
+                        className="rounded-lg border border-line/70 bg-slate-50 px-3 py-2 text-sm text-slate-700 transition hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-950/60 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-900"
+                      >
+                        {entry.name}
+                      </Link>
+                    ))}
+                  </div>
+                </details>
+              ))}
+            </div>
+          </section>
         </div>
       </section>
       <script

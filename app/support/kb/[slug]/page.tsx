@@ -2,11 +2,15 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { KnowledgeBaseArticleView } from "@/components/support-portal/knowledge-base-article-view";
 import { getRecommendedAffiliatesForKBArticle } from "@/lib/affiliate-support.registry";
+import { getKBSeoAlignmentBySlug, getKeywordTargetsForKBArticle } from "@/lib/seo-content.registry";
 import { getKBArticleBySlug, getKBArticles } from "@/lib/support.kb.registry";
 import {
   buildBreadcrumbJsonLd,
+  buildKbFaqJsonLd,
   buildKbArticleJsonLd,
-  buildKbArticleMetadata
+  buildKbHowToJsonLd,
+  buildKbArticleMetadata,
+  toAbsoluteSupportUrl
 } from "@/lib/support-portal.seo";
 
 interface KBArticlePageProps {
@@ -27,7 +31,26 @@ export async function generateMetadata({ params }: KBArticlePageProps): Promise<
     return { title: "KB Article Not Found" };
   }
 
-  return buildKbArticleMetadata(article);
+  const seoAlignment = getKBSeoAlignmentBySlug(article.slug);
+  const baseMetadata = buildKbArticleMetadata(article);
+  const keywordTargets = getKeywordTargetsForKBArticle(article, 10);
+  const baseKeywords = Array.isArray(baseMetadata.keywords) ? baseMetadata.keywords : [];
+
+  return {
+    ...baseMetadata,
+    ...(seoAlignment
+      ? {
+          description: seoAlignment.optimizedLeadParagraph
+        }
+      : {}),
+    keywords: [
+      ...new Set([
+        ...baseKeywords,
+        ...keywordTargets.map((target) => target.keyword),
+        ...(seoAlignment ? [seoAlignment.primaryKeyword] : [])
+      ])
+    ]
+  };
 }
 
 export default async function KBArticlePage({ params }: KBArticlePageProps) {
@@ -42,8 +65,24 @@ export default async function KBArticlePage({ params }: KBArticlePageProps) {
     .map((relatedSlug) => getKBArticleBySlug(relatedSlug))
     .filter((item): item is NonNullable<typeof item> => Boolean(item));
   const recommendedAffiliates = getRecommendedAffiliatesForKBArticle(article);
+  const seoAlignment = getKBSeoAlignmentBySlug(article.slug);
+  const keywordTargets = getKeywordTargetsForKBArticle(article, 8);
 
   const articleJsonLd = buildKbArticleJsonLd(article);
+  const howToJsonLd = buildKbHowToJsonLd(article);
+  const faqJsonLd = buildKbFaqJsonLd(article);
+  const keywordTargetSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: `Related exact-match troubleshooting queries for ${article.title}`,
+    numberOfItems: keywordTargets.length,
+    itemListElement: keywordTargets.map((target, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: target.keyword,
+      url: toAbsoluteSupportUrl(`/support/kb/${target.articleSlug}/`)
+    }))
+  };
   const breadcrumbJsonLd = buildBreadcrumbJsonLd([
     { name: "Support Portal", path: "/support/" },
     { name: "Knowledge Base", path: "/support/kb/" },
@@ -56,10 +95,24 @@ export default async function KBArticlePage({ params }: KBArticlePageProps) {
         article={article}
         relatedArticles={relatedArticles}
         recommendedAffiliates={recommendedAffiliates}
+        keywordTargets={keywordTargets}
+        seoAlignment={seoAlignment}
       />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(keywordTargetSchema) }}
       />
       <script
         type="application/ld+json"

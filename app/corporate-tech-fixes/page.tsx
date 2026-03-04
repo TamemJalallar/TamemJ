@@ -67,6 +67,14 @@ export const metadata: Metadata = {
 
 export default function CorporateTechFixesPage() {
   const fixes = getCorporateFixes();
+  const groupedByCategory = [...new Set(fixes.map((fix) => fix.category))]
+    .sort((a, b) => a.localeCompare(b))
+    .map((category) => ({
+      category,
+      fixes: fixes
+        .filter((fix) => fix.category === category)
+        .sort((a, b) => a.title.localeCompare(b.title))
+    }));
   const catalogFixes = fixes.map((fix) => ({
     slug: fix.slug,
     title: fix.title,
@@ -111,7 +119,7 @@ export default function CorporateTechFixesPage() {
           <SectionHeading
             className="mt-5"
             eyebrow="Corporate Tech Fixes"
-            title="Enterprise-ready troubleshooting guides"
+            title="Corporate IT troubleshooting guides"
             description="Structured, professional runbooks for common corporate IT issues. Search by symptom, filter by category, and use tags to narrow results quickly."
           />
 
@@ -132,6 +140,39 @@ export default function CorporateTechFixesPage() {
           <div className="mt-8">
             <FixesCatalog fixes={catalogFixes} categories={categories} tags={tags} />
           </div>
+
+          <section className="mt-8 surface-card p-5 sm:p-6">
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
+              Full Tech Fixes Index
+            </h2>
+            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+              Crawlable category index for all Corporate Tech Fix guides.
+            </p>
+            <div className="mt-4 space-y-3">
+              {groupedByCategory.map((group, index) => (
+                <details
+                  key={group.category}
+                  className="rounded-xl border border-line/80 bg-white p-4 dark:border-slate-700 dark:bg-slate-900"
+                  open={index === 0}
+                >
+                  <summary className="cursor-pointer list-none text-sm font-semibold text-slate-900 dark:text-slate-100">
+                    {group.category} ({group.fixes.length})
+                  </summary>
+                  <div className="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+                    {group.fixes.map((fix) => (
+                      <Link
+                        key={fix.slug}
+                        href={`/corporate-tech-fixes/${fix.slug}/`}
+                        className="rounded-lg border border-line/70 bg-slate-50 px-3 py-2 text-sm text-slate-700 transition hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-950/60 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-900"
+                      >
+                        {fix.title}
+                      </Link>
+                    ))}
+                  </div>
+                </details>
+              ))}
+            </div>
+          </section>
         </div>
       </section>
       <script

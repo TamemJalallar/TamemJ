@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import type {
   BreadcrumbList,
   CollectionPage,
+  FAQPage,
+  HowTo,
   Service,
   TechArticle,
   WithContext
@@ -47,6 +49,38 @@ function normalizeDateInput(value: string): string | undefined {
   }
 
   return new Date(parsed).toISOString();
+}
+
+function parseEstimatedMinutes(value: string): number | null {
+  const matches = value.match(/\d+/g);
+  if (!matches || matches.length === 0) {
+    return null;
+  }
+
+  const first = Number(matches[0]);
+  if (!Number.isFinite(first) || first <= 0) {
+    return null;
+  }
+
+  if (matches.length === 1) {
+    return Math.round(first);
+  }
+
+  const second = Number(matches[1]);
+  if (!Number.isFinite(second) || second <= 0) {
+    return Math.round(first);
+  }
+
+  return Math.round((first + second) / 2);
+}
+
+function toIso8601DurationFromMinutes(value: string): string | undefined {
+  const minutes = parseEstimatedMinutes(value);
+  if (!minutes || minutes <= 0) {
+    return undefined;
+  }
+
+  return `PT${minutes}M`;
 }
 
 export function toAbsoluteSupportUrl(path: string): string {
@@ -345,6 +379,63 @@ export function buildKbArticleJsonLd(article: KBArticle): WithContext<TechArticl
     datePublished: isoLastVerified,
     inLanguage: "en",
     abstract: article.description
+  };
+}
+
+export function buildKbHowToJsonLd(article: KBArticle): WithContext<HowTo> {
+  const totalTime = toIso8601DurationFromMinutes(article.estimatedTime);
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: article.title,
+    description: article.description,
+    url: toAbsoluteSupportUrl(`/support/kb/${article.slug}/`),
+    ...(totalTime ? { totalTime } : {}),
+    step: article.resolutionSteps.map((step, index) => ({
+      "@type": "HowToStep",
+      position: index + 1,
+      name: step.title,
+      text: step.content,
+      url: toAbsoluteSupportUrl(`/support/kb/${article.slug}/#step-${index + 1}`)
+    }))
+  };
+}
+
+export function buildKbFaqJsonLd(article: KBArticle): WithContext<FAQPage> {
+  const symptomsText = article.symptoms.map((item) => `- ${item}`).join("\n");
+  const causesText = article.causes.map((item) => `- ${item}`).join("\n");
+  const escalationText = article.escalationCriteria.map((item) => `- ${item}`).join("\n");
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: `What symptoms indicate ${article.title}?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: symptomsText
+        }
+      },
+      {
+        "@type": "Question",
+        name: `What usually causes ${article.title}?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: causesText
+        }
+      },
+      {
+        "@type": "Question",
+        name: "When should this issue be escalated to IT or security?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: escalationText
+        }
+      }
+    ]
   };
 }
 

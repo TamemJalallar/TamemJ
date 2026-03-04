@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import type { KBArticle } from "@/types/support";
 import type { KBRecommendedAffiliate } from "@/lib/affiliate-support.registry";
+import type { KBSeoAlignment, SeoKeywordArticleTarget } from "@/lib/seo-content.registry";
 import { SupportPageHeader } from "@/components/support-portal/page-header";
 import { AccordionSteps } from "@/components/support-portal/accordion-steps";
 import { CodeBlock } from "@/components/support-portal/code-block";
@@ -25,6 +26,10 @@ interface HelpfulSummary {
   yes: number;
   no: number;
   ratio: number | null;
+}
+
+function keywordLabel(value: string): string {
+  return value.replace(/"/g, "").trim();
 }
 
 function summarizeHelpfulVotesForSlug(slug: string): HelpfulSummary {
@@ -57,11 +62,15 @@ function summarizeHelpfulVotesForSlug(slug: string): HelpfulSummary {
 export function KnowledgeBaseArticleView({
   article,
   relatedArticles,
-  recommendedAffiliates
+  recommendedAffiliates,
+  keywordTargets,
+  seoAlignment
 }: {
   article: KBArticle;
   relatedArticles: KBArticle[];
   recommendedAffiliates: KBRecommendedAffiliate[];
+  keywordTargets: SeoKeywordArticleTarget[];
+  seoAlignment?: KBSeoAlignment;
 }) {
   const [helpfulVote, setHelpfulVote] = useState<"yes" | "no" | null>(null);
   const [helpfulSummary, setHelpfulSummary] = useState<HelpfulSummary>({
@@ -95,6 +104,18 @@ export function KnowledgeBaseArticleView({
   }, [article, viewTracked]);
 
   const commandCount = article.commands.length;
+  const primaryKeyword =
+    seoAlignment?.primaryKeyword ??
+    (keywordTargets.length > 0 ? keywordLabel(keywordTargets[0].keyword) : null);
+  const resolutionHeading = primaryKeyword
+    ? `How to Fix: ${primaryKeyword}`
+    : "How to Fix This Issue";
+  const symptomsHeading = primaryKeyword
+    ? `Symptoms of ${primaryKeyword}`
+    : "Symptoms";
+  const causesHeading = primaryKeyword
+    ? `Likely Causes of ${primaryKeyword}`
+    : "Likely Causes";
 
   const allCommandsText = useMemo(() => {
     return article.commands
@@ -128,7 +149,7 @@ export function KnowledgeBaseArticleView({
     <div className="space-y-5">
       <SupportPageHeader
         title={article.title}
-        description={article.description}
+        description={seoAlignment?.optimizedLeadParagraph ?? article.description}
         breadcrumbs={[
           { label: "Support Portal", href: "/support" },
           { label: "Knowledge Base", href: "/support/kb" },
@@ -141,6 +162,17 @@ export function KnowledgeBaseArticleView({
           </div>
         }
       />
+
+      {seoAlignment ? (
+        <section className="rounded-2xl border border-cyan-200/70 bg-cyan-50/70 p-5 shadow-soft dark:border-cyan-900/60 dark:bg-cyan-950/25 sm:p-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-cyan-700 dark:text-cyan-200">
+            Editorial Intro (SEO-Aligned)
+          </p>
+          <p className="mt-2 text-sm leading-7 text-slate-700 dark:text-slate-200 sm:text-base">
+            {seoAlignment.editorialIntro}
+          </p>
+        </section>
+      ) : null}
 
       <section className="rounded-2xl border border-line/70 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-6">
         <div className="flex flex-wrap gap-2">
@@ -203,7 +235,7 @@ export function KnowledgeBaseArticleView({
 
         <div className="mt-4 grid gap-4 lg:grid-cols-2">
           <div className="rounded-2xl border border-line/70 bg-slate-50/70 p-4 dark:border-slate-800 dark:bg-slate-900/70">
-            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Symptoms</h2>
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">{symptomsHeading}</h2>
             <ul className="mt-3 space-y-2 pl-5 text-sm text-slate-700 dark:text-slate-200">
               {article.symptoms.map((item) => (
                 <li key={item} className="list-disc leading-7">
@@ -213,7 +245,7 @@ export function KnowledgeBaseArticleView({
             </ul>
           </div>
           <div className="rounded-2xl border border-line/70 bg-slate-50/70 p-4 dark:border-slate-800 dark:bg-slate-900/70">
-            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Likely Causes</h2>
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">{causesHeading}</h2>
             <ul className="mt-3 space-y-2 pl-5 text-sm text-slate-700 dark:text-slate-200">
               {article.causes.map((item) => (
                 <li key={item} className="list-disc leading-7">
@@ -229,7 +261,7 @@ export function KnowledgeBaseArticleView({
 
       <section id="resolution-steps" className="rounded-2xl border border-line/70 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-6">
         <div className="mb-4 flex items-center justify-between gap-3">
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Resolution Steps</h2>
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">{resolutionHeading}</h2>
           <p className="text-xs text-slate-500 dark:text-slate-400">Accordion runbook sections</p>
         </div>
         <AccordionSteps steps={article.resolutionSteps} />
@@ -339,6 +371,41 @@ export function KnowledgeBaseArticleView({
               <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">
                 Disclosure: Active partner links may generate commission with no additional user cost.
               </p>
+            </div>
+          ) : null}
+
+          {keywordTargets.length > 0 ? (
+            <div className="rounded-2xl border border-line/70 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-6">
+              <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                Related Exact-Match Queries
+              </h2>
+              <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                Internal fix guides aligned to high-intent search phrases.
+              </p>
+              <ul className="mt-3 space-y-2">
+                {keywordTargets.map((target) => {
+                  const isSameArticle = target.articleSlug === article.slug;
+                  return (
+                    <li key={`${article.slug}-${target.keyword}`}>
+                      <Link
+                        href={
+                          isSameArticle
+                            ? `/support/kb/?q=${encodeURIComponent(target.keyword)}`
+                            : `/support/kb/${target.articleSlug}/`
+                        }
+                        className="block rounded-xl border border-line/70 bg-slate-50/60 px-3 py-2 text-sm text-slate-700 transition hover:border-slate-300 hover:bg-white dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-700"
+                      >
+                        <span className="font-medium">{keywordLabel(target.keyword)}</span>
+                        <span className="mt-1 block text-xs text-slate-500 dark:text-slate-400">
+                          {isSameArticle
+                            ? "Open exact-match query results"
+                            : `Related guide: ${target.articleTitle}`}
+                        </span>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
           ) : null}
 

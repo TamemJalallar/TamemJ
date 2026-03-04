@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { GenAIPromptsBrowser } from "@/components/genai-prompts/genai-prompts-browser";
 import { getGenAIPrompts } from "@/lib/genai-prompts";
 import { buildBreadcrumbJsonLd, buildCollectionPageJsonLd, buildOpenGraph, buildTwitter } from "@/lib/seo";
@@ -50,6 +51,17 @@ export const metadata: Metadata = {
 
 export default function GenAIPromptsPage() {
   const prompts = getGenAIPrompts();
+  const groupedByPlatformAndCategory = ["MetaAI", "AdobeGenAI", "Both"].map((platform) => ({
+    platform,
+    categories: [...new Set(prompts.filter((prompt) => prompt.platform === platform).map((prompt) => prompt.category))]
+      .sort((a, b) => a.localeCompare(b))
+      .map((category) => ({
+        category,
+        prompts: prompts
+          .filter((prompt) => prompt.platform === platform && prompt.category === category)
+          .sort((a, b) => a.title.localeCompare(b.title))
+      }))
+  }));
 
   const collectionSchema = buildCollectionPageJsonLd(
     "Meta AI and Adobe GenAI Prompts",
@@ -102,6 +114,48 @@ export default function GenAIPromptsPage() {
       <section className="section-shell pt-10 sm:pt-14">
         <div className="page-shell">
           <GenAIPromptsBrowser prompts={prompts} />
+
+          <section className="mt-6 surface-card p-5 sm:p-6">
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
+              Full Prompt Index
+            </h2>
+            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+              Crawlable index of all prompt detail pages grouped by platform and category.
+            </p>
+            <div className="mt-4 space-y-4">
+              {groupedByPlatformAndCategory.map((group) => (
+                <details
+                  key={group.platform}
+                  className="rounded-xl border border-line/80 bg-white p-4 dark:border-slate-700 dark:bg-slate-900"
+                >
+                  <summary className="cursor-pointer list-none text-sm font-semibold text-slate-900 dark:text-slate-100">
+                    {group.platform} (
+                    {group.categories.reduce((total, categoryGroup) => total + categoryGroup.prompts.length, 0)})
+                  </summary>
+                  <div className="mt-3 space-y-3">
+                    {group.categories.map((categoryGroup) => (
+                      <div key={`${group.platform}-${categoryGroup.category}`}>
+                        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                          {categoryGroup.category}
+                        </p>
+                        <div className="mt-2 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+                          {categoryGroup.prompts.map((prompt) => (
+                            <Link
+                              key={prompt.slug}
+                              href={`/genai-prompts/${prompt.slug}/`}
+                              className="rounded-lg border border-line/70 bg-slate-50 px-3 py-2 text-sm text-slate-700 transition hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-950/60 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-900"
+                            >
+                              {prompt.title}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </details>
+              ))}
+            </div>
+          </section>
         </div>
       </section>
 

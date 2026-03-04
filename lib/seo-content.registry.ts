@@ -14,6 +14,25 @@ export interface SeoKeywordOpportunity {
   segment: OpportunitySegment;
 }
 
+export interface SeoKeywordArticleTarget extends SeoKeywordOpportunity {
+  articleSlug: string;
+  articleTitle: string;
+  articleCategory: KBArticle["category"];
+  articleProduct: string;
+  relevanceScore: number;
+}
+
+export interface KBSeoAlignment {
+  articleSlug: string;
+  articleTitle: string;
+  articleCategory: KBArticle["category"];
+  articleProduct: string;
+  primaryKeyword: string;
+  editorialIntro: string;
+  optimizedLeadParagraph: string;
+  relevanceScore: number;
+}
+
 export type ContentClusterSlug =
   | "microsoft-365-administration"
   | "endpoint-management"
@@ -321,6 +340,8 @@ const opportunities: SeoKeywordOpportunity[] = [
   opportunity("best privileged access management tool", "Low", "High", "Low", "affiliate-intent")
 ];
 
+let cachedTopKBSeoAlignments: KBSeoAlignment[] | null = null;
+
 function normalize(value: string): string {
   return value.toLowerCase().replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
 }
@@ -359,6 +380,22 @@ function matchScore(haystack: string, term: string): number {
   return score;
 }
 
+function buildKbArticleSearchHaystack(article: KBArticle): string {
+  return normalize(
+    [
+      article.title,
+      article.description,
+      article.category,
+      article.product,
+      article.productFamily,
+      article.tags.join(" "),
+      article.symptoms.join(" "),
+      article.causes.join(" "),
+      article.escalationCriteria.join(" ")
+    ].join(" ")
+  );
+}
+
 function opportunityValue(opportunity: SeoKeywordOpportunity): number {
   const competitionPenalty = 4 - levelWeight[opportunity.competition];
   return (
@@ -366,6 +403,14 @@ function opportunityValue(opportunity: SeoKeywordOpportunity): number {
     levelWeight[opportunity.monetization] * 3 +
     competitionPenalty
   );
+}
+
+function keywordOpportunityPriority(opportunity: SeoKeywordOpportunity): number {
+  return opportunityValue(opportunity);
+}
+
+function keywordTargetPriority(target: SeoKeywordArticleTarget): number {
+  return target.relevanceScore * 3 + keywordOpportunityPriority(target);
 }
 
 function resolvePillar(pillarOrSlug: PillarContentIdea | string): PillarContentIdea | undefined {
@@ -432,6 +477,202 @@ export function getSeoKeywordOpportunities(
 
 export function getTopSeoKeywordOpportunities(limit = 40): SeoKeywordOpportunity[] {
   return getSeoKeywordOpportunities().slice(0, limit);
+}
+
+export function getTopKeywordArticleTargets(limit = 50): SeoKeywordArticleTarget[] {
+  const topKeywords = getTopSeoKeywordOpportunities(Math.max(limit, 50));
+  const articles = getKBArticles();
+  const articleHaystacks = articles.map((article) => ({
+    article,
+    haystack: buildKbArticleSearchHaystack(article)
+  }));
+
+  const mapped = topKeywords
+    .map((opportunity) => {
+      let best:
+        | {
+            article: KBArticle;
+            score: number;
+          }
+        | undefined;
+
+      for (const entry of articleHaystacks) {
+        const score = matchScore(entry.haystack, opportunity.keyword);
+        if (!best || score > best.score) {
+          best = { article: entry.article, score };
+        }
+      }
+
+      if (!best || best.score <= 0) {
+        return undefined;
+      }
+
+      return {
+        ...opportunity,
+        articleSlug: best.article.slug,
+        articleTitle: best.article.title,
+        articleCategory: best.article.category,
+        articleProduct: best.article.product,
+        relevanceScore: best.score
+      } satisfies SeoKeywordArticleTarget;
+    })
+    .filter((entry): entry is SeoKeywordArticleTarget => Boolean(entry));
+
+  return mapped.slice(0, limit);
+}
+
+function normalizeKeywordLabel(value: string): string {
+  return value.replace(/"/g, "").trim();
+}
+
+function buildLeadEnvironmentText(environment: KBArticle["environment"]): string {
+  switch (environment) {
+    case "Both":
+      return "Windows and macOS enterprise environments";
+    case "Windows":
+      return "Windows enterprise environments";
+    case "macOS":
+      return "macOS enterprise environments";
+    case "iOS":
+      return "managed iOS enterprise environments";
+    case "Android":
+      return "managed Android enterprise environments";
+    default:
+      return "enterprise environments";
+  }
+}
+
+function buildSeoAlignment(article: KBArticle, target: SeoKeywordArticleTarget): KBSeoAlignment {
+  const keywordLabel = normalizeKeywordLabel(target.keyword);
+  const environmentText = buildLeadEnvironmentText(article.environment);
+
+  return {
+    articleSlug: article.slug,
+    articleTitle: article.title,
+    articleCategory: article.category,
+    articleProduct: article.product,
+    primaryKeyword: keywordLabel,
+    editorialIntro: `This troubleshooting guide is aligned to the exact query "${keywordLabel}" and focuses on enterprise-safe remediation for ${article.product}.`,
+    optimizedLeadParagraph: `If you are seeing "${keywordLabel}", use this IT support runbook to validate symptoms, isolate likely causes, apply safe resolution steps, and escalate correctly in ${environmentText}.`,
+    relevanceScore: target.relevanceScore
+  };
+}
+
+function getBestTargetForArticle(article: KBArticle): SeoKeywordArticleTarget | undefined {
+  const haystack = buildKbArticleSearchHaystack(article);
+
+  const candidates = opportunities
+    .map((opportunity) => {
+      const relevanceScore = matchScore(haystack, opportunity.keyword);
+      return relevanceScore > 0
+        ? {
+            ...opportunity,
+            articleSlug: article.slug,
+            articleTitle: article.title,
+            articleCategory: article.category,
+            articleProduct: article.product,
+            relevanceScore
+          }
+        : undefined;
+    })
+    .filter((entry): entry is SeoKeywordArticleTarget => Boolean(entry))
+    .sort(
+      (a, b) =>
+        keywordTargetPriority(b) - keywordTargetPriority(a) ||
+        b.relevanceScore - a.relevanceScore ||
+        a.keyword.localeCompare(b.keyword)
+    );
+
+  return candidates[0];
+}
+
+export function getTopKBSeoAlignments(limit = 50): KBSeoAlignment[] {
+  if (cachedTopKBSeoAlignments && cachedTopKBSeoAlignments.length >= limit) {
+    return cachedTopKBSeoAlignments.slice(0, limit);
+  }
+
+  const topKeywordTargets = getTopKeywordArticleTargets(160);
+  const articleMap = new Map(getKBArticles().map((article) => [article.slug, article]));
+  const bestTargetByArticle = new Map<string, SeoKeywordArticleTarget>();
+
+  for (const target of topKeywordTargets) {
+    const existing = bestTargetByArticle.get(target.articleSlug);
+    if (!existing || keywordTargetPriority(target) > keywordTargetPriority(existing)) {
+      bestTargetByArticle.set(target.articleSlug, target);
+    }
+  }
+
+  const alignments = [...bestTargetByArticle.values()]
+    .sort(
+      (a, b) =>
+        keywordTargetPriority(b) - keywordTargetPriority(a) ||
+        b.relevanceScore - a.relevanceScore ||
+        a.keyword.localeCompare(b.keyword)
+    )
+    .map((target) => {
+      const article = articleMap.get(target.articleSlug);
+      return article ? buildSeoAlignment(article, target) : undefined;
+    })
+    .filter((entry): entry is KBSeoAlignment => Boolean(entry));
+
+  if (alignments.length >= limit) {
+    cachedTopKBSeoAlignments = alignments;
+    return alignments.slice(0, limit);
+  }
+
+  const seen = new Set(alignments.map((entry) => entry.articleSlug));
+  const fallback: KBSeoAlignment[] = [];
+
+  for (const article of getKBArticles()) {
+    if (seen.has(article.slug)) continue;
+    const bestTarget = getBestTargetForArticle(article);
+    if (!bestTarget) continue;
+    fallback.push(buildSeoAlignment(article, bestTarget));
+  }
+
+  fallback.sort(
+    (a, b) =>
+      b.relevanceScore - a.relevanceScore ||
+      a.primaryKeyword.localeCompare(b.primaryKeyword)
+  );
+
+  cachedTopKBSeoAlignments = [...alignments, ...fallback];
+  return cachedTopKBSeoAlignments.slice(0, limit);
+}
+
+export function getKBSeoAlignmentBySlug(slug: string): KBSeoAlignment | undefined {
+  return getTopKBSeoAlignments(50).find((entry) => entry.articleSlug === slug);
+}
+
+export function getKeywordTargetsForKBArticle(
+  articleOrSlug: KBArticle | string,
+  limit = 10
+): SeoKeywordArticleTarget[] {
+  const article =
+    typeof articleOrSlug === "string"
+      ? getKBArticles().find((item) => item.slug === articleOrSlug)
+      : articleOrSlug;
+
+  if (!article) {
+    return [];
+  }
+
+  const articleHaystack = buildKbArticleSearchHaystack(article);
+  const topKeywordTargets = getTopKeywordArticleTargets(80);
+
+  return topKeywordTargets
+    .map((target) => ({
+      ...target,
+      relevanceScore: matchScore(articleHaystack, target.keyword)
+    }))
+    .filter((target) => target.relevanceScore > 0)
+    .sort(
+      (a, b) =>
+        b.relevanceScore - a.relevanceScore ||
+        opportunityValue(b) - opportunityValue(a) ||
+        a.keyword.localeCompare(b.keyword)
+    )
+    .slice(0, limit);
 }
 
 export function getSuggestedKBArticlesForPillar(

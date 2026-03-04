@@ -78,6 +78,11 @@ export default function AiAgentsPage() {
     slug: getAiAgentCategorySlug(category),
     count: agents.filter((agent) => agent.category === category).length
   }));
+  const groupedByCategory = categories.map((category) => ({
+    category,
+    slug: getAiAgentCategorySlug(category),
+    agents: agents.filter((agent) => agent.category === category).sort((a, b) => a.title.localeCompare(b.title))
+  }));
   const popularAgents = agents.slice(0, 24);
 
   const collectionSchema = buildCollectionPageJsonLd(
@@ -191,6 +196,36 @@ export default function AiAgentsPage() {
                   <span className="font-semibold">{agent.title}</span>
                   <span className="ml-2 text-xs text-slate-500 dark:text-slate-400">{agent.category}</span>
                 </Link>
+              ))}
+            </div>
+          </section>
+
+          <section className="mt-6 surface-card p-5 sm:p-6">
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Full AI Agent Index</h2>
+            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+              Crawlable index of all AI agent detail pages grouped by category.
+            </p>
+            <div className="mt-4 space-y-3">
+              {groupedByCategory.map((group) => (
+                <details
+                  key={group.slug}
+                  className="rounded-xl border border-line/80 bg-white p-4 dark:border-slate-700 dark:bg-slate-900"
+                >
+                  <summary className="cursor-pointer list-none text-sm font-semibold text-slate-900 dark:text-slate-100">
+                    {group.category} ({group.agents.length})
+                  </summary>
+                  <div className="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+                    {group.agents.map((agent) => (
+                      <Link
+                        key={agent.slug}
+                        href={`/ai-agents/${agent.slug}/`}
+                        className="rounded-lg border border-line/70 bg-slate-50 px-3 py-2 text-sm text-slate-700 transition hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-950/60 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-900"
+                      >
+                        {agent.title}
+                      </Link>
+                    ))}
+                  </div>
+                </details>
               ))}
             </div>
           </section>

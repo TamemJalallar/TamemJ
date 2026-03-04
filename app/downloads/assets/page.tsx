@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { DownloadAssetsBrowser } from "@/components/downloads/download-assets-browser";
 import {
   getDownloadAssetBundles,
@@ -63,6 +64,14 @@ export default function DownloadAssetsPage() {
   const assets = getDownloadAssets();
   const bundles = getDownloadAssetBundles();
   const stats = getDownloadAssetStats();
+  const assetsByCategory = [...new Set(assets.map((asset) => asset.category))]
+    .sort((a, b) => a.localeCompare(b))
+    .map((category) => ({
+      category,
+      assets: assets
+        .filter((asset) => asset.category === category)
+        .sort((a, b) => a.title.localeCompare(b.title))
+    }));
 
   const collectionSchema = buildCollectionPageJsonLd(
     "IT Download Assets",
@@ -122,6 +131,39 @@ export default function DownloadAssetsPage() {
           </div>
 
           <DownloadAssetsBrowser assets={assets} bundles={bundles} />
+
+          <section className="mt-6 surface-card p-5 sm:p-6">
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
+              Full Download Asset Index
+            </h2>
+            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+              Crawlable list of every script, template, checklist, and runbook in the asset library.
+            </p>
+            <div className="mt-4 space-y-3">
+              {assetsByCategory.map((group, index) => (
+                <details
+                  key={group.category}
+                  className="rounded-xl border border-line/80 bg-white p-4 dark:border-slate-700 dark:bg-slate-900"
+                  open={index === 0}
+                >
+                  <summary className="cursor-pointer list-none text-sm font-semibold text-slate-900 dark:text-slate-100">
+                    {group.category} ({group.assets.length})
+                  </summary>
+                  <div className="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+                    {group.assets.map((asset) => (
+                      <Link
+                        key={asset.slug}
+                        href={`/downloads/assets/${asset.slug}/`}
+                        className="rounded-lg border border-line/70 bg-slate-50 px-3 py-2 text-sm text-slate-700 transition hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-950/60 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-900"
+                      >
+                        {asset.title}
+                      </Link>
+                    ))}
+                  </div>
+                </details>
+              ))}
+            </div>
+          </section>
         </div>
       </section>
       <script

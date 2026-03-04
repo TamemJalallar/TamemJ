@@ -1,29 +1,58 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
+import { getTopSeoKeywordOpportunities } from "@/lib/seo-content.registry";
 import { siteConfig } from "@/lib/site";
 import { getCorporateFixes } from "@/lib/corporate-fixes.registry";
 import { getDownloads } from "@/lib/downloads.registry";
 import { getKBArticleBySlug, getKBArticles } from "@/lib/support.kb.registry";
 
+function uniqueKeywords(keywords: string[]): string[] {
+  const seen = new Set<string>();
+  const result: string[] = [];
+
+  for (const keyword of keywords) {
+    const normalized = keyword.trim().toLowerCase();
+    if (!normalized || seen.has(normalized)) continue;
+    seen.add(normalized);
+    result.push(keyword.trim());
+  }
+
+  return result;
+}
+
+const homeKeywordOpportunities = getTopSeoKeywordOpportunities(30);
+
 export const metadata: Metadata = {
-  title: "Home",
-  description: siteConfig.description,
-  keywords: [
+  title: "Enterprise IT Troubleshooting Guides & Downloads",
+  description:
+    "Enterprise IT troubleshooting knowledge base with Microsoft 365, Intune, Entra, networking, and endpoint fixes plus downloadable admin scripts and templates.",
+  keywords: uniqueKeywords([
     "IT troubleshooting guides",
     "enterprise IT support",
     "corporate tech fixes",
     "Microsoft 365 troubleshooting",
+    "Intune troubleshooting",
+    "Entra ID troubleshooting",
     "PowerShell scripts",
     "IT knowledge base",
     "helpdesk resources",
-    "sysadmin tools"
-  ],
+    "sysadmin tools",
+    "IT download assets",
+    ...homeKeywordOpportunities.map((entry) => entry.keyword)
+  ]),
   alternates: {
     canonical: "/"
   },
-  openGraph: buildOpenGraph(siteConfig.title, siteConfig.description, "/"),
-  twitter: buildTwitter(siteConfig.title, siteConfig.description)
+  openGraph: buildOpenGraph(
+    "Enterprise IT Troubleshooting Guides & Downloads | Tamem J",
+    "Microsoft 365, endpoint, identity, networking, and security troubleshooting guides with practical scripts and templates.",
+    "/"
+  ),
+  twitter: buildTwitter(
+    "Enterprise IT Troubleshooting Guides & Downloads | Tamem J",
+    "Microsoft 365, endpoint, identity, networking, and security troubleshooting guides with practical scripts and templates."
+  )
 };
 
 const trendingArticleSlugs = [
@@ -66,6 +95,7 @@ export default function HomePage() {
   const kbArticles = getKBArticles();
   const corporateFixes = getCorporateFixes();
   const downloads = getDownloads();
+  const keywordOpportunities = homeKeywordOpportunities.slice(0, 15);
 
   const totalGuides = kbArticles.length + corporateFixes.length;
   const topCategories = topCategoryConfig.map((config) => ({
@@ -92,6 +122,19 @@ export default function HomePage() {
         url: toAbsoluteUrl(`/support/kb/${article.slug}/`)
       }))
     }
+  };
+
+  const queryIntentSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Popular IT troubleshooting search intents",
+    numberOfItems: keywordOpportunities.length,
+    itemListElement: keywordOpportunities.map((entry, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: entry.keyword,
+      url: toAbsoluteUrl(`/support/kb/?q=${encodeURIComponent(entry.keyword)}`)
+    }))
   };
 
   return (
@@ -244,9 +287,43 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="section-shell pt-2">
+        <div className="page-shell">
+          <div className="surface-card p-5 sm:p-6">
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100 sm:text-2xl">
+                Popular IT Error Searches
+              </h2>
+              <Link href="/guides" className="text-sm font-semibold text-accent hover:underline">
+                Keyword Strategy
+              </Link>
+            </div>
+            <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+              {keywordOpportunities.map((entry) => (
+                <Link
+                  key={entry.keyword}
+                  href={`/support/kb/?q=${encodeURIComponent(entry.keyword)}`}
+                  className="rounded-2xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-800 dark:bg-slate-950/70"
+                >
+                  <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">{entry.keyword}</h3>
+                  <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                    Traffic {entry.traffic} • Monetization {entry.monetization} • Competition{" "}
+                    {entry.competition}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(queryIntentSchema) }}
       />
     </>
   );

@@ -125,8 +125,8 @@ export function KnowledgeBaseBrowser({ articles, initialQuery = "" }: KnowledgeB
   return (
     <div>
       <SupportPageHeader
-        title="Knowledge Base"
-        description="Search enterprise-safe troubleshooting runbooks for Microsoft 365, Adobe, Figma, Windows, macOS, browsers, networking, printing, and affiliate operations."
+        title="IT Troubleshooting Knowledge Base"
+        description="Search enterprise-safe troubleshooting runbooks for Microsoft 365, Intune, Entra ID, Adobe, Figma, Windows, macOS, networking, browsers, printing, and affiliate operations."
         breadcrumbs={[{ label: "Support Portal", href: "/support" }, { label: "Knowledge Base" }]}
         search={
           <TopSearchBar
