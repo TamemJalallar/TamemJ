@@ -81,20 +81,23 @@ const quickItems: PaletteItem[] = [
     keywords: ["guides", "pillar", "clusters", "seo", "content"]
   },
   {
-    id: "quick-ai-prompts",
-    label: "AI Prompts",
-    description: "Open the multi-model prompt builder",
-    href: "/ai-prompts/",
-    group: "Quick",
-    keywords: ["prompts", "chatgpt", "claude", "perplexity", "grok", "meta ai", "adobe genai"]
-  },
-  {
     id: "quick-ai-agents",
     label: "AI Agents",
     description: "Browse copy-ready professional AI agent system prompts",
     href: "/ai-agents/",
     group: "Quick",
-    keywords: ["ai agents", "system prompts", "roles", "prompt library"]
+    keywords: [
+      "ai agents",
+      "system prompts",
+      "roles",
+      "prompt library",
+      "chatgpt",
+      "claude",
+      "grok",
+      "perplexity",
+      "metaai",
+      "adobe genai"
+    ]
   },
   {
     id: "quick-revenue-roadmap",

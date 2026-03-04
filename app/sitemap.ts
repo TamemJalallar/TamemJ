@@ -22,7 +22,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: url("/apps/"), changeFrequency: "weekly", priority: 0.9, lastModified },
     { url: url("/downloads/"), changeFrequency: "daily", priority: 0.9, lastModified },
     { url: url("/downloads/assets/"), changeFrequency: "weekly", priority: 0.88, lastModified },
-    { url: url("/ai-prompts/"), changeFrequency: "weekly", priority: 0.85, lastModified },
     { url: url("/ai-agents/"), changeFrequency: "weekly", priority: 0.85, lastModified },
     { url: url("/guides/"), changeFrequency: "weekly", priority: 0.9, lastModified },
     { url: url("/guides/revenue-scaling-roadmap/"), changeFrequency: "monthly", priority: 0.86, lastModified },

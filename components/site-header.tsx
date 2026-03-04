@@ -11,7 +11,6 @@ const primaryNavItems = [
   { href: "/corporate-tech-fixes", label: "Fixes" },
   { href: "/downloads", label: "Downloads" },
   { href: "/support/kb", label: "KB" },
-  { href: "/ai-prompts", label: "AI Prompts" },
   { href: "/ai-agents", label: "AI Agents" },
   { href: "/guides", label: "Guides" },
   { href: "/pc-build-guides", label: "PC Builds" },

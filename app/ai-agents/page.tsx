@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { AiAgentsBrowser } from "@/components/ai-prompts/ai-agents-browser";
+import { AiAgentsBrowser } from "@/components/ai-agents/ai-agents-browser";
 import { getAiAgentsRegistry } from "@/lib/aiAgents.registry";
 import { buildBreadcrumbJsonLd, buildCollectionPageJsonLd, buildOpenGraph, buildTwitter } from "@/lib/seo";
 
@@ -20,11 +20,17 @@ function uniqueKeywords(keywords: string[]): string[] {
 export const metadata: Metadata = {
   title: "AI Agents",
   description:
-    "Search, filter, and copy 300+ professional AI agent system prompts across technology, finance, legal, design, marketing, and operations.",
+    "Search, filter, and copy 300+ professional AI agent system prompts with platform-specific variants for ChatGPT, Claude, Grok/xAI, Perplexity, MetaAI, and Adobe GenAI.",
   keywords: uniqueKeywords([
     "ai agents",
     "system prompts",
     "ai agent prompts",
+    "chatgpt system prompts",
+    "claude system prompts",
+    "grok system prompts",
+    "perplexity prompts",
+    "metaai prompts",
+    "adobe genai prompts",
     "professional ai roles",
     "technology ai agent",
     "finance ai assistant",
@@ -38,12 +44,12 @@ export const metadata: Metadata = {
   },
   openGraph: buildOpenGraph(
     "AI Agents | Tamem J",
-    "Copy-ready system prompts for 300+ specialized AI agents across professional domains.",
+    "Copy-ready system prompts for 300+ specialized AI agents with platform-specific output for ChatGPT, Claude, Grok/xAI, Perplexity, MetaAI, and Adobe GenAI.",
     "/ai-agents/"
   ),
   twitter: buildTwitter(
     "AI Agents | Tamem J",
-    "Copy-ready system prompts for 300+ specialized AI agents across professional domains."
+    "Copy-ready system prompts for 300+ specialized AI agents with platform-specific output for ChatGPT, Claude, Grok/xAI, Perplexity, MetaAI, and Adobe GenAI."
   )
 };
 

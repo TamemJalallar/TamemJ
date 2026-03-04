@@ -12,6 +12,32 @@ export interface AiAgentPrompt {
   systemPrompt: string;
 }
 
+export const aiAgentPlatforms = [
+  "ChatGPT",
+  "Claude",
+  "Grok/xAI",
+  "Perplexity",
+  "MetaAI",
+  "Adobe GenAI"
+] as const;
+
+export type AiAgentPlatform = (typeof aiAgentPlatforms)[number];
+
+const platformPromptGuidance: Record<AiAgentPlatform, string> = {
+  ChatGPT:
+    "Use concise sectioned markdown, actionable checklists, and practical implementation detail with clear tradeoffs.",
+  Claude:
+    "Use structured reasoning with explicit assumptions, risk framing, and careful coverage of edge cases.",
+  "Grok/xAI":
+    "Be direct and pragmatic, challenge weak assumptions early, and prioritize fast, execution-ready recommendations.",
+  Perplexity:
+    "Prefer source-oriented reasoning, identify where verification is required, and call out confidence and uncertainty.",
+  MetaAI:
+    "Use highly readable language, compact steps, and user-friendly explanations while preserving technical accuracy.",
+  "Adobe GenAI":
+    "Optimize for creative and visual clarity, with structured directions suitable for design-oriented and content-heavy workflows."
+};
+
 export const aiAgents: AiAgentPrompt[] = [
   {
     "id": "agent-001",
@@ -5878,4 +5904,22 @@ export function getAiAgentsRegistry(): AiAgentPrompt[] {
 
 export function getAiAgentBySlug(slug: string): AiAgentPrompt | undefined {
   return aiAgents.find((agent) => agent.slug === slug);
+}
+
+export function buildAiAgentPromptForPlatform(
+  agent: AiAgentPrompt,
+  platform: AiAgentPlatform
+): string {
+  return [
+    `You are running on ${platform}.`,
+    `Platform guidance: ${platformPromptGuidance[platform]}`,
+    "",
+    "Agent System Prompt:",
+    agent.systemPrompt,
+    "",
+    "Platform-Specific Output Rules:",
+    "- Keep responses structured, actionable, and implementation-ready.",
+    "- Preserve domain-safe constraints and avoid unsupported claims.",
+    "- If critical context is missing, end with focused clarifying questions."
+  ].join("\n");
 }

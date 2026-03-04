@@ -2,7 +2,10 @@
 
 import { useDeferredValue, useEffect, useMemo, useState } from "react";
 import {
+  aiAgentPlatforms,
+  buildAiAgentPromptForPlatform,
   getAiAgentsRegistry,
+  type AiAgentPlatform,
   type AiAgentExpertiseLevel,
   type AiAgentPrompt
 } from "@/lib/aiAgents.registry";
@@ -64,6 +67,7 @@ async function copyText(value: string): Promise<boolean> {
 export function AiAgentsBrowser() {
   const [query, setQuery] = useState("");
   const deferredQuery = useDeferredValue(query);
+  const [selectedPlatform, setSelectedPlatform] = useState<AiAgentPlatform>("ChatGPT");
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [selectedExpertise, setSelectedExpertise] = useState<FilterExpertise>("All");
   const [visibleCount, setVisibleCount] = useState(initialVisibleCount);
@@ -126,14 +130,14 @@ export function AiAgentsBrowser() {
   const totalCategories = categoryOptions.length - 1;
 
   async function handleCopy(agent: AiAgentPrompt) {
-    const key = `${agent.id}-prompt`;
-    const copied = await copyText(agent.systemPrompt);
+    const key = `${agent.id}-${selectedPlatform}-prompt`;
+    const copied = await copyText(buildAiAgentPromptForPlatform(agent, selectedPlatform));
     setCopyKey(key);
     setCopyState(copied ? "success" : "error");
   }
 
   function handleCopyStatus(agent: AiAgentPrompt): string {
-    const key = `${agent.id}-prompt`;
+    const key = `${agent.id}-${selectedPlatform}-prompt`;
     if (copyKey !== key || copyState === "idle") return "Copy Prompt";
     return copyState === "success" ? "Copied" : "Copy Failed";
   }
@@ -152,7 +156,8 @@ export function AiAgentsBrowser() {
         <p className="mt-2 max-w-4xl text-sm leading-7 text-slate-600 dark:text-slate-300">
           Search and filter specialized AI agent prompts across finance, legal, technology, design, marketing,
           business, healthcare, data, and operations. Each profile includes role instructions, reasoning style,
-          output rules, constraints, and example tasks.
+          output rules, constraints, and example tasks. Select a platform to generate prompts tuned for Claude,
+          ChatGPT, Grok/xAI, Perplexity, MetaAI, or Adobe GenAI.
         </p>
 
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
@@ -205,6 +210,29 @@ export function AiAgentsBrowser() {
 
         <div className="mt-4">
           <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+            AI Platform
+          </p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {aiAgentPlatforms.map((platform) => (
+              <button
+                key={platform}
+                type="button"
+                onClick={() => setSelectedPlatform(platform)}
+                className={cx(
+                  "rounded-full border px-3 py-1.5 text-xs font-semibold transition",
+                  selectedPlatform === platform
+                    ? "border-slate-300 bg-slate-900 text-white dark:border-slate-200 dark:bg-slate-100 dark:text-slate-900"
+                    : "border-line/80 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
+                )}
+              >
+                {platform}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
             Expertise Level
           </p>
           <div className="mt-2 flex flex-wrap gap-2">
@@ -231,6 +259,7 @@ export function AiAgentsBrowser() {
         {visibleAgents.map((agent) => {
           const expanded = expandedAgentId === agent.id;
           const copyLabel = handleCopyStatus(agent);
+          const platformPrompt = buildAiAgentPromptForPlatform(agent, selectedPlatform);
 
           return (
             <article
@@ -271,15 +300,15 @@ export function AiAgentsBrowser() {
 
               <div className="mt-4 rounded-xl border border-line/80 bg-slate-50/80 p-3 dark:border-slate-700 dark:bg-slate-900/60">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
-                  System Prompt
+                  System Prompt · {selectedPlatform}
                 </p>
                 {expanded ? (
                   <pre className="mt-2 max-h-72 overflow-auto whitespace-pre-wrap rounded-lg border border-line/70 bg-slate-950 px-3 py-2 font-mono text-xs leading-6 text-slate-100 dark:border-slate-700">
-                    {agent.systemPrompt}
+                    {platformPrompt}
                   </pre>
                 ) : (
                   <p className="mt-2 text-xs leading-6 text-slate-700 dark:text-slate-200">
-                    {promptPreview(agent.systemPrompt)}
+                    {promptPreview(platformPrompt)}
                   </p>
                 )}
               </div>
