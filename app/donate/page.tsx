@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { CryptoDonationCard } from "@/components/crypto-donation-card";
 import { getCryptoDonationMethods } from "@/lib/crypto-donations";
 import { buildOpenGraph, buildTwitter } from "@/lib/seo";
+import { donateProviders } from "@/src/content/donate/providers";
 
 export const metadata: Metadata = {
   title: "Donate",
   description:
-    "Support TamemJ enterprise IT guides and tooling updates through optional crypto donations.",
+    "Support TamemJ enterprise IT guides and tooling updates through PayPal, Buy Me a Coffee, or optional crypto donations.",
   alternates: {
     canonical: "/donate/"
   },
@@ -30,7 +32,7 @@ export default function DonatePage() {
         <div className="surface-card-strong p-6 sm:p-8">
           <p className="eyebrow">Support This Project</p>
           <h1 className="mt-4 text-3xl font-semibold text-slate-900 dark:text-slate-100 sm:text-4xl">
-            Donate
+            Support the Site
           </h1>
           <p className="mt-3 max-w-3xl text-sm sm:text-base">
             Donations are optional and help fund ongoing maintenance for enterprise support
@@ -38,33 +40,46 @@ export default function DonatePage() {
           </p>
         </div>
 
-        <div className="mt-6 rounded-2xl border border-amber-200/80 bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 p-5 shadow-soft dark:border-amber-900/50 dark:from-amber-950/30 dark:via-orange-950/20 dark:to-rose-950/20 sm:p-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-700 dark:text-amber-200">
-            Quick Support Option
-          </p>
-          <h2 className="mt-2 text-xl font-semibold text-slate-900 dark:text-slate-100">
-            Buy Me a Coffee
+        <section className="mt-6 rounded-2xl border border-line/70 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-6">
+          <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
+            Donation Providers
           </h2>
-          <p className="mt-2 max-w-3xl text-sm text-slate-700 dark:text-slate-300">
-            If you want a quick way to support the project, you can contribute here.
+          <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+            Choose the provider you prefer. Each option opens in a new tab.
           </p>
 
-          <div className="mt-4">
-            <a
-              href="https://buymeacoffee.com/tamemj"
-              target="_blank"
-              rel="noopener noreferrer nofollow"
-              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-xl border border-amber-300 bg-gradient-to-r from-amber-400 via-orange-400 to-rose-400 px-5 py-3 text-sm font-semibold text-slate-950 shadow-[0_10px_24px_-12px_rgba(245,158,11,0.65)] transition hover:-translate-y-0.5 hover:shadow-[0_14px_30px_-12px_rgba(251,146,60,0.7)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-amber-700 dark:text-slate-900 dark:focus-visible:ring-offset-slate-950"
-            >
-              <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-white/0 via-white/35 to-white/0 transition duration-700 group-hover:translate-x-full" />
-              <span className="relative inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/90 text-base">
-                ☕
-              </span>
-              <span className="relative">Support on Buy Me a Coffee</span>
-              <span className="relative text-base leading-none">→</span>
-            </a>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {donateProviders.map((provider) => (
+              <a
+                key={provider.id}
+                href={provider.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Donate using ${provider.name}`}
+                className="group flex h-full flex-col items-center rounded-2xl border border-line/80 bg-slate-50/80 p-4 text-center shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300 hover:bg-white hover:shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-slate-700 dark:bg-slate-900/70 dark:hover:border-slate-600 dark:hover:bg-slate-900 dark:focus-visible:ring-cyan-300 dark:focus-visible:ring-offset-slate-950"
+              >
+                <div className="flex h-20 w-20 items-center justify-center rounded-xl border border-line/70 bg-white p-2 dark:border-slate-700 dark:bg-slate-950">
+                  <Image
+                    src={provider.imgSrc}
+                    alt={provider.imgAlt}
+                    width={80}
+                    height={80}
+                    className="h-16 w-16 object-contain"
+                  />
+                </div>
+                <h3 className="mt-3 text-base font-semibold text-slate-900 dark:text-slate-100">
+                  {provider.name}
+                </h3>
+                {provider.note ? (
+                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{provider.note}</p>
+                ) : null}
+                <p className="mt-3 text-xs font-semibold text-cyan-700 transition group-hover:text-cyan-800 dark:text-cyan-300 dark:group-hover:text-cyan-200">
+                  Donate →
+                </p>
+              </a>
+            ))}
           </div>
-        </div>
+        </section>
 
         <div className="mt-6">
           <CryptoDonationCard methods={methods} />

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import type { CryptoDonationMethod } from "@/lib/crypto-donations";
 
@@ -119,10 +120,21 @@ export function CryptoDonationCard({ methods }: CryptoDonationCardProps) {
               key={method.key}
               className="rounded-xl border border-line bg-white p-3 dark:border-slate-700 dark:bg-slate-950"
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
-                {method.network}
-              </p>
-              <p className="mt-1 text-base font-semibold text-slate-900 dark:text-slate-100">{method.symbol}</p>
+              <div className="flex items-center gap-2.5">
+                <Image
+                  src={method.iconSrc}
+                  alt={method.iconAlt}
+                  width={32}
+                  height={32}
+                  className="h-8 w-8 rounded-full border border-line/70 bg-white object-contain p-0.5 dark:border-slate-700 dark:bg-slate-900"
+                />
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                    {method.network}
+                  </p>
+                  <p className="mt-0.5 text-base font-semibold text-slate-900 dark:text-slate-100">{method.symbol}</p>
+                </div>
+              </div>
               <p className="mt-1 font-mono text-xs text-slate-600 dark:text-slate-300" title={method.address}>
                 {shortenAddress(method.address)}
               </p>
@@ -184,13 +196,22 @@ export function CryptoDonationCard({ methods }: CryptoDonationCardProps) {
             className="relative z-10 w-full max-w-lg rounded-2xl border border-line bg-white p-4 shadow-card dark:border-slate-700 dark:bg-slate-950 sm:p-5"
           >
             <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
-                  {activeQrMethod.network}
-                </p>
-                <h3 className="mt-1 text-xl font-semibold text-slate-900 dark:text-slate-100">
-                  {activeQrMethod.symbol} Donation QR
-                </h3>
+              <div className="flex items-center gap-3">
+                <Image
+                  src={activeQrMethod.iconSrc}
+                  alt={activeQrMethod.iconAlt}
+                  width={40}
+                  height={40}
+                  className="h-10 w-10 rounded-full border border-line/70 bg-white object-contain p-1 dark:border-slate-700 dark:bg-slate-900"
+                />
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                    {activeQrMethod.network}
+                  </p>
+                  <h3 className="mt-1 text-xl font-semibold text-slate-900 dark:text-slate-100">
+                    {activeQrMethod.symbol} Donation QR
+                  </h3>
+                </div>
               </div>
               <button
                 type="button"

@@ -1,0 +1,12 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="PayPal logo">
+  <defs>
+    <linearGradient id="paypal-bg" x1="32" y1="24" x2="224" y2="232" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1F7CFF"/>
+      <stop offset="1" stop-color="#003087"/>
+    </linearGradient>
+  </defs>
+  <rect x="16" y="16" width="224" height="224" rx="40" fill="url(#paypal-bg)"/>
+  <path d="M95.5 70H147.7C171 70 186.3 84.4 183.1 105.2C180.2 123.8 164.8 136.6 145.5 136.6H122.4L116.6 174H93.7L95.5 162.1L109.6 70H95.5Z" fill="#B7D9FF"/>
+  <path d="M84.2 82H136.9C159.4 82 173.5 95.9 170.6 115.2C167.9 132.9 153.7 145 135.8 145H112.7L107.7 177H85.1L99.8 82H84.2Z" fill="white"/>
+  <path d="M118.5 92H134.4C146.1 92 152.7 98.8 151.2 108.7C149.6 119.3 141.4 126 130.6 126H115.9L118.5 92Z" fill="#003087"/>
+</svg>
