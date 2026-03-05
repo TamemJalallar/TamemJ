@@ -49,6 +49,7 @@ npm run build:static
 - `npm run build` - production build
 - `npm run build:static` - static export build for GitHub Pages/Netlify
 - `npm run sync:downloads` - sync download release metadata from GitHub releases
+- `npm run scan:secrets` - run local gitleaks scan before push
 - `npm start` - start production server (non-static hosts)
 
 ## Project layout
@@ -295,3 +296,19 @@ Files:
 - Separate `User Safe` and `Admin Required` actions clearly.
 - Add escalation criteria for identity/security/conditional-access issues.
 - Prefer reversible, low-risk troubleshooting steps before destructive remediations.
+
+## Local secret scanning (no CI scan)
+
+Secret scanning is intentionally local-only (GitHub workflow removed for faster pushes).
+
+Install gitleaks once:
+
+```bash
+brew install gitleaks
+```
+
+Run before push:
+
+```bash
+npm run scan:secrets
+```
