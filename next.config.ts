@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
+import createBundleAnalyzer from "@next/bundle-analyzer";
 
 const wantsStaticExport = process.env.npm_lifecycle_event === "build:static";
+const withBundleAnalyzer = createBundleAnalyzer({
+  enabled: process.env.ANALYZE === "true"
+});
 
 const nextConfig: NextConfig = {
   ...(wantsStaticExport ? { output: "export" as const } : {}),
@@ -10,4 +14,4 @@ const nextConfig: NextConfig = {
   }
 };
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);
