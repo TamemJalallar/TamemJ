@@ -1,8 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { GenAIPromptsBrowser } from "@/components/genai-prompts/genai-prompts-browser";
-import { getGenAIPrompts } from "@/lib/genai-prompts";
-import { buildBreadcrumbJsonLd, buildCollectionPageJsonLd, buildOpenGraph, buildTwitter } from "@/lib/seo";
+import {
+  getGenAICategories,
+  getGenAICategorySlug,
+  getGenAIPrompts,
+  getGenAIPromptsByCategory
+} from "@/lib/genai-prompts";
+import {
+  buildBreadcrumbJsonLd,
+  buildCollectionPageJsonLd,
+  buildOpenGraph,
+  buildTwitter,
+  toAbsoluteUrl
+} from "@/lib/seo";
 
 function uniqueKeywords(input: string[]): string[] {
   const seen = new Set<string>();
@@ -19,53 +30,85 @@ function uniqueKeywords(input: string[]): string[] {
 }
 
 export const metadata: Metadata = {
-  title: "Meta AI & Adobe GenAI Prompts Library",
+  title: "GenAI Prompt Library — 120+ Copy-Ready AI Prompts",
   description:
-    "Browse 120 copy/paste-ready prompts for Meta AI chat and Adobe GenAI tools, including Text-to-Image, Generative Fill, and Generative Expand workflows.",
+    "Browse 120+ free, copy-ready AI prompt templates for Meta AI, Adobe Firefly, ChatGPT, and generative AI tools. Covers Text-to-Image, Generative Fill, marketing, copywriting, social media, and more.",
   keywords: uniqueKeywords([
+    "genai prompt library",
+    "ai prompt templates",
+    "copy ready ai prompts",
+    "free ai prompts",
+    "ai prompts 2025",
+    "chatgpt prompt templates",
     "meta ai prompts",
+    "adobe firefly prompts",
     "adobe genai prompts",
-    "firefly prompts",
+    "generative ai prompts",
+    "text to image prompts",
+    "generative fill prompts",
     "photoshop generative fill prompts",
     "generative expand prompts",
-    "text-to-image prompt library",
-    "ai prompt templates",
-    "marketing prompts",
-    "social media prompts",
-    "copywriting prompts",
-    "photo editing prompts"
+    "ai image generation prompts",
+    "adobe ai prompts",
+    "marketing ai prompts",
+    "social media ai prompts",
+    "copywriting ai prompts",
+    "content creation ai prompts",
+    "creative ai prompts",
+    "photography ai prompts",
+    "design ai prompts",
+    "ecommerce ai prompts",
+    "prompt engineering templates",
+    "best ai prompts",
+    "ai creative prompts",
+    "ai writing prompts",
+    "midjourney style prompts",
+    "dalle prompt templates",
+    "stable diffusion prompts",
+    "ai photo editing prompts",
+    "vector art ai prompts",
+    "ai video prompts",
+    "professional ai prompts"
   ]),
   alternates: {
     canonical: "/genai-prompts/"
   },
   openGraph: buildOpenGraph(
-    "Meta AI & Adobe GenAI Prompts Library",
-    "120 practical prompts for Meta AI and Adobe GenAI workflows across chat, photo editing, and creative production.",
+    "GenAI Prompt Library — 120+ Copy-Ready AI Prompts | TamemJ",
+    "Free, copy-ready prompt templates for Meta AI, Adobe Firefly, and generative AI tools. Covers Text-to-Image, Generative Fill, marketing, copywriting, and creative production.",
     "/genai-prompts/"
   ),
   twitter: buildTwitter(
-    "Meta AI & Adobe GenAI Prompts Library",
-    "120 practical prompts for Meta AI and Adobe GenAI workflows across chat, photo editing, and creative production."
+    "GenAI Prompt Library — 120+ Copy-Ready AI Prompts | TamemJ",
+    "Free prompt templates for Meta AI, Adobe Firefly, and generative AI tools."
   )
 };
 
 export default function GenAIPromptsPage() {
   const prompts = getGenAIPrompts();
+  const categories = getGenAICategories();
+
+  const categoryCards = categories.map((category) => ({
+    name: category,
+    slug: getGenAICategorySlug(category),
+    count: getGenAIPromptsByCategory(category).length
+  }));
+
   const groupedByPlatformAndCategory = ["MetaAI", "AdobeGenAI", "Both"].map((platform) => ({
     platform,
-    categories: [...new Set(prompts.filter((prompt) => prompt.platform === platform).map((prompt) => prompt.category))]
+    categories: [...new Set(prompts.filter((p) => p.platform === platform).map((p) => p.category))]
       .sort((a, b) => a.localeCompare(b))
       .map((category) => ({
         category,
         prompts: prompts
-          .filter((prompt) => prompt.platform === platform && prompt.category === category)
+          .filter((p) => p.platform === platform && p.category === category)
           .sort((a, b) => a.title.localeCompare(b.title))
       }))
   }));
 
   const collectionSchema = buildCollectionPageJsonLd(
-    "Meta AI and Adobe GenAI Prompts",
-    `Prompt library with ${prompts.length} practical prompts for Meta AI and Adobe GenAI tools.`,
+    "GenAI Prompt Library",
+    `${prompts.length} copy-ready AI prompt templates for Meta AI, Adobe Firefly, and generative AI workflows.`,
     "/genai-prompts/",
     prompts.map((prompt) => ({
       name: prompt.title,
@@ -73,10 +116,46 @@ export default function GenAIPromptsPage() {
     }))
   );
 
+  const categoryListSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "GenAI Prompt Categories",
+    numberOfItems: categoryCards.length,
+    itemListElement: categoryCards.map((entry, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: `${entry.name} AI Prompts`,
+      url: toAbsoluteUrl(`/genai-prompts/category/${entry.slug}/`)
+    }))
+  };
+
   const breadcrumbSchema = buildBreadcrumbJsonLd([
     { name: "Home", path: "/" },
     { name: "GenAI Prompts", path: "/genai-prompts/" }
   ]);
+
+  const softwareAppSchema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "GenAI Prompt Library — TamemJ",
+    applicationCategory: "ProductivityApplication",
+    operatingSystem: "Web",
+    description: `${prompts.length}+ free, copy-ready AI prompt templates for Meta AI, Adobe Firefly, and generative AI tools across ${categories.length} categories.`,
+    url: toAbsoluteUrl("/genai-prompts/"),
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD"
+    },
+    featureList: [
+      `${prompts.length}+ copy-ready prompt templates`,
+      `${categories.length} prompt categories`,
+      "Meta AI and Adobe GenAI coverage",
+      "Text-to-Image, Generative Fill, Generative Expand",
+      "Variable fill form on each prompt",
+      "One-click copy"
+    ]
+  };
 
   const faqSchema = {
     "@context": "https://schema.org",
@@ -84,26 +163,34 @@ export default function GenAIPromptsPage() {
     mainEntity: [
       {
         "@type": "Question",
-        name: "What platforms are covered in this prompt library?",
+        name: "What AI platforms are covered in this prompt library?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "The library covers Meta AI chat prompts and Adobe GenAI workflows including Text-to-Image, Generative Fill, Generative Expand, Vector, and Video-oriented prompts."
+          text: "The library covers Meta AI chat prompts and Adobe GenAI tools including Text-to-Image, Generative Fill, Generative Expand, Vector, and Video-oriented workflows in Adobe Firefly and Photoshop."
         }
       },
       {
         "@type": "Question",
-        name: "Can I fill variables before copying prompts?",
+        name: "Are these prompts free to use?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Each prompt detail page includes a variable form and a Copy with variables button for quick copy/paste use."
+          text: "Yes — all prompts are free to copy and use. Each detail page has a one-click copy button and a variable form to customize the prompt before copying."
         }
       },
       {
         "@type": "Question",
-        name: "Are prompts separated by complexity?",
+        name: "Can I filter prompts by category or complexity?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. You can filter all prompts by Simple or Advanced complexity depending on your use case."
+          text: "Yes. Use the filter bar to narrow by platform, tool, category, and complexity (Simple or Advanced). You can also browse category landing pages for focused collections."
+        }
+      },
+      {
+        "@type": "Question",
+        name: "What categories of AI prompts are available?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `The library includes prompts across ${categories.length} categories including marketing, copywriting, social media, photo editing, design, ecommerce, photography, and more.`
         }
       }
     ]
@@ -112,15 +199,76 @@ export default function GenAIPromptsPage() {
   return (
     <>
       <section className="section-shell pt-10 sm:pt-14">
-        <div className="page-shell">
+        <div className="page-shell space-y-6">
+          {/* Static crawlable hero — above client browser for SEO */}
+          <div className="surface-card-strong p-6 sm:p-8">
+            <span className="eyebrow">GenAI Prompt Library</span>
+            <h1 className="mt-3 text-3xl font-semibold text-slate-900 dark:text-slate-100 sm:text-4xl lg:text-5xl">
+              {prompts.length}+ Free Copy-Ready AI Prompt Templates
+            </h1>
+            <p className="mt-3 max-w-3xl text-base text-slate-600 dark:text-slate-300 sm:text-lg">
+              Practical prompt templates for Meta AI, Adobe Firefly, and generative AI workflows.
+              Covers Text-to-Image, Generative Fill, marketing, copywriting, social media, and more.
+              Fill variables and copy — ready in seconds.
+            </p>
+
+            <div className="mt-5 flex flex-wrap gap-2">
+              <span className="rounded-full border border-line/80 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
+                {prompts.length}+ prompts
+              </span>
+              <span className="rounded-full border border-line/80 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
+                {categories.length} categories
+              </span>
+              <span className="rounded-full border border-line/80 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
+                Meta AI + Adobe GenAI
+              </span>
+              <span className="rounded-full border border-line/80 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
+                Free to copy
+              </span>
+            </div>
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              {categoryCards.slice(0, 8).map((entry) => (
+                <Link
+                  key={entry.slug}
+                  href={`/genai-prompts/category/${entry.slug}/`}
+                  className="rounded-full border border-line/70 bg-white px-3 py-1 text-xs font-medium text-slate-600 transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-500"
+                >
+                  {entry.name} ({entry.count})
+                </Link>
+              ))}
+            </div>
+          </div>
+
           <GenAIPromptsBrowser prompts={prompts} />
 
-          <section className="mt-6 surface-card p-5 sm:p-6">
-            <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
-              Full Prompt Index
-            </h2>
+          {/* Crawlable category cards */}
+          <section className="surface-card p-5 sm:p-6">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+              <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Browse by Category</h2>
+              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                {categories.length} categories
+              </p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {categoryCards.map((entry) => (
+                <Link
+                  key={entry.slug}
+                  href={`/genai-prompts/category/${entry.slug}/`}
+                  className="rounded-xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-800 dark:bg-slate-950/70"
+                >
+                  <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">{entry.name}</p>
+                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{entry.count} prompts</p>
+                </Link>
+              ))}
+            </div>
+          </section>
+
+          {/* Full crawlable prompt index */}
+          <section className="surface-card p-5 sm:p-6">
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Full Prompt Index</h2>
             <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-              Crawlable index of all prompt detail pages grouped by platform and category.
+              All prompt detail pages grouped by platform and category.
             </p>
             <div className="mt-4 space-y-4">
               {groupedByPlatformAndCategory.map((group) => (
@@ -130,7 +278,7 @@ export default function GenAIPromptsPage() {
                 >
                   <summary className="cursor-pointer list-none text-sm font-semibold text-slate-900 dark:text-slate-100">
                     {group.platform} (
-                    {group.categories.reduce((total, categoryGroup) => total + categoryGroup.prompts.length, 0)})
+                    {group.categories.reduce((total, cg) => total + cg.prompts.length, 0)})
                   </summary>
                   <div className="mt-3 space-y-3">
                     {group.categories.map((categoryGroup) => (
@@ -163,7 +311,18 @@ export default function GenAIPromptsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
       />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(categoryListSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareAppSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}

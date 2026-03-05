@@ -59,8 +59,8 @@ export async function generateMetadata({ params }: AiAgentDetailPageProps): Prom
     description,
     keywords,
     alternates: { canonical: path },
-    openGraph: buildOpenGraph(`${title} | Tamem J`, description, path, "article"),
-    twitter: buildTwitter(`${title} | Tamem J`, description)
+    openGraph: buildOpenGraph(`${title} | TamemJ`, description, path, "article"),
+    twitter: buildTwitter(`${title} | TamemJ`, description)
   };
 }
 
@@ -77,8 +77,38 @@ export default async function AiAgentDetailPage({ params }: AiAgentDetailPagePro
   const breadcrumbSchema = buildBreadcrumbJsonLd([
     { name: "Home", path: "/" },
     { name: "AI Agents", path: "/ai-agents/" },
+    { name: agent.category, path: `/ai-agents/category/${categorySlug}/` },
     { name: agent.title, path: `/ai-agents/${agent.slug}/` }
   ]);
+
+  const howToSchema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: `How to use the ${agent.title} AI Agent`,
+    description: `Step-by-step guide to copying and using the ${agent.title} system prompt in ChatGPT, Claude, or any AI platform.`,
+    step: [
+      {
+        "@type": "HowToStep",
+        name: "Open the agent detail page",
+        text: `Go to the ${agent.title} AI agent page and review the system prompt and responsibilities.`
+      },
+      {
+        "@type": "HowToStep",
+        name: "Select your platform",
+        text: `Choose your preferred AI platform — ChatGPT, Claude, Grok/xAI, Perplexity, or Google Gemini — to see the platform-tuned variant.`
+      },
+      {
+        "@type": "HowToStep",
+        name: "Copy the system prompt",
+        text: "Click the Copy button to copy the full system prompt to your clipboard."
+      },
+      {
+        "@type": "HowToStep",
+        name: "Paste as system/custom instructions",
+        text: `Open your chosen AI platform, navigate to System Prompt or Custom Instructions, and paste the copied prompt to activate the ${agent.title} agent persona.`
+      }
+    ]
+  };
   const isoDate = new Date().toISOString();
 
   const webPageSchema = {
@@ -226,6 +256,10 @@ export default async function AiAgentDetailPage({ params }: AiAgentDetailPagePro
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(relatedListSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
       />
       <script
         type="application/ld+json"

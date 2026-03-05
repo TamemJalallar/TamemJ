@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import type { KBArticle } from "@/types/support";
 import { SupportPageHeader } from "@/components/support-portal/page-header";
 import { TopSearchBar } from "@/components/support-portal/top-search-bar";
@@ -186,17 +185,9 @@ export function KnowledgeBaseBrowser({ articles, initialQuery = "" }: KnowledgeB
       />
 
       {filtered.length > 0 ? (
-        <motion.div layout className="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
-          <AnimatePresence mode="popLayout">
+        <div className="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
             {filtered.map((article, index) => (
-              <motion.div
-                key={article.slug}
-                layout
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.18 }}
-              >
+              <div key={article.slug}>
                 <Link
                   href={`/support/kb/${article.slug}`}
                   onClick={() =>
@@ -225,10 +216,9 @@ export function KnowledgeBaseBrowser({ articles, initialQuery = "" }: KnowledgeB
                     <EnvironmentBadge environment={article.environment} />
                   </div>
                 </Link>
-              </motion.div>
+              </div>
             ))}
-          </AnimatePresence>
-        </motion.div>
+        </div>
       ) : (
         <div className="rounded-2xl border border-dashed border-line/80 bg-white p-6 text-sm shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-8">
           <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">No matching KB articles</h2>

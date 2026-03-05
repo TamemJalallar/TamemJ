@@ -2,6 +2,23 @@ import { genaiPrompts, type GenAIPrompt } from "@/src/content/genai/genai-prompt
 
 export type GenAISort = "newest" | "a-z";
 
+// ---------------------------------------------------------------------------
+// Category slug helpers (mirrors the AI Agents pattern)
+// ---------------------------------------------------------------------------
+function toGenAICategorySlug(category: string): string {
+  return category
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .replace(/-{2,}/g, "-");
+}
+
+const genAICategories = [...new Set(genaiPrompts.map((p) => p.category))].sort((a, b) =>
+  a.localeCompare(b)
+);
+const genAICategorySlugMap = new Map(genAICategories.map((cat) => [toGenAICategorySlug(cat), cat]));
+
 export interface GenAIFilterState {
   platform: "All" | GenAIPrompt["platform"];
   tool: "All" | GenAIPrompt["tool"];
@@ -30,7 +47,26 @@ export function getGenAIPromptBySlug(slug: string): GenAIPrompt | undefined {
 }
 
 export function getGenAICategories(): string[] {
-  return [...new Set(genaiPrompts.map((prompt) => prompt.category))].sort((a, b) => a.localeCompare(b));
+  return [...genAICategories];
+}
+
+export function getGenAICategorySlug(category: string): string {
+  return toGenAICategorySlug(category);
+}
+
+export function getGenAICategoryBySlug(slug: string): string | undefined {
+  return genAICategorySlugMap.get(slug);
+}
+
+export function getGenAIPromptsByCategory(category: string): GenAIPrompt[] {
+  return genaiPrompts
+    .filter((prompt) => prompt.category === category)
+    .map((prompt) => ({
+      ...prompt,
+      tags: [...prompt.tags],
+      variables: prompt.variables ? prompt.variables.map((v) => ({ ...v })) : undefined,
+      bestPractices: prompt.bestPractices ? [...prompt.bestPractices] : undefined
+    }));
 }
 
 export function getGenAITools(): GenAIPrompt["tool"][] {

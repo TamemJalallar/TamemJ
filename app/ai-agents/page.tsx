@@ -25,13 +25,15 @@ function uniqueKeywords(keywords: string[]): string[] {
 }
 
 export const metadata: Metadata = {
-  title: "AI Agents Library (300+ System Prompts)",
+  title: "AI Agents Library — 300+ Copy-Ready System Prompts",
   description:
-    "Discover 300+ copy-ready AI agent system prompts with platform-specific variants for ChatGPT, Claude, Grok/xAI, Perplexity, and Google Gemini.",
+    "Browse 300+ professional AI agent system prompts across 35 categories. Platform-tuned for ChatGPT, Claude, Grok/xAI, Perplexity, and Google Gemini. Free to copy.",
   keywords: uniqueKeywords([
-    "ai agents",
     "ai agents library",
-    "best ai agent prompts",
+    "ai agent prompts",
+    "ai agent system prompts",
+    "best ai agents 2025",
+    "copy ready ai prompts",
     "ai agent examples",
     "professional ai agents",
     "ai role prompts",
@@ -41,20 +43,28 @@ export const metadata: Metadata = {
     "perplexity agents",
     "google gemini prompts",
     "grok xai prompts",
-    "system prompts",
-    "ai agent prompts",
     "chatgpt system prompts",
     "claude system prompts",
     "grok system prompts",
     "perplexity prompts",
-    "google gemini prompts",
-    "professional ai roles",
+    "ai agent prompt library",
+    "free ai agent prompts",
+    "ai agent templates",
     "technology ai agent",
     "finance ai assistant",
     "legal ai prompt",
     "marketing ai strategist",
-    "prompt library",
-    "copy ready ai prompts"
+    "hr ai agent",
+    "sales ai agent prompts",
+    "cybersecurity ai agent",
+    "data analysis ai agent",
+    "writing ai agent prompts",
+    "customer service ai agent",
+    "project management ai agent",
+    "ai persona prompts",
+    "ai assistant prompts",
+    "system prompt generator",
+    "ai prompt templates free"
   ]),
   alternates: {
     canonical: "/ai-agents/"
@@ -123,6 +133,28 @@ export default function AiAgentsPage() {
     inLanguage: "en-US"
   };
 
+  const softwareAppSchema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "AI Agents Prompt Library — TamemJ",
+    applicationCategory: "ProductivityApplication",
+    operatingSystem: "Web",
+    description: `Browser-based AI agent prompt library with ${agents.length}+ copy-ready system prompts across ${categories.length} categories for ChatGPT, Claude, Grok/xAI, Perplexity, and Google Gemini.`,
+    url: toAbsoluteUrl("/ai-agents/"),
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD"
+    },
+    featureList: [
+      "300+ professional AI agent system prompts",
+      "35 specialist categories",
+      "5 AI platform variants per agent",
+      "One-click copy",
+      "Filter by category, expertise, and platform"
+    ]
+  };
+
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -157,10 +189,49 @@ export default function AiAgentsPage() {
   return (
     <>
       <section className="section-shell pt-10 sm:pt-14">
-        <div className="page-shell">
+        <div className="page-shell space-y-6">
+          {/* Static crawlable hero — above client browser for SEO */}
+          <div className="surface-card-strong p-6 sm:p-8">
+            <span className="eyebrow">AI Agents Prompt Library</span>
+            <h1 className="mt-3 text-3xl font-semibold text-slate-900 dark:text-slate-100 sm:text-4xl lg:text-5xl">
+              300+ Professional AI Agent System Prompts
+            </h1>
+            <p className="mt-3 max-w-3xl text-base text-slate-600 dark:text-slate-300 sm:text-lg">
+              Browse copy-ready AI agent prompts across {categories.length} specialist categories.
+              Each prompt ships with platform-tuned variants for ChatGPT, Claude, Grok/xAI, Perplexity, and Google Gemini.
+            </p>
+
+            <div className="mt-5 flex flex-wrap gap-2">
+              <span className="rounded-full border border-line/80 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
+                {agents.length}+ system prompts
+              </span>
+              <span className="rounded-full border border-line/80 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
+                {categories.length} categories
+              </span>
+              <span className="rounded-full border border-line/80 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
+                5 AI platforms
+              </span>
+              <span className="rounded-full border border-line/80 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
+                Free to copy
+              </span>
+            </div>
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              {categoryCards.slice(0, 8).map((entry) => (
+                <Link
+                  key={entry.slug}
+                  href={`/ai-agents/category/${entry.slug}/`}
+                  className="rounded-full border border-line/70 bg-white px-3 py-1 text-xs font-medium text-slate-600 transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-500"
+                >
+                  {entry.category} ({entry.count})
+                </Link>
+              ))}
+            </div>
+          </div>
+
           <AiAgentsBrowser />
 
-          <section className="mt-6 surface-card p-5 sm:p-6">
+          <section className="surface-card p-5 sm:p-6">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
               <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Browse by Category</h2>
               <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
@@ -181,7 +252,7 @@ export default function AiAgentsPage() {
             </div>
           </section>
 
-          <section className="mt-6 surface-card p-5 sm:p-6">
+          <section className="surface-card p-5 sm:p-6">
             <div className="mb-4 flex items-center justify-between gap-3">
               <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Popular AI Agent Prompts</h2>
               <span className="text-xs text-slate-500 dark:text-slate-400">Search-optimized detail pages</span>
@@ -200,7 +271,7 @@ export default function AiAgentsPage() {
             </div>
           </section>
 
-          <section className="mt-6 surface-card p-5 sm:p-6">
+          <section className="surface-card p-5 sm:p-6">
             <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Full AI Agent Index</h2>
             <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
               Crawlable index of all AI agent detail pages grouped by category.
@@ -250,6 +321,10 @@ export default function AiAgentsPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareAppSchema) }}
       />
     </>
   );

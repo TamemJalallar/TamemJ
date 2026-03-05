@@ -4,7 +4,7 @@ import { appsSectionEnabled } from "@/lib/apps-visibility";
 import { getAiAgentCategories, getAiAgentCategorySlug, getAiAgentsRegistry } from "@/lib/aiAgents.registry";
 import { getCorporateFixes } from "@/lib/corporate-fixes.registry";
 import { getDownloadAssets } from "@/lib/download-assets.registry";
-import { getGenAIPrompts } from "@/lib/genai-prompts";
+import { getGenAICategories, getGenAICategorySlug, getGenAIPrompts } from "@/lib/genai-prompts";
 import { getPCBuildGuides } from "@/lib/pc-build-guides.registry";
 import { getPillarContentIdeas } from "@/lib/seo-content.registry";
 import { siteConfig } from "@/lib/site";
@@ -84,6 +84,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: parseDateInput(prompt.updatedAt) ?? generatedAt
   }));
 
+  const genAIPromptCategoryEntries: MetadataRoute.Sitemap = getGenAICategories().map((category) => ({
+    url: url(`/genai-prompts/category/${getGenAICategorySlug(category)}/`),
+    changeFrequency: "weekly",
+    priority: 0.85,
+    lastModified: generatedAt
+  }));
+
   const corporateFixEntries: MetadataRoute.Sitemap = getCorporateFixes().map((fix) => ({
     url: url(`/corporate-tech-fixes/${fix.slug}/`),
     changeFrequency: "weekly",
@@ -132,6 +139,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...aiAgentEntries,
     ...aiAgentCategoryEntries,
     ...genAIPromptEntries,
+    ...genAIPromptCategoryEntries,
     ...downloadAssetEntries,
     ...guideEntries,
     ...corporateFixEntries,

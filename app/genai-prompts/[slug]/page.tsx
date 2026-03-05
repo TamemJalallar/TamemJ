@@ -3,7 +3,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { GenAIPromptDetail } from "@/components/genai-prompts/genai-prompt-detail";
 import { RelatedGenAIPrompts } from "@/components/genai-prompts/related-genai-prompts";
-import { getGenAIPromptBySlug, getGenAIPrompts, getRelatedGenAIPrompts } from "@/lib/genai-prompts";
+import {
+  getGenAICategorySlug,
+  getGenAIPromptBySlug,
+  getGenAIPrompts,
+  getRelatedGenAIPrompts
+} from "@/lib/genai-prompts";
 import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 
 interface GenAIPromptPageProps {
@@ -24,8 +29,8 @@ export async function generateMetadata({ params }: GenAIPromptPageProps): Promis
     return { title: "Prompt Not Found" };
   }
 
-  const title = `${prompt.title} Prompt`;
-  const description = `${prompt.summary} Platform: ${prompt.platform}. Tool: ${prompt.tool}. Complexity: ${prompt.complexity}.`;
+  const title = `${prompt.title} — Copy-Ready ${prompt.platform} Prompt`;
+  const description = `Free copy-ready ${prompt.platform} prompt for ${prompt.tool}. ${prompt.summary} Complexity: ${prompt.complexity}. Category: ${prompt.category}.`;
   const path = `/genai-prompts/${prompt.slug}/`;
 
   return {
@@ -33,16 +38,22 @@ export async function generateMetadata({ params }: GenAIPromptPageProps): Promis
     description,
     keywords: [
       prompt.title,
-      `${prompt.platform} prompt`,
-      `${prompt.tool} prompt`,
-      `${prompt.category} prompt`,
+      `${prompt.title.toLowerCase()} prompt`,
+      `${prompt.platform.toLowerCase()} prompt`,
+      `${prompt.platform.toLowerCase()} ${prompt.category.toLowerCase()} prompt`,
+      `${prompt.tool.toLowerCase()} prompt`,
+      `${prompt.category.toLowerCase()} ai prompt`,
+      `${prompt.category.toLowerCase()} prompt template`,
+      "copy ready ai prompt",
+      "free ai prompt",
+      "genai prompt template",
       ...prompt.tags
     ],
     alternates: {
       canonical: path
     },
-    openGraph: buildOpenGraph(`${title} | Tamem J`, description, path, "article"),
-    twitter: buildTwitter(`${title} | Tamem J`, description)
+    openGraph: buildOpenGraph(`${title} | TamemJ`, description, path, "article"),
+    twitter: buildTwitter(`${title} | TamemJ`, description)
   };
 }
 
@@ -56,11 +67,43 @@ export default async function GenAIPromptPage({ params }: GenAIPromptPageProps) 
 
   const related = getRelatedGenAIPrompts(prompt.slug, 6);
 
+  const categorySlug = getGenAICategorySlug(prompt.category);
+
   const breadcrumbSchema = buildBreadcrumbJsonLd([
     { name: "Home", path: "/" },
     { name: "GenAI Prompts", path: "/genai-prompts/" },
+    { name: prompt.category, path: `/genai-prompts/category/${categorySlug}/` },
     { name: prompt.title, path: `/genai-prompts/${prompt.slug}/` }
   ]);
+
+  const howToSchema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: `How to use the ${prompt.title} prompt`,
+    description: `Step-by-step guide to copying and using the ${prompt.title} prompt in ${prompt.platform}.`,
+    step: [
+      {
+        "@type": "HowToStep",
+        name: "Open the prompt page",
+        text: `Navigate to the ${prompt.title} prompt detail page and review the prompt text.`
+      },
+      {
+        "@type": "HowToStep",
+        name: "Fill in the variables",
+        text: "Use the variable fill form to customize any placeholders (shown as {{variable_name}}) before copying."
+      },
+      {
+        "@type": "HowToStep",
+        name: "Copy the prompt",
+        text: "Click the Copy button to copy the full prompt to your clipboard."
+      },
+      {
+        "@type": "HowToStep",
+        name: `Paste into ${prompt.platform}`,
+        text: `Open ${prompt.platform}, start a new session or file, and paste the copied prompt to begin your ${prompt.tool} workflow.`
+      }
+    ]
+  };
 
   const articleSchema = {
     "@context": "https://schema.org",
@@ -108,6 +151,10 @@ export default async function GenAIPromptPage({ params }: GenAIPromptPageProps) 
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
       />
       <script
         type="application/ld+json"

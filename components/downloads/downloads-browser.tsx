@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   autoUpdate,
   flip,
@@ -16,7 +16,6 @@ import {
   useInteractions,
   useRole
 } from "@floating-ui/react";
-import { AnimatePresence, motion } from "framer-motion";
 import type {
   DirectDownloadArtifact,
   DownloadChannelLink,
@@ -206,6 +205,9 @@ export function DownloadsBrowser({
   const [sortBy, setSortBy] = useState<SortOption>("By Type");
   const [freeOnly, setFreeOnly] = useState(true);
   const [popularOnly, setPopularOnly] = useState(false);
+  const INITIAL_VISIBLE = 18;
+  const LOAD_MORE_STEP = 18;
+  const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE);
 
   const availablePlatforms = useMemo(() => {
     const set = new Set<DownloadPlatform>();
@@ -281,6 +283,12 @@ export function DownloadsBrowser({
     });
   }, [categoryFilter, channelFilter, entries, freeOnly, platformFilter, popularOnly, query, sortBy]);
 
+  useEffect(() => {
+    setVisibleCount(INITIAL_VISIBLE);
+  }, [query, platformFilter, categoryFilter, channelFilter, sortBy, freeOnly, popularOnly]);
+
+  const visibleEntries = useMemo(() => filtered.slice(0, visibleCount), [filtered, visibleCount]);
+
   const spotlight = useMemo(() => {
     return [...filtered]
       .filter((entry) => isPopularEntry(entry) || hasStoreChannel(entry))
@@ -295,7 +303,7 @@ export function DownloadsBrowser({
 
   const groupedByType = useMemo(() => {
     const map = new Map<string, DownloadEntry[]>();
-    for (const entry of filtered) {
+    for (const entry of visibleEntries) {
       const current = map.get(entry.category) ?? [];
       current.push(entry);
       map.set(entry.category, current);
@@ -304,7 +312,7 @@ export function DownloadsBrowser({
     return Array.from(map.entries())
       .sort((a, b) => a[0].localeCompare(b[0]))
       .map(([category, items]) => ({ category, items }));
-  }, [filtered]);
+  }, [visibleEntries]);
 
   const stats = useMemo(() => {
     const directArtifactCount = filtered.reduce(
@@ -561,7 +569,7 @@ export function DownloadsBrowser({
           ) : null}
 
           <p className="ml-auto text-xs text-slate-500 dark:text-slate-400">
-            Showing {filtered.length} of {entries.length} apps
+            Showing {Math.min(visibleCount, filtered.length)} of {filtered.length} apps ({entries.length} total)
           </p>
         </div>
       </section>
@@ -594,7 +602,7 @@ export function DownloadsBrowser({
         </div>
 
         {filtered.length > 0 ? (
-          <motion.div layout className="space-y-4">
+          <div className="space-y-4">
             {groupedByType.map((group) => (
               <details
                 key={`group-${group.category}`}
@@ -612,25 +620,16 @@ export function DownloadsBrowser({
                     </span>
                   </div>
                 </summary>
-                <motion.div layout className="mt-3 grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
-                  <AnimatePresence mode="popLayout">
+                <div className="mt-3 grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
                     {group.items.map((entry) => (
-                      <motion.div
-                        key={entry.slug}
-                        layout
-                        initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -6 }}
-                        transition={{ duration: 0.18 }}
-                      >
+                      <div key={entry.slug}>
                         <DownloadCard entry={entry} onTrackDownload={handleTrackDownload} />
-                      </motion.div>
+                      </div>
                     ))}
-                  </AnimatePresence>
-                </motion.div>
+                </div>
               </details>
             ))}
-          </motion.div>
+          </div>
         ) : (
           <div className="surface-card border-dashed p-5 dark:border-slate-700 dark:bg-slate-950">
             <p className="text-sm text-slate-600 dark:text-slate-300">
@@ -638,6 +637,25 @@ export function DownloadsBrowser({
             </p>
           </div>
         )}
+
+        {filtered.length > visibleCount ? (
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+            <button
+              type="button"
+              onClick={() => setVisibleCount((c) => Math.min(c + LOAD_MORE_STEP, filtered.length))}
+              className="btn-secondary"
+            >
+              Load More ({Math.min(LOAD_MORE_STEP, filtered.length - visibleCount)})
+            </button>
+            <button
+              type="button"
+              onClick={() => setVisibleCount(filtered.length)}
+              className="rounded-xl border border-line bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-800"
+            >
+              Show All ({filtered.length})
+            </button>
+          </div>
+        ) : null}
       </section>
 
       <section className="surface-card p-4 sm:p-5 dark:border-slate-700 dark:bg-slate-950">
