@@ -19,6 +19,8 @@ const inter = Inter({
 
 const googleAnalyticsId =
   process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() || "G-ZJR5L6081Z";
+const googleTagManagerId =
+  process.env.NEXT_PUBLIC_GTM_CONTAINER_ID?.trim() || "GTM-W7XQ7KBV";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -115,6 +117,17 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
           name="impact-site-verification"
           {...({ value: "6f0bde00-6698-4a2c-9ce5-4830ca1e13b5" } as any)}
         />
+        {googleTagManagerId ? (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','${googleTagManagerId}');`
+            }}
+          />
+        ) : null}
         {googleAnalyticsId ? (
           <>
             <script
@@ -138,6 +151,16 @@ gtag('config', '${googleAnalyticsId}');`
         />
       </head>
       <body className="font-sans antialiased">
+        {googleTagManagerId ? (
+          <noscript>
+            <iframe
+              src={`https://www.googletagmanager.com/ns.html?id=${googleTagManagerId}`}
+              height="0"
+              width="0"
+              style={{ display: "none", visibility: "hidden" }}
+            />
+          </noscript>
+        ) : null}
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var t=localStorage.getItem("theme");if(t==="dark"||(t!=="light"&&matchMedia("(prefers-color-scheme:dark)").matches))document.documentElement.classList.add("dark")}catch(e){}})();`
