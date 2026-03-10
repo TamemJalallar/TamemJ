@@ -1322,6 +1322,35 @@ export function PCBuildInteractive({ className }: { className?: string }) {
   const ramOptions = pickByBudget(recommendations.ram, budgetBand);
   const gpuOptions = pickByBudget(recommendations.gpu, budgetBand);
   const psuOptions = pickByBudget(recommendations.psu, budgetBand);
+  const selectionTally = [
+    { label: "Case size", value: selectedCase },
+    { label: "Form factors", value: caseDetail.formFactors.map((factor) => factor.name).join(", ") },
+    { label: "Workload", value: selectedWorkload },
+    { label: "CPU platform", value: cpuPlatform },
+    { label: "Budget target", value: `$${budgetTarget} (${budgetBand})` },
+    { label: "Noise profile", value: noiseProfile },
+    { label: "Storage profile", value: storageProfile },
+    { label: "Dedicated GPU", value: gpuNeeded ? "Yes" : "No" },
+    { label: "Overkill mode", value: overkillMode ? "Enabled" : "Off" },
+    { label: "Cooling", value: recommendedCooling }
+  ];
+  const tallyCounts = [
+    { label: "CPU options", value: cpuOptions.length },
+    { label: "RAM options", value: ramOptions.length },
+    { label: "GPU options", value: gpuNeeded ? gpuOptions.length : 0 },
+    { label: "PSU options", value: psuOptions.length },
+    { label: "Storage picks", value: storageRecommendations.length },
+    { label: "Peripherals", value: recommendations.peripherals.length }
+  ].filter((item) => item.value > 0);
+  const overkillCounts = overkillMode && overkillRecommendations
+    ? [
+        { label: "Overkill CPU", value: overkillRecommendations.cpu.length },
+        { label: "Overkill RAM", value: overkillRecommendations.ram.length },
+        { label: "Overkill GPU", value: gpuNeeded ? overkillRecommendations.gpu.length : 0 },
+        { label: "Overkill PSU", value: overkillRecommendations.psu.length },
+        { label: "Overkill storage", value: overkillRecommendations.storage.length }
+      ].filter((item) => item.value > 0)
+    : [];
 
   return (
     <section className={classNames("surface-card-strong p-6 sm:p-8 lg:p-10", className)}>
@@ -1347,8 +1376,10 @@ export function PCBuildInteractive({ className }: { className?: string }) {
         </div>
       </div>
 
-      <div className="mt-6 grid gap-5 lg:grid-cols-[1fr_1fr]">
-        <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
+      <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+        <div className="min-w-0">
+          <div className="grid gap-5 lg:grid-cols-[1fr_1fr]">
+            <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
             Step 1
           </p>
@@ -1381,9 +1412,9 @@ export function PCBuildInteractive({ className }: { className?: string }) {
           >
             Amazon case options
           </a>
-        </div>
+            </div>
 
-        <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
+            <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
             Step 2
           </p>
@@ -1413,11 +1444,11 @@ export function PCBuildInteractive({ className }: { className?: string }) {
               </button>
             ))}
           </div>
-        </div>
-      </div>
+            </div>
+          </div>
 
-      <div className="mt-4 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
+          <div className="mt-4 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
+            <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
             Step 3
           </p>
@@ -1455,9 +1486,9 @@ export function PCBuildInteractive({ className }: { className?: string }) {
               ) : null}
             </div>
           </div>
-        </div>
+            </div>
 
-        <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
+            <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
             Step 4
           </p>
@@ -1480,11 +1511,11 @@ export function PCBuildInteractive({ className }: { className?: string }) {
               </button>
             ))}
           </div>
-        </div>
-      </div>
+            </div>
+          </div>
 
-      <div className="mt-4 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
+          <div className="mt-4 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
+            <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
             Step 5
           </p>
@@ -1509,9 +1540,9 @@ export function PCBuildInteractive({ className }: { className?: string }) {
               </button>
             ))}
           </div>
-        </div>
+            </div>
 
-        <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
+            <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
             Optional
           </p>
@@ -1556,9 +1587,9 @@ export function PCBuildInteractive({ className }: { className?: string }) {
               Standard
             </button>
           </div>
-        </div>
+            </div>
 
-        <div className="rounded-2xl border border-line/70 bg-slate-50/70 p-4 dark:border-slate-800 dark:bg-slate-900/50">
+            <div className="rounded-2xl border border-line/70 bg-slate-50/70 p-4 dark:border-slate-800 dark:bg-slate-900/50">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
@@ -1605,11 +1636,11 @@ export function PCBuildInteractive({ className }: { className?: string }) {
           >
             Reset selections
           </button>
-        </div>
-      </div>
+            </div>
+          </div>
 
-      <div className="mt-6 grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
+          <div className="mt-6 grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
+            <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
           <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
             Motherboard sizing + chipsets
           </h3>
@@ -1667,9 +1698,9 @@ export function PCBuildInteractive({ className }: { className?: string }) {
               ))}
             </div>
           </div>
-        </div>
+            </div>
 
-        <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
+            <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
           <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Cooling options</h3>
           <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
             Pick the cooling strategy that matches your noise, budget, and performance goals.
@@ -1726,11 +1757,11 @@ export function PCBuildInteractive({ className }: { className?: string }) {
               {fanRecommendation.title}
             </a>
           </div>
-        </div>
-      </div>
+            </div>
+          </div>
 
-      <div className="mt-6 grid gap-5 lg:grid-cols-2">
-        <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
+          <div className="mt-6 grid gap-5 lg:grid-cols-2">
+            <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
             Step 7
           </p>
@@ -1772,9 +1803,9 @@ export function PCBuildInteractive({ className }: { className?: string }) {
               </div>
             ))}
           </div>
-        </div>
+            </div>
 
-        <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
+            <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
           <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">CPU</h3>
           <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{workloadDetail.summary}</p>
           <div className="mt-4 space-y-3">
@@ -1796,11 +1827,11 @@ export function PCBuildInteractive({ className }: { className?: string }) {
               </div>
             ))}
           </div>
-        </div>
-      </div>
+            </div>
+          </div>
 
-      <div className="mt-6 grid gap-5 lg:grid-cols-2">
-        <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
+          <div className="mt-6 grid gap-5 lg:grid-cols-2">
+            <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
           <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">RAM</h3>
           <div className="mt-4 space-y-3">
             {ramOptions.map((item) => (
@@ -1821,9 +1852,9 @@ export function PCBuildInteractive({ className }: { className?: string }) {
               </div>
             ))}
           </div>
-        </div>
+            </div>
 
-        <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
+            <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
           <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">GPU</h3>
           {gpuNeeded && gpuOptions.length > 0 ? (
             <div className="mt-4 space-y-3">
@@ -1852,10 +1883,10 @@ export function PCBuildInteractive({ className }: { className?: string }) {
             </div>
           )}
         </div>
-      </div>
+          </div>
 
-      <div className="mt-6 grid gap-5 lg:grid-cols-2">
-        <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
+          <div className="mt-6 grid gap-5 lg:grid-cols-2">
+            <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
           <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Power Supply</h3>
           <div className="mt-4 space-y-3">
             {psuOptions.map((item) => (
@@ -1880,9 +1911,9 @@ export function PCBuildInteractive({ className }: { className?: string }) {
               Add 100-200W of headroom for GPU spikes, upgrades, and quieter fan curves.
             </p>
           </div>
-        </div>
+            </div>
 
-        <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
+            <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
           <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">GPU clearance check</h3>
           <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
             Check the GPU length in the card specs and your case GPU clearance (mm). If using a front
@@ -1942,12 +1973,12 @@ export function PCBuildInteractive({ className }: { className?: string }) {
               GPU support bracket
             </a>
           </div>
-        </div>
-      </div>
+            </div>
+          </div>
 
-      {overkillMode && overkillRecommendations ? (
-        <div className="mt-6 grid gap-5 lg:grid-cols-2">
-          <div className="rounded-2xl border border-rose-200/80 bg-rose-50/60 p-5 dark:border-rose-900/50 dark:bg-rose-950/30">
+          {overkillMode && overkillRecommendations ? (
+            <div className="mt-6 grid gap-5 lg:grid-cols-2">
+              <div className="rounded-2xl border border-rose-200/80 bg-rose-50/60 p-5 dark:border-rose-900/50 dark:bg-rose-950/30">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <h3 className="text-lg font-semibold text-rose-900 dark:text-rose-100">
                 Overkill upgrades (core parts)
@@ -1988,7 +2019,7 @@ export function PCBuildInteractive({ className }: { className?: string }) {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-rose-200/80 bg-rose-50/60 p-5 dark:border-rose-900/50 dark:bg-rose-950/30">
+              <div className="rounded-2xl border border-rose-200/80 bg-rose-50/60 p-5 dark:border-rose-900/50 dark:bg-rose-950/30">
             <h3 className="text-lg font-semibold text-rose-900 dark:text-rose-100">Overkill upgrades (system)</h3>
             <div className="mt-4 space-y-4">
               {[
@@ -2034,11 +2065,11 @@ export function PCBuildInteractive({ className }: { className?: string }) {
               </div>
             </div>
           </div>
-        </div>
-      ) : null}
+            </div>
+          ) : null}
 
-      <div className="mt-6 grid gap-5 lg:grid-cols-2">
-        <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
+          <div className="mt-6 grid gap-5 lg:grid-cols-2">
+            <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
           <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Build essentials</h3>
           <div className="mt-4 space-y-3">
             {recommendations.essentials.map((item) => (
@@ -2059,9 +2090,9 @@ export function PCBuildInteractive({ className }: { className?: string }) {
               </div>
             ))}
           </div>
-        </div>
+            </div>
 
-        <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
+            <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
           <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Peripherals</h3>
           <div className="mt-4 grid gap-3 md:grid-cols-2">
             {recommendations.peripherals.map((item) => (
@@ -2082,11 +2113,11 @@ export function PCBuildInteractive({ className }: { className?: string }) {
               </div>
             ))}
           </div>
-        </div>
-      </div>
+            </div>
+          </div>
 
-      <div className="mt-6 grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="rounded-2xl border border-line/70 bg-slate-50 p-5 text-sm dark:border-slate-800 dark:bg-slate-900">
+          <div className="mt-6 grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
+            <div className="rounded-2xl border border-line/70 bg-slate-50 p-5 text-sm dark:border-slate-800 dark:bg-slate-900">
           <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Compatibility checklist</h3>
           <ul className="mt-3 space-y-2 pl-5 text-sm text-slate-700 dark:text-slate-200">
             <li className="list-disc">Case supports {caseDetail.formFactors.map((f) => f.name).join("/")} form factor.</li>
@@ -2106,9 +2137,9 @@ export function PCBuildInteractive({ className }: { className?: string }) {
           >
             Open PCPartPicker compatibility check
           </a>
-        </div>
+            </div>
 
-        <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
+            <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
           <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Share this build</h3>
           <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
             Your selections are encoded in the URL so you can bookmark or share this build.
@@ -2124,7 +2155,85 @@ export function PCBuildInteractive({ className }: { className?: string }) {
               {copiedSummary ? "Copied Summary" : "Copy Build Summary"}
             </button>
           </div>
+            </div>
+          </div>
         </div>
+
+        <aside className="lg:sticky lg:top-24 lg:self-start">
+          <div className="rounded-2xl border border-line/70 bg-white/95 p-5 shadow-card backdrop-blur transition hover:shadow-[0_18px_40px_rgba(15,23,42,0.18)] dark:border-slate-800 dark:bg-slate-950/80">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+                  Build Tally
+                </p>
+                <h3 className="mt-1 text-lg font-semibold text-slate-900 dark:text-slate-100">
+                  Selected options
+                </h3>
+              </div>
+              <span className="rounded-full border border-line/70 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
+                {selectionTally.length} picks
+              </span>
+            </div>
+
+            <div className="mt-4 space-y-3 text-sm">
+              {selectionTally.map((item) => (
+                <div key={item.label} className="flex items-start justify-between gap-3">
+                  <span className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400 dark:text-slate-500">
+                    {item.label}
+                  </span>
+                  <span className="text-right text-sm font-semibold text-slate-900 dark:text-slate-100">
+                    {item.value}
+                  </span>
+                </div>
+              ))}
+              {gpuFitStatus ? (
+                <div className="rounded-xl border border-line/70 bg-slate-50 px-3 py-2 text-xs text-slate-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">
+                  <span className="font-semibold">GPU fit:</span> {gpuFitStatus.message}
+                </div>
+              ) : null}
+            </div>
+
+            <div className="mt-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+                Recommendation counts
+              </p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {tallyCounts.map((item) => (
+                  <span
+                    key={item.label}
+                    className="rounded-full border border-line/70 bg-slate-50 px-3 py-1 text-[11px] font-semibold text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
+                  >
+                    {item.label}: {item.value}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {overkillCounts.length > 0 ? (
+              <div className="mt-4 rounded-xl border border-rose-200/80 bg-rose-50/70 px-3 py-2 text-xs text-rose-700 dark:border-rose-900/60 dark:bg-rose-950/40 dark:text-rose-200">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-rose-500 dark:text-rose-300">
+                  Overkill counts
+                </p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {overkillCounts.map((item) => (
+                    <span key={item.label} className="rounded-full border border-rose-200 px-2 py-0.5 text-[10px] font-semibold">
+                      {item.label}: {item.value}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+
+            <div className="mt-4 grid gap-2">
+              <button type="button" onClick={handleCopySummary} className="btn-secondary w-full">
+                {copiedSummary ? "Copied Summary" : "Copy Build Summary"}
+              </button>
+              <button type="button" onClick={handleCopyLink} className="btn-primary w-full">
+                {copiedLink ? "Copied Link" : "Copy Share Link"}
+              </button>
+            </div>
+          </div>
+        </aside>
       </div>
     </section>
   );
