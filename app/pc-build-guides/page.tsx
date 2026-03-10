@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { PCBuildGuidesCatalog } from "@/components/pc-build-guides/pc-build-guides-catalog";
+import { PCBuildInteractive } from "@/components/pc-build-guides/pc-build-interactive";
 import { SectionHeading } from "@/components/section-heading";
 import {
   getPCBuildGuideBudgetBands,
@@ -107,6 +108,10 @@ export default function PCBuildGuidesPage() {
             title="Part-by-part build playbooks"
             description="Search by workload, filter by difficulty and budget, and use each guide to choose components with clear compatibility checks and expected benefits."
           />
+
+          <div className="mt-8">
+            <PCBuildInteractive />
+          </div>
 
           <div className="mt-8">
             <PCBuildGuidesCatalog

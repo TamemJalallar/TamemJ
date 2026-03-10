@@ -103,6 +103,7 @@ Set these in local `.env.local` and in your deployment environment.
 
 - `NEXT_PUBLIC_SHOW_APPS_SECTION` - `true` to show `/apps`; hidden by default when unset/false
 - `NEXT_PUBLIC_NEWEGG_AFFILIATE_SID` - enables Newegg affiliate deep links
+- `NEXT_PUBLIC_AMAZON_ASSOCIATE_TAG` - Amazon Associates tag used for PC build recommendations (default `tamemj-20`)
 
 ### Corporate Tech Fixes builder
 
