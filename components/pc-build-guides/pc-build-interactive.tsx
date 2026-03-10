@@ -985,6 +985,7 @@ export function PCBuildInteractive({ className }: { className?: string }) {
     if (!overkillMode) return null;
     const cpu: Recommendation[] = [];
     const ram: Recommendation[] = [];
+    const motherboard: Recommendation[] = [];
     const gpu: Recommendation[] = [];
     const psu: Recommendation[] = [];
     const storage: Recommendation[] = [];
