@@ -325,7 +325,7 @@ export function summarizeSupportAnalytics(events: AnalyticsEvent[], tickets: Tic
   for (const event of events) {
     if (event.type === "kb_view") {
       kbViews += 1;
-      const title = String(event.payload.title ?? event.payload.slug ?? "Unknown KB Article");
+      const title = String(event.payload.title ?? event.payload.slug ?? "Unknown Ticket");
       kbViewsByTitle.set(title, (kbViewsByTitle.get(title) ?? 0) + 1);
       const product = String(event.payload.product ?? "Unknown Product");
       productsByCount.set(product, (productsByCount.get(product) ?? 0) + 1);

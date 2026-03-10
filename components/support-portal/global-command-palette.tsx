@@ -11,7 +11,7 @@ interface PaletteItem {
   label: string;
   description: string;
   href: string;
-  group: "Quick" | "Knowledge Base" | "Catalog" | "Downloads" | "Guides" | "AI Agents" | "GenAI Prompts";
+  group: "Quick" | "Tickets" | "Catalog" | "Downloads" | "Guides" | "AI Agents" | "GenAI Prompts";
   keywords: string[];
 }
 
@@ -26,9 +26,9 @@ const quickItems: PaletteItem[] = [
   },
   {
     id: "quick-kb",
-    label: "Knowledge Base",
-    description: "Browse troubleshooting guides",
-    href: "/support/kb/",
+    label: "Tickets",
+    description: "Browse troubleshooting tickets",
+    href: "/support/tickets/",
     group: "Quick",
     keywords: ["kb", "knowledge", "troubleshooting"]
   },
@@ -44,7 +44,7 @@ const quickItems: PaletteItem[] = [
     id: "quick-tickets",
     label: "My Tickets",
     description: "View all local tickets",
-    href: "/support/tickets/",
+    href: "/support/my-tickets/",
     group: "Quick",
     keywords: ["tickets", "incidents", "requests"]
   },
@@ -204,8 +204,8 @@ export function GlobalCommandPalette() {
       id: `kb-${article.slug}`,
       label: article.title,
       description: `${article.category} • ${article.product}`,
-      href: `/support/kb/${article.slug}/`,
-      group: "Knowledge Base",
+      href: `/support/tickets/${article.slug}/`,
+      group: "Tickets",
       keywords: [article.productFamily, article.category, ...article.tags]
     }));
 
@@ -338,7 +338,7 @@ export function GlobalCommandPalette() {
           <Command.Input
             value={query}
             onValueChange={setQuery}
-            placeholder="Search KBs, downloads, AI agents, catalog items, tickets, and forms..."
+            placeholder="Search tickets, downloads, AI agents, catalog items, and forms..."
             className="h-10 w-full rounded-lg border border-line bg-white px-3 text-sm outline-none focus:border-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
           />
         </div>

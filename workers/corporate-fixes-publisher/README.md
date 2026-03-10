@@ -1,6 +1,6 @@
 # Corporate Fixes Publisher Worker
 
-Cloudflare Worker endpoint that accepts KB entries from the `Corporate Tech Fixes` builder and commits them to:
+Cloudflare Worker endpoint that accepts ticket entries from the `Corporate Tech Fixes` builder and commits them to:
 
 - `data/corporate-fixes.published.json`
 
@@ -11,7 +11,7 @@ That commit triggers your existing GitHub Pages deployment workflow (`push` to `
 - Default path: `/api/corporate-tech-fixes/publish`
 - Methods:
   - `GET` health/config summary
-  - `POST` publish/upsert KB entry
+  - `POST` publish/upsert ticket entry
 
 ## Security Model
 
@@ -69,4 +69,4 @@ Protect the worker route path with a self-hosted Access app, for example:
 
 - `tamemj.com/api/corporate-tech-fixes/publish*`
 
-Use the same GitHub or Google IdP policy as the KB builder, but restrict to your account only.
+Use the same GitHub or Google IdP policy as the ticket builder, but restrict to your account only.

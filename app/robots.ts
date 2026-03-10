@@ -12,7 +12,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: [
           "/support/admin/",
           "/support/analytics/",
-          "/support/tickets/",
+          "/support/my-tickets/",
           "/support/incident/new/",
           "/corporate-tech-fixes/builder/"
         ]

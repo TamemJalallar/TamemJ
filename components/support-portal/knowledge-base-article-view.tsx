@@ -152,7 +152,7 @@ export function KnowledgeBaseArticleView({
         description={seoAlignment?.optimizedLeadParagraph ?? article.description}
         breadcrumbs={[
           { label: "Support Portal", href: "/support" },
-          { label: "Knowledge Base", href: "/support/kb" },
+          { label: "Tickets", href: "/support/tickets" },
           { label: article.title }
         ]}
         actions={
@@ -358,7 +358,7 @@ export function KnowledgeBaseArticleView({
                           Open partner link
                         </a>
                         <Link
-                          href={`/support/kb/${entry.supportDocSlug}`}
+                          href={`/support/tickets/${entry.supportDocSlug}`}
                           className="btn-secondary !px-3 !py-1.5 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
                         >
                           Open support playbook
@@ -390,8 +390,8 @@ export function KnowledgeBaseArticleView({
                       <Link
                         href={
                           isSameArticle
-                            ? `/support/kb/?q=${encodeURIComponent(target.keyword)}`
-                            : `/support/kb/${target.articleSlug}/`
+                            ? `/support/tickets/?q=${encodeURIComponent(target.keyword)}`
+                            : `/support/tickets/${target.articleSlug}/`
                         }
                         className="block rounded-xl border border-line/70 bg-slate-50/60 px-3 py-2 text-sm text-slate-700 transition hover:border-slate-300 hover:bg-white dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-700"
                       >
@@ -449,7 +449,7 @@ export function KnowledgeBaseArticleView({
                 {relatedArticles.map((related) => (
                   <li key={related.slug}>
                     <Link
-                      href={`/support/kb/${related.slug}`}
+                      href={`/support/tickets/${related.slug}`}
                       className="block rounded-xl border border-line/70 bg-slate-50/60 px-3 py-2 text-sm text-slate-700 transition hover:border-slate-300 hover:bg-white dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-700"
                     >
                       <span className="font-medium">{related.title}</span>

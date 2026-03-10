@@ -337,7 +337,7 @@ export function FixesCatalog({ fixes, categories, tags }: FixesCatalogProps) {
             {localFixes.length} local Tech Fixes {localFixes.length === 1 ? "entry" : "entries"} loaded
           </p>
           <p className="mt-1 text-xs text-sky-800/80 dark:text-sky-200/90">
-            These were added from the KB Builder and exist only in this browser/device until you copy
+            These were added from the Ticket Builder and exist only in this browser/device until you copy
             them into the registry and redeploy.
           </p>
         </div>

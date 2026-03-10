@@ -3452,7 +3452,7 @@ const generalSeeds: KBSeed[] = [
       "No periodic QA of active links and redirect targets."
     ],
     remediations: [
-      "Map Adobe affiliate links to Adobe KB categories and article tags using a documented registry.",
+      "Map Adobe affiliate links to Adobe ticket categories and article tags using a documented registry.",
       "Use contextual CTA text based on user intent (licensing, install, app troubleshooting).",
       "Review partner dashboard click/conversion patterns weekly and tune placements.",
       "Maintain neutral support-first wording and avoid claims that bypass enterprise licensing controls."

@@ -10,7 +10,7 @@ import {
 const phaseOneTrafficActions = [
   "Fix site identity (title, description, schemas) — Week 1",
   "Add HowTo + TechArticle schema to all 212 fix guides — Week 2",
-  "Consolidate /corporate-tech-fixes and /support/kb into one URL structure — Week 3",
+  "Consolidate /corporate-tech-fixes and /support/tickets into one URL structure — Week 3",
   "Write 10 articles targeting exact error-message keywords — Weeks 2-8",
   "Add internal links between all existing articles (related fixes, related downloads) — Week 4",
   "Add datePublished/dateModified to all articles — Week 2"
@@ -42,7 +42,7 @@ const phaseTwoRevenueActions = [
 const phaseThreeProductIdeas = [
   "IT Script Runner (browser-based PowerShell execution with parameter forms)",
   "Template Generator (fill-in-the-blank IT documents)",
-  "Fix Guide Builder Pro (paid KB builder for IT teams)",
+  "Fix Guide Builder Pro (paid ticket builder for IT teams)",
   "IT Dashboard (M365/Entra-integrated operations dashboard)",
   "Compliance Tracker SaaS (SOX/ISO audit tracking)"
 ] as const;

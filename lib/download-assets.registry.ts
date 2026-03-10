@@ -125,7 +125,7 @@ const assetsRegistry: DownloadAsset[] = [
     slug: "patch-management-tracker",
     title: "Patch Management Tracker",
     description:
-      "Track KB rollout status, deployment rings, remediation progress, rollback windows, and compliance trends.",
+      "Track patch rollout status, deployment rings, remediation progress, rollback windows, and compliance trends.",
     format: "xlsx",
     category: "Templates",
     access: "Free",

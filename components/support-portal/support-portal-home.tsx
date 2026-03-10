@@ -30,10 +30,10 @@ function StatCard({ label, value, href }: { label: string; value: number; href: 
 
 const quickLinks = [
   {
-    href: "/support/kb",
-    title: "Knowledge Base",
+    href: "/support/tickets",
+    title: "Tickets",
     description: "Search step-by-step fixes for Microsoft, Adobe, Figma, and endpoint issues.",
-    icon: "book" as const
+    icon: "tickets" as const
   },
   {
     href: "/support/catalog",
@@ -48,7 +48,7 @@ const quickLinks = [
     icon: "incident" as const
   },
   {
-    href: "/support/tickets",
+    href: "/support/my-tickets",
     title: "My Tickets",
     description: "View and manage locally stored demo incidents/requests and activity logs.",
     icon: "tickets" as const
@@ -56,7 +56,7 @@ const quickLinks = [
   {
     href: "/support/analytics",
     title: "Analytics",
-    description: "See KB views, searches, helpful votes, and issue trends stored locally.",
+    description: "See ticket views, searches, helpful votes, and issue trends stored locally.",
     icon: "analytics" as const
   }
 ];
@@ -98,30 +98,30 @@ export function SupportPortalHome() {
     const trimmed = query.trim();
     if (!trimmed) return;
     trackSearch({ area: "portal", query: trimmed, resultCount: 0, context: "portal-home" });
-    router.push(`/support/kb?q=${encodeURIComponent(trimmed)}`);
+    router.push(`/support/tickets?q=${encodeURIComponent(trimmed)}`);
   }
 
   return (
     <div className="space-y-5">
       <SupportPageHeader
         title="IT Support Portal"
-        description="ServiceNow-style demo portal with KB articles, service catalog, incident intake, local ticketing, and analytics. Built to remain static-hosting compatible (GitHub Pages safe)."
+        description="ServiceNow-style demo portal with ticket articles, service catalog, incident intake, local ticketing, and analytics. Built to remain static-hosting compatible (GitHub Pages safe)."
         breadcrumbs={[{ label: "Support Portal" }]}
         search={
           <TopSearchBar
             value={searchValue}
             onChange={setSearchValue}
             onSubmit={submitPortalSearch}
-            placeholder="Search the Knowledge Base (e.g., Outlook search, Adobe sign-in, Figma fonts)"
-            buttonLabel="Search KB"
+            placeholder="Search tickets (e.g., Outlook search, Adobe sign-in, Figma fonts)"
+            buttonLabel="Search Tickets"
           />
         }
       />
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard label="KB Views" value={summary?.totals.kbViews ?? 0} href="/support/analytics" />
+        <StatCard label="Ticket Views" value={summary?.totals.kbViews ?? 0} href="/support/analytics" />
         <StatCard label="Searches" value={summary?.totals.searches ?? 0} href="/support/analytics" />
-        <StatCard label="My Tickets" value={ticketCount} href="/support/tickets" />
+        <StatCard label="My Tickets" value={ticketCount} href="/support/my-tickets" />
         <StatCard label="Incidents Submitted" value={summary?.totals.incidentSubmissions ?? 0} href="/support/analytics" />
       </div>
 
@@ -170,7 +170,7 @@ export function SupportPortalHome() {
                 ))}
               </ul>
             ) : (
-              <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">Open KB articles and use search to populate local analytics.</p>
+              <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">Open tickets and use search to populate local analytics.</p>
             )}
           </section>
 

@@ -47,7 +47,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: url("/corporate-tech-fixes/"), changeFrequency: "daily", priority: 0.9, lastModified: generatedAt },
     { url: url("/pc-build-guides/"), changeFrequency: "weekly", priority: 0.9, lastModified: generatedAt },
     { url: url("/support/"), changeFrequency: "weekly", priority: 0.85, lastModified: generatedAt },
-    { url: url("/support/kb/"), changeFrequency: "daily", priority: 0.95, lastModified: generatedAt },
+    { url: url("/support/tickets/"), changeFrequency: "daily", priority: 0.95, lastModified: generatedAt },
     { url: url("/support/catalog/"), changeFrequency: "weekly", priority: 0.8, lastModified: generatedAt },
     { url: url("/donate/"), changeFrequency: "monthly", priority: 0.5, lastModified: generatedAt },
     { url: url("/contact/"), changeFrequency: "monthly", priority: 0.6, lastModified: generatedAt },
@@ -106,7 +106,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   const kbEntries: MetadataRoute.Sitemap = getKBArticles().map((article) => ({
-    url: url(`/support/kb/${article.slug}/`),
+    url: url(`/support/tickets/${article.slug}/`),
     changeFrequency: "weekly",
     priority: 0.85,
     lastModified: parseDateInput(article.lastVerified) ?? generatedAt

@@ -290,7 +290,7 @@ export function CatalogItemRequestView({ item }: { item: CatalogItem }) {
                   {emailStatusMessage}
                 </p>
               ) : null}
-              <Link href="/support/tickets" className="mt-3 inline-flex rounded-lg border border-emerald-300 bg-white px-3 py-1.5 text-xs font-semibold text-emerald-800 dark:border-emerald-800 dark:bg-slate-900 dark:text-emerald-200">
+              <Link href="/support/my-tickets" className="mt-3 inline-flex rounded-lg border border-emerald-300 bg-white px-3 py-1.5 text-xs font-semibold text-emerald-800 dark:border-emerald-800 dark:bg-slate-900 dark:text-emerald-200">
                 View My Tickets
               </Link>
             </div>

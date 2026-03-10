@@ -11,7 +11,7 @@ import { appsSectionEnabled } from "@/lib/apps-visibility";
 const primaryNavItems = [
   { href: "/corporate-tech-fixes", label: "Fixes" },
   { href: "/downloads", label: "Downloads" },
-  { href: "/support/kb", label: "KB" },
+  { href: "/support/tickets", label: "Tickets" },
   { href: "/ai-agents", label: "AI Agents" },
   { href: "/genai-prompts", label: "GenAI Prompts" },
   { href: "/guides", label: "Guides" },

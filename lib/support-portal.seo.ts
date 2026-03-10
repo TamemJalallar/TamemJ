@@ -20,7 +20,8 @@ type BreadcrumbItem = {
 const supportPortalBaseKeywords = [
   "enterprise IT support",
   "IT troubleshooting guides",
-  "knowledge base",
+  "support tickets",
+  "ticket library",
   "service catalog",
   "IT support portal",
   "ServiceNow style portal",
@@ -104,7 +105,7 @@ export function buildSupportOpenGraph(
         url: "/images/site/og-image.svg",
         width: 1200,
         height: 630,
-        alt: "Tamem J Support Portal knowledge base and IT support documentation"
+        alt: "Tamem J Support Portal tickets and IT support documentation"
       }
     ]
   };
@@ -129,7 +130,7 @@ export function buildSupportKbIndexMetadataWithArticles(articles: KBArticle[]): 
   const articleCount = articles.length;
   const seoOpportunityKeywords = getTopSeoKeywordOpportunities(40).map((entry) => entry.keyword);
 
-  const title = "Knowledge Base";
+  const title = "Tickets";
   const description =
     articleCount > 0
       ? `Browse ${articleCount} enterprise-safe troubleshooting guides for Microsoft 365, Adobe, Figma, Okta, Windows, macOS, iOS, Android, networking, browsers, printers, and affiliate operations.`
@@ -140,7 +141,7 @@ export function buildSupportKbIndexMetadataWithArticles(articles: KBArticle[]): 
     description,
     keywords: uniqueKeywords([
       ...supportPortalBaseKeywords,
-      "IT knowledge base",
+      "IT support tickets",
       "Microsoft 365 troubleshooting",
       "Adobe troubleshooting",
       "Figma troubleshooting",
@@ -154,8 +155,8 @@ export function buildSupportKbIndexMetadataWithArticles(articles: KBArticle[]): 
       ...productFamilies.map((family) => `${family} support`),
       ...categories.map((category) => `${category} troubleshooting`)
     ]),
-    alternates: { canonical: "/support/kb/" },
-    openGraph: buildSupportOpenGraph(`${title} | Support Portal`, description, "/support/kb/"),
+    alternates: { canonical: "/support/tickets/" },
+    openGraph: buildSupportOpenGraph(`${title} | Support Portal`, description, "/support/tickets/"),
     twitter: buildSupportTwitter(`${title} | Support Portal`, description)
   };
 }
@@ -164,9 +165,9 @@ export function buildKbIndexJsonLd(articles: KBArticle[]): WithContext<Collectio
   return {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "Support Knowledge Base",
-    description: `Enterprise-safe IT troubleshooting knowledge base with ${articles.length} guides.`,
-    url: toAbsoluteSupportUrl("/support/kb/"),
+    name: "Support Tickets",
+    description: `Enterprise-safe IT troubleshooting ticket library with ${articles.length} guides.`,
+    url: toAbsoluteSupportUrl("/support/tickets/"),
     isPartOf: {
       "@type": "WebSite",
       name: "Tamem J Support Portal",
@@ -182,7 +183,7 @@ export function buildKbIndexJsonLd(articles: KBArticle[]): WithContext<Collectio
           "@type": "TechArticle",
           headline: article.title,
           description: article.description,
-          url: toAbsoluteSupportUrl(`/support/kb/${article.slug}/`),
+          url: toAbsoluteSupportUrl(`/support/tickets/${article.slug}/`),
           articleSection: article.category,
           keywords: uniqueKeywords([article.product, article.productFamily, ...article.tags]).join(", ")
         }
@@ -259,7 +260,7 @@ export function buildCatalogIndexJsonLd(items: CatalogItem[]): WithContext<Colle
 export function buildKbArticleMetadata(article: KBArticle): Metadata {
   const title = article.title;
   const description = article.description;
-  const path = `/support/kb/${article.slug}/`;
+  const path = `/support/tickets/${article.slug}/`;
   const keywords = uniqueKeywords([
     ...supportPortalBaseKeywords,
     ...article.tags,
@@ -278,8 +279,8 @@ export function buildKbArticleMetadata(article: KBArticle): Metadata {
     keywords,
     alternates: { canonical: path },
     robots: { index: true, follow: true },
-    openGraph: buildSupportOpenGraph(`${title} | Support Portal KB`, description, path, "article"),
-    twitter: buildSupportTwitter(`${title} | Support Portal KB`, description),
+    openGraph: buildSupportOpenGraph(`${title} | Support Portal Tickets`, description, path, "article"),
+    twitter: buildSupportTwitter(`${title} | Support Portal Tickets`, description),
     other: {
       "support:severity": article.severity,
       "support:access-level": article.accessLevel,
@@ -347,8 +348,8 @@ export function buildKbArticleJsonLd(article: KBArticle): WithContext<TechArticl
     "@type": "TechArticle",
     headline: article.title,
     description: article.description,
-    url: toAbsoluteSupportUrl(`/support/kb/${article.slug}/`),
-    mainEntityOfPage: toAbsoluteSupportUrl(`/support/kb/${article.slug}/`),
+    url: toAbsoluteSupportUrl(`/support/tickets/${article.slug}/`),
+    mainEntityOfPage: toAbsoluteSupportUrl(`/support/tickets/${article.slug}/`),
     articleSection: article.category,
     keywords: uniqueKeywords([...article.tags, article.product, article.productFamily]).join(", "),
     about: [
@@ -390,14 +391,14 @@ export function buildKbHowToJsonLd(article: KBArticle): WithContext<HowTo> {
     "@type": "HowTo",
     name: article.title,
     description: article.description,
-    url: toAbsoluteSupportUrl(`/support/kb/${article.slug}/`),
+    url: toAbsoluteSupportUrl(`/support/tickets/${article.slug}/`),
     ...(totalTime ? { totalTime } : {}),
     step: article.resolutionSteps.map((step, index) => ({
       "@type": "HowToStep",
       position: index + 1,
       name: step.title,
       text: step.content,
-      url: toAbsoluteSupportUrl(`/support/kb/${article.slug}/#step-${index + 1}`)
+      url: toAbsoluteSupportUrl(`/support/tickets/${article.slug}/#step-${index + 1}`)
     }))
   };
 }

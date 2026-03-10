@@ -130,7 +130,7 @@ export function AdminTools() {
                 onClick={() => {
                   resetKBHelpfulVotes();
                   trackAdminAction("reset_kb_helpful_votes");
-                  flashMessage("KB helpful votes reset.");
+                  flashMessage("Ticket helpful votes reset.");
                 }}
               >
                 Reset Helpful Votes

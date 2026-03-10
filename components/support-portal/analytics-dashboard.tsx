@@ -134,7 +134,7 @@ export function AnalyticsDashboard() {
     <div className="space-y-5">
       <SupportPageHeader
         title="Analytics"
-        description="Local analytics dashboard for KB views, searches, helpful votes, catalog requests, and incident patterns. Events are mirrored into IndexedDB for higher-capacity storage."
+        description="Local analytics dashboard for ticket views, searches, helpful votes, catalog requests, and incident patterns. Events are mirrored into IndexedDB for higher-capacity storage."
         breadcrumbs={[{ label: "Support Portal", href: "/support" }, { label: "Analytics" }]}
         actions={
           <button type="button" onClick={() => setRefreshKey((value) => value + 1)} className="btn-secondary">
@@ -146,9 +146,9 @@ export function AnalyticsDashboard() {
       {summary ? (
         <>
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6">
-            <MetricCard label="KB Views" value={summary.totals.kbViews} />
+            <MetricCard label="Ticket Views" value={summary.totals.kbViews} />
             <MetricCard label="Searches" value={summary.totals.searches} />
-            <MetricCard label="Helpful / Not" value={helpfulRatio} hint="KB helpful votes" />
+            <MetricCard label="Helpful / Not" value={helpfulRatio} hint="Ticket helpful votes" />
             <MetricCard label="Catalog Requests" value={summary.totals.catalogSubmissions} />
             <MetricCard label="Incidents Submitted" value={summary.totals.incidentSubmissions} />
             <MetricCard label="Tracked Events" value={eventCount} />
@@ -156,8 +156,8 @@ export function AnalyticsDashboard() {
 
           <div className="grid gap-5 xl:grid-cols-2">
             <ChartCard
-              title="Most Viewed KB Articles"
-              emptyMessage="No KB article views tracked yet. Open articles from the Knowledge Base to populate this chart."
+              title="Most Viewed Tickets"
+              emptyMessage="No ticket views tracked yet. Open tickets to populate this chart."
               hasData={kbViewsRows.length > 0}
             >
               <ResponsiveContainer width="100%" height="100%">

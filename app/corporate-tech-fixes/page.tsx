@@ -126,14 +126,14 @@ export default function CorporateTechFixesPage() {
           <div className="mt-5 flex flex-col gap-3 rounded-2xl border border-line/80 bg-white/80 p-4 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-                Need to add a new KB or support runbook?
+                Need to add a new ticket or support runbook?
               </p>
               <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                Use the built-in KB Builder to draft entries, manage steps/tags, and copy a registry snippet.
+                Use the built-in Ticket Builder to draft entries, manage steps/tags, and copy a registry snippet.
               </p>
             </div>
             <Link href="/corporate-tech-fixes/builder" className="btn-secondary">
-              Open KB Builder
+              Open Ticket Builder
             </Link>
           </div>
 

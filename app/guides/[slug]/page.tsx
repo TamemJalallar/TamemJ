@@ -103,7 +103,7 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
         item: {
           "@type": "TechArticle",
           headline: article.title,
-          url: toAbsoluteUrl(`/support/kb/${article.slug}/`)
+          url: toAbsoluteUrl(`/support/tickets/${article.slug}/`)
         }
       }))
     }
@@ -144,7 +144,7 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
                 </span>
               ) : null}
               <span className="rounded-full border border-line/80 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
-                {relatedKBArticles.length} linked KB articles
+                {relatedKBArticles.length} linked tickets
               </span>
               <span className="rounded-full border border-line/80 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
                 {relatedAssets.length} related IT assets
@@ -188,9 +188,9 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
 
           <section className="surface-card p-5 sm:p-6">
             <div className="mb-4 flex items-center justify-between gap-3">
-              <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Linked KB Articles</h2>
-              <Link href="/support/kb" className="text-sm font-semibold text-accent hover:underline">
-                View all KBs
+              <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Linked Tickets</h2>
+              <Link href="/support/tickets" className="text-sm font-semibold text-accent hover:underline">
+                View all tickets
               </Link>
             </div>
             {relatedKBArticles.length > 0 ? (
@@ -198,7 +198,7 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
                 {relatedKBArticles.map((article) => (
                   <Link
                     key={article.slug}
-                    href={`/support/kb/${article.slug}`}
+                    href={`/support/tickets/${article.slug}`}
                     className="rounded-2xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-700 dark:bg-slate-900"
                   >
                     <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
@@ -212,7 +212,7 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-slate-600 dark:text-slate-300">No linked KB articles found for this pillar yet.</p>
+              <p className="text-sm text-slate-600 dark:text-slate-300">No linked tickets found for this pillar yet.</p>
             )}
           </section>
 

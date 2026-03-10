@@ -146,7 +146,7 @@ export function FixBuilderGate() {
       <div className="space-y-4">
         <div className="surface-card-strong p-6 dark:border-slate-800 dark:bg-slate-950/70 sm:p-8">
           <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 sm:text-3xl">
-            KB Builder Locked (Configuration Required)
+            Ticket Builder Locked (Configuration Required)
           </h1>
           <p className="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-300 sm:text-base">
             This builder is configured to require a password, but no password hash was provided at
@@ -172,7 +172,7 @@ export function FixBuilderGate() {
       <div className="space-y-4">
         <div className="surface-card-strong p-6 dark:border-slate-800 dark:bg-slate-950/70 sm:p-8">
           <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 sm:text-3xl">
-            Corporate Tech Fixes KB Builder
+            Corporate Tech Fixes Ticket Builder
           </h1>
           <p className="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-300 sm:text-base">
             Password required. This protects the builder UI from casual/public access on static

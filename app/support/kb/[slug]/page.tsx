@@ -1,17 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { KnowledgeBaseArticleView } from "@/components/support-portal/knowledge-base-article-view";
-import { getRecommendedAffiliatesForKBArticle } from "@/lib/affiliate-support.registry";
-import { getKBSeoAlignmentBySlug, getKeywordTargetsForKBArticle } from "@/lib/seo-content.registry";
+import Link from "next/link";
+import { LegacyKbRedirect } from "@/components/support-portal/legacy-kb-redirect";
 import { getKBArticleBySlug, getKBArticles } from "@/lib/support.kb.registry";
-import {
-  buildBreadcrumbJsonLd,
-  buildKbFaqJsonLd,
-  buildKbArticleJsonLd,
-  buildKbHowToJsonLd,
-  buildKbArticleMetadata,
-  toAbsoluteSupportUrl
-} from "@/lib/support-portal.seo";
+import { buildKbArticleMetadata } from "@/lib/support-portal.seo";
+import { buildKbArticleMetadata } from "@/lib/support-portal.seo";
 
 interface KBArticlePageProps {
   params: Promise<{ slug: string }>;
@@ -28,28 +21,14 @@ export async function generateMetadata({ params }: KBArticlePageProps): Promise<
   const article = getKBArticleBySlug(slug);
 
   if (!article) {
-    return { title: "KB Article Not Found" };
+    return { title: "Ticket Not Found" };
   }
 
-  const seoAlignment = getKBSeoAlignmentBySlug(article.slug);
   const baseMetadata = buildKbArticleMetadata(article);
-  const keywordTargets = getKeywordTargetsForKBArticle(article, 10);
-  const baseKeywords = Array.isArray(baseMetadata.keywords) ? baseMetadata.keywords : [];
-
   return {
     ...baseMetadata,
-    ...(seoAlignment
-      ? {
-          description: seoAlignment.optimizedLeadParagraph
-        }
-      : {}),
-    keywords: [
-      ...new Set([
-        ...baseKeywords,
-        ...keywordTargets.map((target) => target.keyword),
-        ...(seoAlignment ? [seoAlignment.primaryKeyword] : [])
-      ])
-    ]
+    alternates: { canonical: `/support/tickets/${article.slug}/` },
+    robots: { index: false, follow: true }
   };
 }
 
@@ -60,64 +39,18 @@ export default async function KBArticlePage({ params }: KBArticlePageProps) {
   if (!article) {
     notFound();
   }
-
-  const relatedArticles = article.relatedArticleSlugs
-    .map((relatedSlug) => getKBArticleBySlug(relatedSlug))
-    .filter((item): item is NonNullable<typeof item> => Boolean(item));
-  const recommendedAffiliates = getRecommendedAffiliatesForKBArticle(article);
-  const seoAlignment = getKBSeoAlignmentBySlug(article.slug);
-  const keywordTargets = getKeywordTargetsForKBArticle(article, 8);
-
-  const articleJsonLd = buildKbArticleJsonLd(article);
-  const howToJsonLd = buildKbHowToJsonLd(article);
-  const faqJsonLd = buildKbFaqJsonLd(article);
-  const keywordTargetSchema = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    name: `Related exact-match troubleshooting queries for ${article.title}`,
-    numberOfItems: keywordTargets.length,
-    itemListElement: keywordTargets.map((target, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      name: target.keyword,
-      url: toAbsoluteSupportUrl(`/support/kb/${target.articleSlug}/`)
-    }))
-  };
-  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
-    { name: "Support Portal", path: "/support/" },
-    { name: "Knowledge Base", path: "/support/kb/" },
-    { name: article.title, path: `/support/kb/${article.slug}/` }
-  ]);
-
   return (
-    <>
-      <KnowledgeBaseArticleView
-        article={article}
-        relatedArticles={relatedArticles}
-        recommendedAffiliates={recommendedAffiliates}
-        keywordTargets={keywordTargets}
-        seoAlignment={seoAlignment}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(keywordTargetSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
-    </>
+    <section className="section-shell pb-10 pt-10 sm:pt-14">
+      <div className="page-shell max-w-3xl">
+        <LegacyKbRedirect targetPath={`/support/tickets/${article.slug}`} />
+        <div className="mt-6 text-sm text-slate-600 dark:text-slate-300">
+          If you are not redirected automatically, open{" "}
+          <Link href={`/support/tickets/${article.slug}`} className="font-semibold text-accent hover:underline">
+            this ticket
+          </Link>
+          .
+        </div>
+      </div>
+    </section>
   );
 }

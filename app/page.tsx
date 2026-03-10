@@ -68,25 +68,25 @@ const topCategoryConfig = [
   {
     label: "M365",
     description: "Outlook, Teams, OneDrive, SharePoint",
-    href: "/support/kb/?q=microsoft%20365",
+    href: "/support/tickets/?q=microsoft%20365",
     match: (category: string) => category === "Microsoft 365"
   },
   {
     label: "Windows",
     description: "OS, Intune, drivers, endpoint health",
-    href: "/support/kb/?q=windows",
+    href: "/support/tickets/?q=windows",
     match: (category: string) => category === "Windows"
   },
   {
     label: "Security",
     description: "MFA, SSO, Conditional Access",
-    href: "/support/kb/?q=identity%20mfa%20sso",
+    href: "/support/tickets/?q=identity%20mfa%20sso",
     match: (category: string) => category === "Identity / MFA / SSO"
   },
   {
     label: "Networking",
     description: "VPN, DNS, Wi-Fi, access paths",
-    href: "/support/kb/?q=vpn%20networking",
+    href: "/support/tickets/?q=vpn%20networking",
     match: (category: string) => category === "Networking / VPN"
   }
 ] as const;
@@ -119,7 +119,7 @@ export default function HomePage() {
         "@type": "ListItem",
         position: index + 1,
         name: article.title,
-        url: toAbsoluteUrl(`/support/kb/${article.slug}/`)
+        url: toAbsoluteUrl(`/support/tickets/${article.slug}/`)
       }))
     }
   };
@@ -133,7 +133,7 @@ export default function HomePage() {
       "@type": "ListItem",
       position: index + 1,
       name: entry.keyword,
-      url: toAbsoluteUrl(`/support/kb/?q=${encodeURIComponent(entry.keyword)}`)
+      url: toAbsoluteUrl(`/support/tickets/?q=${encodeURIComponent(entry.keyword)}`)
     }))
   };
 
@@ -151,7 +151,7 @@ export default function HomePage() {
               networking, and corporate workflows.
             </p>
 
-            <form action="/support/kb/" method="get" className="mt-7">
+            <form action="/support/tickets/" method="get" className="mt-7">
               <label htmlFor="home-guide-search" className="sr-only">
                 Search support guides
               </label>
@@ -174,8 +174,8 @@ export default function HomePage() {
               <Link href="/corporate-tech-fixes" className="btn-secondary !px-4 !py-2 text-xs sm:text-sm">
                 Browse Tech Fixes
               </Link>
-              <Link href="/support/kb" className="btn-secondary !px-4 !py-2 text-xs sm:text-sm">
-                Open Knowledge Base
+              <Link href="/support/tickets" className="btn-secondary !px-4 !py-2 text-xs sm:text-sm">
+                Open Tickets
               </Link>
               <Link href="/guides" className="btn-secondary !px-4 !py-2 text-xs sm:text-sm">
                 Open Pillar Guides
@@ -198,7 +198,7 @@ export default function HomePage() {
               <div className="surface-card p-4">
                 <p className="text-2xl font-bold text-accent">{kbArticles.length}</p>
                 <p className="mt-1 text-xs font-medium uppercase tracking-wide text-muted">
-                  Verified KB Articles
+                  Verified Tickets
                 </p>
               </div>
               <div className="surface-card p-4">
@@ -225,7 +225,7 @@ export default function HomePage() {
               <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100 sm:text-2xl">
                 Top Categories
               </h2>
-              <Link href="/support/kb" className="text-sm font-semibold text-accent hover:underline">
+              <Link href="/support/tickets" className="text-sm font-semibold text-accent hover:underline">
                 View all categories
               </Link>
             </div>
@@ -259,15 +259,15 @@ export default function HomePage() {
               <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100 sm:text-2xl">
                 Trending Fix Articles
               </h2>
-              <Link href="/support/kb" className="text-sm font-semibold text-accent hover:underline">
-                Open KB
+              <Link href="/support/tickets" className="text-sm font-semibold text-accent hover:underline">
+                Open Tickets
               </Link>
             </div>
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {trendingArticles.map((article) => (
                 <Link
                   key={article.slug}
-                  href={`/support/kb/${article.slug}`}
+                  href={`/support/tickets/${article.slug}`}
                   className="group rounded-2xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-800 dark:bg-slate-950/70"
                 >
                   <p className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
@@ -302,7 +302,7 @@ export default function HomePage() {
               {keywordOpportunities.map((entry) => (
                 <Link
                   key={entry.keyword}
-                  href={`/support/kb/?q=${encodeURIComponent(entry.keyword)}`}
+                  href={`/support/tickets/?q=${encodeURIComponent(entry.keyword)}`}
                   className="rounded-2xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-800 dark:bg-slate-950/70"
                 >
                   <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">{entry.keyword}</h3>

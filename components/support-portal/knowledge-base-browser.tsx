@@ -124,21 +124,21 @@ export function KnowledgeBaseBrowser({ articles, initialQuery = "" }: KnowledgeB
   return (
     <div>
       <SupportPageHeader
-        title="IT Troubleshooting Knowledge Base"
+        title="IT Troubleshooting Tickets"
         description="Search enterprise-safe troubleshooting runbooks for Microsoft 365, Intune, Entra ID, Adobe, Figma, Windows, macOS, networking, browsers, printing, and affiliate operations."
-        breadcrumbs={[{ label: "Support Portal", href: "/support" }, { label: "Knowledge Base" }]}
+        breadcrumbs={[{ label: "Support Portal", href: "/support" }, { label: "Tickets" }]}
         search={
           <TopSearchBar
             value={query}
             onChange={setQuery}
             onSubmit={handleSearchSubmit}
             placeholder="Search issues (e.g., Outlook search, Teams mic, Adobe sign-in, affiliate tracking)"
-            buttonLabel="Search KB"
+            buttonLabel="Search Tickets"
           />
         }
         actions={
           <div className="rounded-xl border border-line/70 bg-slate-50 px-4 py-3 text-sm dark:border-slate-800 dark:bg-slate-900/70">
-            <p className="font-semibold text-slate-900 dark:text-slate-100">{filtered.length} articles</p>
+            <p className="font-semibold text-slate-900 dark:text-slate-100">{filtered.length} tickets</p>
             <p className="text-xs text-slate-500 dark:text-slate-400">{articles.length} total in registry</p>
           </div>
         }
@@ -189,7 +189,7 @@ export function KnowledgeBaseBrowser({ articles, initialQuery = "" }: KnowledgeB
             {filtered.map((article, index) => (
               <div key={article.slug}>
                 <Link
-                  href={`/support/kb/${article.slug}`}
+                  href={`/support/tickets/${article.slug}`}
                   onClick={() =>
                     trackSearchClick({
                       area: "kb",
@@ -221,7 +221,7 @@ export function KnowledgeBaseBrowser({ articles, initialQuery = "" }: KnowledgeB
         </div>
       ) : (
         <div className="rounded-2xl border border-dashed border-line/80 bg-white p-6 text-sm shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-8">
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">No matching KB articles</h2>
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">No matching tickets</h2>
           <p className="mt-2 text-slate-600 dark:text-slate-300">
             Try broader keywords or remove one or more filters. Search analytics are tracked locally to help improve future article coverage.
           </p>

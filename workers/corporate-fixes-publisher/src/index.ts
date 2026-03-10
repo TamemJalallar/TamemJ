@@ -184,7 +184,7 @@ function ensureAccess(request: Request, env: Env): { ok: true; email: string | n
       response: json(
         {
           ok: false,
-          error: "Authenticated user is not allowed to publish KB entries."
+          error: "Authenticated user is not allowed to publish ticket entries."
         },
         { status: 403 },
         request,

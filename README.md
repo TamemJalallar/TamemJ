@@ -4,7 +4,7 @@ Enterprise IT troubleshooting and resources site built with Next.js App Router +
 
 ## What this project includes
 
-- Enterprise IT Knowledge Base (`/support/kb`, `/support/kb/[slug]`)
+- Enterprise IT Tickets (`/support/tickets`, `/support/tickets/[slug]`)
 - Corporate Tech Fixes + Builder (`/corporate-tech-fixes`, `/corporate-tech-fixes/[slug]`, `/corporate-tech-fixes/builder`)
 - ITIL-style Support Portal (`/support/*`)
 - Downloads hub + IT asset marketplace (`/downloads`, `/downloads/assets`, `/downloads/assets/[slug]`)
@@ -70,7 +70,7 @@ types/                   # Shared TypeScript models
 
 ### Core support content
 
-- KB articles: `lib/support.kb.registry.ts`
+- Ticket articles: `lib/support.kb.registry.ts`
 - Service catalog: `lib/support.catalog.registry.ts`
 - Corporate fixes: `lib/corporate-fixes.registry.ts`
 - Published corporate fixes cache: `data/corporate-fixes.published.json`
@@ -188,7 +188,7 @@ NEXT_PUBLIC_SHOW_APPS_SECTION=true
 
 This repo supports static export even with zero published apps. A hidden placeholder slug is generated for `/apps/[slug]` at build time to satisfy static generation.
 
-### Corporate KB Builder publishing
+### Corporate Ticket Builder publishing
 
 `Publish to Site` sends builder payloads to a Cloudflare Worker, which commits into `data/corporate-fixes.published.json` and triggers GitHub Pages deploy.
 
@@ -287,7 +287,7 @@ Files:
 
 - Keep article slugs symptom-first and stable.
 - Use consistent lowercase tags for reliable filtering.
-- Add `lastVerified` updates on major KB changes.
+- Add `lastVerified` updates on major ticket changes.
 - Add related-article links between support docs and downloads.
 - For direct binary downloads, prefer official vendor links or GitHub Releases and include checksums when possible.
 

@@ -4,10 +4,10 @@ export const siteConfig = {
   url: "https://tamemj.com",
   email: "hello@tamemj.com",
   supportEmail: "support@tamemj.com",
-  title: "TamemJ — IT Troubleshooting Knowledge Base & Tools",
+  title: "TamemJ — IT Troubleshooting Tickets & Tools",
   description:
     "Enterprise IT troubleshooting guides, PowerShell scripts, Microsoft 365 fixes, and downloadable IT templates for sysadmins and helpdesk engineers.",
-  tagline: "Enterprise IT Troubleshooting Guides & Tools"
+  tagline: "Enterprise IT Troubleshooting Tickets & Tools"
 } as const;
 
 export const seoKeywords = [
@@ -18,7 +18,7 @@ export const seoKeywords = [
   "Intune troubleshooting",
   "Microsoft Entra fixes",
   "PowerShell scripts",
-  "IT knowledge base",
+  "IT support tickets",
   "helpdesk engineer resources",
   "sysadmin tools",
   "endpoint management",
@@ -26,7 +26,7 @@ export const seoKeywords = [
   "Kandji troubleshooting",
   "Okta support docs",
   "IT support portal",
-  "enterprise knowledge base",
+  "enterprise ticket library",
   "incident intake form",
   "service catalog",
   "IT templates download",

@@ -312,11 +312,11 @@ export default async function CorporateFixDetailPage({ params }: CorporateFixPag
                       {target.segment} • {target.articleCategory}
                     </p>
                     <div className="mt-3 flex flex-wrap gap-2">
-                      <Link href={`/support/kb/${target.articleSlug}/`} className="btn-secondary !px-3 !py-1.5 text-xs">
+                      <Link href={`/support/tickets/${target.articleSlug}/`} className="btn-secondary !px-3 !py-1.5 text-xs">
                         Open related guide
                       </Link>
                       <Link
-                        href={`/support/kb/?q=${encodeURIComponent(target.keyword)}`}
+                        href={`/support/tickets/?q=${encodeURIComponent(target.keyword)}`}
                         className="btn-secondary !px-3 !py-1.5 text-xs"
                       >
                         Search exact query

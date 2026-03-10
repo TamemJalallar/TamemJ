@@ -33,8 +33,10 @@ type CaseOption = {
 };
 
 const budgetMin = 500;
-const budgetMax = 5000;
+const budgetMaxStandard = 8000;
+const budgetMaxOverkill = 15000;
 const budgetStep = 100;
+const overkillSuggestedBudget = 10000;
 
 const caseOptions: CaseOption[] = [
   {
@@ -312,10 +314,10 @@ function paramToNoise(value: string | null): NoiseProfile {
   }
 }
 
-function parseBudgetParam(value: string | null): number {
+function parseBudgetParam(value: string | null, maxBudget: number): number {
   const parsed = Number(value);
   if (!Number.isFinite(parsed)) return 1500;
-  return clamp(parsed, budgetMin, budgetMax);
+  return clamp(parsed, budgetMin, maxBudget);
 }
 
 function getFanRecommendation(
@@ -356,6 +358,7 @@ export function PCBuildInteractive({ className }: { className?: string }) {
   const [storageProfile, setStorageProfile] = useState<StorageProfile>("Balanced");
   const [noiseProfile, setNoiseProfile] = useState<NoiseProfile>("Balanced");
   const [budgetTarget, setBudgetTarget] = useState<number>(1500);
+  const [overkillMode, setOverkillMode] = useState<boolean>(false);
   const [gpuLengthMm, setGpuLengthMm] = useState<string>("");
   const [caseClearanceMm, setCaseClearanceMm] = useState<string>("");
   const [shareUrl, setShareUrl] = useState<string>("");
@@ -364,6 +367,7 @@ export function PCBuildInteractive({ className }: { className?: string }) {
   const [mounted, setMounted] = useState(false);
 
   const budgetBand = useMemo(() => getBudgetBand(budgetTarget), [budgetTarget]);
+  const budgetMax = overkillMode ? budgetMaxOverkill : budgetMaxStandard;
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -374,11 +378,19 @@ export function PCBuildInteractive({ className }: { className?: string }) {
     setCpuPlatform(paramToPlatform(params.get("platform")));
     setStorageProfile(paramToStorage(params.get("storage")));
     setNoiseProfile(paramToNoise(params.get("noise")));
-    setBudgetTarget(parseBudgetParam(params.get("budget")));
+    setBudgetTarget(parseBudgetParam(params.get("budget"), budgetMaxOverkill));
+    setOverkillMode(params.get("overkill") === "1");
     setGpuLengthMm(params.get("gpuLen") ?? "");
     setCaseClearanceMm(params.get("caseClear") ?? "");
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    if (!overkillMode && budgetTarget > budgetMaxStandard) {
+      setBudgetTarget(budgetMaxStandard);
+    }
+  }, [mounted, overkillMode, budgetTarget]);
 
   useEffect(() => {
     if (!mounted || typeof window === "undefined") return;
@@ -390,7 +402,11 @@ export function PCBuildInteractive({ className }: { className?: string }) {
     url.searchParams.set("storage", storageToParam(storageProfile));
     url.searchParams.set("noise", noiseToParam(noiseProfile));
     url.searchParams.set("budget", String(budgetTarget));
-
+    if (overkillMode) {
+      url.searchParams.set("overkill", "1");
+    } else {
+      url.searchParams.delete("overkill");
+    }
     if (gpuLengthMm.trim()) {
       url.searchParams.set("gpuLen", gpuLengthMm.trim());
     } else {
@@ -414,6 +430,7 @@ export function PCBuildInteractive({ className }: { className?: string }) {
     storageProfile,
     noiseProfile,
     budgetTarget,
+    overkillMode,
     gpuLengthMm,
     caseClearanceMm
   ]);
@@ -561,6 +578,7 @@ export function PCBuildInteractive({ className }: { className?: string }) {
   const recommendations = useMemo(() => {
     const cpu: Recommendation[] = [];
     const ram: Recommendation[] = [];
+    const motherboard: Recommendation[] = [];
     const gpu: Recommendation[] = [];
     const psu: Recommendation[] = [];
     const peripherals: Recommendation[] = [];
@@ -963,9 +981,249 @@ export function PCBuildInteractive({ className }: { className?: string }) {
     return { cpu, ram, gpu, psu, peripherals, essentials };
   }, [selectedWorkload, gpuNeeded]);
 
+  const overkillRecommendations = useMemo(() => {
+    if (!overkillMode) return null;
+    const cpu: Recommendation[] = [];
+    const ram: Recommendation[] = [];
+    const gpu: Recommendation[] = [];
+    const psu: Recommendation[] = [];
+    const storage: Recommendation[] = [];
+    const enterpriseStorage: Recommendation[] = [];
+    const cooling: Recommendation[] = [];
+    const networking: Recommendation[] = [];
+    const extras: string[] = [];
+
+    if (cpuPlatform === "AMD AM5") {
+      cpu.push({
+        title: "Flagship AMD CPU",
+        description: "Maximum cache + cores for long-term headroom.",
+        amazonQuery: "Ryzen 9 7950X3D CPU"
+      });
+      cpu.push({
+        title: "AMD Threadripper workstation",
+        description: "Huge core counts and PCIe lanes for heavy workloads.",
+        amazonQuery: "AMD Threadripper CPU"
+      });
+      motherboard.push({
+        title: "X670E premium motherboard",
+        description: "High-end AM5 boards with strong VRMs and Gen5 storage.",
+        amazonQuery: "X670E motherboard"
+      });
+      motherboard.push({
+        title: "Threadripper workstation board",
+        description: "Massive PCIe lanes for GPUs and NVMe arrays.",
+        amazonQuery: "TRX50 motherboard"
+      });
+    } else if (cpuPlatform === "Intel LGA1700") {
+      cpu.push({
+        title: "Flagship Intel CPU",
+        description: "Top-end clocks with strong multi-thread performance.",
+        amazonQuery: "Intel i9 14900KS CPU"
+      });
+      cpu.push({
+        title: "Intel Xeon workstation",
+        description: "Workstation-class stability and core counts.",
+        amazonQuery: "Intel Xeon W CPU"
+      });
+      motherboard.push({
+        title: "Z790 premium motherboard",
+        description: "Strong VRMs, PCIe Gen5, and high-end connectivity.",
+        amazonQuery: "Z790 motherboard"
+      });
+      motherboard.push({
+        title: "Xeon workstation board",
+        description: "Workstation chipset with enterprise reliability.",
+        amazonQuery: "Intel W790 motherboard"
+      });
+    } else {
+      cpu.push(
+        {
+          title: "Flagship AMD CPU",
+          description: "Maximum cache + cores for longevity.",
+          amazonQuery: "Ryzen 9 7950X3D CPU"
+        },
+        {
+          title: "AMD Threadripper workstation",
+          description: "Huge core counts and PCIe lanes for heavy workloads.",
+          amazonQuery: "AMD Threadripper CPU"
+        },
+        {
+          title: "Flagship Intel CPU",
+          description: "Top-end clocks with strong multi-thread performance.",
+          amazonQuery: "Intel i9 14900KS CPU"
+        },
+        {
+          title: "Intel Xeon workstation",
+          description: "Workstation-class stability and core counts.",
+          amazonQuery: "Intel Xeon W CPU"
+        }
+      );
+      motherboard.push(
+        {
+          title: "X670E premium motherboard",
+          description: "High-end AM5 boards with strong VRMs and Gen5 storage.",
+          amazonQuery: "X670E motherboard"
+        },
+        {
+          title: "TRX50 workstation board",
+          description: "Massive PCIe lanes for GPUs and NVMe arrays.",
+          amazonQuery: "TRX50 motherboard"
+        },
+        {
+          title: "Z790 premium motherboard",
+          description: "Strong VRMs, PCIe Gen5, and high-end connectivity.",
+          amazonQuery: "Z790 motherboard"
+        },
+        {
+          title: "W790 workstation board",
+          description: "Workstation chipset with enterprise reliability.",
+          amazonQuery: "Intel W790 motherboard"
+        }
+      );
+    }
+
+    if (selectedWorkload === "AI/ML") {
+      ram.push(
+        {
+          title: "128 GB DDR5",
+          description: "Better for large datasets and multi-env workflows.",
+          amazonQuery: "128GB DDR5 kit"
+        },
+        {
+          title: "192 GB DDR5 (if supported)",
+          description: "Max out memory for local training and large models.",
+          amazonQuery: "192GB DDR5 kit"
+        }
+      );
+    } else {
+      ram.push(
+        {
+          title: "64 GB DDR5",
+          description: "Futureproof for next-gen games and heavy multitasking.",
+          amazonQuery: "64GB DDR5 kit"
+        },
+        {
+          title: "128 GB DDR5",
+          description: "Overkill headroom for content creation and VMs.",
+          amazonQuery: "128GB DDR5 kit"
+        }
+      );
+    }
+
+    ram.push({
+      title: "ECC DDR5 (workstation option)",
+      description: "Extra stability for critical workloads (requires compatible board/CPU).",
+      amazonQuery: "ECC DDR5 memory"
+    });
+
+    if (gpuNeeded) {
+      gpu.push(
+        {
+          title: "Flagship GPU (24 GB VRAM)",
+          description: "Best-in-class performance and longevity.",
+          amazonQuery: "RTX 4090 graphics card"
+        },
+        {
+          title: "Workstation-class GPU",
+          description: "Built for stability and long-term driver support.",
+          amazonQuery: "RTX 6000 Ada graphics card"
+        }
+      );
+    }
+
+    psu.push({
+      title: "1200-1600W 80+ Platinum/Titanium",
+      description: "Handles peak spikes, dual upgrades, and silent fan curves.",
+      amazonQuery: "1200W 80+ Platinum power supply"
+    });
+    psu.push({
+      title: "Redundant workstation PSU (if supported)",
+      description: "Enterprise-grade redundancy for uptime-critical builds.",
+      amazonQuery: "redundant power supply workstation"
+    });
+
+    storage.push(
+      {
+        title: "4-8TB NVMe Gen4/Gen5 (Primary)",
+        description: "Massive headroom for OS, apps, and active projects.",
+        amazonQuery: "8TB NVMe SSD"
+      },
+      {
+        title: "4-8TB secondary SSD/HDD",
+        description: "Cold storage for archives and backups.",
+        amazonQuery: "8TB HDD"
+      }
+    );
+
+    enterpriseStorage.push(
+      {
+        title: "U.2/U.3 enterprise NVMe",
+        description: "High endurance and consistent performance.",
+        amazonQuery: "U.2 NVMe SSD"
+      },
+      {
+        title: "Hardware RAID card",
+        description: "For redundant arrays and sustained throughput.",
+        amazonQuery: "hardware RAID controller PCIe"
+      },
+      {
+        title: "Hot-swap drive bay",
+        description: "Easier swaps and expansion for storage arrays.",
+        amazonQuery: "hot swap drive bay"
+      }
+    );
+
+    cooling.push(
+      {
+        title: "420mm AIO or Custom Loop",
+        description: "Maximum thermal headroom for flagship CPUs.",
+        amazonQuery: "420mm AIO liquid cooler"
+      },
+      {
+        title: "Premium case fans (quiet high airflow)",
+        description: "Lower noise at higher airflow.",
+        amazonQuery: "premium PWM case fans"
+      }
+    );
+
+    networking.push(
+      {
+        title: "10GbE NIC (PCIe)",
+        description: "Fast LAN for large asset transfers and NAS workflows.",
+        amazonQuery: "10GbE PCIe network card"
+      },
+      {
+        title: "Wi-Fi 7 card (if needed)",
+        description: "Latest wireless standard for high-throughput environments.",
+        amazonQuery: "Wi-Fi 7 PCIe card"
+      }
+    );
+
+    extras.push(
+      "Add a UPS for clean shutdowns during power loss.",
+      "Consider a PCIe Gen5 NVMe if your motherboard supports it.",
+      "Budget for a quality surge protector and extra thermal paste.",
+      "If you need ECC memory or more PCIe lanes, consider a workstation platform (Threadripper / Xeon)."
+    );
+
+    return {
+      cpu,
+      ram,
+      gpu,
+      psu,
+      storage,
+      cooling,
+      extras,
+      motherboard,
+      networking,
+      enterpriseStorage
+    };
+  }, [overkillMode, cpuPlatform, gpuNeeded, selectedWorkload]);
+
   const buildSummary = useMemo(() => {
     const summary = [
       `Budget target: $${budgetTarget} (${budgetBand})`,
+      `Futureproof mode: ${overkillMode ? `Enabled (target $8000-$${budgetMaxOverkill})` : "Off"}`,
       `Noise profile: ${noiseProfile}`,
       `Case size: ${selectedCase}`,
       `Motherboard form factors: ${caseDetail.formFactors.map((f) => f.name).join(", ")}`,
@@ -997,6 +1255,7 @@ export function PCBuildInteractive({ className }: { className?: string }) {
     recommendedCooling,
     fanRecommendation,
     recommendations.psu,
+    overkillMode,
     gpuLengthMm,
     caseClearanceMm
   ]);
@@ -1053,6 +1312,7 @@ export function PCBuildInteractive({ className }: { className?: string }) {
     setStorageProfile("Balanced");
     setNoiseProfile("Balanced");
     setBudgetTarget(1500);
+    setOverkillMode(false);
     setGpuLengthMm("");
     setCaseClearanceMm("");
   }
@@ -1184,7 +1444,14 @@ export function PCBuildInteractive({ className }: { className?: string }) {
               <p className="font-semibold text-slate-900 dark:text-slate-100">
                 Budget target: ${budgetTarget}
               </p>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Band: {budgetBand}</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Band: {budgetBand}
+              </p>
+              {!overkillMode ? (
+                <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">
+                  Enable overkill to unlock budgets up to ${budgetMaxOverkill}.
+                </p>
+              ) : null}
             </div>
           </div>
         </div>
@@ -1240,6 +1507,53 @@ export function PCBuildInteractive({ className }: { className?: string }) {
                 <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">{option.summary}</p>
               </button>
             ))}
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+            Optional
+          </p>
+          <h3 className="mt-2 text-lg font-semibold text-slate-900 dark:text-slate-100">
+            Futureproof / overkill mode ($8000+)
+          </h3>
+          <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+            Uses flagship parts, maximum headroom, and long-term upgrade runway.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                setOverkillMode(true);
+                setGpuNeeded(true);
+                setBudgetTarget(Math.max(overkillSuggestedBudget, budgetTarget, budgetMaxStandard));
+              }}
+              className={classNames(
+                "rounded-full border px-4 py-2 text-xs font-semibold transition",
+                overkillMode
+                  ? "border-slate-900 bg-slate-900 text-white dark:border-slate-100 dark:bg-slate-100 dark:text-slate-900"
+                  : "border-line/70 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
+              )}
+            >
+              Enable
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setOverkillMode(false);
+                if (budgetTarget > budgetMaxStandard) {
+                  setBudgetTarget(budgetMaxStandard);
+                }
+              }}
+              className={classNames(
+                "rounded-full border px-4 py-2 text-xs font-semibold transition",
+                !overkillMode
+                  ? "border-slate-900 bg-slate-900 text-white dark:border-slate-100 dark:bg-slate-100 dark:text-slate-900"
+                  : "border-line/70 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
+              )}
+            >
+              Standard
+            </button>
           </div>
         </div>
 
@@ -1629,6 +1943,98 @@ export function PCBuildInteractive({ className }: { className?: string }) {
           </div>
         </div>
       </div>
+
+      {overkillMode && overkillRecommendations ? (
+        <div className="mt-6 grid gap-5 lg:grid-cols-2">
+          <div className="rounded-2xl border border-rose-200/80 bg-rose-50/60 p-5 dark:border-rose-900/50 dark:bg-rose-950/30">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h3 className="text-lg font-semibold text-rose-900 dark:text-rose-100">
+                Overkill upgrades (core parts)
+              </h3>
+              <span className="rounded-full border border-rose-300 bg-rose-100 px-2 py-0.5 text-[10px] font-semibold text-rose-700 dark:border-rose-800 dark:bg-rose-900/40 dark:text-rose-200">
+                Futureproof tier
+              </span>
+            </div>
+            <div className="mt-4 space-y-4">
+              {[
+                { title: "CPU", items: overkillRecommendations.cpu },
+                { title: "Motherboard", items: overkillRecommendations.motherboard },
+                { title: "RAM", items: overkillRecommendations.ram },
+                ...(gpuNeeded ? [{ title: "GPU", items: overkillRecommendations.gpu }] : [])
+              ].map((block) => (
+                <div key={block.title} className="rounded-xl border border-rose-200/80 bg-white px-4 py-3 dark:border-rose-900/60 dark:bg-rose-950/40">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-rose-500 dark:text-rose-300">
+                    {block.title}
+                  </p>
+                  <div className="mt-3 space-y-3">
+                    {block.items.map((item) => (
+                      <div key={item.title} className="text-sm">
+                        <p className="text-sm font-semibold text-rose-900 dark:text-rose-100">{item.title}</p>
+                        <p className="mt-1 text-xs text-rose-700/80 dark:text-rose-200/80">{item.description}</p>
+                        <a
+                          href={buildAmazonSearchLink(item.amazonQuery)}
+                          target="_blank"
+                          rel="sponsored nofollow noreferrer"
+                          className="mt-2 inline-flex items-center rounded-full border border-rose-200 bg-rose-50 px-3 py-1 text-[11px] font-semibold text-rose-800 transition hover:border-rose-300 hover:bg-rose-100 dark:border-rose-900/70 dark:bg-rose-950/50 dark:text-rose-200"
+                        >
+                          Amazon options
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-rose-200/80 bg-rose-50/60 p-5 dark:border-rose-900/50 dark:bg-rose-950/30">
+            <h3 className="text-lg font-semibold text-rose-900 dark:text-rose-100">Overkill upgrades (system)</h3>
+            <div className="mt-4 space-y-4">
+              {[
+                { title: "Power", items: overkillRecommendations.psu },
+                { title: "Storage", items: overkillRecommendations.storage },
+                { title: "Enterprise storage", items: overkillRecommendations.enterpriseStorage },
+                { title: "Cooling", items: overkillRecommendations.cooling },
+                { title: "Networking", items: overkillRecommendations.networking }
+              ].map((block) => (
+                <div key={block.title} className="rounded-xl border border-rose-200/80 bg-white px-4 py-3 dark:border-rose-900/60 dark:bg-rose-950/40">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-rose-500 dark:text-rose-300">
+                    {block.title}
+                  </p>
+                  <div className="mt-3 space-y-3">
+                    {block.items.map((item) => (
+                      <div key={item.title} className="text-sm">
+                        <p className="text-sm font-semibold text-rose-900 dark:text-rose-100">{item.title}</p>
+                        <p className="mt-1 text-xs text-rose-700/80 dark:text-rose-200/80">{item.description}</p>
+                        <a
+                          href={buildAmazonSearchLink(item.amazonQuery)}
+                          target="_blank"
+                          rel="sponsored nofollow noreferrer"
+                          className="mt-2 inline-flex items-center rounded-full border border-rose-200 bg-rose-50 px-3 py-1 text-[11px] font-semibold text-rose-800 transition hover:border-rose-300 hover:bg-rose-100 dark:border-rose-900/70 dark:bg-rose-950/50 dark:text-rose-200"
+                        >
+                          Amazon options
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+              <div className="rounded-xl border border-rose-200/80 bg-white px-4 py-3 text-xs text-rose-700/80 dark:border-rose-900/60 dark:bg-rose-950/40 dark:text-rose-200/80">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-rose-500 dark:text-rose-300">
+                  Futureproof notes
+                </p>
+                <ul className="mt-2 space-y-2 pl-4">
+                  {overkillRecommendations.extras.map((item) => (
+                    <li key={item} className="list-disc">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       <div className="mt-6 grid gap-5 lg:grid-cols-2">
         <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">

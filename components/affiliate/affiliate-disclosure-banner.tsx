@@ -30,10 +30,10 @@ export function AffiliateDisclosureBanner({
         <p className="mt-2 text-amber-900 dark:text-amber-100">
           Link governance and support mappings are documented in the affiliate support guides in{" "}
           <Link
-            href="/support/kb/"
+            href="/support/tickets/"
             className="font-semibold underline decoration-amber-700 underline-offset-4 dark:decoration-amber-300"
           >
-            Support KB
+            Support Tickets
           </Link>
           .
         </p>

@@ -15,10 +15,10 @@ function cx(...classes: Array<string | false | null | undefined>): string {
 
 const baseNavItems = [
   { href: "/support", label: "Home", icon: "home" as const },
-  { href: "/support/kb", label: "Knowledge Base", icon: "book" as const },
+  { href: "/support/tickets", label: "Tickets", icon: "tickets" as const },
   { href: "/support/catalog", label: "Service Catalog", icon: "catalog" as const },
   { href: "/support/incident/new", label: "Submit Incident", icon: "incident" as const },
-  { href: "/support/tickets", label: "My Tickets", icon: "tickets" as const },
+  { href: "/support/my-tickets", label: "My Tickets", icon: "tickets" as const },
   { href: "/support/analytics", label: "Analytics", icon: "analytics" as const }
 ];
 

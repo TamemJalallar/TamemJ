@@ -10,9 +10,9 @@ const BUILDER_AUTH_MODE = (
 const USES_CLOUDFLARE_ACCESS = BUILDER_AUTH_MODE === "cloudflare-access";
 
 export const metadata: Metadata = {
-  title: "Corporate Tech Fixes KB Builder",
+  title: "Corporate Tech Fixes Ticket Builder",
   description:
-    "Authoring tool for creating Corporate Tech Fixes knowledge base entries and support documentation drafts.",
+    "Authoring tool for creating Corporate Tech Fixes ticket entries and support documentation drafts.",
   alternates: {
     canonical: "/corporate-tech-fixes/builder/"
   },

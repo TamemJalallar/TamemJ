@@ -99,11 +99,11 @@ export default function GuidesPage() {
             </h1>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600 dark:text-slate-300 sm:text-base">
               Structured hubs for high-intent enterprise IT search demand. Each pillar links to related
-              troubleshooting KBs, download assets, and monetization-aligned keyword opportunities.
+              troubleshooting tickets, download assets, and monetization-aligned keyword opportunities.
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
-              <Link href="/support/kb" className="btn-secondary">
-                Open Knowledge Base
+              <Link href="/support/tickets" className="btn-secondary">
+                Open Tickets
               </Link>
               <Link href="/downloads/assets" className="btn-secondary">
                 Open IT Assets
@@ -191,7 +191,7 @@ export default function GuidesPage() {
                     <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{pillar.description}</p>
                     <div className="mt-3 flex flex-wrap gap-2 text-xs">
                       <span className="rounded-full border border-line/80 bg-slate-50 px-2.5 py-1 font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
-                        {kbCount} related KBs
+                        {kbCount} related tickets
                       </span>
                       <span className="rounded-full border border-line/80 bg-slate-50 px-2.5 py-1 font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
                         {assetCount} related assets

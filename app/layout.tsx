@@ -77,7 +77,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
     description: siteConfig.description,
     potentialAction: {
       "@type": "SearchAction",
-      target: `${toAbsoluteUrl("/support/kb/")}?q={search_term_string}`,
+      target: `${toAbsoluteUrl("/support/tickets/")}?q={search_term_string}`,
       "query-input": "required name=search_term_string"
     } as SearchAction
   };

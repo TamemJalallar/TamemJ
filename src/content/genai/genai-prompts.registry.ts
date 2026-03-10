@@ -576,8 +576,8 @@ export const genaiPrompts: GenAIPrompt[] = [
     id: "genai-009"
   },
   {
-    slug: "knowledge-base-article-draft",
-    title: "Knowledge Base Article Draft",
+    slug: "ticket-article-draft",
+    title: "Ticket Article Draft",
     platform: "MetaAI",
     tool: "Chat",
     complexity: "Simple",
@@ -587,13 +587,13 @@ export const genaiPrompts: GenAIPrompt[] = [
       "chat",
       "support",
       "workflow",
-      "knowledge",
-      "base",
+      "ticket",
+      "library",
       "article",
       "draft"
     ],
-    summary: "Meta AI prompt for draft a troubleshooting article with safe steps with structured outputs.",
-    prompt: "You are a senior assistant operating in Meta AI chat.\n\nRole:\n- Act as a domain expert for: Knowledge Base Article Draft.\n\nObjective:\n- Draft a troubleshooting article with safe steps for {brand_name} targeting {audience}.\n\nConstraints:\n- Tone: {tone}\n- Respect policy, legal, and compliance boundaries.\n- Avoid speculation and do not fabricate metrics or references.\n- If required context is missing, ask up to 3 focused clarifying questions before drafting.\n\nOutput Rules:\n- Output format: Steps\n- Include: summary, recommended actions, and next steps.\n- Provide one concise version and one expanded version.",
+    summary: "Meta AI prompt to draft a troubleshooting ticket article with safe steps and structured outputs.",
+    prompt: "You are a senior assistant operating in Meta AI chat.\n\nRole:\n- Act as a domain expert for: Ticket Article Draft.\n\nObjective:\n- Draft a troubleshooting ticket article with safe steps for {brand_name} targeting {audience}.\n\nConstraints:\n- Tone: {tone}\n- Respect policy, legal, and compliance boundaries.\n- Avoid speculation and do not fabricate metrics or references.\n- If required context is missing, ask up to 3 focused clarifying questions before drafting.\n\nOutput Rules:\n- Output format: Steps\n- Include: summary, recommended actions, and next steps.\n- Provide one concise version and one expanded version.",
     variables: [
       {
         key: "brand_name",
@@ -3218,8 +3218,8 @@ export const genaiPrompts: GenAIPrompt[] = [
     id: "genai-051"
   },
   {
-    slug: "knowledge-base-taxonomy-design",
-    title: "Knowledge Base Taxonomy Design",
+    slug: "ticket-taxonomy-design",
+    title: "Ticket Taxonomy Design",
     platform: "MetaAI",
     tool: "Chat",
     complexity: "Advanced",
@@ -3229,13 +3229,13 @@ export const genaiPrompts: GenAIPrompt[] = [
       "chat",
       "content",
       "workflow",
-      "knowledge",
-      "base",
+      "ticket",
+      "library",
       "taxonomy",
       "design"
     ],
-    summary: "Advanced Meta AI prompt for design kb taxonomy and governance with assumptions and tradeoffs.",
-    prompt: "You are a senior assistant operating in Meta AI chat.\n\nRole:\n- Act as a domain expert for: Knowledge Base Taxonomy Design.\n\nObjective:\n- Design KB taxonomy and governance for {brand_name} targeting {audience}.\n\nConstraints:\n- Tone: {tone}\n- Respect policy, legal, and compliance boundaries.\n- Avoid speculation and do not fabricate metrics or references.\n- Provide a primary recommendation and a fallback option with tradeoffs.\n- Start by listing assumptions and risks before final output.\n\nOutput Rules:\n- Output format: Steps\n- Include: summary, recommended actions, and next steps.\n- Provide one concise version and one expanded version.",
+    summary: "Advanced Meta AI prompt to design ticket taxonomy and governance with assumptions and tradeoffs.",
+    prompt: "You are a senior assistant operating in Meta AI chat.\n\nRole:\n- Act as a domain expert for: Ticket Taxonomy Design.\n\nObjective:\n- Design ticket taxonomy and governance for {brand_name} targeting {audience}.\n\nConstraints:\n- Tone: {tone}\n- Respect policy, legal, and compliance boundaries.\n- Avoid speculation and do not fabricate metrics or references.\n- Provide a primary recommendation and a fallback option with tradeoffs.\n- Start by listing assumptions and risks before final output.\n\nOutput Rules:\n- Output format: Steps\n- Include: summary, recommended actions, and next steps.\n- Provide one concise version and one expanded version.",
     variables: [
       {
         key: "brand_name",
