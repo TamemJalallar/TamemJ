@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { Suspense } from "react";
 import { LegacyKbRedirect } from "@/components/support-portal/legacy-kb-redirect";
 import { getKBArticleBySlug, getKBArticles } from "@/lib/support.kb.registry";
 import { buildKbArticleMetadata } from "@/lib/support-portal.seo";
@@ -41,7 +42,15 @@ export default async function KBArticlePage({ params }: KBArticlePageProps) {
   return (
     <section className="section-shell pb-10 pt-10 sm:pt-14">
       <div className="page-shell max-w-3xl">
-        <LegacyKbRedirect targetPath={`/support/tickets/${article.slug}`} />
+        <Suspense
+          fallback={
+            <div className="rounded-2xl border border-line/70 bg-white p-5 text-sm text-slate-700 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 dark:text-slate-200">
+              Redirecting to tickets…
+            </div>
+          }
+        >
+          <LegacyKbRedirect targetPath={`/support/tickets/${article.slug}`} />
+        </Suspense>
         <div className="mt-6 text-sm text-slate-600 dark:text-slate-300">
           If you are not redirected automatically, open{" "}
           <Link href={`/support/tickets/${article.slug}`} className="font-semibold text-accent hover:underline">
