@@ -4,7 +4,6 @@ import Link from "next/link";
 import { LegacyKbRedirect } from "@/components/support-portal/legacy-kb-redirect";
 import { getKBArticleBySlug, getKBArticles } from "@/lib/support.kb.registry";
 import { buildKbArticleMetadata } from "@/lib/support-portal.seo";
-import { buildKbArticleMetadata } from "@/lib/support-portal.seo";
 
 interface KBArticlePageProps {
   params: Promise<{ slug: string }>;
