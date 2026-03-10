@@ -17,6 +17,11 @@ type Recommendation = {
   note?: string;
 };
 
+type TaggedRecommendation = Recommendation & {
+  badge?: "Best Value" | "Balanced" | "Performance" | "Max Performance";
+  badgeTone?: "value" | "balanced" | "performance";
+};
+
 type FormFactor = {
   name: string;
   inches: string;
@@ -170,6 +175,17 @@ const noiseOptions: Array<{ value: NoiseProfile; summary: string }> = [
 
 function classNames(...values: Array<string | false | null | undefined>): string {
   return values.filter(Boolean).join(" ");
+}
+
+function badgeClass(tone?: TaggedRecommendation["badgeTone"]): string {
+  switch (tone) {
+    case "performance":
+      return "border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-900/60 dark:bg-rose-950/40 dark:text-rose-200";
+    case "balanced":
+      return "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-900/60 dark:bg-amber-950/40 dark:text-amber-200";
+    default:
+      return "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900/60 dark:bg-emerald-950/40 dark:text-emerald-200";
+  }
 }
 
 function clamp(value: number, min: number, max: number): number {
@@ -346,8 +362,35 @@ function pickByBudget(list: Recommendation[], band: BudgetBand): Recommendation[
   if (list.length <= 1) return list;
   if (band === "Entry") return list.slice(0, 1);
   if (band === "Midrange") return list.slice(0, Math.min(2, list.length));
-  if (band === "High-End") return list.slice(Math.max(list.length - 2, 0));
-  return list;
+  if (band === "High-End") {
+    if (list.length >= 3) return list.slice(1, 3);
+    return list.slice(0, Math.min(2, list.length));
+  }
+  return list.length >= 3 ? list.slice(Math.max(list.length - 3, 0)) : list;
+}
+
+function tagRecommendations(items: Recommendation[], band: BudgetBand): TaggedRecommendation[] {
+  if (items.length === 0) return [];
+  const tagged: TaggedRecommendation[] = items.map((item) => ({ ...item }));
+  if (items.length === 1) {
+    tagged[0].badge = "Best Value";
+    tagged[0].badgeTone = "value";
+    return tagged;
+  }
+
+  tagged[0].badge = "Best Value";
+  tagged[0].badgeTone = "value";
+  const lastIndex = items.length - 1;
+  tagged[lastIndex].badge = band === "Enthusiast" ? "Max Performance" : "Performance";
+  tagged[lastIndex].badgeTone = "performance";
+  if (items.length > 2) {
+    const midIndex = Math.floor(items.length / 2);
+    if (!tagged[midIndex].badge) {
+      tagged[midIndex].badge = "Balanced";
+      tagged[midIndex].badgeTone = "balanced";
+    }
+  }
+  return tagged;
 }
 
 export function PCBuildInteractive({ className }: { className?: string }) {
@@ -1318,10 +1361,13 @@ export function PCBuildInteractive({ className }: { className?: string }) {
     setCaseClearanceMm("");
   }
 
-  const cpuOptions = pickByBudget(recommendations.cpu, budgetBand);
-  const ramOptions = pickByBudget(recommendations.ram, budgetBand);
-  const gpuOptions = pickByBudget(recommendations.gpu, budgetBand);
-  const psuOptions = pickByBudget(recommendations.psu, budgetBand);
+  const cpuOptions = tagRecommendations(pickByBudget(recommendations.cpu, budgetBand), budgetBand);
+  const ramOptions = tagRecommendations(pickByBudget(recommendations.ram, budgetBand), budgetBand);
+  const gpuOptions = tagRecommendations(pickByBudget(recommendations.gpu, budgetBand), budgetBand);
+  const psuOptions = tagRecommendations(pickByBudget(recommendations.psu, budgetBand), budgetBand);
+  const storageOptionsTagged = tagRecommendations(pickByBudget(storageRecommendations, budgetBand), budgetBand);
+  const essentialsTagged = tagRecommendations(pickByBudget(recommendations.essentials, budgetBand), budgetBand);
+  const peripheralsTagged = tagRecommendations(pickByBudget(recommendations.peripherals, budgetBand), budgetBand);
   const selectionTally = [
     { label: "Case size", value: selectedCase },
     { label: "Form factors", value: caseDetail.formFactors.map((factor) => factor.name).join(", ") },
@@ -1334,23 +1380,6 @@ export function PCBuildInteractive({ className }: { className?: string }) {
     { label: "Overkill mode", value: overkillMode ? "Enabled" : "Off" },
     { label: "Cooling", value: recommendedCooling }
   ];
-  const tallyCounts = [
-    { label: "CPU options", value: cpuOptions.length },
-    { label: "RAM options", value: ramOptions.length },
-    { label: "GPU options", value: gpuNeeded ? gpuOptions.length : 0 },
-    { label: "PSU options", value: psuOptions.length },
-    { label: "Storage picks", value: storageRecommendations.length },
-    { label: "Peripherals", value: recommendations.peripherals.length }
-  ].filter((item) => item.value > 0);
-  const overkillCounts = overkillMode && overkillRecommendations
-    ? [
-        { label: "Overkill CPU", value: overkillRecommendations.cpu.length },
-        { label: "Overkill RAM", value: overkillRecommendations.ram.length },
-        { label: "Overkill GPU", value: gpuNeeded ? overkillRecommendations.gpu.length : 0 },
-        { label: "Overkill PSU", value: overkillRecommendations.psu.length },
-        { label: "Overkill storage", value: overkillRecommendations.storage.length }
-      ].filter((item) => item.value > 0)
-    : [];
 
   return (
     <section className={classNames("surface-card-strong p-6 sm:p-8 lg:p-10", className)}>
@@ -1456,7 +1485,7 @@ export function PCBuildInteractive({ className }: { className?: string }) {
             Budget target
           </h3>
           <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
-            This prioritizes which recommendations show up first.
+            This tunes how aggressive the value-focused picks are for your workload.
           </p>
           <div className="mt-4">
             <div className="flex items-center justify-between text-sm text-slate-600 dark:text-slate-300">
@@ -1785,12 +1814,24 @@ export function PCBuildInteractive({ className }: { className?: string }) {
             ))}
           </div>
           <div className="mt-4 space-y-3">
-            {storageRecommendations.map((item) => (
+            {storageOptionsTagged.map((item) => (
               <div
                 key={item.title}
                 className="rounded-xl border border-line/70 bg-slate-50 px-4 py-3 text-sm dark:border-slate-800 dark:bg-slate-900"
               >
-                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">{item.title}</p>
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">{item.title}</p>
+                  {item.badge ? (
+                    <span
+                      className={classNames(
+                        "rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em]",
+                        badgeClass(item.badgeTone)
+                      )}
+                    >
+                      {item.badge}
+                    </span>
+                  ) : null}
+                </div>
                 <p className="mt-2 text-xs text-slate-600 dark:text-slate-300">{item.description}</p>
                 <a
                   href={buildAmazonSearchLink(item.amazonQuery)}
@@ -1814,7 +1855,19 @@ export function PCBuildInteractive({ className }: { className?: string }) {
                 key={item.title}
                 className="rounded-xl border border-line/70 bg-slate-50 px-4 py-3 text-sm dark:border-slate-800 dark:bg-slate-900"
               >
-                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">{item.title}</p>
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">{item.title}</p>
+                  {item.badge ? (
+                    <span
+                      className={classNames(
+                        "rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em]",
+                        badgeClass(item.badgeTone)
+                      )}
+                    >
+                      {item.badge}
+                    </span>
+                  ) : null}
+                </div>
                 <p className="mt-2 text-xs text-slate-600 dark:text-slate-300">{item.description}</p>
                 <a
                   href={buildAmazonSearchLink(item.amazonQuery)}
@@ -1839,7 +1892,19 @@ export function PCBuildInteractive({ className }: { className?: string }) {
                 key={item.title}
                 className="rounded-xl border border-line/70 bg-slate-50 px-4 py-3 text-sm dark:border-slate-800 dark:bg-slate-900"
               >
-                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">{item.title}</p>
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">{item.title}</p>
+                  {item.badge ? (
+                    <span
+                      className={classNames(
+                        "rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em]",
+                        badgeClass(item.badgeTone)
+                      )}
+                    >
+                      {item.badge}
+                    </span>
+                  ) : null}
+                </div>
                 <p className="mt-2 text-xs text-slate-600 dark:text-slate-300">{item.description}</p>
                 <a
                   href={buildAmazonSearchLink(item.amazonQuery)}
@@ -1863,7 +1928,19 @@ export function PCBuildInteractive({ className }: { className?: string }) {
                   key={item.title}
                   className="rounded-xl border border-line/70 bg-slate-50 px-4 py-3 text-sm dark:border-slate-800 dark:bg-slate-900"
                 >
-                  <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">{item.title}</p>
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">{item.title}</p>
+                    {item.badge ? (
+                      <span
+                        className={classNames(
+                          "rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em]",
+                          badgeClass(item.badgeTone)
+                        )}
+                      >
+                        {item.badge}
+                      </span>
+                    ) : null}
+                  </div>
                   <p className="mt-2 text-xs text-slate-600 dark:text-slate-300">{item.description}</p>
                   <a
                     href={buildAmazonSearchLink(item.amazonQuery)}
@@ -1894,7 +1971,19 @@ export function PCBuildInteractive({ className }: { className?: string }) {
                 key={item.title}
                 className="rounded-xl border border-line/70 bg-slate-50 px-4 py-3 text-sm dark:border-slate-800 dark:bg-slate-900"
               >
-                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">{item.title}</p>
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">{item.title}</p>
+                  {item.badge ? (
+                    <span
+                      className={classNames(
+                        "rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em]",
+                        badgeClass(item.badgeTone)
+                      )}
+                    >
+                      {item.badge}
+                    </span>
+                  ) : null}
+                </div>
                 <p className="mt-2 text-xs text-slate-600 dark:text-slate-300">{item.description}</p>
                 <a
                   href={buildAmazonSearchLink(item.amazonQuery)}
@@ -2072,12 +2161,24 @@ export function PCBuildInteractive({ className }: { className?: string }) {
             <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
           <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Build essentials</h3>
           <div className="mt-4 space-y-3">
-            {recommendations.essentials.map((item) => (
+            {essentialsTagged.map((item) => (
               <div
                 key={item.title}
                 className="rounded-xl border border-line/70 bg-slate-50 px-4 py-3 text-sm dark:border-slate-800 dark:bg-slate-900"
               >
-                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">{item.title}</p>
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">{item.title}</p>
+                  {item.badge ? (
+                    <span
+                      className={classNames(
+                        "rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em]",
+                        badgeClass(item.badgeTone)
+                      )}
+                    >
+                      {item.badge}
+                    </span>
+                  ) : null}
+                </div>
                 <p className="mt-2 text-xs text-slate-600 dark:text-slate-300">{item.description}</p>
                 <a
                   href={buildAmazonSearchLink(item.amazonQuery)}
@@ -2095,12 +2196,24 @@ export function PCBuildInteractive({ className }: { className?: string }) {
             <div className="rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
           <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Peripherals</h3>
           <div className="mt-4 grid gap-3 md:grid-cols-2">
-            {recommendations.peripherals.map((item) => (
+            {peripheralsTagged.map((item) => (
               <div
                 key={item.title}
                 className="rounded-xl border border-line/70 bg-slate-50 px-4 py-3 text-sm dark:border-slate-800 dark:bg-slate-900"
               >
-                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">{item.title}</p>
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">{item.title}</p>
+                  {item.badge ? (
+                    <span
+                      className={classNames(
+                        "rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em]",
+                        badgeClass(item.badgeTone)
+                      )}
+                    >
+                      {item.badge}
+                    </span>
+                  ) : null}
+                </div>
                 <p className="mt-2 text-xs text-slate-600 dark:text-slate-300">{item.description}</p>
                 <a
                   href={buildAmazonSearchLink(item.amazonQuery)}
@@ -2193,36 +2306,9 @@ export function PCBuildInteractive({ className }: { className?: string }) {
               ) : null}
             </div>
 
-            <div className="mt-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
-                Recommendation counts
-              </p>
-              <div className="mt-2 flex flex-wrap gap-2">
-                {tallyCounts.map((item) => (
-                  <span
-                    key={item.label}
-                    className="rounded-full border border-line/70 bg-slate-50 px-3 py-1 text-[11px] font-semibold text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
-                  >
-                    {item.label}: {item.value}
-                  </span>
-                ))}
-              </div>
+            <div className="mt-4 rounded-xl border border-line/70 bg-slate-50 px-3 py-2 text-xs text-slate-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">
+              Badges highlight the best value and performance picks for your workload.
             </div>
-
-            {overkillCounts.length > 0 ? (
-              <div className="mt-4 rounded-xl border border-rose-200/80 bg-rose-50/70 px-3 py-2 text-xs text-rose-700 dark:border-rose-900/60 dark:bg-rose-950/40 dark:text-rose-200">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-rose-500 dark:text-rose-300">
-                  Overkill counts
-                </p>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {overkillCounts.map((item) => (
-                    <span key={item.label} className="rounded-full border border-rose-200 px-2 py-0.5 text-[10px] font-semibold">
-                      {item.label}: {item.value}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ) : null}
 
             <div className="mt-4 grid gap-2">
               <button type="button" onClick={handleCopySummary} className="btn-secondary w-full">
