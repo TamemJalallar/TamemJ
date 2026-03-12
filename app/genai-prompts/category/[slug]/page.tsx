@@ -48,10 +48,9 @@ export async function generateMetadata({ params }: GenAIPromptCategoryPageProps)
     keywords: [
       `${category.toLowerCase()} ai prompts`,
       `${category.toLowerCase()} prompt templates`,
-      `${category.toLowerCase()} chatgpt prompts`,
-      `${category.toLowerCase()} claude prompts`,
       `${category.toLowerCase()} meta ai prompts`,
       `${category.toLowerCase()} adobe firefly prompts`,
+      `${category.toLowerCase()} adobe genai prompts`,
       `${category.toLowerCase()} generative ai`,
       "copy ready ai prompts",
       "ai prompt library",

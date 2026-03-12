@@ -5,7 +5,8 @@ import {
   getGenAICategories,
   getGenAICategorySlug,
   getGenAIPrompts,
-  getGenAIPromptsByCategory
+  getGenAIPromptsByCategory,
+  getLatestGenAIPromptUpdatedAt
 } from "@/lib/genai-prompts";
 import {
   buildBreadcrumbJsonLd,
@@ -38,8 +39,7 @@ export const metadata: Metadata = {
     "ai prompt templates",
     "copy ready ai prompts",
     "free ai prompts",
-    "ai prompts 2025",
-    "chatgpt prompt templates",
+    "ai prompts 2026",
     "meta ai prompts",
     "adobe firefly prompts",
     "adobe genai prompts",
@@ -62,9 +62,6 @@ export const metadata: Metadata = {
     "best ai prompts",
     "ai creative prompts",
     "ai writing prompts",
-    "midjourney style prompts",
-    "dalle prompt templates",
-    "stable diffusion prompts",
     "ai photo editing prompts",
     "vector art ai prompts",
     "ai video prompts",
@@ -87,6 +84,7 @@ export const metadata: Metadata = {
 export default function GenAIPromptsPage() {
   const prompts = getGenAIPrompts();
   const categories = getGenAICategories();
+  const latestUpdatedAt = getLatestGenAIPromptUpdatedAt();
 
   const categoryCards = categories.map((category) => ({
     name: category,
@@ -224,6 +222,10 @@ export default function GenAIPromptsPage() {
               </span>
               <span className="rounded-full border border-line/80 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
                 Free to copy
+              </span>
+              <span className="rounded-full border border-line/80 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
+                Updated{" "}
+                {new Date(latestUpdatedAt).toLocaleDateString("en-US", { dateStyle: "medium" })}
               </span>
             </div>
 

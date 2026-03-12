@@ -2,13 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
-  buildDownloadAssetRequestMailto,
   getDownloadAssetBundles,
   getDownloadAssetBySlug,
   getDownloadAssets
 } from "@/lib/download-assets.registry";
 import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
-import { siteConfig } from "@/lib/site";
 
 interface DownloadAssetPageProps {
   params: Promise<{ slug: string }>;
@@ -28,7 +26,7 @@ export async function generateMetadata({ params }: DownloadAssetPageProps): Prom
     return { title: "Asset Not Found" };
   }
 
-  const description = `${asset.description} Format: ${asset.format.toUpperCase()}. Access: ${asset.access}.`;
+  const description = `${asset.description} Format: ${asset.format.toUpperCase()}. File size: ${asset.fileSize}. Updated ${new Date(asset.updatedAt).toLocaleDateString("en-US", { dateStyle: "long" })}. Access: Free.`;
 
   return {
     title: `${asset.title} | IT Download Assets`,
@@ -52,16 +50,12 @@ export async function generateMetadata({ params }: DownloadAssetPageProps): Prom
   };
 }
 
-function accessTone(access: string): string {
-  if (access === "Free") {
-    return "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100";
-  }
+function accessTone(): string {
+  return "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100";
+}
 
-  if (access === "Email gate") {
-    return "border-sky-200 bg-sky-50 text-sky-700 dark:border-sky-700 dark:bg-sky-900/40 dark:text-sky-100";
-  }
-
-  return "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-700 dark:bg-amber-900/40 dark:text-amber-100";
+function formatUpdatedDate(isoDate: string): string {
+  return new Date(isoDate).toLocaleDateString("en-US", { dateStyle: "long" });
 }
 
 export default async function DownloadAssetDetailPage({ params }: DownloadAssetPageProps) {
@@ -76,7 +70,7 @@ export default async function DownloadAssetDetailPage({ params }: DownloadAssetP
   const relatedAssets = getDownloadAssets()
     .filter((candidate) => candidate.slug !== asset.slug && candidate.category === asset.category)
     .slice(0, 6);
-  const requestHref = buildDownloadAssetRequestMailto(asset, siteConfig.email);
+  const downloadHref = asset.downloadUrl;
 
   const assetSchema = {
     "@context": "https://schema.org",
@@ -84,9 +78,13 @@ export default async function DownloadAssetDetailPage({ params }: DownloadAssetP
     name: asset.title,
     description: asset.description,
     url: toAbsoluteUrl(`/downloads/assets/${asset.slug}/`),
+    contentUrl: asset.downloadUrl,
+    contentSize: `${asset.fileSizeBytes} B`,
+    dateModified: asset.updatedAt,
     fileFormat: asset.format,
     about: asset.category,
     keywords: asset.tags.join(", "),
+    isAccessibleForFree: true,
     audience: {
       "@type": "Audience",
       audienceType: "Enterprise IT administrators and support teams"
@@ -115,7 +113,7 @@ export default async function DownloadAssetDetailPage({ params }: DownloadAssetP
 
           <article className="surface-card-strong p-6 sm:p-8">
             <div className="flex flex-wrap items-center gap-2">
-              <span className={`rounded-full border px-2.5 py-1 text-xs font-semibold ${accessTone(asset.access)}`}>
+              <span className={`rounded-full border px-2.5 py-1 text-xs font-semibold ${accessTone()}`}>
                 {asset.access}
               </span>
               <span className="rounded-full border border-line/80 bg-slate-50 px-2.5 py-1 text-xs font-semibold uppercase text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
@@ -127,11 +125,6 @@ export default async function DownloadAssetDetailPage({ params }: DownloadAssetP
               <span className="rounded-full border border-line/80 bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
                 {asset.searchDemand} search demand
               </span>
-              {asset.priceLabel ? (
-                <span className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700 dark:border-amber-700 dark:bg-amber-900/40 dark:text-amber-100">
-                  {asset.priceLabel}
-                </span>
-              ) : null}
             </div>
 
             <h1 className="mt-4 text-2xl font-semibold text-slate-900 dark:text-slate-100 sm:text-3xl">
@@ -144,26 +137,80 @@ export default async function DownloadAssetDetailPage({ params }: DownloadAssetP
             <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               <MetaPill label="Format" value={asset.format.toUpperCase()} />
               <MetaPill label="Category" value={asset.category} />
-              <MetaPill label="Access" value={asset.access} />
-              <MetaPill label="Monetization" value={asset.monetization} />
+              <MetaPill label="File Size" value={asset.fileSize} />
+              <MetaPill label="Updated" value={formatUpdatedDate(asset.updatedAt)} />
             </div>
 
             <div className="mt-6 flex flex-wrap gap-2">
               <a
-                href={requestHref}
+                href={downloadHref}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="btn-primary"
               >
-                {asset.access === "Premium"
-                  ? "Request Purchase Details"
-                  : asset.access === "Email gate"
-                    ? "Request Email-Gated Access"
-                    : "Request Free Copy"}
+                Download Free Asset
               </a>
               <Link href="/contact" className="btn-secondary">
                 Contact
               </Link>
             </div>
           </article>
+
+          <section className="mt-6 grid gap-4 lg:grid-cols-[1.25fr_0.75fr]">
+            <div className="surface-card p-5 sm:p-6 dark:border-slate-700 dark:bg-slate-950">
+              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                Preview Metadata
+              </h2>
+              <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                Quick summary of what this asset includes before download.
+              </p>
+              <ul className="mt-4 space-y-2">
+                {asset.previewItems.map((item) => (
+                  <li
+                    key={item}
+                    className="flex gap-3 rounded-xl border border-line/80 bg-slate-50/80 px-3 py-3 text-sm text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+                  >
+                    <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-slate-400 dark:bg-slate-500" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <aside className="surface-card p-5 sm:p-6 dark:border-slate-700 dark:bg-slate-950">
+              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                File Details
+              </h2>
+              <dl className="mt-4 space-y-3 text-sm">
+                <div className="rounded-xl border border-line/80 bg-white/80 px-3 py-3 dark:border-slate-700 dark:bg-slate-900">
+                  <dt className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                    Delivery
+                  </dt>
+                  <dd className="mt-1 font-medium text-slate-900 dark:text-slate-100">Direct download</dd>
+                </div>
+                <div className="rounded-xl border border-line/80 bg-white/80 px-3 py-3 dark:border-slate-700 dark:bg-slate-900">
+                  <dt className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                    File Size
+                  </dt>
+                  <dd className="mt-1 font-medium text-slate-900 dark:text-slate-100">{asset.fileSize}</dd>
+                </div>
+                <div className="rounded-xl border border-line/80 bg-white/80 px-3 py-3 dark:border-slate-700 dark:bg-slate-900">
+                  <dt className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                    Last Updated
+                  </dt>
+                  <dd className="mt-1 font-medium text-slate-900 dark:text-slate-100">
+                    {formatUpdatedDate(asset.updatedAt)}
+                  </dd>
+                </div>
+                <div className="rounded-xl border border-line/80 bg-white/80 px-3 py-3 dark:border-slate-700 dark:bg-slate-900">
+                  <dt className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                    Host
+                  </dt>
+                  <dd className="mt-1 font-medium text-slate-900 dark:text-slate-100">downloads.tamemj.com</dd>
+                </div>
+              </dl>
+            </aside>
+          </section>
 
           {relatedBundles.length > 0 ? (
             <section className="mt-6 surface-card p-5 sm:p-6 dark:border-slate-700 dark:bg-slate-950">
@@ -176,11 +223,8 @@ export default async function DownloadAssetDetailPage({ params }: DownloadAssetP
                   >
                     <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">{bundle.title}</p>
                     <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                      {bundle.itemSlugs.length} assets • {bundle.monetization}
+                      {bundle.itemSlugs.length} assets • Free bundle
                     </p>
-                    {bundle.priceLabel ? (
-                      <p className="mt-1 text-xs text-amber-700 dark:text-amber-200">Bundle price: {bundle.priceLabel}</p>
-                    ) : null}
                   </div>
                 ))}
               </div>

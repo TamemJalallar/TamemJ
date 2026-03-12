@@ -73,8 +73,10 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: siteConfig.title,
+    alternateName: siteConfig.tagline,
     url: siteConfig.url,
     description: siteConfig.description,
+    inLanguage: "en-US",
     potentialAction: {
       "@type": "SearchAction",
       target: `${toAbsoluteUrl("/support/tickets/")}?q={search_term_string}`,
@@ -88,6 +90,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
     name: siteConfig.name,
     url: siteConfig.url,
     email: siteConfig.email,
+    description: siteConfig.description,
     contactPoint: {
       "@type": "ContactPoint",
       email: siteConfig.supportEmail,
@@ -103,11 +106,11 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
     url: siteConfig.url,
     jobTitle: "IT Solutions Engineer",
     email: siteConfig.email,
+    description: siteConfig.description,
     worksFor: {
       "@type": "Organization",
       name: siteConfig.name
-    },
-    sameAs: []
+    }
   };
 
   return (

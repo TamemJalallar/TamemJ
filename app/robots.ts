@@ -10,10 +10,12 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: "*",
         allow: "/",
         disallow: [
+          "/account/",
           "/support/admin/",
           "/support/analytics/",
           "/support/my-tickets/",
           "/support/incident/new/",
+          "/support/kb/",
           "/corporate-tech-fixes/builder/"
         ]
       }

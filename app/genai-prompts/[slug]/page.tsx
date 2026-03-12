@@ -9,7 +9,7 @@ import {
   getGenAIPrompts,
   getRelatedGenAIPrompts
 } from "@/lib/genai-prompts";
-import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
+import { buildArticleOpenGraph, buildBreadcrumbJsonLd, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 
 interface GenAIPromptPageProps {
   params: Promise<{ slug: string }>;
@@ -52,7 +52,13 @@ export async function generateMetadata({ params }: GenAIPromptPageProps): Promis
     alternates: {
       canonical: path
     },
-    openGraph: buildOpenGraph(`${title} | TamemJ`, description, path, "article"),
+    openGraph: buildArticleOpenGraph(`${title} | TamemJ`, description, path, {
+      publishedTime: prompt.updatedAt,
+      modifiedTime: prompt.updatedAt,
+      authors: ["Tamem J"],
+      section: prompt.category,
+      tags: [prompt.platform, prompt.tool, prompt.complexity, ...prompt.tags]
+    }),
     twitter: buildTwitter(`${title} | TamemJ`, description)
   };
 }

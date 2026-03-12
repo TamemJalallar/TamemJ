@@ -20,6 +20,8 @@ export const aiAgentPlatforms = [
   "Google Gemini"
 ] as const;
 
+export const aiAgentsLastVerified = "2026-03-12T00:00:00.000Z";
+
 export type AiAgentPlatform = (typeof aiAgentPlatforms)[number];
 
 const platformPromptGuidance: Record<AiAgentPlatform, string> = {
@@ -5894,6 +5896,10 @@ export const aiAgents: AiAgentPrompt[] = [
 ];
 
 export const aiAgentsRegistry = aiAgents;
+
+export function getAiAgentsLastVerified(): string {
+  return aiAgentsLastVerified;
+}
 
 export function getAiAgentsRegistry(): AiAgentPrompt[] {
   return aiAgents.map((agent) => ({ ...agent, tags: [...agent.tags] }));

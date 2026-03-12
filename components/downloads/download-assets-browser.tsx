@@ -2,8 +2,6 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { buildDownloadAssetRequestMailto } from "@/lib/download-assets.registry";
-import { siteConfig } from "@/lib/site";
 import type { DownloadAsset, DownloadAssetAccess, DownloadAssetBundle, DownloadAssetSearchDemand } from "@/types/download";
 
 interface DownloadAssetsBrowserProps {
@@ -15,16 +13,8 @@ function cx(...classes: Array<string | false | null | undefined>): string {
   return classes.filter(Boolean).join(" ");
 }
 
-function formatBadgeTone(access: DownloadAssetAccess): string {
-  if (access === "Free") {
-    return "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100";
-  }
-
-  if (access === "Email gate") {
-    return "border-sky-200 bg-sky-50 text-sky-700 dark:border-sky-700 dark:bg-sky-900/40 dark:text-sky-100";
-  }
-
-  return "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-700 dark:bg-amber-900/40 dark:text-amber-100";
+function formatBadgeTone(): string {
+  return "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100";
 }
 
 function demandBadgeTone(demand: DownloadAssetSearchDemand): string {
@@ -37,6 +27,14 @@ function demandBadgeTone(demand: DownloadAssetSearchDemand): string {
   }
 
   return "border-slate-200 bg-slate-50 text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200";
+}
+
+function formatUpdatedDate(isoDate: string): string {
+  return new Date(isoDate).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric"
+  });
 }
 
 export function DownloadAssetsBrowser({ assets, bundles }: DownloadAssetsBrowserProps) {
@@ -65,7 +63,7 @@ export function DownloadAssetsBrowser({ assets, bundles }: DownloadAssetsBrowser
           return true;
         }
 
-        const haystack = [asset.title, asset.description, asset.category, asset.format, asset.access, asset.monetization, asset.searchDemand, ...asset.tags]
+        const haystack = [asset.title, asset.description, asset.category, asset.format, asset.access, asset.searchDemand, ...asset.tags]
           .join(" ")
           .toLowerCase();
 
@@ -101,6 +99,9 @@ export function DownloadAssetsBrowser({ assets, bundles }: DownloadAssetsBrowser
           Browse enterprise-focused operational assets designed for IT support, system administration,
           compliance tracking, and security response workflows.
         </p>
+        <p className="mt-2 text-xs font-medium uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+          Each asset includes direct file metadata, preview notes, and an updated date.
+        </p>
 
         <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard label="Total Assets" value={String(stats.total)} />
@@ -119,24 +120,19 @@ export function DownloadAssetsBrowser({ assets, bundles }: DownloadAssetsBrowser
                 id={bundle.slug}
                 className="rounded-2xl border border-line/80 bg-white p-4 dark:border-slate-700 dark:bg-slate-900"
               >
-              <div className="flex flex-wrap items-center gap-2">
-                <span className={cx("rounded-full border px-2.5 py-1 text-[11px] font-semibold", formatBadgeTone(bundle.access))}>
-                  {bundle.access}
-                </span>
-                <span className="rounded-full border border-line/80 bg-slate-50 px-2.5 py-1 text-[11px] font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
-                  {bundle.itemCount} assets
-                </span>
-                {bundle.priceLabel ? (
-                  <span className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[11px] font-semibold text-amber-700 dark:border-amber-700 dark:bg-amber-900/40 dark:text-amber-100">
-                    {bundle.priceLabel}
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className={cx("rounded-full border px-2.5 py-1 text-[11px] font-semibold", formatBadgeTone())}>
+                    Free
                   </span>
-                ) : null}
-              </div>
-              <h3 className="mt-2 text-base font-semibold text-slate-900 dark:text-slate-100">{bundle.title}</h3>
-              <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{bundle.description}</p>
-              <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">{bundle.monetization}</p>
-            </article>
-          ))}
+                  <span className="rounded-full border border-line/80 bg-slate-50 px-2.5 py-1 text-[11px] font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
+                    {bundle.itemCount} assets
+                  </span>
+                </div>
+                <h3 className="mt-2 text-base font-semibold text-slate-900 dark:text-slate-100">{bundle.title}</h3>
+                <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{bundle.description}</p>
+                <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">Free bundle</p>
+              </article>
+            ))}
         </div>
       </section>
 
@@ -166,7 +162,7 @@ export function DownloadAssetsBrowser({ assets, bundles }: DownloadAssetsBrowser
             label="Access"
             value={accessFilter}
             onChange={(value) => setAccessFilter(value as DownloadAssetAccess | "All")}
-            options={["All", "Free", "Email gate", "Premium"]}
+            options={["All", "Free"]}
           />
 
           <SelectFilter
@@ -202,7 +198,7 @@ export function DownloadAssetsBrowser({ assets, bundles }: DownloadAssetsBrowser
                 className="surface-card-strong p-4 dark:border-slate-700 dark:bg-slate-900"
               >
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className={cx("rounded-full border px-2.5 py-1 text-[11px] font-semibold", formatBadgeTone(asset.access))}>
+                  <span className={cx("rounded-full border px-2.5 py-1 text-[11px] font-semibold", formatBadgeTone())}>
                     {asset.access}
                   </span>
                   <span className="rounded-full border border-line/80 bg-slate-50 px-2.5 py-1 text-[11px] font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
@@ -220,21 +216,51 @@ export function DownloadAssetsBrowser({ assets, bundles }: DownloadAssetsBrowser
                   {asset.title}
                 </h3>
                 <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{asset.description}</p>
-                <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">{asset.monetization}</p>
+
+                <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                  <div className="rounded-xl border border-line/80 bg-slate-50/80 px-3 py-2 dark:border-slate-700 dark:bg-slate-950/60">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                      File Size
+                    </p>
+                    <p className="mt-1 text-sm font-medium text-slate-900 dark:text-slate-100">
+                      {asset.fileSize}
+                    </p>
+                  </div>
+                  <div className="rounded-xl border border-line/80 bg-slate-50/80 px-3 py-2 dark:border-slate-700 dark:bg-slate-950/60">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                      Updated
+                    </p>
+                    <p className="mt-1 text-sm font-medium text-slate-900 dark:text-slate-100">
+                      {formatUpdatedDate(asset.updatedAt)}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-3 rounded-xl border border-dashed border-line/80 bg-white/70 p-3 dark:border-slate-700 dark:bg-slate-950/40">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                    Preview
+                  </p>
+                  <ul className="mt-2 space-y-1.5 text-xs leading-5 text-slate-600 dark:text-slate-300">
+                    {asset.previewItems.slice(0, 2).map((item) => (
+                      <li key={item} className="flex gap-2">
+                        <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-slate-400 dark:bg-slate-500" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
                 <div className="mt-4 flex flex-wrap gap-2">
                   <Link href={`/downloads/assets/${asset.slug}`} className="btn-secondary !px-3.5 !py-2 text-xs">
                     View Asset
                   </Link>
                   <a
-                    href={buildDownloadAssetRequestMailto(asset, siteConfig.email)}
+                    href={asset.downloadUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="btn-secondary !px-3.5 !py-2 text-xs dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
                   >
-                    {asset.access === "Premium"
-                      ? "Purchase"
-                      : asset.access === "Email gate"
-                        ? "Request Access"
-                        : "Get Free Copy"}
+                    Download Free Copy
                   </a>
                 </div>
               </article>

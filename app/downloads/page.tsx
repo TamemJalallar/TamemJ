@@ -4,7 +4,11 @@ import type { FAQPage, ItemList, WebPage, WithContext } from "schema-dts";
 import { AffiliateDisclosureBanner } from "@/components/affiliate/affiliate-disclosure-banner";
 import { DownloadsBrowser } from "@/components/downloads/downloads-browser";
 import { getAffiliateLinkByKey, getAffiliateLinksByKeys } from "@/lib/affiliate-links";
-import { getDownloadAssetBundles, getDownloadAssetStats } from "@/lib/download-assets.registry";
+import {
+  formatDownloadAssetFileSize,
+  getDownloadAssetBundles,
+  getDownloadAssetStats
+} from "@/lib/download-assets.registry";
 import { getDownloads } from "@/lib/downloads.registry";
 import { buildBreadcrumbJsonLd, buildCollectionPageJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 import type { DownloadEntry } from "@/types/download";
@@ -262,7 +266,13 @@ export default function DownloadsPage() {
                   {assetStats.total} scripts, templates, checklists, and runbooks
                 </h2>
                 <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-                  Includes {assetStats.byAccess.free} free assets, {assetStats.byAccess.emailGate} email-gated assets, and {assetStats.byAccess.premium} premium assets.
+                  Includes {assetStats.byAccess.free} free assets. No email gating or premium tiers.
+                </p>
+                <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                  {formatDownloadAssetFileSize(assetStats.totalFileSizeBytes)} total library size • Updated{" "}
+                  {new Date(assetStats.latestUpdatedAt).toLocaleDateString("en-US", {
+                    dateStyle: "long"
+                  })}
                 </p>
               </div>
               <a href="/downloads/assets" className="btn-secondary !px-4 !py-2.5">
@@ -279,7 +289,6 @@ export default function DownloadsPage() {
                   <span className="font-medium">{bundle.title}</span>
                   <span className="mt-0.5 block text-xs text-slate-500 dark:text-slate-400">
                     {bundle.itemSlugs.length} assets
-                    {bundle.priceLabel ? ` • ${bundle.priceLabel}` : ""}
                   </span>
                 </a>
               ))}

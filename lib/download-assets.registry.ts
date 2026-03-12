@@ -1,5 +1,7 @@
 import type { DownloadAsset, DownloadAssetBundle } from "@/types/download";
 
+const ASSET_BASE_URL = "https://downloads.tamemj.com";
+
 interface DownloadAssetSeed {
   slug: string;
   title: string;
@@ -7,19 +9,279 @@ interface DownloadAssetSeed {
   format: DownloadAsset["format"];
   category: DownloadAsset["category"];
   access: DownloadAsset["access"];
-  monetization: string;
+  monetization: DownloadAsset["monetization"];
   searchDemand: DownloadAsset["searchDemand"];
-  priceLabel?: string;
   tags: string[];
 }
+
+interface DownloadAssetMetadataSeed {
+  fileSizeBytes: number;
+  updatedAt: string;
+  previewItems: string[];
+}
+
+const DEFAULT_ASSET_UPDATED_AT = "2026-03-12T05:12:31-04:00";
+
+const assetMetadataRegistry: Record<string, DownloadAssetMetadataSeed> = {
+  "ad-user-audit-script": {
+    fileSizeBytes: 1809,
+    updatedAt: DEFAULT_ASSET_UPDATED_AT,
+    previewItems: [
+      "UserPrincipalName, Enabled, and LastLogonDate export fields",
+      "Optional group membership collection for access reviews",
+      "CSV output for cleanup, audit, and recertification workflows"
+    ]
+  },
+  "it-asset-inventory-template": {
+    fileSizeBytes: 3240,
+    updatedAt: DEFAULT_ASSET_UPDATED_AT,
+    previewItems: [
+      "Asset tag, serial number, and assigned user tracking",
+      "Warranty, location, and department inventory fields",
+      "Audit date and lifecycle note coverage"
+    ]
+  },
+  "incident-response-checklist": {
+    fileSizeBytes: 1981,
+    updatedAt: DEFAULT_ASSET_UPDATED_AT,
+    previewItems: [
+      "Preparation through post-incident workflow coverage",
+      "Containment, eradication, and recovery checkpoints",
+      "Post-mortem follow-up tasks for operational closeout"
+    ]
+  },
+  "m365-license-tracker": {
+    fileSizeBytes: 13073,
+    updatedAt: DEFAULT_ASSET_UPDATED_AT,
+    previewItems: [
+      "License SKU, assigned date, and status tracking fields",
+      "Department, manager, and cost center visibility",
+      "Notes for reclaim actions, add-ons, and exception handling"
+    ]
+  },
+  "it-onboarding-checklist": {
+    fileSizeBytes: 1418,
+    updatedAt: DEFAULT_ASSET_UPDATED_AT,
+    previewItems: [
+      "Pre-start provisioning tasks for devices and accounts",
+      "Day-one login, MFA, and software validation steps",
+      "Week-one access checks and support handoff items"
+    ]
+  },
+  "helpdesk-sla-tracker": {
+    fileSizeBytes: 3217,
+    updatedAt: DEFAULT_ASSET_UPDATED_AT,
+    previewItems: [
+      "Opened, first response, and resolved timestamp tracking",
+      "Response and resolution SLA target columns",
+      "Priority, category, and assignee fields for queue reporting"
+    ]
+  },
+  "windows-hardening-checklist": {
+    fileSizeBytes: 1785,
+    updatedAt: DEFAULT_ASSET_UPDATED_AT,
+    previewItems: [
+      "Baseline hardening checks for Windows endpoints",
+      "Identity, firewall, and legacy protocol review points",
+      "Logging and security monitoring validation steps"
+    ]
+  },
+  "group-policy-documentation-template": {
+    fileSizeBytes: 2446,
+    updatedAt: DEFAULT_ASSET_UPDATED_AT,
+    previewItems: [
+      "Policy overview, purpose, and linked OU documentation",
+      "Security filtering, WMI, and inheritance note sections",
+      "Testing, rollback, and approval tracking blocks"
+    ]
+  },
+  "patch-management-tracker": {
+    fileSizeBytes: 13247,
+    updatedAt: DEFAULT_ASSET_UPDATED_AT,
+    previewItems: [
+      "KB or release tracking by platform and deployment ring",
+      "Compliance percentage, owner, and rollback fields",
+      "Status notes for change windows and remediation follow-up"
+    ]
+  },
+  "m365-bulk-license-script": {
+    fileSizeBytes: 1381,
+    updatedAt: DEFAULT_ASSET_UPDATED_AT,
+    previewItems: [
+      "CSV-driven assign or remove workflow for M365 SKUs",
+      "Microsoft Graph connection and per-user processing logic",
+      "Console output for validation during bulk license changes"
+    ]
+  },
+  "vip-support-runbook": {
+    fileSizeBytes: 16645,
+    updatedAt: DEFAULT_ASSET_UPDATED_AT,
+    previewItems: [
+      "Executive SLA, escalation, and communication structure",
+      "Common VIP support scenario coverage",
+      "Runbook sections for ownership, status updates, and handoff"
+    ]
+  },
+  "sox-compliance-tracker": {
+    fileSizeBytes: 13155,
+    updatedAt: DEFAULT_ASSET_UPDATED_AT,
+    previewItems: [
+      "Control ID, owner, and test cadence tracking",
+      "Evidence link, findings, and remediation fields",
+      "Audit-ready status visibility for recurring reviews"
+    ]
+  },
+  "sharepoint-migration-checklist": {
+    fileSizeBytes: 1607,
+    updatedAt: DEFAULT_ASSET_UPDATED_AT,
+    previewItems: [
+      "Discovery, cleanup, and permission mapping tasks",
+      "Pilot migration and wave validation checkpoints",
+      "Post-cutover review items for end-user readiness"
+    ]
+  },
+  "entra-app-audit-script": {
+    fileSizeBytes: 1310,
+    updatedAt: DEFAULT_ASSET_UPDATED_AT,
+    previewItems: [
+      "Application inventory export via Microsoft Graph",
+      "Secret and certificate expiry visibility",
+      "CSV output for Entra governance and lifecycle reviews"
+    ]
+  },
+  "it-risk-register": {
+    fileSizeBytes: 13225,
+    updatedAt: DEFAULT_ASSET_UPDATED_AT,
+    previewItems: [
+      "Likelihood, impact, and risk rating columns",
+      "Mitigation owner and target date tracking",
+      "Status fields for review and remediation progress"
+    ]
+  },
+  "device-lifecycle-template": {
+    fileSizeBytes: 3264,
+    updatedAt: DEFAULT_ASSET_UPDATED_AT,
+    previewItems: [
+      "Procurement through retirement lifecycle coverage",
+      "Warranty planning and replacement milestone fields",
+      "Assigned user, condition, and check-in tracking"
+    ]
+  },
+  "ad-stale-computer-cleanup": {
+    fileSizeBytes: 1872,
+    updatedAt: DEFAULT_ASSET_UPDATED_AT,
+    previewItems: [
+      "90-day stale AD computer detection workflow",
+      "Optional disable mode with ShouldProcess safety control",
+      "CSV reporting for validation before remediation"
+    ]
+  },
+  "change-management-log": {
+    fileSizeBytes: 3263,
+    updatedAt: DEFAULT_ASSET_UPDATED_AT,
+    previewItems: [
+      "Change ID, owner, and risk documentation fields",
+      "Approval and implementation status tracking",
+      "Rollback plan and stakeholder note coverage"
+    ]
+  },
+  "risk-assessment-matrix": {
+    fileSizeBytes: 13220,
+    updatedAt: DEFAULT_ASSET_UPDATED_AT,
+    previewItems: [
+      "Threat and asset mapping grid",
+      "Existing controls and treatment planning fields",
+      "Owner, due date, and status tracking for remediation"
+    ]
+  },
+  "sso-mapping-template": {
+    fileSizeBytes: 13157,
+    updatedAt: DEFAULT_ASSET_UPDATED_AT,
+    previewItems: [
+      "Application protocol and endpoint inventory fields",
+      "Claims mapping and provisioning notes",
+      "Conditional access and rollout status tracking"
+    ]
+  },
+  "it-budget-template": {
+    fileSizeBytes: 13140,
+    updatedAt: DEFAULT_ASSET_UPDATED_AT,
+    previewItems: [
+      "Annual and monthly cost planning fields",
+      "Vendor, renewal date, and contract term visibility",
+      "Status and note sections for optimization reviews"
+    ]
+  },
+  "mailbox-permission-audit": {
+    fileSizeBytes: 1592,
+    updatedAt: DEFAULT_ASSET_UPDATED_AT,
+    previewItems: [
+      "Full Access, Send As, and Send on Behalf export coverage",
+      "Exchange Online mailbox permission audit workflow",
+      "CSV output for access reviews and cleanup projects"
+    ]
+  },
+  "av-event-triage-checklist": {
+    fileSizeBytes: 1618,
+    updatedAt: DEFAULT_ASSET_UPDATED_AT,
+    previewItems: [
+      "Alert validation and initial containment steps",
+      "Investigation evidence and lateral movement checks",
+      "Resolution and escalation closeout guidance"
+    ]
+  },
+  "it-project-status-template": {
+    fileSizeBytes: 16444,
+    updatedAt: DEFAULT_ASSET_UPDATED_AT,
+    previewItems: [
+      "Project summary and status indicator structure",
+      "Risk, issue, and blocker documentation space",
+      "Budget, resourcing, and stakeholder update sections"
+    ]
+  },
+  "entra-mfa-status-script": {
+    fileSizeBytes: 1202,
+    updatedAt: DEFAULT_ASSET_UPDATED_AT,
+    previewItems: [
+      "Per-user MFA registration export for Entra ID",
+      "Registered methods and admin flag visibility",
+      "Compliance campaign reporting support"
+    ]
+  }
+};
 
 function normalizeTag(tag: string): string {
   return tag.trim().toLowerCase();
 }
 
+export function formatDownloadAssetFileSize(fileSizeBytes: number): string {
+  if (fileSizeBytes < 1000) {
+    return `${fileSizeBytes} B`;
+  }
+
+  const formatted = (fileSizeBytes / 1000).toFixed(2).replace(/\.?0+$/, "");
+  return `${formatted} KB`;
+}
+
+function buildAssetUrl(slug: string, format: DownloadAsset["format"]): string {
+  const base = ASSET_BASE_URL.replace(/\/+$/, "");
+  return `${base}/${slug}.${format}`;
+}
+
 function createAsset(seed: DownloadAssetSeed): DownloadAsset {
+  const metadata = assetMetadataRegistry[seed.slug];
+
+  if (!metadata) {
+    throw new Error(`Missing asset metadata for ${seed.slug}`);
+  }
+
   return {
     ...seed,
+    downloadUrl: buildAssetUrl(seed.slug, seed.format),
+    fileSize: formatDownloadAssetFileSize(metadata.fileSizeBytes),
+    fileSizeBytes: metadata.fileSizeBytes,
+    updatedAt: metadata.updatedAt,
+    previewItems: [...metadata.previewItems],
     tags: [...new Set(seed.tags.map(normalizeTag).filter(Boolean))]
   };
 }
@@ -33,7 +295,7 @@ const assetsRegistry: DownloadAsset[] = [
     format: "ps1",
     category: "Scripts",
     access: "Free",
-    monetization: "AdSense on page",
+    monetization: "Free",
     searchDemand: "High",
     tags: ["powershell", "active-directory", "audit", "ad-users", "identity"]
   }),
@@ -44,8 +306,8 @@ const assetsRegistry: DownloadAsset[] = [
       "Track endpoints, software licenses, warranty dates, assigned users, and ownership lifecycle across your environment.",
     format: "xlsx",
     category: "Templates",
-    access: "Email gate",
-    monetization: "Lead magnet",
+    access: "Free",
+    monetization: "Free",
     searchDemand: "High",
     tags: ["asset-management", "inventory", "hardware", "licenses", "it-operations"]
   }),
@@ -57,7 +319,7 @@ const assetsRegistry: DownloadAsset[] = [
     format: "pdf",
     category: "Checklists",
     access: "Free",
-    monetization: "AdSense on page",
+    monetization: "Free",
     searchDemand: "High",
     tags: ["incident-response", "security", "soc", "containment", "playbook"]
   }),
@@ -68,8 +330,8 @@ const assetsRegistry: DownloadAsset[] = [
       "Monitor E3/E5/F1 assignments, costs, renewal windows, and allocation trends for Microsoft 365 subscriptions.",
     format: "xlsx",
     category: "Templates",
-    access: "Email gate",
-    monetization: "Affiliate (M365 tools)",
+    access: "Free",
+    monetization: "Free",
     searchDemand: "High",
     tags: ["microsoft-365", "licensing", "cost-management", "entra", "subscription"]
   }),
@@ -81,7 +343,7 @@ const assetsRegistry: DownloadAsset[] = [
     format: "pdf",
     category: "Checklists",
     access: "Free",
-    monetization: "AdSense on page",
+    monetization: "Free",
     searchDemand: "High",
     tags: ["onboarding", "new-hire", "it-checklist", "provisioning", "helpdesk"]
   }),
@@ -92,8 +354,8 @@ const assetsRegistry: DownloadAsset[] = [
       "Track first response, resolution times, breach rates, and SLA compliance by priority and support queue.",
     format: "xlsx",
     category: "Templates",
-    access: "Email gate",
-    monetization: "Lead magnet",
+    access: "Free",
+    monetization: "Free",
     searchDemand: "Medium",
     tags: ["sla", "helpdesk", "it-support", "kpi", "service-desk"]
   }),
@@ -105,7 +367,7 @@ const assetsRegistry: DownloadAsset[] = [
     format: "pdf",
     category: "Checklists",
     access: "Free",
-    monetization: "Affiliate (security tools)",
+    monetization: "Free",
     searchDemand: "High",
     tags: ["windows-security", "hardening", "cis", "baseline", "endpoint-security"]
   }),
@@ -116,8 +378,8 @@ const assetsRegistry: DownloadAsset[] = [
       "Document GPO purpose, linked OUs, security filtering, and critical settings for audit and change control.",
     format: "docx",
     category: "Templates",
-    access: "Email gate",
-    monetization: "Lead magnet",
+    access: "Free",
+    monetization: "Free",
     searchDemand: "Medium",
     tags: ["gpo", "group-policy", "documentation", "active-directory", "change-control"]
   }),
@@ -129,7 +391,7 @@ const assetsRegistry: DownloadAsset[] = [
     format: "xlsx",
     category: "Templates",
     access: "Free",
-    monetization: "AdSense on page",
+    monetization: "Free",
     searchDemand: "Medium",
     tags: ["patching", "windows-update", "compliance", "endpoint-management", "tracker"]
   }),
@@ -141,7 +403,7 @@ const assetsRegistry: DownloadAsset[] = [
     format: "ps1",
     category: "Scripts",
     access: "Free",
-    monetization: "AdSense on page",
+    monetization: "Free",
     searchDemand: "High",
     tags: ["powershell", "microsoft-graph", "m365", "bulk-operations", "licensing"]
   }),
@@ -152,10 +414,9 @@ const assetsRegistry: DownloadAsset[] = [
       "Executive support runbook with escalation paths, SLA overrides, communication templates, and ownership controls.",
     format: "docx",
     category: "Runbooks",
-    access: "Premium",
-    monetization: "Direct revenue",
+    access: "Free",
+    monetization: "Free",
     searchDemand: "Medium",
-    priceLabel: "$19",
     tags: ["vip-support", "runbook", "executive-support", "escalation", "it-operations"]
   }),
   createAsset({
@@ -165,10 +426,9 @@ const assetsRegistry: DownloadAsset[] = [
       "Track SOX control objectives, test cycles, evidence links, findings, and remediation milestones.",
     format: "xlsx",
     category: "Templates",
-    access: "Premium",
-    monetization: "Direct revenue",
+    access: "Free",
+    monetization: "Free",
     searchDemand: "Medium",
-    priceLabel: "$29",
     tags: ["sox", "compliance", "audit", "governance", "risk"]
   }),
   createAsset({
@@ -178,8 +438,8 @@ const assetsRegistry: DownloadAsset[] = [
       "Migration checklist covering discovery, permission mapping, pilot validation, and production cutover readiness.",
     format: "pdf",
     category: "Checklists",
-    access: "Email gate",
-    monetization: "Affiliate (migration tools)",
+    access: "Free",
+    monetization: "Free",
     searchDemand: "High",
     tags: ["sharepoint", "migration", "microsoft-365", "permissions", "content-move"]
   }),
@@ -191,7 +451,7 @@ const assetsRegistry: DownloadAsset[] = [
     format: "ps1",
     category: "Scripts",
     access: "Free",
-    monetization: "AdSense on page",
+    monetization: "Free",
     searchDemand: "High",
     tags: ["entra-id", "azure-ad", "app-registrations", "audit", "powershell"]
   }),
@@ -202,8 +462,8 @@ const assetsRegistry: DownloadAsset[] = [
       "Track identified risks, likelihood/impact scores, controls, treatment plans, and accountable owners.",
     format: "xlsx",
     category: "Templates",
-    access: "Email gate",
-    monetization: "Lead magnet",
+    access: "Free",
+    monetization: "Free",
     searchDemand: "Medium",
     tags: ["risk-register", "it-risk", "governance", "mitigation", "compliance"]
   }),
@@ -215,7 +475,7 @@ const assetsRegistry: DownloadAsset[] = [
     format: "xlsx",
     category: "Templates",
     access: "Free",
-    monetization: "AdSense on page",
+    monetization: "Free",
     searchDemand: "Medium",
     tags: ["device-lifecycle", "asset-management", "endpoint", "warranty", "refresh"]
   }),
@@ -227,7 +487,7 @@ const assetsRegistry: DownloadAsset[] = [
     format: "ps1",
     category: "Scripts",
     access: "Free",
-    monetization: "AdSense on page",
+    monetization: "Free",
     searchDemand: "High",
     tags: ["powershell", "active-directory", "computer-objects", "cleanup", "security-hygiene"]
   }),
@@ -238,8 +498,8 @@ const assetsRegistry: DownloadAsset[] = [
       "Document change requests, approvals, implementation windows, rollback plans, and post-change validation.",
     format: "xlsx",
     category: "Templates",
-    access: "Email gate",
-    monetization: "Lead magnet",
+    access: "Free",
+    monetization: "Free",
     searchDemand: "Medium",
     tags: ["change-management", "itil", "cab", "rollback", "operations"]
   }),
@@ -250,10 +510,9 @@ const assetsRegistry: DownloadAsset[] = [
       "5x5 risk scoring matrix with threat categories, asset mapping, and treatment workflow columns.",
     format: "xlsx",
     category: "Templates",
-    access: "Premium",
-    monetization: "Direct revenue",
+    access: "Free",
+    monetization: "Free",
     searchDemand: "Medium",
-    priceLabel: "$19",
     tags: ["cybersecurity", "risk-matrix", "assessment", "threat-model", "governance"]
   }),
   createAsset({
@@ -263,8 +522,8 @@ const assetsRegistry: DownloadAsset[] = [
       "Map applications, protocols, claims, and conditional access requirements for SSO rollout projects.",
     format: "xlsx",
     category: "Templates",
-    access: "Email gate",
-    monetization: "Affiliate (identity tools)",
+    access: "Free",
+    monetization: "Free",
     searchDemand: "Medium",
     tags: ["okta", "entra-id", "sso", "identity", "access-management"]
   }),
@@ -275,10 +534,9 @@ const assetsRegistry: DownloadAsset[] = [
       "Annual IT budget workbook for hardware, software, cloud services, staffing, and project forecasting.",
     format: "xlsx",
     category: "Templates",
-    access: "Premium",
-    monetization: "Direct revenue",
+    access: "Free",
+    monetization: "Free",
     searchDemand: "Medium",
-    priceLabel: "$29",
     tags: ["it-budget", "finance", "capacity-planning", "forecast", "operations"]
   }),
   createAsset({
@@ -289,7 +547,7 @@ const assetsRegistry: DownloadAsset[] = [
     format: "ps1",
     category: "Scripts",
     access: "Free",
-    monetization: "AdSense on page",
+    monetization: "Free",
     searchDemand: "High",
     tags: ["exchange-online", "mailbox", "permissions", "powershell", "microsoft-365"]
   }),
@@ -301,7 +559,7 @@ const assetsRegistry: DownloadAsset[] = [
     format: "pdf",
     category: "Checklists",
     access: "Free",
-    monetization: "Affiliate (EDR tools)",
+    monetization: "Free",
     searchDemand: "Low",
     tags: ["antivirus", "edr", "incident-triage", "security-operations", "endpoint"]
   }),
@@ -313,7 +571,7 @@ const assetsRegistry: DownloadAsset[] = [
     format: "docx",
     category: "Templates",
     access: "Free",
-    monetization: "AdSense on page",
+    monetization: "Free",
     searchDemand: "Medium",
     tags: ["project-management", "status-report", "pm", "stakeholder-update", "template"]
   }),
@@ -325,7 +583,7 @@ const assetsRegistry: DownloadAsset[] = [
     format: "ps1",
     category: "Scripts",
     access: "Free",
-    monetization: "AdSense on page",
+    monetization: "Free",
     searchDemand: "High",
     tags: ["entra-id", "mfa", "reporting", "powershell", "identity-security"]
   })
@@ -347,8 +605,8 @@ const bundleRegistry: DownloadAssetBundle[] = [
       "change-management-log",
       "it-project-status-template"
     ],
-    access: "Email gate",
-    monetization: "Lead magnet"
+    access: "Free",
+    monetization: "Free"
   },
   {
     slug: "security-compliance-bundle",
@@ -363,9 +621,8 @@ const bundleRegistry: DownloadAssetBundle[] = [
       "risk-assessment-matrix",
       "av-event-triage-checklist"
     ],
-    access: "Premium",
-    monetization: "Direct revenue",
-    priceLabel: "$49"
+    access: "Free",
+    monetization: "Free",
   },
   {
     slug: "powershell-admin-toolkit",
@@ -381,7 +638,7 @@ const bundleRegistry: DownloadAssetBundle[] = [
       "entra-mfa-status-script"
     ],
     access: "Free",
-    monetization: "AdSense on page"
+    monetization: "Free"
   },
   {
     slug: "m365-admin-bundle",
@@ -395,15 +652,15 @@ const bundleRegistry: DownloadAssetBundle[] = [
       "mailbox-permission-audit",
       "entra-mfa-status-script"
     ],
-    access: "Premium",
-    monetization: "Direct revenue",
-    priceLabel: "$29"
+    access: "Free",
+    monetization: "Free",
   }
 ];
 
 export function getDownloadAssets(): DownloadAsset[] {
   return assetsRegistry.map((asset) => ({
     ...asset,
+    previewItems: [...asset.previewItems],
     tags: [...asset.tags]
   }));
 }
@@ -448,40 +705,26 @@ export function getDownloadAssetStats() {
   const total = assetsRegistry.length;
   const byAccess = {
     free: assetsRegistry.filter((asset) => asset.access === "Free").length,
-    emailGate: assetsRegistry.filter((asset) => asset.access === "Email gate").length,
-    premium: assetsRegistry.filter((asset) => asset.access === "Premium").length
+    emailGate: 0,
+    premium: 0
   };
   const highDemand = assetsRegistry.filter((asset) => asset.searchDemand === "High").length;
+  const totalFileSizeBytes = assetsRegistry.reduce((sum, asset) => sum + asset.fileSizeBytes, 0);
+  const latestUpdatedAt =
+    [...assetsRegistry]
+      .map((asset) => asset.updatedAt)
+      .sort((a, b) => Date.parse(b) - Date.parse(a))[0] ?? DEFAULT_ASSET_UPDATED_AT;
 
   return {
     total,
     bundles: bundleRegistry.length,
     highDemand,
-    byAccess
+    byAccess,
+    totalFileSizeBytes,
+    latestUpdatedAt
   };
 }
 
-export function buildDownloadAssetRequestMailto(
-  asset: DownloadAsset,
-  recipientEmail: string
-): string {
-  const subjectPrefix =
-    asset.access === "Premium"
-      ? "Purchase Request"
-      : asset.access === "Email gate"
-        ? "Email Gate Request"
-        : "Free Asset Request";
-
-  const subject = `${subjectPrefix}: ${asset.title}`;
-  const body = [
-    `Asset: ${asset.title}`,
-    `Slug: ${asset.slug}`,
-    `Category: ${asset.category}`,
-    `Format: ${asset.format.toUpperCase()}`,
-    `Access: ${asset.access}`,
-    "",
-    "Please send access details."
-  ].join("\n");
-
-  return `mailto:${recipientEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+export function buildDownloadAssetUrl(asset: DownloadAsset): string {
+  return asset.downloadUrl;
 }

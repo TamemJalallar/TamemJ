@@ -9,25 +9,24 @@ export const metadata: Metadata = {
     template: "%s | Support Portal"
   },
   description:
-    "ServiceNow-style IT support portal demo with an enterprise-safe knowledge base, service catalog, incident intake, local ticketing, and analytics.",
+    "Enterprise IT support portal with an enterprise-safe ticket library, service catalog, incident intake, local ticketing, and analytics.",
   keywords: [
     "support portal",
-    "IT support knowledge base",
+    "IT support tickets",
     "service catalog",
     "enterprise help desk",
     "IT incident management",
     "troubleshooting documentation",
-    "affiliate operations",
-    "affiliate link governance"
+    "enterprise support documentation"
   ],
   openGraph: buildSupportOpenGraph(
     "Support Portal | Tamem J",
-    "ServiceNow-style IT support portal demo with enterprise-safe troubleshooting docs, service catalog requests, and incident workflows.",
+    "Enterprise IT support portal with enterprise-safe troubleshooting docs, service catalog requests, and incident workflows.",
     "/support/"
   ),
   twitter: buildSupportTwitter(
     "Support Portal | Tamem J",
-    "ServiceNow-style IT support portal demo with enterprise-safe troubleshooting docs, service catalog requests, and incident workflows."
+    "Enterprise IT support portal with enterprise-safe troubleshooting docs, service catalog requests, and incident workflows."
   )
 };
 

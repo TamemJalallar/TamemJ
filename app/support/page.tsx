@@ -10,45 +10,46 @@ import { buildSupportOpenGraph, buildSupportTwitter } from "@/lib/support-portal
 export const metadata: Metadata = {
   title: "Support Portal",
   description:
-    "ServiceNow-style support portal demo with a knowledge base, service catalog, incident forms, local ticketing, analytics, and preserved iOS app support contact form.",
+    "Enterprise IT support portal with a ticket library, service catalog, incident form, analytics, and direct support contact options.",
   keywords: [
     "IT support portal",
-    "knowledge base",
+    "enterprise IT support",
+    "support tickets",
     "service catalog",
     "incident form",
-    "ITIL demo",
     "enterprise support docs",
-    "iOS app support"
+    "helpdesk portal",
+    "it support contact"
   ],
   alternates: {
     canonical: "/support/"
   },
   openGraph: buildSupportOpenGraph(
     "Support Portal | Tamem J",
-    "ServiceNow-style support portal demo with a knowledge base, service catalog, incident forms, local ticketing, analytics, and preserved iOS app support.",
+    "Enterprise IT support portal with ticket library, service catalog, incident form, analytics, and direct support contact options.",
     "/support/"
   ),
   twitter: buildSupportTwitter(
     "Support Portal | Tamem J",
-    "ServiceNow-style support portal demo with enterprise-safe troubleshooting docs, service requests, and a preserved iOS app support form."
+    "Enterprise IT support portal with troubleshooting docs, service requests, incident intake, and support contact options."
   )
 };
 
 const faqs = [
   {
-    question: "How do I restore a purchase?",
+    question: "How do I submit a new IT issue?",
     answer:
-      "Open the app settings and use Restore Purchases. If the issue continues, submit the app support form with your app name and device iOS version."
+      "Use the Incident Form from the Support Portal navigation. Include a clear summary, the affected product or workflow, impact, urgency, and your contact details so the issue can be triaged correctly."
   },
   {
-    question: "Why is data not syncing across devices?",
+    question: "Where should I start if I need a troubleshooting guide?",
     answer:
-      "Confirm both devices use the same Apple ID and have iCloud enabled (if the app supports sync). Restarting the app can refresh sync status."
+      "Start in Tickets. The ticket library contains enterprise-safe troubleshooting guides for Microsoft 365, Adobe, Figma, Okta, Windows, macOS, networking, and endpoint management."
   },
   {
-    question: "How do I report a bug or request a feature?",
+    question: "How do I request software, access, or other IT services?",
     answer:
-      "Use the app support form below. Include steps to reproduce, your device model, iOS version, and the app version if possible."
+      "Use the Service Catalog for structured requests such as software installs, mailbox access, VPN access, or device-related support. Catalog entries include expected fulfillment guidance."
   }
 ];
 
@@ -73,7 +74,7 @@ export default function SupportPage() {
     name: "Support Portal",
     url: toAbsoluteSupportUrl("/support/"),
     description:
-      "ServiceNow-style support portal demo with a knowledge base, service catalog, incident forms, local ticketing, analytics, and iOS app support."
+      "Enterprise IT support portal with ticket library, service catalog, incident intake, analytics, and contact options."
   };
   const breadcrumbSchema = buildBreadcrumbJsonLd([
     { name: "Home", path: "/" },
@@ -89,15 +90,16 @@ export default function SupportPage() {
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
-              Legacy Feature (Preserved)
+              Additional Support
             </p>
             <h2 className="mt-2 text-xl font-semibold text-slate-900 dark:text-slate-100 sm:text-2xl">
-              iOS App Support
+              Direct Support Contact
             </h2>
             <p className="mt-2 max-w-3xl text-sm leading-7 text-slate-600 dark:text-slate-300 sm:text-base">
-              The original lightweight app support experience is still available here. Existing links such
-              as <code className="mx-1 rounded bg-slate-100 px-1.5 py-0.5 text-xs dark:bg-slate-800">/support?app=&lt;slug&gt;</code>
-              continue to work because the support form remains embedded on this page.
+              Use this area for direct support questions, product inquiries, or follow-up contact when the
+              main ticket flow is not the right fit. Existing links such as{" "}
+              <code className="mx-1 rounded bg-slate-100 px-1.5 py-0.5 text-xs dark:bg-slate-800">/support?app=&lt;slug&gt;</code>{" "}
+              still resolve because the preserved support form remains embedded on this page.
             </p>
             <div className="mt-4 rounded-xl border border-line/70 bg-slate-50/70 p-4 text-sm dark:border-slate-800 dark:bg-slate-900/70">
               <p className="font-semibold text-slate-900 dark:text-slate-100">Support Email</p>
@@ -110,7 +112,9 @@ export default function SupportPage() {
             </div>
           </div>
           <div className="rounded-2xl border border-line/70 bg-slate-50/70 p-4 text-sm dark:border-slate-800 dark:bg-slate-900/70 lg:max-w-sm">
-            <p className="font-semibold text-slate-900 dark:text-slate-100">Simple App Support Instructions</p>
+            <p className="font-semibold text-slate-900 dark:text-slate-100">
+              {hasApps ? "Simple App Support Instructions" : "Support Contact Guidance"}
+            </p>
             <ol className="mt-2 space-y-2 text-slate-600 dark:text-slate-300">
               {hasApps ? (
                 <>
@@ -120,8 +124,8 @@ export default function SupportPage() {
                 </>
               ) : (
                 <>
-                  <li>1. Use the support email for general inquiries or launch updates.</li>
-                  <li>2. App-specific support options will appear after apps are published.</li>
+                  <li>1. Use the support email for IT documentation questions, business inquiries, or launch updates.</li>
+                  <li>2. App-specific support options will appear here after published apps are available.</li>
                 </>
               )}
             </ol>

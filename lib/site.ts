@@ -4,10 +4,10 @@ export const siteConfig = {
   url: "https://tamemj.com",
   email: "hello@tamemj.com",
   supportEmail: "support@tamemj.com",
-  title: "TamemJ — IT Troubleshooting Tickets & Tools",
+  title: "TamemJ - Enterprise IT Troubleshooting, Scripts, Downloads & AI Libraries",
   description:
-    "Enterprise IT troubleshooting guides, PowerShell scripts, Microsoft 365 fixes, and downloadable IT templates for sysadmins and helpdesk engineers.",
-  tagline: "Enterprise IT Troubleshooting Tickets & Tools"
+    "Enterprise IT troubleshooting guides, Microsoft 365 fixes, PowerShell scripts, downloadable IT templates, AI agent libraries, and admin resources for sysadmins, helpdesk engineers, and IT operations teams.",
+  tagline: "Enterprise IT troubleshooting, downloads, scripts, and AI resource libraries"
 } as const;
 
 export const seoKeywords = [
@@ -36,6 +36,12 @@ export const seoKeywords = [
   "IT documentation",
   "Windows troubleshooting",
   "macOS enterprise support",
+  "enterprise IT downloads",
+  "Microsoft 365 fixes",
+  "AI agent prompt library",
+  "GenAI prompt library",
+  "IT admin templates",
+  "enterprise support knowledge base",
   "tamemj.com"
 ];
 

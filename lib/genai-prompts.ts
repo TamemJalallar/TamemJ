@@ -46,6 +46,16 @@ export function getGenAIPromptBySlug(slug: string): GenAIPrompt | undefined {
   return genaiPrompts.find((prompt) => prompt.slug === slug);
 }
 
+export function getLatestGenAIPromptUpdatedAt(): string {
+  return genaiPrompts.reduce((latest, prompt) => {
+    if (!latest) {
+      return prompt.updatedAt;
+    }
+
+    return prompt.updatedAt > latest ? prompt.updatedAt : latest;
+  }, "");
+}
+
 export function getGenAICategories(): string[] {
   return [...genAICategories];
 }

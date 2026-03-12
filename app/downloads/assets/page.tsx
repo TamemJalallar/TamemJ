@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { DownloadAssetsBrowser } from "@/components/downloads/download-assets-browser";
 import {
+  formatDownloadAssetFileSize,
   getDownloadAssetBundles,
   getDownloadAssets,
   getDownloadAssetStats
@@ -89,7 +90,7 @@ export default function DownloadAssetsPage() {
     name: "IT Download Assets",
     url: toAbsoluteUrl("/downloads/assets/"),
     description:
-      "Enterprise IT scripts, templates, checklists, and runbooks with free, email-gated, and premium access paths."
+      "Enterprise IT scripts, templates, checklists, and runbooks with free access."
   };
 
   const itemListSchema = {
@@ -105,8 +106,11 @@ export default function DownloadAssetsPage() {
         name: asset.title,
         description: asset.description,
         url: toAbsoluteUrl(`/downloads/assets/${asset.slug}/`),
+        contentSize: `${asset.fileSizeBytes} B`,
+        dateModified: asset.updatedAt,
         fileFormat: asset.format,
-        about: asset.category
+        about: asset.category,
+        isAccessibleForFree: true
       }
     }))
   };
@@ -123,10 +127,14 @@ export default function DownloadAssetsPage() {
         <div className="page-shell">
           <div className="mb-5 rounded-2xl border border-line/80 bg-white/80 p-4 shadow-soft dark:border-slate-700 dark:bg-slate-950/70 sm:p-5">
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
-              Monetization Mix
+              Access Model
             </p>
             <p className="mt-2 text-sm text-slate-700 dark:text-slate-200">
-              {stats.byAccess.free} free assets, {stats.byAccess.emailGate} email-gated assets, and {stats.byAccess.premium} premium assets.
+              All assets are free to download. No gating or premium tiers.
+            </p>
+            <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+              Library footprint: {formatDownloadAssetFileSize(stats.totalFileSizeBytes)} • Last refreshed{" "}
+              {new Date(stats.latestUpdatedAt).toLocaleDateString("en-US", { dateStyle: "long" })}
             </p>
           </div>
 
