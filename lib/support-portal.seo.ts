@@ -103,7 +103,7 @@ export function buildSupportOpenGraph(
     locale: "en_US",
     images: [
       {
-        url: toAbsoluteSupportUrl("/images/site/og-image.svg"),
+        url: toAbsoluteSupportUrl("/images/site/og-image.png"),
         width: 1200,
         height: 630,
         alt: "Tamem J Support Portal tickets and IT support documentation"
@@ -117,7 +117,7 @@ export function buildSupportTwitter(title: string, description: string): NonNull
     card: "summary_large_image",
     title,
     description,
-    images: [toAbsoluteSupportUrl("/images/site/og-image.svg")]
+    images: [toAbsoluteSupportUrl("/images/site/og-image.png")]
   };
 }
 
@@ -134,8 +134,8 @@ export function buildSupportKbIndexMetadataWithArticles(articles: KBArticle[]): 
   const title = "Tickets";
   const description =
     articleCount > 0
-      ? `Browse ${articleCount} enterprise-safe troubleshooting guides for Microsoft 365, Adobe, Figma, Okta, Windows, macOS, iOS, Android, networking, browsers, printers, and affiliate operations.`
-      : "Enterprise-safe troubleshooting guides for Microsoft 365, Adobe, Figma, Okta, Windows, macOS, iOS, Android, networking, browsers, printers, and affiliate operations.";
+      ? `Browse ${articleCount} enterprise-safe troubleshooting guides for Microsoft 365, Adobe, Figma, Okta, Windows, macOS, iOS, Android, networking, browsers, printers, identity, and endpoint management.`
+      : "Enterprise-safe troubleshooting guides for Microsoft 365, Adobe, Figma, Okta, Windows, macOS, iOS, Android, networking, browsers, printers, identity, and endpoint management.";
 
   return {
     title,
@@ -150,8 +150,8 @@ export function buildSupportKbIndexMetadataWithArticles(articles: KBArticle[]): 
       "mobile device support",
       "Windows support",
       "macOS support",
-      "affiliate operations support",
-      "affiliate link governance",
+      "identity troubleshooting",
+      "endpoint management support",
       ...seoOpportunityKeywords,
       ...productFamilies.map((family) => `${family} support`),
       ...categories.map((category) => `${category} troubleshooting`)

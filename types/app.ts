@@ -17,5 +17,6 @@ export interface IOSApp {
   features: string[];
   pricing: string;
   minIOSVersion: string;
+  updatedAt?: string;
   supportEmail?: string;
 }
