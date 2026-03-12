@@ -29,61 +29,63 @@ function uniqueKeywords(keywords: string[]): string[] {
   return result;
 }
 
-export const metadata: Metadata = {
-  title: "AI Agents Library — 300+ Copy-Ready System Prompts",
-  description:
-    "Browse 300+ professional AI agent system prompts across 35 categories. Platform-tuned for ChatGPT, Claude, Grok/xAI, Perplexity, and Google Gemini. Free to copy.",
-  keywords: uniqueKeywords([
-    "ai agents library",
-    "ai agent prompts",
-    "ai agent system prompts",
-    "best ai agents 2026",
-    "copy ready ai prompts",
-    "ai agent examples",
-    "professional ai agents",
-    "ai role prompts",
-    "custom ai agents",
-    "chatgpt agents",
-    "claude agents",
-    "perplexity agents",
-    "google gemini prompts",
-    "grok xai prompts",
-    "chatgpt system prompts",
-    "claude system prompts",
-    "grok system prompts",
-    "perplexity prompts",
-    "ai agent prompt library",
-    "free ai agent prompts",
-    "ai agent templates",
-    "technology ai agent",
-    "finance ai assistant",
-    "legal ai prompt",
-    "marketing ai strategist",
-    "hr ai agent",
-    "sales ai agent prompts",
-    "cybersecurity ai agent",
-    "data analysis ai agent",
-    "writing ai agent prompts",
-    "customer service ai agent",
-    "project management ai agent",
-    "ai persona prompts",
-    "ai assistant prompts",
-    "system prompt generator",
-    "ai prompt templates free"
-  ]),
-  alternates: {
-    canonical: "/ai-agents/"
-  },
-  openGraph: buildOpenGraph(
-    "AI Agents Library | 300+ Professional System Prompts",
-    "Copy-ready system prompts for 300+ specialized AI agents with platform-specific output for ChatGPT, Claude, Grok/xAI, Perplexity, and Google Gemini.",
-    "/ai-agents/"
-  ),
-  twitter: buildTwitter(
-    "AI Agents Library | 300+ Professional System Prompts",
-    "Copy-ready system prompts for 300+ specialized AI agents with platform-specific output for ChatGPT, Claude, Grok/xAI, Perplexity, and Google Gemini."
-  )
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const agents = getAiAgentsRegistry();
+  const categories = getAiAgentCategories();
+  const description = `Browse ${agents.length}+ professional AI agent system prompts across ${categories.length} categories. Platform-tuned for ChatGPT, Claude, Grok/xAI, Perplexity, and Google Gemini. Free to copy.`;
+
+  return {
+    title: `AI Agents Library — ${agents.length}+ Copy-Ready System Prompts`,
+    description,
+    keywords: uniqueKeywords([
+      "ai agents library",
+      "ai agent prompts",
+      "ai agent system prompts",
+      "best ai agents 2026",
+      "copy ready ai prompts",
+      "ai agent examples",
+      "professional ai agents",
+      "ai role prompts",
+      "custom ai agents",
+      "chatgpt agents",
+      "claude agents",
+      "perplexity agents",
+      "google gemini prompts",
+      "grok xai prompts",
+      "chatgpt system prompts",
+      "claude system prompts",
+      "grok system prompts",
+      "perplexity prompts",
+      "ai agent prompt library",
+      "free ai agent prompts",
+      "ai agent templates",
+      "technology ai agent",
+      "finance ai assistant",
+      "legal ai prompt",
+      "marketing ai strategist",
+      "hr ai agent",
+      "sales ai agent prompts",
+      "cybersecurity ai agent",
+      "data analysis ai agent",
+      "writing ai agent prompts",
+      "customer service ai agent",
+      "project management ai agent",
+      "ai persona prompts",
+      "ai assistant prompts",
+      "system prompt generator",
+      "ai prompt templates free"
+    ]),
+    alternates: {
+      canonical: "/ai-agents/"
+    },
+    openGraph: buildOpenGraph(
+      `AI Agents Library | ${agents.length}+ Professional System Prompts`,
+      description,
+      "/ai-agents/"
+    ),
+    twitter: buildTwitter(`AI Agents Library | ${agents.length}+ Professional System Prompts`, description)
+  };
+}
 
 export default function AiAgentsPage() {
   const agents = getAiAgentsRegistry();
@@ -136,7 +138,18 @@ export default function AiAgentsPage() {
     description:
       "Professional AI agent prompt library with copy-ready system prompts and filterable roles by category, platform, and expertise.",
     url: toAbsoluteUrl("/ai-agents/"),
-    inLanguage: "en-US"
+    inLanguage: "en-US",
+    dateModified: lastVerified,
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: popularAgents.length,
+      itemListElement: popularAgents.map((agent, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: agent.title,
+        url: toAbsoluteUrl(`/ai-agents/${agent.slug}/`)
+      }))
+    }
   };
 
   const softwareAppSchema = {

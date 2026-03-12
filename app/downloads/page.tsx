@@ -86,7 +86,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const description = `Browse ${downloads.length} curated software downloads with official store links, GitHub Releases, and direct binaries. Includes ${freeCount} free apps and ${assetStats.total} IT templates/scripts/checklists for enterprise support teams.`;
 
   return {
-    title: "Downloads",
+    title: "Software Downloads & IT Assets",
     description,
     keywords: uniqueKeywords([
       ...buildDownloadKeywords(downloads),
@@ -105,8 +105,8 @@ export async function generateMetadata(): Promise<Metadata> {
       index: true,
       follow: true
     },
-    openGraph: buildOpenGraph("Downloads | Tamem J", description, "/downloads/"),
-    twitter: buildTwitter("Downloads | Tamem J", description)
+    openGraph: buildOpenGraph("Software Downloads & IT Assets | Tamem J", description, "/downloads/"),
+    twitter: buildTwitter("Software Downloads & IT Assets | Tamem J", description)
   };
 }
 
@@ -191,6 +191,7 @@ export default function DownloadsPage() {
     url: toAbsoluteUrl("/downloads/"),
     description:
       "Curated software downloads with official store links, free direct binaries, and GitHub Releases references.",
+    dateModified: assetStats.latestUpdatedAt,
     about: [
       { "@type": "Thing", name: "Mac App Store software" },
       { "@type": "Thing", name: "Microsoft Store software" },

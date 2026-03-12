@@ -39,7 +39,7 @@ function buildGuideKeywords() {
 export const metadata: Metadata = {
   title: "PC Build Guides",
   description:
-    "Step-by-step PC building guides with practical part recommendations, compatibility checks, and performance benefits for gaming, creator, office, and AI workflows.",
+    `Step-by-step PC building guides with practical part recommendations, compatibility checks, and performance benefits across ${guides.length} guides for gaming, creator, office, and AI workflows.`,
   keywords: buildGuideKeywords(),
   alternates: {
     canonical: "/pc-build-guides/"
@@ -88,6 +88,28 @@ export default function PCBuildGuidesPage() {
     { name: "Home", path: "/" },
     { name: "PC Build Guides", path: "/pc-build-guides/" }
   ]);
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "How do these PC build guides choose parts?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "The guides recommend components based on workload, form factor, compatibility, cooling needs, upgrade headroom, and overall value."
+        }
+      },
+      {
+        "@type": "Question",
+        name: "Do the build guides include gaming and workstation recommendations?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Yes. The library covers gaming, development, creator, office, and future-proofed high-end builds with compatible motherboard, CPU, RAM, GPU, storage, cooling, and power supply guidance."
+        }
+      }
+    ]
+  };
 
   return (
     <>
@@ -132,6 +154,10 @@ export default function PCBuildGuidesPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <script
         type="application/ld+json"
