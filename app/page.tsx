@@ -180,8 +180,8 @@ export default function HomePage() {
               <Link href="/guides" className="btn-secondary !px-4 !py-2 text-xs sm:text-sm">
                 Open Pillar Guides
               </Link>
-              <Link href="/ai-agents" className="btn-secondary !px-4 !py-2 text-xs sm:text-sm">
-                Open AI Agents
+              <Link href="/ai" className="btn-secondary !px-4 !py-2 text-xs sm:text-sm">
+                Open AI Hub
               </Link>
               <Link href="/downloads" className="btn-secondary !px-4 !py-2 text-xs sm:text-sm">
                 View Downloads
