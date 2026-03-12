@@ -7,8 +7,17 @@ import {
   getAiAgentsLastVerified,
   getAiAgentsRegistry
 } from "@/lib/aiAgents.registry";
-import { getCorporateFixes } from "@/lib/corporate-fixes.registry";
-import { getDownloadAssets, getDownloadAssetStats } from "@/lib/download-assets.registry";
+import {
+  getCorporateFixCategories,
+  getCorporateFixCategorySlug,
+  getCorporateFixes
+} from "@/lib/corporate-fixes.registry";
+import {
+  getDownloadAssetCategories,
+  getDownloadAssetCategorySlug,
+  getDownloadAssets,
+  getDownloadAssetStats
+} from "@/lib/download-assets.registry";
 import {
   getGenAICategories,
   getGenAICategorySlug,
@@ -20,6 +29,7 @@ import { getPillarContentIdeas } from "@/lib/seo-content.registry";
 import { siteConfig } from "@/lib/site";
 import { getCatalogItems } from "@/lib/support.catalog.registry";
 import { getKBArticles } from "@/lib/support.kb.registry";
+import { getDownloadCategories, getDownloadCategorySlug } from "@/lib/downloads.registry";
 
 export const dynamic = "force-static";
 
@@ -138,6 +148,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: parseDateInput(fix.lastVerified) ?? generatedAt
   }));
 
+  const corporateFixCategoryEntries: MetadataRoute.Sitemap = getCorporateFixCategories().map((category) => ({
+    url: url(`/corporate-tech-fixes/category/${getCorporateFixCategorySlug(category)}/`),
+    changeFrequency: "weekly",
+    priority: 0.84,
+    lastModified: corporateFixesLastUpdated
+  }));
+
   const pcBuildGuideEntries: MetadataRoute.Sitemap = getPCBuildGuides().map((guide) => ({
     url: url(`/pc-build-guides/${guide.slug}/`),
     changeFrequency: "weekly",
@@ -166,6 +183,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: parseDateInput(asset.updatedAt) ?? generatedAt
   }));
 
+  const downloadCategoryEntries: MetadataRoute.Sitemap = getDownloadCategories().map((category) => ({
+    url: url(`/downloads/category/${getDownloadCategorySlug(category)}/`),
+    changeFrequency: "weekly",
+    priority: 0.8,
+    lastModified: generatedAt
+  }));
+
+  const downloadAssetCategoryEntries: MetadataRoute.Sitemap = getDownloadAssetCategories().map((category) => ({
+    url: url(`/downloads/assets/category/${getDownloadAssetCategorySlug(category)}/`),
+    changeFrequency: "weekly",
+    priority: 0.83,
+    lastModified: downloadAssetsLastUpdated
+  }));
+
   const guideEntries: MetadataRoute.Sitemap = getPillarContentIdeas().map((guide) => ({
     url: url(`/guides/${guide.slug}/`),
     changeFrequency: "weekly",
@@ -180,9 +211,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...aiAgentCategoryEntries,
     ...genAIPromptEntries,
     ...genAIPromptCategoryEntries,
+    ...downloadCategoryEntries,
     ...downloadAssetEntries,
+    ...downloadAssetCategoryEntries,
     ...guideEntries,
     ...corporateFixEntries,
+    ...corporateFixCategoryEntries,
     ...pcBuildGuideEntries,
     ...kbEntries,
     ...catalogEntries

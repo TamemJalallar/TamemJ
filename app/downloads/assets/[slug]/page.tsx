@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { RelatedContentSection } from "@/components/related-content-section";
+import { getDownloadAssetEditorialOverrideBySlug } from "@/lib/editorial-overrides";
 import {
   getDownloadAssetBundles,
   getDownloadAssetBySlug,
   getDownloadAssets
 } from "@/lib/download-assets.registry";
+import { buildResourceGroupsForItContext } from "@/lib/related-content";
 import { buildArticleOpenGraph, buildBreadcrumbJsonLd, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 
 interface DownloadAssetPageProps {
@@ -26,7 +29,9 @@ export async function generateMetadata({ params }: DownloadAssetPageProps): Prom
     return { title: "Asset Not Found" };
   }
 
-  const description = `${asset.description} Format: ${asset.format.toUpperCase()}. File size: ${asset.fileSize}. Updated ${new Date(asset.updatedAt).toLocaleDateString("en-US", { dateStyle: "long" })}. Access: Free.`;
+  const editorialOverride = getDownloadAssetEditorialOverrideBySlug(asset.slug);
+  const leadText = editorialOverride?.optimizedLeadParagraph ?? asset.description;
+  const description = `${leadText} Format: ${asset.format.toUpperCase()}. File size: ${asset.fileSize}. Updated ${new Date(asset.updatedAt).toLocaleDateString("en-US", { dateStyle: "long" })}. Access: Free.`;
 
   return {
     title: `${asset.title} | IT Download Assets`,
@@ -77,6 +82,13 @@ export default async function DownloadAssetDetailPage({ params }: DownloadAssetP
   const relatedAssets = getDownloadAssets()
     .filter((candidate) => candidate.slug !== asset.slug && candidate.category === asset.category)
     .slice(0, 6);
+  const editorialOverride = getDownloadAssetEditorialOverrideBySlug(asset.slug);
+  const relatedContentGroups = buildResourceGroupsForItContext(
+    [asset.title, asset.description, asset.category, ...asset.tags, ...asset.previewItems],
+    {
+      excludeAssetSlug: asset.slug
+    }
+  );
   const downloadHref = asset.downloadUrl;
 
   const assetSchema = {
@@ -144,8 +156,17 @@ export default async function DownloadAssetDetailPage({ params }: DownloadAssetP
               {asset.title}
             </h1>
             <p className="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-300 sm:text-base">
-              {asset.description}
+              {editorialOverride?.optimizedLeadParagraph ?? asset.description}
             </p>
+
+            {editorialOverride ? (
+              <div className="mt-5 rounded-2xl border border-cyan-200/70 bg-cyan-50/70 p-4 text-sm leading-7 text-slate-700 dark:border-cyan-900/60 dark:bg-cyan-950/25 dark:text-slate-200">
+                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-cyan-700 dark:text-cyan-200">
+                  Editorial Intro
+                </p>
+                <p className="mt-2">{editorialOverride.editorialIntro}</p>
+              </div>
+            ) : null}
 
             <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               <MetaPill label="Format" value={asset.format.toUpperCase()} />
@@ -224,6 +245,16 @@ export default async function DownloadAssetDetailPage({ params }: DownloadAssetP
               </dl>
             </aside>
           </section>
+
+          {relatedContentGroups.length > 0 ? (
+            <div className="mt-6">
+              <RelatedContentSection
+                title="Related Resources Around This Asset"
+                description="Use these internal links to move from the download itself into the broader troubleshooting, documentation, and guide content connected to the same workflow."
+                groups={relatedContentGroups}
+              />
+            </div>
+          ) : null}
 
           {relatedBundles.length > 0 ? (
             <section className="mt-6 surface-card p-5 sm:p-6 dark:border-slate-700 dark:bg-slate-950">

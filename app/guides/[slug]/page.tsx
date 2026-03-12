@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { RelatedContentSection } from "@/components/related-content-section";
+import { getRelatedCorporateFixesForContext } from "@/lib/related-content";
 import {
   getContentClusterBySlug,
   getKeywordOpportunitiesForPillar,
@@ -86,6 +88,10 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
   const cluster = getContentClusterBySlug(pillar.cluster);
   const relatedKBArticles = getSuggestedKBArticlesForPillar(pillar, 28);
   const relatedAssets = getSuggestedDownloadAssetsForPillar(pillar, 14);
+  const relatedCorporateFixes = getRelatedCorporateFixesForContext(
+    [pillar.title, pillar.description, ...pillar.targetKeywords, ...pillar.relatedTerms],
+    4
+  );
   const opportunities = getKeywordOpportunitiesForPillar(pillar, 12);
 
   const guideSchema = {
@@ -247,6 +253,21 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
               <p className="text-sm text-slate-600 dark:text-slate-300">No linked assets found for this pillar yet.</p>
             )}
           </section>
+
+          {relatedCorporateFixes.length > 0 ? (
+            <RelatedContentSection
+              title="Corporate Fixes Connected to This Guide"
+              description="These enterprise-safe remediation pages reinforce the operational work covered by this pillar guide."
+              groups={[
+                {
+                  title: "Related Corporate Fixes",
+                  description: "Step-by-step support runbooks for adjacent incidents and recurring troubleshooting paths.",
+                  href: "/corporate-tech-fixes/",
+                  items: relatedCorporateFixes
+                }
+              ]}
+            />
+          ) : null}
 
           <section className="space-y-4">
             <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Opportunity Tables</h2>

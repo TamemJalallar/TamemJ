@@ -1,3 +1,4 @@
+import { slugifyLabel } from "@/lib/slugs";
 import type { DownloadAsset, DownloadAssetBundle } from "@/types/download";
 
 const ASSET_BASE_URL = "https://downloads.tamemj.com";
@@ -672,6 +673,29 @@ export function getDownloadAssetBySlug(slug: string): DownloadAsset | undefined 
 export function getDownloadAssetCategories(): DownloadAsset["category"][] {
   const categories = [...new Set(assetsRegistry.map((asset) => asset.category))];
   return categories.sort((a, b) => a.localeCompare(b));
+}
+
+export function getDownloadAssetCategorySlug(category: DownloadAsset["category"]): string {
+  return slugifyLabel(category);
+}
+
+export function getDownloadAssetCategoryBySlug(slug: string): DownloadAsset["category"] | undefined {
+  return getDownloadAssetCategories().find((category) => getDownloadAssetCategorySlug(category) === slug);
+}
+
+export function getDownloadAssetsByCategory(
+  categoryOrSlug: DownloadAsset["category"] | string
+): DownloadAsset[] {
+  const resolvedCategory = getDownloadAssetCategoryBySlug(categoryOrSlug) ?? categoryOrSlug;
+
+  return assetsRegistry
+    .filter((asset) => asset.category === resolvedCategory)
+    .map((asset) => ({
+      ...asset,
+      previewItems: [...asset.previewItems],
+      tags: [...asset.tags]
+    }))
+    .sort((a, b) => a.title.localeCompare(b.title));
 }
 
 export function getDownloadAssetFormats(): DownloadAsset["format"][] {

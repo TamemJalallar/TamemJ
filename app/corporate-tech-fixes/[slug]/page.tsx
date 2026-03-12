@@ -3,7 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FixGuide } from "@/components/corporate-fixes/fix-guide";
 import { EnterpriseSupportBanner } from "@/components/corporate-fixes/fix-shared";
+import { RelatedContentSection } from "@/components/related-content-section";
 import { getCorporateFixBySlug, getCorporateFixes } from "@/lib/corporate-fixes.registry";
+import { buildResourceGroupsForItContext } from "@/lib/related-content";
 import { getTopKeywordArticleTargets } from "@/lib/seo-content.registry";
 import { supportAuthorProfile } from "@/lib/site";
 import { buildArticleOpenGraph, buildBreadcrumbJsonLd, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
@@ -191,6 +193,12 @@ export default async function CorporateFixDetailPage({ params }: CorporateFixPag
         a.keyword.localeCompare(b.keyword)
     )
     .slice(0, 8);
+  const relatedContentGroups = buildResourceGroupsForItContext(
+    [fix.title, fix.description, fix.category, ...fix.tags, ...fix.steps.slice(0, 3).map((step) => step.content)],
+    {
+      excludeFixSlug: fix.slug
+    }
+  );
 
   const fixArticleSchema = {
     "@context": "https://schema.org",
@@ -295,6 +303,16 @@ export default async function CorporateFixDetailPage({ params }: CorporateFixPag
 
           <EnterpriseSupportBanner className="mb-5" />
           <FixGuide fix={fix} />
+
+          {relatedContentGroups.length > 0 ? (
+            <div className="mt-6">
+              <RelatedContentSection
+                title="Broader Resources for This Fix"
+                description="Use these links to move into related support tickets, reusable downloads, and higher-level guide pages covering the same enterprise workflow."
+                groups={relatedContentGroups}
+              />
+            </div>
+          ) : null}
 
           {exactQueryTargets.length > 0 ? (
             <section className="mt-6 surface-card p-5 sm:p-6">

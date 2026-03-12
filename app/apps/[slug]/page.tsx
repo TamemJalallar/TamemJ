@@ -3,9 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AppStoreButton } from "@/components/app-store-button";
+import { RelatedContentSection } from "@/components/related-content-section";
 import { ScreenshotCarousel } from "@/components/screenshot-carousel";
 import { getAppBySlug, getApps } from "@/lib/apps";
 import { appsSectionEnabled } from "@/lib/apps-visibility";
+import { getAppCrossSectionGroups } from "@/lib/related-content";
 import { buildBreadcrumbJsonLd, buildTwitter, buildOpenGraph, toAbsoluteUrl } from "@/lib/seo";
 
 const STATIC_EXPORT_PLACEHOLDER_SLUG = "__site-build-placeholder__";
@@ -126,6 +128,7 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
     notFound();
   }
 
+  const appCrossSectionGroups = getAppCrossSectionGroups(app.slug);
   const appSchema = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
@@ -263,6 +266,16 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
             <ScreenshotCarousel screenshots={app.screenshots} appName={app.name} />
           </div>
         </div>
+
+        {appCrossSectionGroups.length > 0 ? (
+          <div className="mt-6">
+            <RelatedContentSection
+              title="More From the Site"
+              description="These internal sections connect the app catalog to the broader resources published on the site."
+              groups={appCrossSectionGroups}
+            />
+          </div>
+        ) : null}
         </div>
       </section>
       <script

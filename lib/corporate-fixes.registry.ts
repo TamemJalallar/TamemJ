@@ -1,5 +1,6 @@
 import publishedCorporateFixesStore from "@/data/corporate-fixes.published.json";
 import { supportAuthorProfile } from "@/lib/site";
+import { slugifyLabel } from "@/lib/slugs";
 import { getKBArticles } from "@/lib/support.kb.registry";
 import type { KBArticle, KBArticleAuthor } from "@/types/support";
 
@@ -957,4 +958,22 @@ export function getCorporateFixCategories(): CorporateFixCategory[] {
   const usedCategories = new Set(corporateFixRegistry.map((fix) => fix.category));
 
   return corporateFixCategories.filter((category) => usedCategories.has(category));
+}
+
+export function getCorporateFixCategorySlug(category: CorporateFixCategory): string {
+  return slugifyLabel(category);
+}
+
+export function getCorporateFixCategoryBySlug(slug: string): CorporateFixCategory | undefined {
+  return getCorporateFixCategories().find((category) => getCorporateFixCategorySlug(category) === slug);
+}
+
+export function getCorporateFixesByCategory(
+  categoryOrSlug: CorporateFixCategory | string
+): CorporateTechFix[] {
+  const resolvedCategory = getCorporateFixCategoryBySlug(categoryOrSlug) ?? categoryOrSlug;
+
+  return getCorporateFixes()
+    .filter((fix) => fix.category === resolvedCategory)
+    .sort((a, b) => a.title.localeCompare(b.title));
 }
