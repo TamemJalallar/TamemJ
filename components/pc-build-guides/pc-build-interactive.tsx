@@ -1,6 +1,21 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import {
+  autoUpdate,
+  flip,
+  FloatingPortal,
+  offset,
+  safePolygon,
+  shift,
+  useClick,
+  useDismiss,
+  useFloating,
+  useFocus,
+  useHover,
+  useInteractions,
+  useRole
+} from "@floating-ui/react";
 import { buildAmazonSearchLink } from "@/lib/amazon-affiliate";
 
 type CaseSize = "Small Form" | "Mid Size" | "Big Tower" | "Extra Big Tower";
@@ -20,6 +35,12 @@ type Recommendation = {
 type TaggedRecommendation = Recommendation & {
   badge?: "Best Value" | "Balanced" | "Performance" | "Max Performance";
   badgeTone?: "value" | "balanced" | "performance";
+};
+
+type ComponentDoc = {
+  title: string;
+  description: string;
+  bullets: string[];
 };
 
 type FormFactor = {
@@ -186,6 +207,64 @@ function badgeClass(tone?: TaggedRecommendation["badgeTone"]): string {
     default:
       return "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900/60 dark:bg-emerald-950/40 dark:text-emerald-200";
   }
+}
+
+function ComponentDocCard({ doc }: { doc: ComponentDoc }) {
+  const [open, setOpen] = useState(false);
+  const { refs, floatingStyles, context } = useFloating({
+    open,
+    onOpenChange: setOpen,
+    placement: "right-start",
+    whileElementsMounted: autoUpdate,
+    middleware: [offset(12), flip({ padding: 12 }), shift({ padding: 12 })]
+  });
+  const hover = useHover(context, { handleClose: safePolygon(), move: false });
+  const focus = useFocus(context);
+  const click = useClick(context);
+  const dismiss = useDismiss(context, { outsidePress: true });
+  const role = useRole(context, { role: "dialog" });
+  const { getReferenceProps, getFloatingProps } = useInteractions([hover, focus, click, dismiss, role]);
+
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        ref={refs.setReference}
+        {...getReferenceProps({
+          "aria-expanded": open,
+          "aria-label": `${doc.title} documentation`
+        })}
+        className="group flex w-full items-center justify-between gap-2 rounded-xl border border-line/70 bg-slate-50 px-4 py-3 text-left text-sm transition hover:border-slate-300 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700 dark:hover:bg-slate-900/70 dark:focus-visible:ring-slate-700"
+      >
+        <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">{doc.title}</span>
+        <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400 dark:text-slate-500">
+          Details
+        </span>
+      </button>
+      {open ? (
+        <FloatingPortal>
+          <div
+            ref={refs.setFloating}
+            style={floatingStyles}
+            className="z-40 w-[18rem] rounded-xl border border-line/80 bg-white p-3 shadow-card dark:border-slate-700 dark:bg-slate-950"
+            {...getFloatingProps()}
+          >
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+              {doc.title}
+            </p>
+            <p className="mt-2 text-xs text-slate-600 dark:text-slate-300">{doc.description}</p>
+            <ul className="mt-3 space-y-2 pl-4 text-xs text-slate-600 dark:text-slate-300">
+              {doc.bullets.map((item) => (
+                <li key={item} className="list-disc">
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </FloatingPortal>
+      ) : null}
+    </div>
+  );
 }
 
 function clamp(value: number, min: number, max: number): number {
@@ -1380,6 +1459,89 @@ export function PCBuildInteractive({ className }: { className?: string }) {
     { label: "Overkill mode", value: overkillMode ? "Enabled" : "Off" },
     { label: "Cooling", value: recommendedCooling }
   ];
+  const componentDocs: ComponentDoc[] = [
+    {
+      title: "Case",
+      description: "Sets size, airflow, and expansion limits for the entire build.",
+      bullets: [
+        "Match case size to motherboard form factor (Mini-ITX, ATX, E-ATX).",
+        "Check GPU length + radiator clearance before buying.",
+        "Prioritize front intake + rear/top exhaust for balanced airflow."
+      ]
+    },
+    {
+      title: "Motherboard",
+      description: "Defines CPU socket, expansion lanes, and future upgrades.",
+      bullets: [
+        "Chipset determines features like PCIe Gen5 and USB bandwidth.",
+        "Ensure RAM generation (DDR5) and slot count match your plan.",
+        "Look for enough M.2 slots and robust VRMs for high-end CPUs."
+      ]
+    },
+    {
+      title: "CPU",
+      description: "Primary compute for apps, multitasking, and productivity.",
+      bullets: [
+        "Gaming favors high clocks and cache; creative favors more cores.",
+        "Match CPU to workload first, then GPU for balanced performance.",
+        "Consider upgrade path when choosing platform."
+      ]
+    },
+    {
+      title: "RAM",
+      description: "System memory for multitasking, large projects, and VMs.",
+      bullets: [
+        "16–32 GB for gaming/work; 64+ GB for creative/VMs/AI.",
+        "Use dual-channel kits (2×16) for best performance.",
+        "Check motherboard QVL for high-speed DDR5 kits."
+      ]
+    },
+    {
+      title: "GPU",
+      description: "Drives gaming, rendering, AI inference, and creative acceleration.",
+      bullets: [
+        "1080p/1440p gaming needs midrange; 4K needs high-end GPUs.",
+        "VRAM matters for AI/ML and large creative assets.",
+        "Confirm power connectors and case clearance."
+      ]
+    },
+    {
+      title: "Power Supply",
+      description: "Provides stable power for CPU/GPU under load.",
+      bullets: [
+        "Choose 80+ Gold or better for efficiency and stability.",
+        "Add 100–200W headroom for spikes and upgrades.",
+        "Ensure PSU form factor matches case (ATX vs SFX)."
+      ]
+    },
+    {
+      title: "Cooling",
+      description: "Controls thermals and noise under sustained workloads.",
+      bullets: [
+        "Air coolers: reliable and low maintenance.",
+        "AIO: better peak cooling for higher boost clocks.",
+        "Custom loop: best thermals, requires maintenance."
+      ]
+    },
+    {
+      title: "Storage",
+      description: "NVMe for speed, SSD/HDD for capacity and archives.",
+      bullets: [
+        "Use NVMe Gen4 for OS and active projects.",
+        "Add secondary SSD/HDD for backups and archives.",
+        "Check motherboard M.2 count and heatsinks."
+      ]
+    },
+    {
+      title: "Peripherals",
+      description: "Keyboard, mouse, and display complete the experience.",
+      bullets: [
+        "Match monitor refresh rate to GPU capability.",
+        "Pick ergonomic peripherals for long work sessions.",
+        "Consider a UPS for power protection."
+      ]
+    }
+  ];
 
   return (
     <section className={classNames("surface-card-strong p-6 sm:p-8 lg:p-10", className)}>
@@ -2231,7 +2393,7 @@ export function PCBuildInteractive({ className }: { className?: string }) {
 
           <div className="mt-6 grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
             <div className="rounded-2xl border border-line/70 bg-slate-50 p-5 text-sm dark:border-slate-800 dark:bg-slate-900">
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Compatibility checklist</h3>
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Compatibility checklist</h3>
           <ul className="mt-3 space-y-2 pl-5 text-sm text-slate-700 dark:text-slate-200">
             <li className="list-disc">Case supports {caseDetail.formFactors.map((f) => f.name).join("/")} form factor.</li>
             <li className="list-disc">CPU socket matches chipset ({cpuPlatform === "No Preference" ? "AM5 or LGA1700" : cpuPlatform}).</li>
@@ -2268,6 +2430,18 @@ export function PCBuildInteractive({ className }: { className?: string }) {
               {copiedSummary ? "Copied Summary" : "Copy Build Summary"}
             </button>
           </div>
+            </div>
+          </div>
+
+          <div className="mt-6 rounded-2xl border border-line/70 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/60">
+            <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Component documentation</h3>
+            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+              Quick reference notes to help you evaluate each part before you buy.
+            </p>
+            <div className="mt-4 grid gap-4 md:grid-cols-2">
+              {componentDocs.map((doc) => (
+                <ComponentDocCard key={doc.title} doc={doc} />
+              ))}
             </div>
           </div>
         </div>
