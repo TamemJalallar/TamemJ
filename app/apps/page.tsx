@@ -27,7 +27,7 @@ const topAppKeywords = seoApps.slice(0, 12).map((app) => `${app.name} app`);
 export const metadata: Metadata = {
   title: "Apps",
   description:
-    "Browse iOS apps by Tamem J, including upcoming and published iPhone apps.",
+    "Browse iOS apps by Tamem J, including upcoming and published iPhone apps like HappilyEverAfter Planner.",
   keywords: uniqueKeywords([
     "iOS apps",
     "iPhone apps",
@@ -42,12 +42,12 @@ export const metadata: Metadata = {
   },
   openGraph: buildOpenGraph(
     "Apps | Tamem J",
-    "Browse iOS apps by Tamem J, including upcoming and published iPhone apps.",
+    "Browse iOS apps by Tamem J, including upcoming and published iPhone apps like HappilyEverAfter Planner.",
     "/apps/"
   ),
   twitter: buildTwitter(
     "Apps | Tamem J",
-    "Browse iOS apps by Tamem J, including upcoming and published iPhone apps."
+    "Browse iOS apps by Tamem J, including upcoming and published iPhone apps like HappilyEverAfter Planner."
   )
 };
 
@@ -79,7 +79,7 @@ export default function AppsPage() {
           <SectionHeading
             eyebrow="Apps"
             title="iPhone apps built for clarity"
-            description="All apps are listed below. Add a new app by updating the JSON file in /data/apps.json."
+            description="A growing catalog of iPhone apps designed around focused workflows, thoughtful interfaces, and practical day-to-day use."
           />
 
           {hasApps ? (

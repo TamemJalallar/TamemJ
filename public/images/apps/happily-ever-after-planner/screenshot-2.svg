@@ -1,0 +1,49 @@
+<svg width="1290" height="2796" viewBox="0 0 1290 2796" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="screen2" x1="40" y1="120" x2="1210" y2="2736" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FDF2F8"/>
+      <stop offset="0.48" stop-color="#EFF6FF"/>
+      <stop offset="1" stop-color="#F8FAFC"/>
+    </linearGradient>
+  </defs>
+  <rect width="1290" height="2796" rx="120" fill="url(#screen2)"/>
+  <text x="120" y="190" fill="#0F172A" font-family="Arial, sans-serif" font-size="62" font-weight="700">Guest list &amp; RSVPs</text>
+  <text x="120" y="260" fill="#475569" font-family="Arial, sans-serif" font-size="34">Track responses, meal choices, seating notes, and plus-ones.</text>
+  <rect x="120" y="336" width="1050" height="220" rx="48" fill="#FFFFFF" fill-opacity="0.94"/>
+  <text x="176" y="418" fill="#2563EB" font-family="Arial, sans-serif" font-size="34" font-weight="700">Overview</text>
+  <text x="176" y="500" fill="#111827" font-family="Arial, sans-serif" font-size="72" font-weight="700">164 invited</text>
+  <text x="176" y="546" fill="#6B7280" font-family="Arial, sans-serif" font-size="30">121 confirmed • 19 pending • 24 not yet replied</text>
+  <rect x="120" y="622" width="1050" height="1650" rx="48" fill="#FFFFFF" fill-opacity="0.94"/>
+  <text x="176" y="706" fill="#2563EB" font-family="Arial, sans-serif" font-size="34" font-weight="700">Recent RSVP updates</text>
+  <g font-family="Arial, sans-serif">
+    <rect x="176" y="760" width="938" height="196" rx="32" fill="#EFF6FF"/>
+    <text x="220" y="836" fill="#111827" font-size="34" font-weight="700">Ariana &amp; Nate Robinson</text>
+    <text x="220" y="886" fill="#475569" font-size="30">2 guests • Chicken / Vegetarian • Hotel shuttle requested</text>
+    <text x="220" y="930" fill="#2563EB" font-size="28" font-weight="700">Confirmed</text>
+
+    <rect x="176" y="992" width="938" height="196" rx="32" fill="#FDF2F8"/>
+    <text x="220" y="1068" fill="#111827" font-size="34" font-weight="700">Elena Patel</text>
+    <text x="220" y="1118" fill="#475569" font-size="30">1 guest • Gluten-free meal • Needs wheelchair seating note</text>
+    <text x="220" y="1162" fill="#BE185D" font-size="28" font-weight="700">Confirmed with accessibility note</text>
+
+    <rect x="176" y="1224" width="938" height="196" rx="32" fill="#FEF3C7"/>
+    <text x="220" y="1300" fill="#111827" font-size="34" font-weight="700">Jordan and Mia Lewis</text>
+    <text x="220" y="1350" fill="#475569" font-size="30">Awaiting reply • Save-the-date delivered</text>
+    <text x="220" y="1394" fill="#B45309" font-size="28" font-weight="700">Reminder scheduled</text>
+
+    <rect x="176" y="1456" width="938" height="196" rx="32" fill="#F8FAFC"/>
+    <text x="220" y="1532" fill="#111827" font-size="34" font-weight="700">Family table assignments</text>
+    <text x="220" y="1582" fill="#475569" font-size="30">Table 3 almost full • review elder seating spacing</text>
+    <text x="220" y="1626" fill="#0F172A" font-size="28" font-weight="700">Needs adjustment</text>
+  </g>
+  <rect x="120" y="2336" width="1050" height="340" rx="48" fill="#FFFFFF" fill-opacity="0.94"/>
+  <text x="176" y="2420" fill="#2563EB" font-family="Arial, sans-serif" font-size="34" font-weight="700">Quick actions</text>
+  <g font-family="Arial, sans-serif">
+    <rect x="176" y="2476" width="280" height="120" rx="28" fill="#DBEAFE"/>
+    <text x="220" y="2548" fill="#1D4ED8" font-size="30" font-weight="700">Send reminder</text>
+    <rect x="505" y="2476" width="280" height="120" rx="28" fill="#FCE7F3"/>
+    <text x="548" y="2548" fill="#BE185D" font-size="30" font-weight="700">Edit seating</text>
+    <rect x="834" y="2476" width="280" height="120" rx="28" fill="#EDE9FE"/>
+    <text x="882" y="2548" fill="#7C3AED" font-size="30" font-weight="700">Export list</text>
+  </g>
+</svg>

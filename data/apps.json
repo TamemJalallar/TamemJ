@@ -1,1 +1,38 @@
-[]
+[
+  {
+    "slug": "happily-ever-after-planner",
+    "name": "HappilyEverAfter Planner",
+    "category": "Wedding Planning",
+    "tagline": "Plan the day without losing the details.",
+    "shortDescription": "A modern wedding planning app for organizing timelines, guests, budgets, vendors, and day-of tasks in one clear workspace.",
+    "description": "HappilyEverAfter Planner helps couples manage the full wedding planning process with a calm, organized experience. Track key milestones, keep budgets visible, manage guests and RSVPs, capture vendor notes, and stay ready for the wedding weekend with checklists that keep everyone aligned.",
+    "featured": true,
+    "appStoreUrl": "https://apps.apple.com/us/app/happilyeverafter-planner/id6760481033",
+    "icon": "/images/apps/AppIcon.jpg",
+    "screenshots": [
+      {
+        "src": "/images/apps/Dashboard.png",
+        "alt": "HappilyEverAfter Planner dashboard screen"
+      },
+      {
+        "src": "/images/apps/Budget.png",
+        "alt": "HappilyEverAfter Planner budget tracking screen"
+      },
+      {
+        "src": "/images/apps/Guest-List.png",
+        "alt": "HappilyEverAfter Planner guest list and RSVP tracking screen"
+      }
+    ],
+    "features": [
+      "Build a wedding timeline with milestone reminders from engagement to wedding weekend.",
+      "Track budget categories, deposits, and remaining balances in one shared view.",
+      "Manage guests, RSVPs, party assignments, and seating notes without spreadsheet sprawl.",
+      "Keep vendor details, contacts, contracts, and follow-up notes organized by category.",
+      "Use day-of checklists to coordinate final tasks, logistics, and ceremony timing.",
+      "Review planning progress in a clean mobile-first workspace built for quick updates."
+    ],
+    "pricing": "Available on the App Store",
+    "minIOSVersion": "See the App Store listing for current iPhone and iOS compatibility",
+    "supportEmail": "support@tamemj.com"
+  }
+]

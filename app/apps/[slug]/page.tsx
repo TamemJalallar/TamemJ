@@ -129,9 +129,14 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
     url: toAbsoluteUrl(`/apps/${app.slug}/`),
     image: toAbsoluteUrl(app.icon),
     screenshot: app.screenshots.map((screenshot) => toAbsoluteUrl(screenshot.src)),
-    downloadUrl: app.appStoreUrl,
     isAccessibleForFree: app.pricing.toLowerCase().includes("free"),
+    ...(app.appStoreUrl
+      ? {
+          downloadUrl: app.appStoreUrl
+        }
+      : {}),
     ...(app.pricing.toLowerCase().includes("free")
+      && app.appStoreUrl
       ? {
           offers: {
             "@type": "Offer",
@@ -192,6 +197,12 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
                   Support
                 </Link>
               </div>
+              {!app.appStoreUrl ? (
+                <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">
+                  The App Store listing is not live yet. Product details are available now while the
+                  first public release is being prepared.
+                </p>
+              ) : null}
 
               <dl className="mt-6 grid gap-4 rounded-xl border border-line bg-slate-50 p-4 text-sm sm:grid-cols-2">
                 <div>
