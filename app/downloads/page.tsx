@@ -260,7 +260,7 @@ export default function DownloadsPage() {
   return (
     <>
       <section className="section-shell pt-8 sm:pt-10">
-        <div className="page-shell">
+        <div className="mx-auto w-full max-w-[1600px] px-4 sm:px-6 lg:px-8">
           <AffiliateDisclosureBanner className="mb-6" />
           <div className="mb-6 rounded-2xl border border-line/80 bg-white/85 p-5 shadow-soft dark:border-slate-700 dark:bg-slate-950/70">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
