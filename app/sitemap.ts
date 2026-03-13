@@ -15,6 +15,7 @@ import {
 import {
   getDownloadAssetCategories,
   getDownloadAssetCategorySlug,
+  getDownloadAssetBundles,
   getDownloadAssets,
   getDownloadAssetStats
 } from "@/lib/download-assets.registry";
@@ -177,6 +178,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: parseDateInput(asset.updatedAt) ?? generatedAt
   }));
 
+  const downloadAssetBundleIndexEntry: MetadataRoute.Sitemap = [
+    {
+      url: url("/downloads/assets/bundles/"),
+      changeFrequency: "weekly",
+      priority: 0.84,
+      lastModified: downloadAssetsLastUpdated
+    }
+  ];
+
+  const downloadAssetBundleEntries: MetadataRoute.Sitemap = getDownloadAssetBundles().map((bundle) => ({
+    url: url(`/downloads/assets/bundles/${bundle.slug}/`),
+    changeFrequency: "weekly",
+    priority: 0.83,
+    lastModified: parseDateInput(bundle.updatedAt) ?? generatedAt
+  }));
+
   const downloadCategoryEntries: MetadataRoute.Sitemap = getDownloadCategories().map((category) => ({
     url: url(`/downloads/category/${getDownloadCategorySlug(category)}/`),
     changeFrequency: "weekly",
@@ -207,6 +224,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...genAIPromptCategoryEntries,
     ...downloadCategoryEntries,
     ...downloadAssetEntries,
+    ...downloadAssetBundleIndexEntry,
+    ...downloadAssetBundleEntries,
     ...downloadAssetCategoryEntries,
     ...guideEntries,
     ...corporateFixEntries,

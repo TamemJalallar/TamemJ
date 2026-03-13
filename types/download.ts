@@ -101,4 +101,10 @@ export interface DownloadAssetBundle {
   itemSlugs: string[];
   access: DownloadAssetAccess;
   monetization: string;
+  downloadUrl: string;
+  fileSize: string;
+  fileSizeBytes: number;
+  updatedAt: string;
+  previewItems: string[];
+  highlights: string[];
 }

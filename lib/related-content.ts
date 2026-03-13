@@ -94,12 +94,15 @@ export function getRelatedGuidesForContext(parts: Array<string | undefined | nul
 export function getRelatedDownloadAssetsForContext(
   parts: Array<string | undefined | null>,
   limit = 4,
-  excludeSlug?: string
+  excludeSlugs?: string | string[]
 ): RelatedContentItem[] {
   const terms = buildContextTerms(parts);
+  const excluded = new Set(
+    (Array.isArray(excludeSlugs) ? excludeSlugs : excludeSlugs ? [excludeSlugs] : []).filter(Boolean)
+  );
 
   return getDownloadAssets()
-    .filter((asset) => asset.slug !== excludeSlug)
+    .filter((asset) => !excluded.has(asset.slug))
     .map((asset) => ({
       asset,
       score: scoreForTerms([asset.title, asset.description, asset.category, ...asset.tags, ...asset.previewItems], terms)
@@ -181,10 +184,12 @@ export function buildResourceGroupsForItContext(
     excludeKBSlug?: string;
     excludeFixSlug?: string;
     excludeAssetSlug?: string;
+    excludeAssetSlugs?: string[];
   }
 ): RelatedContentGroup[] {
   const guideItems = getRelatedGuidesForContext(parts, 3);
-  const assetItems = getRelatedDownloadAssetsForContext(parts, 3, options?.excludeAssetSlug);
+  const assetExclusions = options?.excludeAssetSlugs ?? (options?.excludeAssetSlug ? [options.excludeAssetSlug] : []);
+  const assetItems = getRelatedDownloadAssetsForContext(parts, 3, assetExclusions);
   const fixItems = getRelatedCorporateFixesForContext(parts, 3, options?.excludeFixSlug);
   const ticketItems = getRelatedKBArticlesForContext(parts, 3, options?.excludeKBSlug);
 

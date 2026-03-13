@@ -33,10 +33,11 @@ function uniqueKeywords(keywords: string[]): string[] {
 
 export async function generateMetadata(): Promise<Metadata> {
   const assets = getDownloadAssets();
+  const bundles = getDownloadAssetBundles();
   const stats = getDownloadAssetStats();
   const categories = [...new Set(assets.map((asset) => asset.category))];
 
-  const description = `Download ${stats.total} enterprise IT assets, including PowerShell scripts, Excel templates, checklists, and runbooks for Microsoft 365, Active Directory, security, and operations workflows.`;
+  const description = `Download ${stats.total} enterprise IT assets and ${bundles.length} ZIP bundles, including PowerShell scripts, Excel templates, checklists, and runbooks for Microsoft 365, Active Directory, security, and operations workflows.`;
 
   return {
     title: "IT Download Assets",
@@ -52,6 +53,7 @@ export async function generateMetadata(): Promise<Metadata> {
       "incident response checklist",
       "it operations runbook",
       "it admin starter kit",
+      "it download bundles",
       ...categories.map((category) => `${category.toLowerCase()} downloads`),
       ...assets.slice(0, 20).map((asset) => `${asset.title.toLowerCase()} download`)
     ]),
@@ -142,23 +144,56 @@ export default function DownloadAssetsPage() {
           </div>
 
           <section className="mb-6 rounded-2xl border border-line/80 bg-white/80 p-5 shadow-soft dark:border-slate-700 dark:bg-slate-950/70">
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Asset Categories</h2>
-            <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
-              Category landing pages for scripts, templates, checklists, and runbooks.
-            </p>
-            <div className="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
-              {assetCategories.map((category) => (
-                <Link
-                  key={category}
-                  href={`/downloads/assets/category/${getDownloadAssetCategorySlug(category)}/`}
-                  className="rounded-xl border border-line/80 bg-slate-50 px-3 py-3 text-sm text-slate-700 transition hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-800"
-                >
-                  <span className="font-medium">{category}</span>
-                  <span className="mt-0.5 block text-xs text-slate-500 dark:text-slate-400">
-                    Open category landing page
-                  </span>
+            <div className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
+              <div>
+                <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Asset Categories</h2>
+                <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
+                  Category landing pages for scripts, templates, checklists, and runbooks.
+                </p>
+                <div className="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+                  {assetCategories.map((category) => (
+                    <Link
+                      key={category}
+                      href={`/downloads/assets/category/${getDownloadAssetCategorySlug(category)}/`}
+                      className="rounded-xl border border-line/80 bg-slate-50 px-3 py-3 text-sm text-slate-700 transition hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-800"
+                    >
+                      <span className="font-medium">{category}</span>
+                      <span className="mt-0.5 block text-xs text-slate-500 dark:text-slate-400">
+                        Open category landing page
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-dashed border-line/80 bg-slate-50/70 p-4 dark:border-slate-700 dark:bg-slate-900/60">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+                  Bundle Library
+                </p>
+                <h3 className="mt-2 text-base font-semibold text-slate-900 dark:text-slate-100">
+                  Download grouped starter packs
+                </h3>
+                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                  Bundle pages explain what each pack includes, who it is for, and provide a single ZIP download.
+                </p>
+                <div className="mt-3 space-y-2">
+                  {bundles.slice(0, 3).map((bundle) => (
+                    <Link
+                      key={bundle.slug}
+                      href={`/downloads/assets/bundles/${bundle.slug}/`}
+                      className="block rounded-xl border border-line/80 bg-white px-3 py-3 text-sm text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-900"
+                    >
+                      <span className="font-medium">{bundle.title}</span>
+                      <span className="mt-0.5 block text-xs text-slate-500 dark:text-slate-400">
+                        {bundle.itemSlugs.length} assets • {bundle.fileSize}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+                <Link href="/downloads/assets/bundles/" className="mt-4 inline-block text-sm font-semibold text-accent hover:underline">
+                  View all bundles
                 </Link>
-              ))}
+              </div>
             </div>
           </section>
 
