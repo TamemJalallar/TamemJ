@@ -1,10 +1,23 @@
 import type { NextConfig } from "next";
-import createBundleAnalyzer from "@next/bundle-analyzer";
+
+type ConfigTransformer = (config: NextConfig) => NextConfig;
+
+function getBundleAnalyzer(): ConfigTransformer {
+  if (process.env.ANALYZE !== "true") {
+    return (config) => config;
+  }
+
+  const createBundleAnalyzer = require("@next/bundle-analyzer") as (options: {
+    enabled: boolean;
+  }) => ConfigTransformer;
+
+  return createBundleAnalyzer({
+    enabled: true
+  });
+}
 
 const wantsStaticExport = process.env.npm_lifecycle_event === "build:static";
-const withBundleAnalyzer = createBundleAnalyzer({
-  enabled: process.env.ANALYZE === "true"
-});
+const withBundleAnalyzer = getBundleAnalyzer();
 
 const nextConfig: NextConfig = {
   ...(wantsStaticExport ? { output: "export" as const } : {}),
