@@ -34,8 +34,6 @@ export const metadata: Metadata = {
     "app portfolio",
     "App Store apps",
     "mobile apps by Tamem J",
-    "wedding planner app",
-    "wedding planning app iphone",
     ...topCategories.map((category) => `${category} app`),
     ...topAppKeywords
   ]),
@@ -62,7 +60,7 @@ export default function AppsPage() {
   const hasApps = apps.length > 0;
   const appsCollectionSchema = buildCollectionPageJsonLd(
     "iOS Apps by Tamem J",
-    "Browse iOS apps by Tamem J, including focused productivity and wedding planning apps.",
+    "Browse iOS apps by Tamem J, including upcoming and published iPhone apps.",
     "/apps/",
     apps.map((app) => ({
       name: app.name,

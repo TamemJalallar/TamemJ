@@ -63,10 +63,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ]) ?? generatedAt;
   const aiHubLastUpdated =
     latestDate([aiAgentsLastUpdated, genAIPromptsLastUpdated]) ?? generatedAt;
-  const appsLastUpdated =
-    latestDate(getApps().map((app) => parseDateInput(app.updatedAt ?? ""))) ?? generatedAt;
   const appsIndexEntry: MetadataRoute.Sitemap = [
-    { url: url("/apps/"), changeFrequency: "weekly", priority: 0.9, lastModified: appsLastUpdated }
+    { url: url("/apps/"), changeFrequency: "weekly", priority: 0.9, lastModified: generatedAt }
   ];
 
   const staticEntries: MetadataRoute.Sitemap = [
@@ -99,7 +97,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         url: url(`/apps/${app.slug}/`),
         changeFrequency: "monthly",
         priority: 0.7,
-        lastModified: parseDateInput(app.updatedAt ?? "") ?? generatedAt
+        lastModified: generatedAt
       }))
     : [];
 

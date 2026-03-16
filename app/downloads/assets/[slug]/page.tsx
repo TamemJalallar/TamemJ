@@ -6,7 +6,7 @@ import {
   getDownloadAssetBySlug,
   getDownloadAssets
 } from "@/lib/download-assets.registry";
-import { buildArticleOpenGraph, buildBreadcrumbJsonLd, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
+import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 
 interface DownloadAssetPageProps {
   params: Promise<{ slug: string }>;
@@ -41,17 +41,10 @@ export async function generateMetadata({ params }: DownloadAssetPageProps): Prom
     alternates: {
       canonical: `/downloads/assets/${asset.slug}/`
     },
-    openGraph: buildArticleOpenGraph(
+    openGraph: buildOpenGraph(
       `${asset.title} | IT Download Assets`,
       description,
-      `/downloads/assets/${asset.slug}/`,
-      {
-        publishedTime: asset.updatedAt,
-        modifiedTime: asset.updatedAt,
-        authors: ["Tamem J"],
-        section: asset.category,
-        tags: asset.tags
-      }
+      `/downloads/assets/${asset.slug}/`
     ),
     twitter: buildTwitter(`${asset.title} | IT Download Assets`, description)
   };
@@ -91,12 +84,6 @@ export default async function DownloadAssetDetailPage({ params }: DownloadAssetP
     fileFormat: asset.format,
     about: asset.category,
     keywords: asset.tags.join(", "),
-    mainEntityOfPage: toAbsoluteUrl(`/downloads/assets/${asset.slug}/`),
-    publisher: {
-      "@type": "Organization",
-      name: "Tamem J",
-      url: toAbsoluteUrl("/")
-    },
     isAccessibleForFree: true,
     audience: {
       "@type": "Audience",

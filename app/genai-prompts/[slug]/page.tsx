@@ -117,7 +117,6 @@ export default async function GenAIPromptPage({ params }: GenAIPromptPageProps) 
     headline: prompt.title,
     description: prompt.summary,
     url: toAbsoluteUrl(`/genai-prompts/${prompt.slug}/`),
-    mainEntityOfPage: toAbsoluteUrl(`/genai-prompts/${prompt.slug}/`),
     datePublished: prompt.updatedAt,
     dateModified: prompt.updatedAt,
     articleSection: prompt.category,
@@ -133,13 +132,7 @@ export default async function GenAIPromptPage({ params }: GenAIPromptPageProps) 
     },
     publisher: {
       "@type": "Organization",
-      name: "Tamem J",
-      url: toAbsoluteUrl("/")
-    },
-    isPartOf: {
-      "@type": "CollectionPage",
-      name: "GenAI Prompt Library",
-      url: toAbsoluteUrl("/genai-prompts/")
+      name: "Tamem J"
     }
   };
 

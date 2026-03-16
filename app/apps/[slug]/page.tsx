@@ -6,7 +6,7 @@ import { AppStoreButton } from "@/components/app-store-button";
 import { ScreenshotCarousel } from "@/components/screenshot-carousel";
 import { getAppBySlug, getApps } from "@/lib/apps";
 import { appsSectionEnabled } from "@/lib/apps-visibility";
-import { buildBreadcrumbJsonLd, buildTwitter, buildOpenGraph, toAbsoluteUrl } from "@/lib/seo";
+import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 
 const STATIC_EXPORT_PLACEHOLDER_SLUG = "__site-build-placeholder__";
 
@@ -72,20 +72,13 @@ export async function generateMetadata({ params }: AppPageProps): Promise<Metada
       "iPhone app",
       "iOS app",
       "App Store app",
-      `${app.category} app`,
-      `${app.name} app store`,
       ...app.features.slice(0, 6)
     ],
     alternates: {
       canonical: `/apps/${app.slug}/`
     },
-    openGraph: buildOpenGraph(`${app.name} | Tamem J`, app.shortDescription, `/apps/${app.slug}/`),
-    twitter: buildTwitter(`${app.name} | Tamem J`, app.shortDescription),
-    other: {
-      "app:category": app.category,
-      ...(app.appStoreUrl ? { "app:store-url": app.appStoreUrl } : {}),
-      ...(app.updatedAt ? { "app:last-updated": app.updatedAt } : {})
-    }
+    openGraph: buildOpenGraph(`${app.name} | Tamem J`, app.shortDescription, `/apps/${app.slug}/`, "article"),
+    twitter: buildTwitter(`${app.name} | Tamem J`, app.shortDescription)
   };
 }
 
@@ -131,32 +124,15 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
     "@type": "SoftwareApplication",
     name: app.name,
     applicationCategory: app.category,
-    applicationSubCategory: "Mobile Application",
     operatingSystem: "iOS",
     description: app.shortDescription,
     url: toAbsoluteUrl(`/apps/${app.slug}/`),
-    mainEntityOfPage: toAbsoluteUrl(`/apps/${app.slug}/`),
     image: toAbsoluteUrl(app.icon),
     screenshot: app.screenshots.map((screenshot) => toAbsoluteUrl(screenshot.src)),
     isAccessibleForFree: app.pricing.toLowerCase().includes("free"),
-    author: {
-      "@type": "Person",
-      name: "Tamem J"
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "Tamem J",
-      url: toAbsoluteUrl("/")
-    },
-    ...(app.updatedAt
-      ? {
-          dateModified: app.updatedAt
-        }
-      : {}),
     ...(app.appStoreUrl
       ? {
-          downloadUrl: app.appStoreUrl,
-          sameAs: [app.appStoreUrl]
+          downloadUrl: app.appStoreUrl
         }
       : {}),
     ...(app.pricing.toLowerCase().includes("free")
