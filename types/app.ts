@@ -11,7 +11,7 @@ export interface IOSApp {
   shortDescription: string;
   description: string;
   featured: boolean;
-  appStoreUrl?: string;
+  appStoreUrl: string;
   icon: string;
   screenshots: AppScreenshot[];
   features: string[];
