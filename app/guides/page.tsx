@@ -31,13 +31,12 @@ function uniqueKeywords(keywords: string[]): string[] {
 
 export async function generateMetadata(): Promise<Metadata> {
   const topKeywords = getTopSeoKeywordOpportunities(50).map((entry) => entry.keyword);
-  const pillars = getPillarContentIdeas();
-  const clusters = getContentClusters();
+
   const description =
-    `Pillar guides and SEO content clusters for enterprise IT troubleshooting across ${pillars.length} pillar pages and ${clusters.length} core clusters: Microsoft 365, endpoint management, identity security, PowerShell automation, and IT operations.`;
+    "Pillar guides and SEO content clusters for enterprise IT troubleshooting: Microsoft 365, endpoint management, identity security, PowerShell automation, and IT operations.";
 
   return {
-    title: "Enterprise IT Pillar Guides",
+    title: "IT Pillar Guides",
     description,
     keywords: uniqueKeywords([
       "enterprise it troubleshooting guide",
@@ -52,8 +51,8 @@ export async function generateMetadata(): Promise<Metadata> {
     alternates: {
       canonical: "/guides/"
     },
-    openGraph: buildOpenGraph("Enterprise IT Pillar Guides | Tamem J", description, "/guides/"),
-    twitter: buildTwitter("Enterprise IT Pillar Guides | Tamem J", description)
+    openGraph: buildOpenGraph("IT Pillar Guides | Tamem J", description, "/guides/"),
+    twitter: buildTwitter("IT Pillar Guides | Tamem J", description)
   };
 }
 
@@ -88,47 +87,6 @@ export default function GuidesPage() {
     { name: "Home", path: "/" },
     { name: "IT Pillar Guides", path: "/guides/" }
   ]);
-  const webPageSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    name: "Enterprise IT Pillar Guides",
-    url: toAbsoluteUrl("/guides/"),
-    description:
-      "Pillar guides and content clusters for Microsoft 365, endpoint management, identity, PowerShell automation, and IT operations.",
-    inLanguage: "en-US",
-    mainEntity: {
-      "@type": "ItemList",
-      numberOfItems: pillars.length,
-      itemListElement: pillars.map((pillar, index) => ({
-        "@type": "ListItem",
-        position: index + 1,
-        name: pillar.title,
-        url: toAbsoluteUrl(`/guides/${pillar.slug}/`)
-      }))
-    }
-  };
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: [
-      {
-        "@type": "Question",
-        name: "What are pillar guides on this site?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Pillar guides are long-form hub pages that organize related troubleshooting tickets, downloads, and search topics into a focused knowledge cluster."
-        }
-      },
-      {
-        "@type": "Question",
-        name: "Which topics do the pillar guides cover?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "The guides cover Microsoft 365, endpoint management, identity and security, PowerShell automation, networking, SharePoint, and IT operations workflows."
-        }
-      }
-    ]
-  };
 
   return (
     <>
@@ -272,15 +230,7 @@ export default function GuidesPage() {
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
-      />
-      <script
-        type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(keywordListSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <script
         type="application/ld+json"

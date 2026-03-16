@@ -33,38 +33,37 @@ function uniqueKeywords(keywords: string[]): string[] {
 const seoFixCategories = getCorporateFixCategories().slice(0, 10);
 const seoFixTags = getCorporateFixTags().slice(0, 24);
 
-export async function generateMetadata(): Promise<Metadata> {
-  const fixes = getCorporateFixes();
-  const description = `Enterprise-safe IT troubleshooting guides with ${fixes.length}+ structured step-by-step fixes for Windows, macOS, Microsoft 365, networking, printers, and security incidents.`;
-
-  return {
-    title: "Corporate Tech Fixes",
-    description,
-    keywords: uniqueKeywords([
-      "corporate IT support",
-      "enterprise troubleshooting",
-      "IT runbook",
-      "Microsoft 365 support",
-      "Windows support",
-      "macOS support",
-      "network troubleshooting",
-      "SharePoint access denied",
-      "OneDrive sync issue",
-      "Teams microphone issue",
-      ...seoFixCategories.map((category) => `${category} troubleshooting`),
-      ...seoFixTags
-    ]),
-    alternates: {
-      canonical: "/corporate-tech-fixes/"
-    },
-    openGraph: buildOpenGraph(
-      "Corporate Tech Fixes | Tamem J",
-      description,
-      "/corporate-tech-fixes/"
-    ),
-    twitter: buildTwitter("Corporate Tech Fixes | Tamem J", description)
-  };
-}
+export const metadata: Metadata = {
+  title: "Corporate Tech Fixes",
+  description:
+    "Enterprise-safe IT troubleshooting guides with structured step-by-step fixes for Windows, macOS, Microsoft 365, networking, printers, and security incidents.",
+  keywords: uniqueKeywords([
+    "corporate IT support",
+    "enterprise troubleshooting",
+    "IT runbook",
+    "Microsoft 365 support",
+    "Windows support",
+    "macOS support",
+    "network troubleshooting",
+    "SharePoint access denied",
+    "OneDrive sync issue",
+    "Teams microphone issue",
+    ...seoFixCategories.map((category) => `${category} troubleshooting`),
+    ...seoFixTags
+  ]),
+  alternates: {
+    canonical: "/corporate-tech-fixes/"
+  },
+  openGraph: buildOpenGraph(
+    "Corporate Tech Fixes | Tamem J",
+    "Professional, enterprise-safe IT troubleshooting guides for common corporate technology issues.",
+    "/corporate-tech-fixes/"
+  ),
+  twitter: buildTwitter(
+    "Corporate Tech Fixes | Tamem J",
+    "Professional, enterprise-safe IT troubleshooting guides for common corporate technology issues."
+  )
+};
 
 export default function CorporateTechFixesPage() {
   const fixes = getCorporateFixes();
@@ -110,28 +109,6 @@ export default function CorporateTechFixesPage() {
     { name: "Home", path: "/" },
     { name: "Corporate Tech Fixes", path: "/corporate-tech-fixes/" }
   ]);
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: [
-      {
-        "@type": "Question",
-        name: "Are these fixes safe for enterprise environments?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Yes. The guides are written in an enterprise-safe documentation style, label admin-only actions clearly, and avoid bypassing security controls."
-        }
-      },
-      {
-        "@type": "Question",
-        name: "Do the fixes include commands and escalation guidance?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Yes. Where appropriate, each fix includes commands, expected effort, severity, and clear escalation guidance for IT or security teams."
-        }
-      }
-    ]
-  };
 
   return (
     <>
@@ -205,10 +182,6 @@ export default function CorporateTechFixesPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(portalSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <script
         type="application/ld+json"

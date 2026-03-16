@@ -30,61 +30,56 @@ function uniqueKeywords(input: string[]): string[] {
   return result;
 }
 
-export async function generateMetadata(): Promise<Metadata> {
-  const prompts = getGenAIPrompts();
-  const categories = getGenAICategories();
-  const description = `Browse ${prompts.length}+ free, copy-ready AI prompt templates across ${categories.length} categories for Meta AI, Adobe Firefly, and generative AI workflows. Covers Text-to-Image, Generative Fill, marketing, copywriting, social media, and more.`;
-
-  return {
-    title: `GenAI Prompt Library — ${prompts.length}+ Copy-Ready AI Prompts`,
-    description,
-    keywords: uniqueKeywords([
-      "genai prompt library",
-      "ai prompt templates",
-      "copy ready ai prompts",
-      "free ai prompts",
-      "ai prompts 2026",
-      "meta ai prompts",
-      "adobe firefly prompts",
-      "adobe genai prompts",
-      "generative ai prompts",
-      "text to image prompts",
-      "generative fill prompts",
-      "photoshop generative fill prompts",
-      "generative expand prompts",
-      "ai image generation prompts",
-      "adobe ai prompts",
-      "marketing ai prompts",
-      "social media ai prompts",
-      "copywriting ai prompts",
-      "content creation ai prompts",
-      "creative ai prompts",
-      "photography ai prompts",
-      "design ai prompts",
-      "ecommerce ai prompts",
-      "prompt engineering templates",
-      "best ai prompts",
-      "ai creative prompts",
-      "ai writing prompts",
-      "ai photo editing prompts",
-      "vector art ai prompts",
-      "ai video prompts",
-      "professional ai prompts"
-    ]),
-    alternates: {
-      canonical: "/genai-prompts/"
-    },
-    openGraph: buildOpenGraph(
-      `GenAI Prompt Library — ${prompts.length}+ Copy-Ready AI Prompts | TamemJ`,
-      description,
-      "/genai-prompts/"
-    ),
-    twitter: buildTwitter(
-      `GenAI Prompt Library — ${prompts.length}+ Copy-Ready AI Prompts | TamemJ`,
-      description
-    )
-  };
-}
+export const metadata: Metadata = {
+  title: "GenAI Prompt Library — 120+ Copy-Ready AI Prompts",
+  description:
+    "Browse 120+ free, copy-ready AI prompt templates for Meta AI, Adobe Firefly, ChatGPT, and generative AI tools. Covers Text-to-Image, Generative Fill, marketing, copywriting, social media, and more.",
+  keywords: uniqueKeywords([
+    "genai prompt library",
+    "ai prompt templates",
+    "copy ready ai prompts",
+    "free ai prompts",
+    "ai prompts 2026",
+    "meta ai prompts",
+    "adobe firefly prompts",
+    "adobe genai prompts",
+    "generative ai prompts",
+    "text to image prompts",
+    "generative fill prompts",
+    "photoshop generative fill prompts",
+    "generative expand prompts",
+    "ai image generation prompts",
+    "adobe ai prompts",
+    "marketing ai prompts",
+    "social media ai prompts",
+    "copywriting ai prompts",
+    "content creation ai prompts",
+    "creative ai prompts",
+    "photography ai prompts",
+    "design ai prompts",
+    "ecommerce ai prompts",
+    "prompt engineering templates",
+    "best ai prompts",
+    "ai creative prompts",
+    "ai writing prompts",
+    "ai photo editing prompts",
+    "vector art ai prompts",
+    "ai video prompts",
+    "professional ai prompts"
+  ]),
+  alternates: {
+    canonical: "/genai-prompts/"
+  },
+  openGraph: buildOpenGraph(
+    "GenAI Prompt Library — 120+ Copy-Ready AI Prompts | TamemJ",
+    "Free, copy-ready prompt templates for Meta AI, Adobe Firefly, and generative AI tools. Covers Text-to-Image, Generative Fill, marketing, copywriting, and creative production.",
+    "/genai-prompts/"
+  ),
+  twitter: buildTwitter(
+    "GenAI Prompt Library — 120+ Copy-Ready AI Prompts | TamemJ",
+    "Free prompt templates for Meta AI, Adobe Firefly, and generative AI tools."
+  )
+};
 
 export default function GenAIPromptsPage() {
   const prompts = getGenAIPrompts();
@@ -136,27 +131,6 @@ export default function GenAIPromptsPage() {
     { name: "Home", path: "/" },
     { name: "GenAI Prompts", path: "/genai-prompts/" }
   ]);
-
-  const webPageSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    name: "GenAI Prompt Library",
-    url: toAbsoluteUrl("/genai-prompts/"),
-    description:
-      "Free, copy-ready AI prompt templates for Meta AI, Adobe Firefly, and creative production workflows.",
-    inLanguage: "en-US",
-    dateModified: latestUpdatedAt,
-    mainEntity: {
-      "@type": "ItemList",
-      numberOfItems: prompts.length,
-      itemListElement: prompts.slice(0, 24).map((prompt, index) => ({
-        "@type": "ListItem",
-        position: index + 1,
-        name: prompt.title,
-        url: toAbsoluteUrl(`/genai-prompts/${prompt.slug}/`)
-      }))
-    }
-  };
 
   const softwareAppSchema = {
     "@context": "https://schema.org",
@@ -338,10 +312,6 @@ export default function GenAIPromptsPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
       />
       <script
         type="application/ld+json"
