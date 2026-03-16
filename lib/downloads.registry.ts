@@ -1,4 +1,3 @@
-import { slugifyLabel } from "@/lib/slugs";
 import type { DownloadEntry } from "@/types/download";
 
 const downloadsRegistry: DownloadEntry[] = [
@@ -549,24 +548,4 @@ const downloadsRegistry: DownloadEntry[] = [
 
 export function getDownloads(): DownloadEntry[] {
   return downloadsRegistry;
-}
-
-export function getDownloadCategories(): string[] {
-  return [...new Set(downloadsRegistry.map((entry) => entry.category))].sort((a, b) => a.localeCompare(b));
-}
-
-export function getDownloadCategorySlug(category: string): string {
-  return slugifyLabel(category);
-}
-
-export function getDownloadCategoryBySlug(slug: string): string | undefined {
-  return getDownloadCategories().find((category) => getDownloadCategorySlug(category) === slug);
-}
-
-export function getDownloadsByCategory(categoryOrSlug: string): DownloadEntry[] {
-  const resolvedCategory = getDownloadCategoryBySlug(categoryOrSlug) ?? categoryOrSlug;
-
-  return downloadsRegistry
-    .filter((entry) => entry.category === resolvedCategory)
-    .sort((a, b) => a.name.localeCompare(b.name));
 }

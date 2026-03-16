@@ -9,11 +9,7 @@ import {
   getDownloadAssetBundles,
   getDownloadAssetStats
 } from "@/lib/download-assets.registry";
-import {
-  getDownloadCategories,
-  getDownloadCategorySlug,
-  getDownloads
-} from "@/lib/downloads.registry";
+import { getDownloads } from "@/lib/downloads.registry";
 import { buildBreadcrumbJsonLd, buildCollectionPageJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 import type { DownloadEntry } from "@/types/download";
 
@@ -116,7 +112,6 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function DownloadsPage() {
   const downloads = getDownloads();
-  const downloadCategories = getDownloadCategories();
   const groupedByCategory = [...new Set(downloads.map((entry) => entry.category))]
     .sort((a, b) => a.localeCompare(b))
     .map((category) => ({
@@ -300,35 +295,6 @@ export default function DownloadsPage() {
               ))}
             </div>
           </div>
-          <section className="mb-6 rounded-2xl border border-line/80 bg-white/85 p-5 shadow-soft dark:border-slate-700 dark:bg-slate-950/70">
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                  Download Categories
-                </h2>
-                <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
-                  Dedicated landing pages for each software category, not just the filterable main index.
-                </p>
-              </div>
-              <Link href="/downloads/assets" className="text-sm font-semibold text-accent hover:underline">
-                IT assets
-              </Link>
-            </div>
-            <div className="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
-              {downloadCategories.map((category) => (
-                <Link
-                  key={category}
-                  href={`/downloads/category/${getDownloadCategorySlug(category)}/`}
-                  className="rounded-xl border border-line/80 bg-slate-50 px-3 py-3 text-sm text-slate-700 transition hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-800"
-                >
-                  <span className="font-medium">{category}</span>
-                  <span className="mt-0.5 block text-xs text-slate-500 dark:text-slate-400">
-                    Open category landing page
-                  </span>
-                </Link>
-              ))}
-            </div>
-          </section>
           <DownloadsBrowser
             entries={downloads}
             amazonAffiliateUrl={amazonAffiliate?.url}

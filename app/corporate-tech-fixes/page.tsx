@@ -5,7 +5,6 @@ import { EnterpriseSupportBanner } from "@/components/corporate-fixes/fix-shared
 import { SectionHeading } from "@/components/section-heading";
 import {
   getCorporateFixCategories,
-  getCorporateFixCategorySlug,
   getCorporateFixes,
   getCorporateFixTags
 } from "@/lib/corporate-fixes.registry";
@@ -164,29 +163,6 @@ export default function CorporateTechFixesPage() {
           <div className="mt-8">
             <FixesCatalog fixes={catalogFixes} categories={categories} tags={tags} />
           </div>
-
-          <section className="mt-8 surface-card p-5 sm:p-6">
-            <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
-              Browse Fix Categories
-            </h2>
-            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-              Dedicated landing pages for each Corporate Tech Fix category, separate from the search and filter UI.
-            </p>
-            <div className="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
-              {categories.map((category) => (
-                <Link
-                  key={category}
-                  href={`/corporate-tech-fixes/category/${getCorporateFixCategorySlug(category)}/`}
-                  className="rounded-xl border border-line/80 bg-slate-50 px-3 py-3 text-sm text-slate-700 transition hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-800"
-                >
-                  <span className="font-medium">{category}</span>
-                  <span className="mt-0.5 block text-xs text-slate-500 dark:text-slate-400">
-                    Open category landing page
-                  </span>
-                </Link>
-              ))}
-            </div>
-          </section>
 
           <section className="mt-8 surface-card p-5 sm:p-6">
             <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">

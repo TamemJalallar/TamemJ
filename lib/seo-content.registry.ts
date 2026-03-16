@@ -1,4 +1,3 @@
-import { getKBEditorialOverrideBySlug } from "@/lib/editorial-overrides";
 import { getDownloadAssets } from "@/lib/download-assets.registry";
 import { getKBArticles } from "@/lib/support.kb.registry";
 import type { DownloadAsset } from "@/types/download";
@@ -544,7 +543,6 @@ function buildLeadEnvironmentText(environment: KBArticle["environment"]): string
 }
 
 function buildSeoAlignment(article: KBArticle, target: SeoKeywordArticleTarget): KBSeoAlignment {
-  const override = getKBEditorialOverrideBySlug(article.slug);
   const keywordLabel = normalizeKeywordLabel(target.keyword);
   const environmentText = buildLeadEnvironmentText(article.environment);
 
@@ -553,13 +551,9 @@ function buildSeoAlignment(article: KBArticle, target: SeoKeywordArticleTarget):
     articleTitle: article.title,
     articleCategory: article.category,
     articleProduct: article.product,
-    primaryKeyword: override?.primaryKeyword ?? keywordLabel,
-    editorialIntro:
-      override?.editorialIntro ??
-      `This troubleshooting guide is aligned to the exact query "${keywordLabel}" and focuses on enterprise-safe remediation for ${article.product}.`,
-    optimizedLeadParagraph:
-      override?.optimizedLeadParagraph ??
-      `If you are seeing "${keywordLabel}", use this IT support runbook to validate symptoms, isolate likely causes, apply safe resolution steps, and escalate correctly in ${environmentText}.`,
+    primaryKeyword: keywordLabel,
+    editorialIntro: `This troubleshooting guide is aligned to the exact query "${keywordLabel}" and focuses on enterprise-safe remediation for ${article.product}.`,
+    optimizedLeadParagraph: `If you are seeing "${keywordLabel}", use this IT support runbook to validate symptoms, isolate likely causes, apply safe resolution steps, and escalate correctly in ${environmentText}.`,
     relevanceScore: target.relevanceScore
   };
 }
@@ -647,36 +641,7 @@ export function getTopKBSeoAlignments(limit = 50): KBSeoAlignment[] {
 }
 
 export function getKBSeoAlignmentBySlug(slug: string): KBSeoAlignment | undefined {
-  const cachedAlignment = getTopKBSeoAlignments(50).find((entry) => entry.articleSlug === slug);
-  if (cachedAlignment) {
-    return cachedAlignment;
-  }
-
-  const article = getKBArticles().find((entry) => entry.slug === slug);
-  if (!article) {
-    return undefined;
-  }
-
-  const bestTarget = getBestTargetForArticle(article);
-  if (bestTarget) {
-    return buildSeoAlignment(article, bestTarget);
-  }
-
-  const override = getKBEditorialOverrideBySlug(slug);
-  if (!override) {
-    return undefined;
-  }
-
-  return {
-    articleSlug: article.slug,
-    articleTitle: article.title,
-    articleCategory: article.category,
-    articleProduct: article.product,
-    primaryKeyword: override.primaryKeyword ?? article.title,
-    editorialIntro: override.editorialIntro,
-    optimizedLeadParagraph: override.optimizedLeadParagraph,
-    relevanceScore: 0
-  };
+  return getTopKBSeoAlignments(50).find((entry) => entry.articleSlug === slug);
 }
 
 export function getKeywordTargetsForKBArticle(

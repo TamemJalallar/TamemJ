@@ -4,8 +4,6 @@ import { DownloadAssetsBrowser } from "@/components/downloads/download-assets-br
 import {
   formatDownloadAssetFileSize,
   getDownloadAssetBundles,
-  getDownloadAssetCategories,
-  getDownloadAssetCategorySlug,
   getDownloadAssets,
   getDownloadAssetStats
 } from "@/lib/download-assets.registry";
@@ -65,7 +63,6 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function DownloadAssetsPage() {
   const assets = getDownloadAssets();
-  const assetCategories = getDownloadAssetCategories();
   const bundles = getDownloadAssetBundles();
   const stats = getDownloadAssetStats();
   const assetsByCategory = [...new Set(assets.map((asset) => asset.category))]
@@ -140,27 +137,6 @@ export default function DownloadAssetsPage() {
               {new Date(stats.latestUpdatedAt).toLocaleDateString("en-US", { dateStyle: "long" })}
             </p>
           </div>
-
-          <section className="mb-6 rounded-2xl border border-line/80 bg-white/80 p-5 shadow-soft dark:border-slate-700 dark:bg-slate-950/70">
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Asset Categories</h2>
-            <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
-              Category landing pages for scripts, templates, checklists, and runbooks.
-            </p>
-            <div className="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
-              {assetCategories.map((category) => (
-                <Link
-                  key={category}
-                  href={`/downloads/assets/category/${getDownloadAssetCategorySlug(category)}/`}
-                  className="rounded-xl border border-line/80 bg-slate-50 px-3 py-3 text-sm text-slate-700 transition hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-800"
-                >
-                  <span className="font-medium">{category}</span>
-                  <span className="mt-0.5 block text-xs text-slate-500 dark:text-slate-400">
-                    Open category landing page
-                  </span>
-                </Link>
-              ))}
-            </div>
-          </section>
 
           <DownloadAssetsBrowser assets={assets} bundles={bundles} />
 

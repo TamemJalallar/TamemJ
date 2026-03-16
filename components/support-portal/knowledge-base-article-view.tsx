@@ -2,10 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { RelatedContentSection } from "@/components/related-content-section";
 import type { KBArticle } from "@/types/support";
 import type { KBRecommendedAffiliate } from "@/lib/affiliate-support.registry";
-import type { RelatedContentGroup } from "@/lib/related-content";
 import type { KBSeoAlignment, SeoKeywordArticleTarget } from "@/lib/seo-content.registry";
 import { SupportPageHeader } from "@/components/support-portal/page-header";
 import { AccordionSteps } from "@/components/support-portal/accordion-steps";
@@ -64,14 +62,12 @@ function summarizeHelpfulVotesForSlug(slug: string): HelpfulSummary {
 export function KnowledgeBaseArticleView({
   article,
   relatedArticles,
-  relatedContentGroups,
   recommendedAffiliates,
   keywordTargets,
   seoAlignment
 }: {
   article: KBArticle;
   relatedArticles: KBArticle[];
-  relatedContentGroups?: RelatedContentGroup[];
   recommendedAffiliates: KBRecommendedAffiliate[];
   keywordTargets: SeoKeywordArticleTarget[];
   seoAlignment?: KBSeoAlignment;
@@ -411,14 +407,6 @@ export function KnowledgeBaseArticleView({
                 })}
               </ul>
             </div>
-          ) : null}
-
-          {relatedContentGroups && relatedContentGroups.length > 0 ? (
-            <RelatedContentSection
-              title="Broader Resources for This Issue"
-              description="Use these internal links to move from the immediate fix into related guides, supporting downloads, and adjacent enterprise support documentation."
-              groups={relatedContentGroups}
-            />
           ) : null}
 
           <div className="rounded-2xl border border-line/70 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-6">
