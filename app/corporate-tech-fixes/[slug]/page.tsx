@@ -6,7 +6,7 @@ import { EnterpriseSupportBanner } from "@/components/corporate-fixes/fix-shared
 import { getCorporateFixBySlug, getCorporateFixes } from "@/lib/corporate-fixes.registry";
 import { getTopKeywordArticleTargets } from "@/lib/seo-content.registry";
 import { supportAuthorProfile } from "@/lib/site";
-import { buildArticleOpenGraph, buildBreadcrumbJsonLd, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
+import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 
 interface CorporateFixPageProps {
   params: Promise<{
@@ -94,10 +94,6 @@ export async function generateMetadata({
     fix.testedOn && fix.testedOn.length > 0
       ? fix.testedOn.join(", ")
       : "Windows 11 23H2, macOS Sequoia 15";
-  const normalizedLastVerified = fix.lastVerified ? Date.parse(fix.lastVerified) : Number.NaN;
-  const isoLastVerified = Number.isNaN(normalizedLastVerified)
-    ? undefined
-    : new Date(normalizedLastVerified).toISOString();
   const fixSeoHaystack = normalizeKeyword(
     [fix.title, fix.description, fix.category, fix.tags.join(" "), fix.steps.map((step) => step.content).join(" ")]
       .join(" ")
@@ -135,13 +131,12 @@ export async function generateMetadata({
       index: true,
       follow: true
     },
-    openGraph: buildArticleOpenGraph(`${fix.title} | Corporate Tech Fixes`, fix.description, `/corporate-tech-fixes/${fix.slug}/`, {
-      publishedTime: isoLastVerified,
-      modifiedTime: isoLastVerified,
-      authors: [authorName],
-      section: fix.category,
-      tags: uniqueKeywords([fix.category, ...fix.tags])
-    }),
+    openGraph: buildOpenGraph(
+      `${fix.title} | Corporate Tech Fixes`,
+      fix.description,
+      `/corporate-tech-fixes/${fix.slug}/`,
+      "article"
+    ),
     twitter: buildTwitter(`${fix.title} | Corporate Tech Fixes`, fix.description),
     other: {
       "support:severity": fix.severity,

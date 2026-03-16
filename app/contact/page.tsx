@@ -5,27 +5,24 @@ import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description:
-    "Contact Tamem J for enterprise IT partnerships, support questions, affiliate opportunities, or general inquiries.",
+  description: "Contact Tamem J for app support, partnerships, or general inquiries.",
   keywords: [
-    "contact tamemj",
-    "enterprise it contact",
-    "it partnership inquiries",
-    "affiliate inquiries",
+    "contact iOS developer",
+    "app support contact",
     "Tamem J contact",
-    "support contact"
+    "mobile app developer inquiries"
   ],
   alternates: {
     canonical: "/contact/"
   },
   openGraph: buildOpenGraph(
     "Contact | Tamem J",
-    "Contact Tamem J for enterprise IT partnerships, support questions, affiliate opportunities, or general inquiries.",
+    "Contact Tamem J for app support, partnerships, or general inquiries.",
     "/contact/"
   ),
   twitter: buildTwitter(
     "Contact | Tamem J",
-    "Contact Tamem J for enterprise IT partnerships, support questions, affiliate opportunities, or general inquiries."
+    "Contact Tamem J for app support, partnerships, or general inquiries."
   )
 };
 
@@ -35,8 +32,7 @@ export default function ContactPage() {
     "@type": "ContactPage",
     name: "Contact Tamem J",
     url: toAbsoluteUrl("/contact/"),
-    description:
-      "Contact Tamem J for enterprise IT partnerships, support questions, affiliate opportunities, or general inquiries."
+    description: "Contact Tamem J for app support, partnerships, or general inquiries."
   };
   const breadcrumbSchema = buildBreadcrumbJsonLd([
     { name: "Home", path: "/" },
@@ -52,8 +48,8 @@ export default function ContactPage() {
               <p className="eyebrow">Contact</p>
               <h1 className="mt-4 text-3xl font-semibold sm:text-4xl">Get in touch</h1>
               <p className="mt-4 text-sm sm:text-base">
-                For enterprise IT questions, partnerships, affiliate opportunities, or general
-                inquiries, send a message below or email directly.
+                For app support, feature questions, or business inquiries, send a message below or
+                email directly.
               </p>
               <div className="mt-6 space-y-4">
                 <div className="rounded-xl border border-line bg-slate-50 p-4">
@@ -66,10 +62,10 @@ export default function ContactPage() {
                   </a>
                 </div>
                 <div className="rounded-xl border border-line bg-white p-4">
-                  <p className="text-sm font-medium text-slate-900">Support and Documentation</p>
+                  <p className="text-sm font-medium text-slate-900">Support Requests</p>
                   <p className="mt-1 text-sm">
-                    For faster troubleshooting help, use the <a href="/support" className="underline">Support page</a>{" "}
-                    and include the affected platform, product, or workflow.
+                    For faster support, use the <a href="/support" className="underline">Support page</a>{" "}
+                    and include the app name and iOS version.
                   </p>
                 </div>
               </div>

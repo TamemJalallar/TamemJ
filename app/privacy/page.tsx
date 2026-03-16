@@ -4,56 +4,46 @@ import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description:
-    "Privacy policy for tamemj.com, published apps, downloadable resources, and support services operated by Tamem J.",
-  keywords: [
-    "privacy policy",
-    "website privacy policy",
-    "download privacy",
-    "support portal privacy",
-    "Tamem J privacy"
-  ],
+  description: "Privacy policy for iOS apps developed by Tamem J.",
+  keywords: ["privacy policy", "iOS app privacy", "app data handling", "Tamem J privacy"],
   alternates: {
     canonical: "/privacy/"
   },
   openGraph: buildOpenGraph(
     "Privacy Policy | Tamem J",
-    "Privacy policy for tamemj.com, published apps, downloadable resources, and support services operated by Tamem J.",
+    "Privacy policy for iOS apps developed by Tamem J.",
     "/privacy/"
   ),
-  twitter: buildTwitter(
-    "Privacy Policy | Tamem J",
-    "Privacy policy for tamemj.com, published apps, downloadable resources, and support services operated by Tamem J."
-  )
+  twitter: buildTwitter("Privacy Policy | Tamem J", "Privacy policy for iOS apps developed by Tamem J.")
 };
 
 const sections = [
   {
     title: "Introduction",
     body: [
-      "This Privacy Policy explains how tamemj.com, downloadable resources, support services, and apps published by Tamem J handle information.",
-      "Different services may have different data requirements. Service-specific behavior can be noted in the relevant app listing, download page, or support workflow when applicable."
+      "This Privacy Policy explains how apps published by Tamem J handle information. The goal is to provide clear, simple disclosure for App Store users.",
+      "Different apps may have different data requirements. App-specific behavior can be noted in the app listing or in-app disclosures when applicable."
     ]
   },
   {
     title: "Data Collection",
     body: [
-      "The site and related resources are designed to collect only the minimum data needed to provide core functionality.",
-      "Depending on the service, this may include contact form submissions, support intake details, account information, locally stored preferences, or user-entered content stored in user-controlled tools."
+      "Apps are designed to collect only the minimum data needed to provide core functionality.",
+      "Depending on the app, this may include user-entered content (such as tasks, budgets, or planning details) stored locally on the device or in user-controlled cloud storage features."
     ]
   },
   {
     title: "Third Party Services (e.g. Google AdMob)",
     body: [
-      "Some services may use third-party providers such as analytics, authentication, hosting, crash reporting, advertising, or payment services to improve reliability and operations.",
-      "These providers may collect device identifiers, usage data, diagnostic information, or transaction-related metadata in accordance with their own privacy policies."
+      "Some apps may use third-party services such as analytics, crash reporting, or advertising providers (for example, Google AdMob) to improve reliability and app performance.",
+      "These providers may collect device identifiers, usage data, or diagnostic information in accordance with their own privacy policies."
     ]
   },
   {
-    title: "Payments and Purchases",
+    title: "In-App Purchases",
     body: [
-      "Payments for apps, donations, or other services may be processed by third-party platforms such as Apple, PayPal, Buy Me a Coffee, or crypto networks. Payment card details are not stored directly by Tamem J.",
-      "Transaction status, purchase state, or entitlement information may be used only to deliver the requested feature, product, or service."
+      "In-app purchases are processed by Apple through the App Store. Payment details are not received or stored by Tamem J.",
+      "Purchase status and entitlement information may be used within the app to unlock premium features."
     ]
   },
   {
@@ -78,9 +68,7 @@ export default function PrivacyPage() {
     "@type": "WebPage",
     name: "Privacy Policy",
     url: toAbsoluteUrl("/privacy/"),
-    dateModified: "2026-03-12T00:00:00.000Z",
-    description:
-      "Privacy policy for tamemj.com, downloadable resources, support services, and published apps operated by Tamem J."
+    description: "Privacy policy for iOS apps developed by Tamem J."
   };
   const breadcrumbSchema = buildBreadcrumbJsonLd([
     { name: "Home", path: "/" },
@@ -95,7 +83,7 @@ export default function PrivacyPage() {
             <p className="eyebrow">Legal</p>
             <h1 className="mt-4 text-3xl font-semibold sm:text-4xl">Privacy Policy</h1>
             <p className="mt-4 text-sm sm:text-base">
-              Last updated: March 12, 2026. This template is intentionally structured so it can
+              Last updated: February 23, 2026. This template is intentionally structured so it can
               be updated quickly as apps or services change.
             </p>
 

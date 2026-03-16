@@ -74,7 +74,7 @@ export interface DownloadEntry {
 
 export type DownloadAssetFormat = "ps1" | "xlsx" | "pdf" | "docx";
 export type DownloadAssetCategory = "Scripts" | "Templates" | "Checklists" | "Runbooks";
-export type DownloadAssetAccess = "Free";
+export type DownloadAssetAccess = "Free" | "Email gate" | "Premium";
 export type DownloadAssetSearchDemand = "High" | "Medium" | "Low";
 
 export interface DownloadAsset {
@@ -86,11 +86,7 @@ export interface DownloadAsset {
   access: DownloadAssetAccess;
   monetization: string;
   searchDemand: DownloadAssetSearchDemand;
-  downloadUrl: string;
-  fileSize: string;
-  fileSizeBytes: number;
-  updatedAt: string;
-  previewItems: string[];
+  priceLabel?: string;
   tags: string[];
 }
 
@@ -101,4 +97,5 @@ export interface DownloadAssetBundle {
   itemSlugs: string[];
   access: DownloadAssetAccess;
   monetization: string;
+  priceLabel?: string;
 }

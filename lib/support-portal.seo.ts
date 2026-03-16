@@ -97,13 +97,12 @@ export function buildSupportOpenGraph(
   return {
     title,
     description,
-    url: toAbsoluteSupportUrl(path),
+    url: path,
     type,
     siteName: "Tamem J Support Portal",
-    locale: "en_US",
     images: [
       {
-        url: toAbsoluteSupportUrl("/images/site/og-image.svg"),
+        url: "/images/site/og-image.svg",
         width: 1200,
         height: 630,
         alt: "Tamem J Support Portal tickets and IT support documentation"
@@ -117,7 +116,7 @@ export function buildSupportTwitter(title: string, description: string): NonNull
     card: "summary_large_image",
     title,
     description,
-    images: [toAbsoluteSupportUrl("/images/site/og-image.svg")]
+    images: ["/images/site/og-image.svg"]
   };
 }
 
@@ -262,7 +261,6 @@ export function buildKbArticleMetadata(article: KBArticle): Metadata {
   const title = article.title;
   const description = article.description;
   const path = `/support/tickets/${article.slug}/`;
-  const normalizedLastVerified = normalizeDateInput(article.lastVerified);
   const keywords = uniqueKeywords([
     ...supportPortalBaseKeywords,
     ...article.tags,
@@ -281,15 +279,7 @@ export function buildKbArticleMetadata(article: KBArticle): Metadata {
     keywords,
     alternates: { canonical: path },
     robots: { index: true, follow: true },
-    openGraph: {
-      ...buildSupportOpenGraph(`${title} | Support Portal Tickets`, description, path, "article"),
-      ...(normalizedLastVerified
-        ? {
-            publishedTime: normalizedLastVerified,
-            modifiedTime: normalizedLastVerified
-          }
-        : {})
-    },
+    openGraph: buildSupportOpenGraph(`${title} | Support Portal Tickets`, description, path, "article"),
     twitter: buildSupportTwitter(`${title} | Support Portal Tickets`, description),
     other: {
       "support:severity": article.severity,

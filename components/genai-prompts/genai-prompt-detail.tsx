@@ -23,12 +23,6 @@ export function GenAIPromptDetail({ prompt }: GenAIPromptDetailProps) {
         <p className="eyebrow">Prompt Detail</p>
         <h1 className="mt-3 text-3xl font-semibold text-slate-900 dark:text-slate-100 sm:text-4xl">{prompt.title}</h1>
         <p className="mt-2 max-w-4xl text-sm leading-7 text-slate-600 dark:text-slate-300">{prompt.summary}</p>
-        <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
-          Last updated{" "}
-          {new Date(prompt.updatedAt).toLocaleDateString("en-US", {
-            dateStyle: "long"
-          })}
-        </p>
 
         <div className="mt-4 flex flex-wrap gap-2">
           <span className={`rounded-full border px-3 py-1 text-xs font-semibold ${badgeTone(prompt.platform)}`}>

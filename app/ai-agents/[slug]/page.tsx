@@ -6,12 +6,11 @@ import {
   aiAgentPlatforms,
   getAiAgentBySlug,
   getAiAgentCategorySlug,
-  getAiAgentsLastVerified,
   getAiAgentsRegistry,
   getRelatedAiAgents
 } from "@/lib/aiAgents.registry";
 import { getAiAgentEditorialIntro } from "@/lib/ai-agents.editorial";
-import { buildArticleOpenGraph, buildBreadcrumbJsonLd, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
+import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 
 interface AiAgentDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -54,20 +53,13 @@ export async function generateMetadata({ params }: AiAgentDetailPageProps): Prom
     ...agent.tags,
     ...aiAgentPlatforms.map((platform) => `${agent.title} ${platform} prompt`)
   ]);
-  const verifiedAt = getAiAgentsLastVerified();
 
   return {
     title,
     description,
     keywords,
     alternates: { canonical: path },
-    openGraph: buildArticleOpenGraph(`${title} | TamemJ`, description, path, {
-      publishedTime: verifiedAt,
-      modifiedTime: verifiedAt,
-      authors: ["Tamem J"],
-      section: agent.category,
-      tags: uniqueKeywords([agent.role, ...agent.tags])
-    }),
+    openGraph: buildOpenGraph(`${title} | TamemJ`, description, path, "article"),
     twitter: buildTwitter(`${title} | TamemJ`, description)
   };
 }
@@ -82,7 +74,6 @@ export default async function AiAgentDetailPage({ params }: AiAgentDetailPagePro
   const relatedAgents = getRelatedAiAgents(agent.slug, 8);
   const categorySlug = getAiAgentCategorySlug(agent.category);
   const editorialIntro = getAiAgentEditorialIntro(agent.slug);
-  const isoDate = getAiAgentsLastVerified();
   const breadcrumbSchema = buildBreadcrumbJsonLd([
     { name: "Home", path: "/" },
     { name: "AI Agents", path: "/ai-agents/" },
@@ -118,6 +109,7 @@ export default async function AiAgentDetailPage({ params }: AiAgentDetailPagePro
       }
     ]
   };
+  const isoDate = new Date().toISOString();
 
   const webPageSchema = {
     "@context": "https://schema.org",

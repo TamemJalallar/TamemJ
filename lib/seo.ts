@@ -24,40 +24,17 @@ export function buildOpenGraph(
   return {
     title,
     description,
-    url: toAbsoluteUrl(path),
+    url: path,
     type,
-    siteName: siteConfig.title,
-    locale: "en_US",
+    siteName: "TamemJ",
     images: [
       {
-        url: toAbsoluteUrl(defaultOgImage),
+        url: defaultOgImage,
         width: 1200,
         height: 630,
         alt: `${title} | Tamem J`
       }
     ]
-  };
-}
-
-export function buildArticleOpenGraph(
-  title: string,
-  description: string,
-  path: string,
-  options: {
-    publishedTime?: string;
-    modifiedTime?: string;
-    authors?: string[];
-    section?: string;
-    tags?: string[];
-  } = {}
-): NonNullable<Metadata["openGraph"]> {
-  return {
-    ...buildOpenGraph(title, description, path, "article"),
-    ...(options.publishedTime ? { publishedTime: options.publishedTime } : {}),
-    ...(options.modifiedTime ? { modifiedTime: options.modifiedTime } : {}),
-    ...(options.authors && options.authors.length > 0 ? { authors: options.authors } : {}),
-    ...(options.section ? { section: options.section } : {}),
-    ...(options.tags && options.tags.length > 0 ? { tags: options.tags } : {})
   };
 }
 
@@ -69,7 +46,7 @@ export function buildTwitter(
     card: "summary_large_image",
     title,
     description,
-    images: [toAbsoluteUrl(defaultOgImage)]
+    images: [defaultOgImage]
   };
 }
 

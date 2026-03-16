@@ -1,12 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AiAgentsBrowser } from "@/components/ai-agents/ai-agents-browser";
-import {
-  getAiAgentCategories,
-  getAiAgentCategorySlug,
-  getAiAgentsLastVerified,
-  getAiAgentsRegistry
-} from "@/lib/aiAgents.registry";
+import { getAiAgentCategories, getAiAgentCategorySlug, getAiAgentsRegistry } from "@/lib/aiAgents.registry";
 import {
   buildBreadcrumbJsonLd,
   buildCollectionPageJsonLd,
@@ -37,7 +32,7 @@ export const metadata: Metadata = {
     "ai agents library",
     "ai agent prompts",
     "ai agent system prompts",
-    "best ai agents 2026",
+    "best ai agents 2025",
     "copy ready ai prompts",
     "ai agent examples",
     "professional ai agents",
@@ -88,7 +83,6 @@ export const metadata: Metadata = {
 export default function AiAgentsPage() {
   const agents = getAiAgentsRegistry();
   const categories = getAiAgentCategories();
-  const lastVerified = getAiAgentsLastVerified();
   const categoryCards = categories.map((category) => ({
     category,
     slug: getAiAgentCategorySlug(category),
@@ -219,10 +213,6 @@ export default function AiAgentsPage() {
               </span>
               <span className="rounded-full border border-line/80 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
                 Free to copy
-              </span>
-              <span className="rounded-full border border-line/80 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
-                Verified{" "}
-                {new Date(lastVerified).toLocaleDateString("en-US", { dateStyle: "medium" })}
               </span>
             </div>
 
