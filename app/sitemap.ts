@@ -35,7 +35,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...(appsSectionEnabled ? appsIndexEntry : []),
     { url: url("/downloads/"), changeFrequency: "daily", priority: 0.9, lastModified: generatedAt },
     { url: url("/downloads/assets/"), changeFrequency: "weekly", priority: 0.88, lastModified: generatedAt },
-    { url: url("/ai/"), changeFrequency: "weekly", priority: 0.86, lastModified: generatedAt },
     { url: url("/ai-agents/"), changeFrequency: "weekly", priority: 0.85, lastModified: generatedAt },
     { url: url("/genai-prompts/"), changeFrequency: "weekly", priority: 0.86, lastModified: generatedAt },
     { url: url("/guides/"), changeFrequency: "weekly", priority: 0.9, lastModified: generatedAt },
