@@ -267,25 +267,8 @@ export default async function DownloadAssetDetailPage({ params }: DownloadAssetP
                   >
                     <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">{bundle.title}</p>
                     <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                      {bundle.itemSlugs.length} assets • {bundle.fileSize}
+                      {bundle.itemSlugs.length} assets • Free bundle
                     </p>
-                    <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{bundle.description}</p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      <Link
-                        href={`/downloads/assets/bundles/${bundle.slug}/`}
-                        className="btn-secondary !px-3.5 !py-2 text-xs"
-                      >
-                        View bundle
-                      </Link>
-                      <a
-                        href={bundle.downloadUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn-secondary !px-3.5 !py-2 text-xs dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
-                      >
-                        Download ZIP
-                      </a>
-                    </div>
                   </div>
                 ))}
               </div>

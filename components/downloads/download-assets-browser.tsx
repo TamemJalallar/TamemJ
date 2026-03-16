@@ -81,19 +81,12 @@ export function DownloadAssetsBrowser({ assets, bundles }: DownloadAssetsBrowser
     };
   }, [assets, bundles.length]);
 
-  const assetTitleBySlug = useMemo(() => {
-    return new Map(assets.map((asset) => [asset.slug, asset.title]));
-  }, [assets]);
-
   const bundleCounts = useMemo(() => {
     return bundles.map((bundle) => ({
       ...bundle,
-      itemCount: bundle.itemSlugs.length,
-      includedTitles: bundle.itemSlugs
-        .map((slug) => assetTitleBySlug.get(slug))
-        .filter((title): title is string => Boolean(title))
+      itemCount: bundle.itemSlugs.length
     }));
-  }, [assetTitleBySlug, bundles]);
+  }, [bundles]);
 
   return (
     <div className="space-y-6">
@@ -137,73 +130,7 @@ export function DownloadAssetsBrowser({ assets, bundles }: DownloadAssetsBrowser
                 </div>
                 <h3 className="mt-2 text-base font-semibold text-slate-900 dark:text-slate-100">{bundle.title}</h3>
                 <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{bundle.description}</p>
-                <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                  <div className="rounded-xl border border-line/80 bg-slate-50/80 px-3 py-2 dark:border-slate-700 dark:bg-slate-950/60">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
-                      ZIP Size
-                    </p>
-                    <p className="mt-1 text-sm font-medium text-slate-900 dark:text-slate-100">
-                      {bundle.fileSize}
-                    </p>
-                  </div>
-                  <div className="rounded-xl border border-line/80 bg-slate-50/80 px-3 py-2 dark:border-slate-700 dark:bg-slate-950/60">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
-                      Updated
-                    </p>
-                    <p className="mt-1 text-sm font-medium text-slate-900 dark:text-slate-100">
-                      {formatUpdatedDate(bundle.updatedAt)}
-                    </p>
-                  </div>
-                </div>
-                <div className="mt-3 rounded-xl border border-dashed border-line/80 bg-white/70 p-3 dark:border-slate-700 dark:bg-slate-950/40">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
-                    What&apos;s Inside
-                  </p>
-                  <ul className="mt-2 space-y-1.5 text-xs leading-5 text-slate-600 dark:text-slate-300">
-                    {bundle.previewItems.slice(0, 2).map((item) => (
-                      <li key={item} className="flex gap-2">
-                        <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-slate-400 dark:bg-slate-500" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="mt-3">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
-                    Included Assets
-                  </p>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {bundle.includedTitles.slice(0, 4).map((title) => (
-                      <span
-                        key={title}
-                        className="rounded-full border border-line/80 bg-slate-50 px-2.5 py-1 text-[11px] text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
-                      >
-                        {title}
-                      </span>
-                    ))}
-                    {bundle.includedTitles.length > 4 ? (
-                      <span className="rounded-full border border-line/80 bg-slate-50 px-2.5 py-1 text-[11px] text-slate-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400">
-                        +{bundle.includedTitles.length - 4} more
-                      </span>
-                    ) : null}
-                  </div>
-                </div>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  <Link
-                    href={`/downloads/assets/bundles/${bundle.slug}/`}
-                    className="btn-secondary !px-3.5 !py-2 text-xs"
-                  >
-                    View Bundle
-                  </Link>
-                  <a
-                    href={bundle.downloadUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-secondary !px-3.5 !py-2 text-xs dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
-                  >
-                    Download ZIP
-                  </a>
-                </div>
+                <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">Free bundle</p>
               </article>
             ))}
         </div>

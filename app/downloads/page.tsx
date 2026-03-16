@@ -87,7 +87,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const downloads = getDownloads();
   const assetStats = getDownloadAssetStats();
   const freeCount = downloads.filter(isFreeEntry).length;
-  const description = `Browse ${downloads.length} curated software downloads with official store links, GitHub Releases, and direct binaries. Includes ${freeCount} free apps, ${assetStats.total} IT templates/scripts/checklists, and ${assetStats.bundles} ZIP bundles for enterprise support teams.`;
+  const description = `Browse ${downloads.length} curated software downloads with official store links, GitHub Releases, and direct binaries. Includes ${freeCount} free apps and ${assetStats.total} IT templates/scripts/checklists for enterprise support teams.`;
 
   return {
     title: "Software Downloads & IT Assets",
@@ -99,8 +99,7 @@ export async function generateMetadata(): Promise<Metadata> {
       "it templates download",
       "it checklist download",
       "it runbook template",
-      "it admin toolkit",
-      "it download bundles"
+      "it admin toolkit"
     ]),
     category: "Software",
     alternates: {
@@ -288,22 +287,17 @@ export default function DownloadsPage() {
             </div>
             <div className="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
               {assetBundles.map((bundle) => (
-                <Link
+                <a
                   key={bundle.slug}
-                  href={`/downloads/assets/bundles/${bundle.slug}/`}
+                  href={`/downloads/assets#${bundle.slug}`}
                   className="rounded-xl border border-line/80 bg-slate-50 px-3 py-2 text-sm text-slate-700 transition hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-800"
                 >
                   <span className="font-medium">{bundle.title}</span>
                   <span className="mt-0.5 block text-xs text-slate-500 dark:text-slate-400">
-                    {bundle.itemSlugs.length} assets • {bundle.fileSize}
+                    {bundle.itemSlugs.length} assets
                   </span>
-                </Link>
+                </a>
               ))}
-            </div>
-            <div className="mt-4">
-              <Link href="/downloads/assets/bundles/" className="text-sm font-semibold text-accent hover:underline">
-                Open bundle library
-              </Link>
             </div>
           </div>
           <section className="mb-6 rounded-2xl border border-line/80 bg-white/85 p-5 shadow-soft dark:border-slate-700 dark:bg-slate-950/70">

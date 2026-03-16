@@ -2,7 +2,6 @@ import { slugifyLabel } from "@/lib/slugs";
 import type { DownloadAsset, DownloadAssetBundle } from "@/types/download";
 
 const ASSET_BASE_URL = "https://downloads.tamemj.com";
-const BUNDLE_BASE_URL = `${ASSET_BASE_URL}/bundles`;
 
 interface DownloadAssetSeed {
   slug: string;
@@ -20,22 +19,6 @@ interface DownloadAssetMetadataSeed {
   fileSizeBytes: number;
   updatedAt: string;
   previewItems: string[];
-}
-
-interface DownloadAssetBundleSeed {
-  slug: string;
-  title: string;
-  description: string;
-  itemSlugs: string[];
-  access: DownloadAssetBundle["access"];
-  monetization: DownloadAssetBundle["monetization"];
-}
-
-interface DownloadAssetBundleMetadataSeed {
-  fileSizeBytes: number;
-  updatedAt: string;
-  previewItems: string[];
-  highlights: string[];
 }
 
 const DEFAULT_ASSET_UPDATED_AT = "2026-03-12T05:12:31-04:00";
@@ -286,11 +269,6 @@ function buildAssetUrl(slug: string, format: DownloadAsset["format"]): string {
   return `${base}/${slug}.${format}`;
 }
 
-function buildBundleUrl(slug: string): string {
-  const base = BUNDLE_BASE_URL.replace(/\/+$/, "");
-  return `${base}/${slug}.zip`;
-}
-
 function createAsset(seed: DownloadAssetSeed): DownloadAsset {
   const metadata = assetMetadataRegistry[seed.slug];
 
@@ -306,67 +284,6 @@ function createAsset(seed: DownloadAssetSeed): DownloadAsset {
     updatedAt: metadata.updatedAt,
     previewItems: [...metadata.previewItems],
     tags: [...new Set(seed.tags.map(normalizeTag).filter(Boolean))]
-  };
-}
-
-const bundleMetadataRegistry: Record<string, DownloadAssetBundleMetadataSeed> = {
-  "it-admin-starter-kit": {
-    fileSizeBytes: 39325,
-    updatedAt: DEFAULT_ASSET_UPDATED_AT,
-    previewItems: [
-      "Eight operational assets covering onboarding, inventory, SLAs, change tracking, and project updates",
-      "Mix of Excel workbooks, Word templates, and PDF checklists for day-to-day IT operations",
-      "Useful starter pack for helpdesk leads, sysadmins, and small internal IT teams"
-    ],
-    highlights: ["Operations workflows", "Onboarding + asset tracking", "Service desk reporting"]
-  },
-  "security-compliance-bundle": {
-    fileSizeBytes: 34488,
-    updatedAt: DEFAULT_ASSET_UPDATED_AT,
-    previewItems: [
-      "Incident response, Windows hardening, AV triage, and risk/compliance tracking assets",
-      "Balanced pack for security operations, audit preparation, and control reviews",
-      "Includes both action checklists and spreadsheet-based governance templates"
-    ],
-    highlights: ["Incident readiness", "Control tracking", "Risk and audit support"]
-  },
-  "powershell-admin-toolkit": {
-    fileSizeBytes: 5445,
-    updatedAt: DEFAULT_ASSET_UPDATED_AT,
-    previewItems: [
-      "Six PowerShell scripts for AD auditing, M365 licensing, Entra reporting, and mailbox permissions",
-      "Lightweight archive built for admins who want a script-first toolkit without templates",
-      "Good fit for scheduled audits, access review prep, and tenant hygiene cleanup"
-    ],
-    highlights: ["Identity reporting", "M365 automation", "AD cleanup workflows"]
-  },
-  "m365-admin-bundle": {
-    fileSizeBytes: 13818,
-    updatedAt: DEFAULT_ASSET_UPDATED_AT,
-    previewItems: [
-      "Focused Microsoft 365 pack for licensing, SharePoint migration, mailbox permissions, and MFA reporting",
-      "Combines templates, scripts, and checklists for M365 tenant operations",
-      "Good fit for admins working across Exchange Online, SharePoint Online, and Entra ID"
-    ],
-    highlights: ["Microsoft 365 operations", "Licensing + permissions", "Migration readiness"]
-  }
-};
-
-function createBundle(seed: DownloadAssetBundleSeed): DownloadAssetBundle {
-  const metadata = bundleMetadataRegistry[seed.slug];
-
-  if (!metadata) {
-    throw new Error(`Missing bundle metadata for ${seed.slug}`);
-  }
-
-  return {
-    ...seed,
-    downloadUrl: buildBundleUrl(seed.slug),
-    fileSize: formatDownloadAssetFileSize(metadata.fileSizeBytes),
-    fileSizeBytes: metadata.fileSizeBytes,
-    updatedAt: metadata.updatedAt,
-    previewItems: [...metadata.previewItems],
-    highlights: [...metadata.highlights]
   };
 }
 
@@ -674,7 +591,7 @@ const assetsRegistry: DownloadAsset[] = [
 ];
 
 const bundleRegistry: DownloadAssetBundle[] = [
-  createBundle({
+  {
     slug: "it-admin-starter-kit",
     title: "IT Admin Starter Kit",
     description:
@@ -691,8 +608,8 @@ const bundleRegistry: DownloadAssetBundle[] = [
     ],
     access: "Free",
     monetization: "Free"
-  }),
-  createBundle({
+  },
+  {
     slug: "security-compliance-bundle",
     title: "Security & Compliance Bundle",
     description:
@@ -706,9 +623,9 @@ const bundleRegistry: DownloadAssetBundle[] = [
       "av-event-triage-checklist"
     ],
     access: "Free",
-    monetization: "Free"
-  }),
-  createBundle({
+    monetization: "Free",
+  },
+  {
     slug: "powershell-admin-toolkit",
     title: "PowerShell Admin Toolkit",
     description:
@@ -723,8 +640,8 @@ const bundleRegistry: DownloadAssetBundle[] = [
     ],
     access: "Free",
     monetization: "Free"
-  }),
-  createBundle({
+  },
+  {
     slug: "m365-admin-bundle",
     title: "M365 Admin Bundle",
     description:
@@ -737,8 +654,8 @@ const bundleRegistry: DownloadAssetBundle[] = [
       "entra-mfa-status-script"
     ],
     access: "Free",
-    monetization: "Free"
-  })
+    monetization: "Free",
+  }
 ];
 
 export function getDownloadAssets(): DownloadAsset[] {
@@ -789,25 +706,8 @@ export function getDownloadAssetFormats(): DownloadAsset["format"][] {
 export function getDownloadAssetBundles(): DownloadAssetBundle[] {
   return bundleRegistry.map((bundle) => ({
     ...bundle,
-    itemSlugs: [...bundle.itemSlugs],
-    previewItems: [...bundle.previewItems],
-    highlights: [...bundle.highlights]
+    itemSlugs: [...bundle.itemSlugs]
   }));
-}
-
-export function getDownloadAssetBundleBySlug(slug: string): DownloadAssetBundle | undefined {
-  const bundle = bundleRegistry.find((entry) => entry.slug === slug);
-
-  if (!bundle) {
-    return undefined;
-  }
-
-  return {
-    ...bundle,
-    itemSlugs: [...bundle.itemSlugs],
-    previewItems: [...bundle.previewItems],
-    highlights: [...bundle.highlights]
-  };
 }
 
 export function getDownloadAssetsForBundle(bundleSlug: string): DownloadAsset[] {
@@ -851,8 +751,4 @@ export function getDownloadAssetStats() {
 
 export function buildDownloadAssetUrl(asset: DownloadAsset): string {
   return asset.downloadUrl;
-}
-
-export function buildDownloadAssetBundleUrl(bundle: DownloadAssetBundle): string {
-  return bundle.downloadUrl;
 }
