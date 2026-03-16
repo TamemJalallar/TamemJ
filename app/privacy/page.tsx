@@ -5,12 +5,10 @@ import { siteConfig } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
-    "Privacy policy for tamemj.com and apps developed by Tamem J, including planning, productivity, and support-related applications such as Wedding Planner.",
+    "Privacy policy for tamemj.com, published apps, downloadable resources, and support services operated by Tamem J.",
   keywords: [
     "privacy policy",
     "website privacy policy",
-    "app privacy policy",
-    "wedding planner app privacy policy",
     "download privacy",
     "support portal privacy",
     "Tamem J privacy"
@@ -20,12 +18,12 @@ export const metadata: Metadata = {
   },
   openGraph: buildOpenGraph(
     "Privacy Policy | Tamem J",
-    "Privacy policy for tamemj.com and apps developed by Tamem J, including planning, productivity, and support-related applications such as Wedding Planner.",
+    "Privacy policy for tamemj.com, published apps, downloadable resources, and support services operated by Tamem J.",
     "/privacy/"
   ),
   twitter: buildTwitter(
     "Privacy Policy | Tamem J",
-    "Privacy policy for tamemj.com and apps developed by Tamem J, including planning, productivity, and support-related applications such as Wedding Planner."
+    "Privacy policy for tamemj.com, published apps, downloadable resources, and support services operated by Tamem J."
   )
 };
 
@@ -33,64 +31,29 @@ const sections = [
   {
     title: "Introduction",
     body: [
-      "This Privacy Policy explains how tamemj.com, downloadable resources, support services, and apps developed and published by Tamem J handle information.",
-      "It applies to current and future apps released by Tamem J unless an app includes a separate product-specific privacy notice. This includes planning, productivity, and utility apps, including apps such as Wedding Planner."
+      "This Privacy Policy explains how tamemj.com, downloadable resources, support services, and apps published by Tamem J handle information.",
+      "Different services may have different data requirements. Service-specific behavior can be noted in the relevant app listing, download page, or support workflow when applicable."
     ]
   },
   {
-    title: "Apps Covered by This Policy",
+    title: "Data Collection",
     body: [
-      "This policy covers apps developed by Tamem J for iPhone, iPad, or related Apple platforms, as well as connected website features used for support, privacy, and contact workflows.",
-      "If an app is released under a distinct brand or includes unique data practices, its App Store listing or in-app disclosures may provide additional details that supplement this policy."
+      "The site and related resources are designed to collect only the minimum data needed to provide core functionality.",
+      "Depending on the service, this may include contact form submissions, support intake details, account information, locally stored preferences, or user-entered content stored in user-controlled tools."
     ]
   },
   {
-    title: "Information You Provide in Apps",
+    title: "Third Party Services (e.g. Google AdMob)",
     body: [
-      "Apps may allow you to enter or manage information needed for the app's core purpose. For a planning app such as Wedding Planner, this can include event details, schedules, task lists, budget items, guest information, notes, vendor details, and reminder preferences.",
-      "This information is used only to provide the requested app functionality. Tamem J does not sell personal data entered into the app."
+      "Some services may use third-party providers such as analytics, authentication, hosting, crash reporting, advertising, or payment services to improve reliability and operations.",
+      "These providers may collect device identifiers, usage data, diagnostic information, or transaction-related metadata in accordance with their own privacy policies."
     ]
   },
   {
-    title: "Device Permissions and Sensitive Access",
+    title: "Payments and Purchases",
     body: [
-      "Some apps may request access to device features such as notifications, photos, files, calendar data, camera access, or contacts. Access is requested only when needed for a user-initiated feature.",
-      "For example, a planning app may request notification access for reminders, photo or file access for attachments or inspiration boards, or calendar access to help users export event milestones. If you deny permission, the related feature may not work, but the rest of the app should continue to function where possible."
-    ]
-  },
-  {
-    title: "Storage, Sync, and Backups",
-    body: [
-      "App data may be stored locally on your device, in Apple-provided storage tied to your account such as iCloud, or in another user-controlled storage context depending on the feature set of the app.",
-      "If cloud sync or backup features are offered, synced data is used to keep your information available across your own devices and is not used for unrelated advertising or data resale."
-    ]
-  },
-  {
-    title: "Analytics, Diagnostics, and Third-Party Services",
-    body: [
-      "Some apps or website features may use third-party providers for analytics, crash reporting, authentication, hosting, advertising, or payment processing. These providers may receive limited technical data such as device type, app version, usage diagnostics, or transaction-related metadata.",
-      "Where third-party services are used, they operate under their own privacy terms. Tamem J uses these services to improve reliability, support functionality, and app operations, not to sell your private in-app content."
-    ]
-  },
-  {
-    title: "Purchases, Subscriptions, and Donations",
-    body: [
-      "Payments for apps, subscriptions, donations, or other services may be processed by Apple, PayPal, Buy Me a Coffee, crypto networks, or other third-party platforms. Payment card or wallet credentials are not stored directly by Tamem J.",
-      "Purchase status, entitlement state, or subscription information may be used only to unlock features, confirm access, process support requests, or maintain the service you requested."
-    ]
-  },
-  {
-    title: "Data Retention and Deletion",
-    body: [
-      "Information is retained only as long as needed to provide the app or service, comply with legal obligations, resolve disputes, or maintain basic operational records.",
-      "If an app stores information only on your device or in your own Apple account, you can typically delete that data by removing it within the app, disabling sync, or deleting the app and its associated local data. For support or account-related deletion requests, contact the support email listed below."
-    ]
-  },
-  {
-    title: "Children's Privacy",
-    body: [
-      "Apps developed by Tamem J are not intended to knowingly collect personal information from children in violation of applicable law.",
-      "If you believe a child has provided personal information through an app or website workflow, contact Tamem J so the issue can be reviewed and addressed."
+      "Payments for apps, donations, or other services may be processed by third-party platforms such as Apple, PayPal, Buy Me a Coffee, or crypto networks. Payment card details are not stored directly by Tamem J.",
+      "Transaction status, purchase state, or entitlement information may be used only to deliver the requested feature, product, or service."
     ]
   },
   {
@@ -101,10 +64,10 @@ const sections = [
     ]
   },
   {
-    title: "Changes to This Policy",
+    title: "Changes to Policy",
     body: [
-      "This policy may be updated from time to time to reflect new app releases, feature changes, legal requirements, or service provider updates.",
-      "The latest version will always be published on this page and should be treated as the current privacy notice for apps and services covered here."
+      "This policy may be updated from time to time to reflect app changes, legal requirements, or service provider updates.",
+      "The latest version will always be published on this page."
     ]
   }
 ];
@@ -117,7 +80,7 @@ export default function PrivacyPage() {
     url: toAbsoluteUrl("/privacy/"),
     dateModified: "2026-03-12T00:00:00.000Z",
     description:
-      "Privacy policy for tamemj.com and apps developed by Tamem J, including planning, productivity, and support-related applications such as Wedding Planner."
+      "Privacy policy for tamemj.com, downloadable resources, support services, and published apps operated by Tamem J."
   };
   const breadcrumbSchema = buildBreadcrumbJsonLd([
     { name: "Home", path: "/" },
