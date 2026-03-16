@@ -6,6 +6,9 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
 permissions:
   contents: read
   pages: write
@@ -19,7 +22,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
       NEXT_PUBLIC_CORPORATE_FIXES_BUILDER_AUTH_MODE: "cloudflare-access"
       NEXT_PUBLIC_SUPPORT_TICKET_EMAIL_TO: "noreply@tamemj.com"
       NEXT_PUBLIC_SUPPORT_TICKET_EMAIL_ENDPOINT: ${{ secrets.NEXT_PUBLIC_SUPPORT_TICKET_EMAIL_ENDPOINT }}
@@ -71,8 +73,6 @@ jobs:
           path: ./out
 
   deploy:
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
