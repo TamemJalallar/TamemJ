@@ -135,14 +135,13 @@ export default function GuidesPage() {
       <section className="section-shell pt-10 sm:pt-14">
         <div className="page-shell space-y-6">
           <div className="surface-card-strong p-6 sm:p-8">
-            <p className="eyebrow">IT Knowledge Hubs</p>
+            <p className="eyebrow">SEO Growth Architecture</p>
             <h1 className="mt-4 text-3xl font-semibold text-slate-900 dark:text-slate-100 sm:text-4xl">
               IT Pillar Guides and Content Clusters
             </h1>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600 dark:text-slate-300 sm:text-base">
-              Structured hubs for enterprise IT troubleshooting. Each pillar connects related tickets,
-              download assets, and broader operational guidance around Microsoft 365, endpoints,
-              identity, networking, and IT operations.
+              Structured hubs for high-intent enterprise IT search demand. Each pillar links to related
+              troubleshooting tickets, download assets, and monetization-aligned keyword opportunities.
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
               <Link href="/support/tickets" className="btn-secondary">
@@ -151,8 +150,31 @@ export default function GuidesPage() {
               <Link href="/downloads/assets" className="btn-secondary">
                 Open IT Assets
               </Link>
+              <Link href="/guides/revenue-scaling-roadmap" className="btn-secondary">
+                Open Revenue Roadmap
+              </Link>
             </div>
           </div>
+
+          <section className="surface-card p-5 sm:p-6">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+                  Business Guide
+                </p>
+                <h2 className="mt-1 text-xl font-semibold text-slate-900 dark:text-slate-100">
+                  Revenue Scaling Roadmap (0-24 Months)
+                </h2>
+                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                  Phase-based execution plan for traffic growth, affiliate monetization, digital products,
+                  and SaaS productization.
+                </p>
+              </div>
+              <Link href="/guides/revenue-scaling-roadmap" className="btn-secondary">
+                View Roadmap
+              </Link>
+            </div>
+          </section>
 
           <section className="surface-card p-5 sm:p-6">
             <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Content Clusters</h2>

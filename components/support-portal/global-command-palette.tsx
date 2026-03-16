@@ -113,6 +113,14 @@ const quickItems: PaletteItem[] = [
       "text-to-image prompts"
     ]
   },
+  {
+    id: "quick-revenue-roadmap",
+    label: "Revenue Scaling Roadmap",
+    description: "Open 0-24 month growth and monetization plan",
+    href: "/guides/revenue-scaling-roadmap/",
+    group: "Quick",
+    keywords: ["revenue", "roadmap", "adsense", "affiliates", "gumroad", "saas"]
+  }
 ];
 
 export function GlobalCommandPalette() {

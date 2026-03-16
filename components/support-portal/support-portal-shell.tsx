@@ -31,7 +31,7 @@ export function SupportPortalShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="section-shell !py-0">
-      <div className="mx-auto w-full max-w-[1600px] px-0 sm:px-4 lg:px-6">
+      <div className="mx-auto w-full max-w-[1400px] px-0 sm:px-4 lg:px-6">
         <div className="grid min-h-[calc(100vh-4rem)] grid-cols-1 gap-0 lg:grid-cols-[auto_1fr] lg:py-4">
           <div className="hidden lg:block">
             <aside
