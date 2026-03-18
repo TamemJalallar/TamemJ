@@ -838,55 +838,51 @@ function DownloadCard({
     <article id={entry.slug} className="surface-card-strong scroll-mt-24 overflow-visible p-4 sm:p-5 dark:border-slate-700 dark:bg-slate-900">
       <div className="pointer-events-none mb-3 h-1 rounded-full bg-gradient-to-r from-cyan-500 via-sky-500 to-slate-900" />
 
-      <div className="flex flex-wrap items-start justify-between gap-2.5">
+      <div className="flex items-start gap-3">
+        <DownloadEntryIcon entry={entry} />
         <div className="min-w-0 flex-1">
-          <div className="flex items-start gap-3">
-            <DownloadEntryIcon entry={entry} />
-            <div className="min-w-0 flex-1">
-              <div className="flex flex-wrap items-center gap-1.5">
-                <span className="rounded-full border border-line bg-slate-50 px-2 py-0.5 text-[11px] font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
-                  {entry.category}
+          <div className="flex items-start justify-between gap-2">
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className="rounded-full border border-line bg-slate-50 px-2 py-0.5 text-[11px] font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                {entry.category}
+              </span>
+              {entry.popularityLabel ? (
+                <span className="rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-700 dark:border-amber-700 dark:bg-amber-900/40 dark:text-amber-100">
+                  {entry.popularityLabel}
                 </span>
-                {entry.popularityLabel ? (
-                  <span className="rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-700 dark:border-amber-700 dark:bg-amber-900/40 dark:text-amber-100">
-                    {entry.popularityLabel}
-                  </span>
-                ) : null}
-                {isFreeEntry(entry) ? (
-                  <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100">
-                    Free
-                  </span>
-                ) : null}
-              </div>
-
-              <h3 className="mt-2 text-lg font-semibold text-slate-900 dark:text-slate-100">{entry.name}</h3>
-              <p className="mt-1.5 text-sm leading-5">{entry.summary}</p>
+              ) : null}
+              {isFreeEntry(entry) ? (
+                <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100">
+                  Free
+                </span>
+              ) : null}
+            </div>
+            <div className="shrink-0 text-right text-[11px] text-slate-500 dark:text-slate-400">
+              {entry.developer ? <p>{entry.developer}</p> : null}
+              {entry.license ? <p className="mt-0.5">License: {entry.license}</p> : null}
+              {entry.pricing ? <p className="mt-0.5">{entry.pricing}</p> : null}
             </div>
           </div>
-        </div>
 
-        <div className="flex max-w-[15rem] shrink-0 flex-col items-end gap-2">
-          <div className="flex flex-wrap justify-end gap-1">
-            {topRightPlatforms.map((platform) => (
-              <PlatformDownloadChip
-                key={`${entry.slug}-download-platform-${platform}`}
-                appSlug={entry.slug}
-                appName={entry.name}
-                platform={platform}
-                artifacts={directArtifactsByPlatform[platform] ?? []}
-                onTrackDownload={onTrackDownload}
-              />
-            ))}
-          </div>
-          <div className="text-right text-[11px] text-slate-500 dark:text-slate-400">
-            {entry.developer ? <p>{entry.developer}</p> : null}
-            {entry.license ? <p className="mt-0.5">License: {entry.license}</p> : null}
-            {entry.pricing ? <p className="mt-0.5">{entry.pricing}</p> : null}
-          </div>
+          <h3 className="mt-2 text-lg font-semibold text-slate-900 dark:text-slate-100">{entry.name}</h3>
+          <p className="mt-1.5 text-sm leading-5">{entry.summary}</p>
         </div>
       </div>
 
-      <div className="mt-3.5 flex flex-wrap gap-1.5">
+      <div className="mt-3 flex flex-wrap gap-1">
+        {topRightPlatforms.map((platform) => (
+          <PlatformDownloadChip
+            key={`${entry.slug}-download-platform-${platform}`}
+            appSlug={entry.slug}
+            appName={entry.name}
+            platform={platform}
+            artifacts={directArtifactsByPlatform[platform] ?? []}
+            onTrackDownload={onTrackDownload}
+          />
+        ))}
+      </div>
+
+      <div className="mt-2.5 flex flex-wrap gap-1.5">
         {entry.channels.map((channel) => (
           <a
             key={`${entry.slug}-${channel.type}-${channel.url}`}
