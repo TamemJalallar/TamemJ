@@ -33,6 +33,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticEntries: MetadataRoute.Sitemap = [
     { url: url("/"), changeFrequency: "weekly", priority: 1, lastModified: generatedAt },
     ...(appsSectionEnabled ? appsIndexEntry : []),
+    { url: url("/services/msp/"), changeFrequency: "monthly", priority: 0.82, lastModified: generatedAt },
     { url: url("/downloads/"), changeFrequency: "daily", priority: 0.9, lastModified: generatedAt },
     { url: url("/downloads/assets/"), changeFrequency: "weekly", priority: 0.88, lastModified: generatedAt },
     { url: url("/ai-agents/"), changeFrequency: "weekly", priority: 0.85, lastModified: generatedAt },

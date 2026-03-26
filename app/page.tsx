@@ -220,6 +220,66 @@ export default function HomePage() {
 
       <section className="section-shell pt-4 sm:pt-6">
         <div className="page-shell">
+          <div className="surface-card-strong mb-6 overflow-hidden p-5 sm:p-6 lg:p-8">
+            <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+              <div>
+                <span className="eyebrow">Managed IT Services</span>
+                <h2 className="mt-4 text-balance text-2xl font-semibold sm:text-3xl">
+                  Need retained systems administration, not just one-off fixes?
+                </h2>
+                <p className="mt-3 max-w-2xl text-sm sm:text-base">
+                  I also offer retained MSP-style support for small businesses, agencies, and
+                  growing teams that need ongoing help across Microsoft 365, Google Workspace,
+                  macOS, Windows, Linux, identity, collaboration, SaaS administration, and
+                  operational improvement.
+                </p>
+                <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+                  <Link href="/services/msp" className="btn-primary">
+                    Explore MSP Services
+                  </Link>
+                  <Link href="/contact" className="btn-secondary">
+                    Request Retainer Availability
+                  </Link>
+                </div>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="rounded-2xl border border-line/80 bg-slate-50/80 p-4 dark:border-slate-800 dark:bg-slate-950/70">
+                  <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                    Cross-platform coverage
+                  </p>
+                  <p className="mt-2 text-xs leading-6 text-slate-600 dark:text-slate-300">
+                    Microsoft, Google, Apple, Windows, Linux, and business SaaS environments.
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-line/80 bg-slate-50/80 p-4 dark:border-slate-800 dark:bg-slate-950/70">
+                  <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                    Retained monthly support
+                  </p>
+                  <p className="mt-2 text-xs leading-6 text-slate-600 dark:text-slate-300">
+                    Ongoing admin, consulting, systems cleanup, and workflow improvement.
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-line/80 bg-slate-50/80 p-4 dark:border-slate-800 dark:bg-slate-950/70">
+                  <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                    Security-aware operations
+                  </p>
+                  <p className="mt-2 text-xs leading-6 text-slate-600 dark:text-slate-300">
+                    Identity, permissions, endpoint management, and platform governance.
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-line/80 bg-slate-50/80 p-4 dark:border-slate-800 dark:bg-slate-950/70">
+                  <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                    Documentation that scales
+                  </p>
+                  <p className="mt-2 text-xs leading-6 text-slate-600 dark:text-slate-300">
+                    Runbooks, standards, and cleaner operational handoffs as teams grow.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="surface-card p-5 sm:p-6">
             <div className="mb-4 flex items-center justify-between gap-3">
               <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100 sm:text-2xl">

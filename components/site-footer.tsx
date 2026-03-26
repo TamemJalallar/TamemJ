@@ -38,6 +38,12 @@ export function SiteFooter() {
               Guides
             </Link>
             <Link
+              href="/services/msp"
+              className="nav-link dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-slate-100"
+            >
+              MSP Services
+            </Link>
+            <Link
               href="/ai-agents"
               className="nav-link dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-slate-100"
             >

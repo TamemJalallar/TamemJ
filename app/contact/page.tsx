@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ContactForm } from "@/components/contact-form";
 import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
@@ -48,8 +49,8 @@ export default function ContactPage() {
               <p className="eyebrow">Contact</p>
               <h1 className="mt-4 text-3xl font-semibold sm:text-4xl">Get in touch</h1>
               <p className="mt-4 text-sm sm:text-base">
-                For app support, feature questions, or business inquiries, send a message below or
-                email directly.
+                For app support, retained IT services inquiries, feature questions, or general
+                business inquiries, send a message below or email directly.
               </p>
               <div className="mt-6 space-y-4">
                 <div className="rounded-xl border border-line bg-slate-50 p-4">
@@ -67,6 +68,24 @@ export default function ContactPage() {
                     For faster support, use the <a href="/support" className="underline">Support page</a>{" "}
                     and include the app name and iOS version.
                   </p>
+                </div>
+                <div className="rounded-xl border border-line bg-white p-4">
+                  <p className="text-sm font-medium text-slate-900">Managed IT / MSP Services</p>
+                  <p className="mt-1 text-sm">
+                    If you are looking for retained systems administration, platform support, or an
+                    ongoing technical partner, start with the managed services page.
+                  </p>
+                  <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+                    <Link href="/services/msp" className="btn-secondary !px-4 !py-2">
+                      View MSP Services
+                    </Link>
+                    <a
+                      href={`mailto:${siteConfig.email}?subject=${encodeURIComponent("Managed IT Retainer Inquiry")}`}
+                      className="btn-secondary !px-4 !py-2"
+                    >
+                      Email About Retainers
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
