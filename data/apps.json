@@ -1,1 +1,64 @@
-[]
+[
+  {
+    "slug": "everafter-planner",
+    "name": "EverAfter Planner",
+    "category": "Wedding Planner",
+    "tagline": "Plan your wedding in one calm place.",
+    "shortDescription": "Manage checklist, budget, guests, vendors, timeline, seating, reminders, and settings in one shared planning space.",
+    "description": "EverAfter Planner helps couples organize wedding planning from one clean iPhone workspace. Track progress across checklist phases, keep budget visibility, manage guests and RSVPs, coordinate vendors, run a clear day-of timeline, and handle reminders in one place.",
+    "featured": true,
+    "appStoreUrl": "https://apps.apple.com/us/app/happilyeverafter-planner/id6760481033",
+    "icon": "/images/apps/everafter-planner/icon.svg",
+    "screenshots": [
+      {
+        "src": "/images/apps/everafter-planner/dashboard.jpg",
+        "alt": "EverAfter Planner dashboard with countdown and planning snapshot"
+      },
+      {
+        "src": "/images/apps/everafter-planner/checklist.jpg",
+        "alt": "EverAfter Planner checklist progress by planning phase"
+      },
+      {
+        "src": "/images/apps/everafter-planner/budget.jpg",
+        "alt": "EverAfter Planner budget overview and category breakdown"
+      },
+      {
+        "src": "/images/apps/everafter-planner/guests.jpg",
+        "alt": "EverAfter Planner guest list and RSVP status management"
+      },
+      {
+        "src": "/images/apps/everafter-planner/vendors.jpg",
+        "alt": "EverAfter Planner vendor organization and follow-up reminders"
+      },
+      {
+        "src": "/images/apps/everafter-planner/timeline.jpg",
+        "alt": "EverAfter Planner wedding day timeline schedule"
+      },
+      {
+        "src": "/images/apps/everafter-planner/seating.jpg",
+        "alt": "EverAfter Planner seating overview and table assignments"
+      },
+      {
+        "src": "/images/apps/everafter-planner/reminders.jpg",
+        "alt": "EverAfter Planner reminder center for tasks and due dates"
+      },
+      {
+        "src": "/images/apps/everafter-planner/settings.jpg",
+        "alt": "EverAfter Planner settings and shared planner management"
+      }
+    ],
+    "features": [
+      "Shared and personal planner switching",
+      "Phase-based wedding checklist tracking",
+      "Budget estimates versus actual spend",
+      "Guest list and RSVP contact management",
+      "Vendor organization and follow-up reminders",
+      "Wedding day timeline builder",
+      "Seating and table assignment overview",
+      "Central reminder center for planning tasks"
+    ],
+    "pricing": "Coming soon",
+    "minIOSVersion": "iOS 16.0+",
+    "supportEmail": "support@tamemj.com"
+  }
+]

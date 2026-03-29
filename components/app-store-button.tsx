@@ -1,9 +1,27 @@
 interface AppStoreButtonProps {
-  href: string;
+  href?: string;
   className?: string;
+  unavailableText?: string;
 }
 
-export function AppStoreButton({ href, className = "" }: AppStoreButtonProps) {
+export function AppStoreButton({
+  href,
+  className = "",
+  unavailableText = "Coming Soon on the App Store"
+}: AppStoreButtonProps) {
+  const hasHref = typeof href === "string" && href.trim().length > 0;
+
+  if (!hasHref) {
+    return (
+      <span
+        className={`inline-flex items-center justify-center rounded-full border border-line bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 ${className}`}
+        aria-label={unavailableText}
+      >
+        {unavailableText}
+      </span>
+    );
+  }
+
   return (
     <a
       href={href}

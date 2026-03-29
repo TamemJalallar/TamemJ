@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { FAQPage, ItemList, WebPage, WithContext } from "schema-dts";
 import { AffiliateDisclosureBanner } from "@/components/affiliate/affiliate-disclosure-banner";
 import { DownloadsBrowser } from "@/components/downloads/downloads-browser";
+import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import { getAffiliateLinkByKey, getAffiliateLinksByKeys } from "@/lib/affiliate-links";
 import { getDownloadAssetBundles, getDownloadAssetStats } from "@/lib/download-assets.registry";
 import { getDownloads } from "@/lib/downloads.registry";
@@ -97,10 +98,7 @@ export async function generateMetadata(): Promise<Metadata> {
     alternates: {
       canonical: "/downloads/"
     },
-    robots: {
-      index: true,
-      follow: true
-    },
+    robots: buildRobotsIndexRule("/downloads/"),
     openGraph: buildOpenGraph("Downloads | Tamem J", description, "/downloads/"),
     twitter: buildTwitter("Downloads | Tamem J", description)
   };

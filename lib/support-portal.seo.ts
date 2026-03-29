@@ -8,6 +8,7 @@ import type {
   TechArticle,
   WithContext
 } from "schema-dts";
+import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import { getTopSeoKeywordOpportunities } from "@/lib/seo-content.registry";
 import { siteConfig } from "@/lib/site";
 import type { CatalogItem, KBArticle } from "@/types/support";
@@ -278,7 +279,7 @@ export function buildKbArticleMetadata(article: KBArticle): Metadata {
     authors: [{ name: article.author.name }],
     keywords,
     alternates: { canonical: path },
-    robots: { index: true, follow: true },
+    robots: buildRobotsIndexRule(path),
     openGraph: buildSupportOpenGraph(`${title} | Support Portal Tickets`, description, path, "article"),
     twitter: buildSupportTwitter(`${title} | Support Portal Tickets`, description),
     other: {
@@ -312,7 +313,7 @@ export function buildCatalogItemMetadata(item: CatalogItem): Metadata {
       "IT request form"
     ]),
     alternates: { canonical: path },
-    robots: { index: true, follow: true },
+    robots: buildRobotsIndexRule(path),
     openGraph: buildSupportOpenGraph(`${title} | Support Catalog`, description, path),
     twitter: buildSupportTwitter(`${title} | Support Catalog`, description),
     other: {

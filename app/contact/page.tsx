@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ContactForm } from "@/components/contact-form";
+import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 
@@ -16,6 +17,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/contact/"
   },
+  robots: buildRobotsIndexRule("/contact/"),
   openGraph: buildOpenGraph(
     "Contact | Tamem J",
     "Contact Tamem J for app support, partnerships, or general inquiries.",

@@ -8,6 +8,7 @@ import { SentryBootstrap } from "@/components/monitoring/sentry-bootstrap";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { GlobalCommandPalette } from "@/components/support-portal/global-command-palette";
+import { adsenseReviewModeEnabled } from "@/lib/adsense-review-mode";
 import { buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 import { seoKeywords, siteConfig } from "@/lib/site";
 
@@ -44,10 +45,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/"
   },
-  robots: {
-    index: true,
-    follow: true
-  },
+  robots: adsenseReviewModeEnabled ? { index: false, follow: false } : { index: true, follow: true },
   openGraph: buildOpenGraph(siteConfig.title, siteConfig.description, "/"),
   twitter: buildTwitter(siteConfig.title, siteConfig.description),
   manifest: "/manifest.webmanifest",

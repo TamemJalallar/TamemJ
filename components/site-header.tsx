@@ -6,19 +6,26 @@ import { useEffect, useState } from "react";
 import { AccountNavLabel } from "@/components/account-nav-label";
 import { NavLink } from "@/components/nav-link";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { adsenseReviewModeEnabled } from "@/lib/adsense-review-mode";
 import { appsSectionEnabled } from "@/lib/apps-visibility";
 
-const primaryNavItems = [
-  { href: "/corporate-tech-fixes", label: "Fixes" },
-  { href: "/downloads", label: "Downloads" },
-  { href: "/support/tickets", label: "Tickets" },
-  { href: "/ai-agents", label: "AI Agents" },
-  { href: "/genai-prompts", label: "GenAI Prompts" },
-  { href: "/guides", label: "Guides" },
-  { href: "/pc-build-guides", label: "PC Builds" },
-  { href: "/support", label: "Support" },
-  ...(appsSectionEnabled ? [{ href: "/apps", label: "Apps" }] : [])
-] as const;
+const primaryNavItems = adsenseReviewModeEnabled
+  ? ([
+      ...(appsSectionEnabled ? [{ href: "/apps", label: "Apps" }] : []),
+      { href: "/support", label: "Support" },
+      { href: "/privacy", label: "Privacy" }
+    ] as const)
+  : ([
+      { href: "/corporate-tech-fixes", label: "Fixes" },
+      { href: "/downloads", label: "Downloads" },
+      { href: "/support/tickets", label: "Tickets" },
+      { href: "/ai-agents", label: "AI Agents" },
+      { href: "/genai-prompts", label: "GenAI Prompts" },
+      { href: "/guides", label: "Guides" },
+      { href: "/pc-build-guides", label: "PC Builds" },
+      { href: "/support", label: "Support" },
+      ...(appsSectionEnabled ? [{ href: "/apps", label: "Apps" }] : [])
+    ] as const);
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -56,9 +63,11 @@ export function SiteHeader() {
                 {item.label}
               </NavLink>
             ))}
-            <NavLink href="/account">
-              <AccountNavLabel />
-            </NavLink>
+            {!adsenseReviewModeEnabled ? (
+              <NavLink href="/account">
+                <AccountNavLabel />
+              </NavLink>
+            ) : null}
             <NavLink href="/contact">Contact</NavLink>
             <ThemeToggle />
           </nav>
@@ -93,9 +102,11 @@ export function SiteHeader() {
                   {item.label}
                 </NavLink>
               ))}
-              <NavLink href="/account">
-                <AccountNavLabel />
-              </NavLink>
+              {!adsenseReviewModeEnabled ? (
+                <NavLink href="/account">
+                  <AccountNavLabel />
+                </NavLink>
+              ) : null}
               <NavLink href="/contact">Contact</NavLink>
               <ThemeToggle />
             </nav>

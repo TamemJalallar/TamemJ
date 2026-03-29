@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { adsenseReviewModeEnabled } from "@/lib/adsense-review-mode";
 import { appsSectionEnabled } from "@/lib/apps-visibility";
 
 export function SiteFooter() {
@@ -19,54 +20,60 @@ export function SiteFooter() {
                 Apps
               </Link>
             ) : null}
-            <Link
-              href="/downloads"
-              className="nav-link dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-slate-100"
-            >
-              Downloads
-            </Link>
-            <Link
-              href="/corporate-tech-fixes"
-              className="nav-link dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-slate-100"
-            >
-              Tech Fixes
-            </Link>
-            <Link
-              href="/guides"
-              className="nav-link dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-slate-100"
-            >
-              Guides
-            </Link>
-            <Link
-              href="/services/msp"
-              className="nav-link dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-slate-100"
-            >
-              MSP Services
-            </Link>
-            <Link
-              href="/ai-agents"
-              className="nav-link dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-slate-100"
-            >
-              AI Agents
-            </Link>
-            <Link
-              href="/genai-prompts"
-              className="nav-link dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-slate-100"
-            >
-              GenAI Prompts
-            </Link>
+            {!adsenseReviewModeEnabled ? (
+              <>
+                <Link
+                  href="/downloads"
+                  className="nav-link dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-slate-100"
+                >
+                  Downloads
+                </Link>
+                <Link
+                  href="/corporate-tech-fixes"
+                  className="nav-link dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-slate-100"
+                >
+                  Tech Fixes
+                </Link>
+                <Link
+                  href="/guides"
+                  className="nav-link dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-slate-100"
+                >
+                  Guides
+                </Link>
+                <Link
+                  href="/services/msp"
+                  className="nav-link dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-slate-100"
+                >
+                  MSP Services
+                </Link>
+                <Link
+                  href="/ai-agents"
+                  className="nav-link dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-slate-100"
+                >
+                  AI Agents
+                </Link>
+                <Link
+                  href="/genai-prompts"
+                  className="nav-link dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-slate-100"
+                >
+                  GenAI Prompts
+                </Link>
+              </>
+            ) : null}
             <Link
               href="/support"
               className="nav-link dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-slate-100"
             >
               Support
             </Link>
-            <Link
-              href="/donate"
-              className="nav-link dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-slate-100"
-            >
-              Donate
-            </Link>
+            {!adsenseReviewModeEnabled ? (
+              <Link
+                href="/donate"
+                className="nav-link dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-slate-100"
+              >
+                Donate
+              </Link>
+            ) : null}
             <Link
               href="/privacy"
               className="nav-link dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-slate-100"

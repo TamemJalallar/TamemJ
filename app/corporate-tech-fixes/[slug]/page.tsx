@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FixGuide } from "@/components/corporate-fixes/fix-guide";
 import { EnterpriseSupportBanner } from "@/components/corporate-fixes/fix-shared";
+import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import { getCorporateFixBySlug, getCorporateFixes } from "@/lib/corporate-fixes.registry";
 import { getTopKeywordArticleTargets } from "@/lib/seo-content.registry";
 import { supportAuthorProfile } from "@/lib/site";
@@ -127,10 +128,7 @@ export async function generateMetadata({
     alternates: {
       canonical: `/corporate-tech-fixes/${fix.slug}/`
     },
-    robots: {
-      index: true,
-      follow: true
-    },
+    robots: buildRobotsIndexRule(`/corporate-tech-fixes/${fix.slug}/`),
     openGraph: buildOpenGraph(
       `${fix.title} | Corporate Tech Fixes`,
       fix.description,

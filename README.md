@@ -101,7 +101,8 @@ Set these in local `.env.local` and in your deployment environment.
 
 ### Core/site behavior
 
-- `NEXT_PUBLIC_SHOW_APPS_SECTION` - `true` to show `/apps`; hidden by default when unset/false
+- `NEXT_PUBLIC_SHOW_APPS_SECTION` - optional override (`true`/`false`) for `/apps` visibility (defaults to visible when unset)
+- `NEXT_PUBLIC_ADSENSE_REVIEW_MODE` - `true` to index only core app/support pages for AdSense review
 - `NEXT_PUBLIC_NEWEGG_AFFILIATE_SID` - enables Newegg affiliate deep links
 - `NEXT_PUBLIC_AMAZON_ASSOCIATE_TAG` - Amazon Associates tag used for PC build recommendations (default `tamemj-20`)
 
@@ -146,6 +147,7 @@ Example:
 
 ```env
 NEXT_PUBLIC_SHOW_APPS_SECTION=false
+NEXT_PUBLIC_ADSENSE_REVIEW_MODE=true
 NEXT_PUBLIC_NEWEGG_AFFILIATE_SID=4670565
 
 NEXT_PUBLIC_CORPORATE_FIXES_BUILDER_AUTH_MODE=cloudflare-access
@@ -172,7 +174,7 @@ NEXT_PUBLIC_DONATION_DOGE_ADDRESS=D...
 
 ### Apps section toggle
 
-Apps is intentionally hidden by default until App Store launch:
+Apps can be hidden with an environment override:
 
 - navigation link hidden
 - `/apps` and `/apps/[slug]` return 404
@@ -183,6 +185,21 @@ To re-enable later:
 ```env
 NEXT_PUBLIC_SHOW_APPS_SECTION=true
 ```
+
+### AdSense review mode
+
+To prepare for AdSense review, enable:
+
+```env
+NEXT_PUBLIC_ADSENSE_REVIEW_MODE=true
+```
+
+When enabled:
+
+- only core pages are indexable (`/`, `/apps`, `/apps/[slug]`, `/privacy`, `/support`, `/contact`)
+- sitemap output is trimmed to core pages + app detail pages
+- robots rules block non-core sections from crawling
+- header/footer navigation is reduced to core links during review mode
 
 ### Static export compatibility
 

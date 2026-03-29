@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import { buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 import { getTopSeoKeywordOpportunities } from "@/lib/seo-content.registry";
 import { siteConfig } from "@/lib/site";
@@ -44,6 +45,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/"
   },
+  robots: buildRobotsIndexRule("/"),
   openGraph: buildOpenGraph(
     "Enterprise IT Troubleshooting Guides & Downloads | Tamem J",
     "Microsoft 365, endpoint, identity, networking, and security troubleshooting guides with practical scripts and templates.",

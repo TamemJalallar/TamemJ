@@ -1,4 +1,8 @@
 import type { MetadataRoute } from "next";
+import {
+  adsenseReviewCoreSitemapPaths,
+  adsenseReviewModeEnabled
+} from "@/lib/adsense-review-mode";
 import { getApps } from "@/lib/apps";
 import { appsSectionEnabled } from "@/lib/apps-visibility";
 import { getAiAgentCategories, getAiAgentCategorySlug, getAiAgentsRegistry } from "@/lib/aiAgents.registry";
@@ -26,6 +30,31 @@ function parseDateInput(value?: string): Date | undefined {
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const generatedAt = new Date();
+
+  if (adsenseReviewModeEnabled) {
+    const reviewCorePaths = appsSectionEnabled
+      ? [...adsenseReviewCoreSitemapPaths]
+      : adsenseReviewCoreSitemapPaths.filter((path) => path !== "/apps/");
+
+    const coreEntries: MetadataRoute.Sitemap = reviewCorePaths.map((path) => ({
+      url: url(path),
+      changeFrequency: path === "/" ? "weekly" : "monthly",
+      priority: path === "/" ? 1 : path === "/apps/" ? 0.9 : 0.7,
+      lastModified: generatedAt
+    }));
+
+    const appEntries: MetadataRoute.Sitemap = appsSectionEnabled
+      ? getApps().map((app) => ({
+          url: url(`/apps/${app.slug}/`),
+          changeFrequency: "weekly",
+          priority: 0.85,
+          lastModified: generatedAt
+        }))
+      : [];
+
+    return [...coreEntries, ...appEntries];
+  }
+
   const appsIndexEntry: MetadataRoute.Sitemap = [
     { url: url("/apps/"), changeFrequency: "weekly", priority: 0.9, lastModified: generatedAt }
   ];

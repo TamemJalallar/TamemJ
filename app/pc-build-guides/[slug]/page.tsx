@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PCBuildGuideView } from "@/components/pc-build-guides/pc-build-guide-view";
+import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import { getPCBuildGuideBySlug, getPCBuildGuides } from "@/lib/pc-build-guides.registry";
 import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 
@@ -54,10 +55,7 @@ export async function generateMetadata({ params }: PCBuildGuidePageProps): Promi
     alternates: {
       canonical: `/pc-build-guides/${guide.slug}/`
     },
-    robots: {
-      index: true,
-      follow: true
-    },
+    robots: buildRobotsIndexRule(`/pc-build-guides/${guide.slug}/`),
     openGraph: buildOpenGraph(
       `${guide.title} | PC Build Guides`,
       guide.description,

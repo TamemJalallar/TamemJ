@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 
@@ -9,6 +10,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/privacy/"
   },
+  robots: buildRobotsIndexRule("/privacy/"),
   openGraph: buildOpenGraph(
     "Privacy Policy | Tamem J",
     "Privacy policy for iOS apps developed by Tamem J.",

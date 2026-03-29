@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SupportForm } from "@/components/support-form";
 import { SupportPortalHome } from "@/components/support-portal/support-portal-home";
+import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import { getApps } from "@/lib/apps";
 import { buildBreadcrumbJsonLd } from "@/lib/seo";
 import { toAbsoluteSupportUrl } from "@/lib/support-portal.seo";
@@ -23,6 +24,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/support/"
   },
+  robots: buildRobotsIndexRule("/support/"),
   openGraph: buildSupportOpenGraph(
     "Support Portal | Tamem J",
     "ServiceNow-style support portal demo with a knowledge base, service catalog, incident forms, local ticketing, analytics, and preserved iOS app support.",

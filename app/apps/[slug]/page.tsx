@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AppStoreButton } from "@/components/app-store-button";
 import { ScreenshotCarousel } from "@/components/screenshot-carousel";
+import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import { getAppBySlug, getApps } from "@/lib/apps";
 import { appsSectionEnabled } from "@/lib/apps-visibility";
 import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
@@ -66,6 +67,7 @@ export async function generateMetadata({ params }: AppPageProps): Promise<Metada
   return {
     title: app.name,
     description: app.shortDescription,
+    robots: buildRobotsIndexRule(`/apps/${app.slug}/`),
     keywords: [
       app.name,
       app.category,
@@ -129,8 +131,12 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
     url: toAbsoluteUrl(`/apps/${app.slug}/`),
     image: toAbsoluteUrl(app.icon),
     screenshot: app.screenshots.map((screenshot) => toAbsoluteUrl(screenshot.src)),
-    downloadUrl: app.appStoreUrl,
     isAccessibleForFree: app.pricing.toLowerCase().includes("free"),
+    ...(app.appStoreUrl.trim().length > 0
+      ? {
+          downloadUrl: app.appStoreUrl
+        }
+      : {}),
     ...(app.pricing.toLowerCase().includes("free")
       ? {
           offers: {
