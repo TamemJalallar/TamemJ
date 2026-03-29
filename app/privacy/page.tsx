@@ -29,7 +29,15 @@ const sections = [
     title: "Data Collection",
     body: [
       "Apps are designed to collect only the minimum data needed to provide core functionality.",
-      "Depending on the app, this may include user-entered content (such as tasks, budgets, or planning details) stored locally on the device or in user-controlled cloud storage features."
+      "Depending on the app, this may include user-entered content (such as tasks, budgets, planning details, or guest RSVP information).",
+      "For RSVP features, collected data may include guest names, phone numbers, RSVP status, and related event notes submitted by users."
+    ]
+  },
+  {
+    title: "RSVP Data Processing (Cloudflare Hosting)",
+    body: [
+      "RSVP submissions are processed through a Cloudflare-hosted RSVP backend to support invite and response workflows.",
+      "This Cloudflare-hosted RSVP processing may handle guest RSVP data, including names and phone numbers, for the purpose of delivering RSVP functionality."
     ]
   },
   {
@@ -83,7 +91,7 @@ export default function PrivacyPage() {
             <p className="eyebrow">Legal</p>
             <h1 className="mt-4 text-3xl font-semibold sm:text-4xl">Privacy Policy</h1>
             <p className="mt-4 text-sm sm:text-base">
-              Last updated: February 23, 2026. This template is intentionally structured so it can
+              Last updated: March 29, 2026. This template is intentionally structured so it can
               be updated quickly as apps or services change.
             </p>
 
