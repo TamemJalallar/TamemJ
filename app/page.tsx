@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AppCard } from "@/components/app-card";
 import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
+import { getFeaturedApps } from "@/lib/apps";
+import { appsSectionEnabled } from "@/lib/apps-visibility";
 import { buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 import { getPillarContentIdeas, getTopSeoKeywordOpportunities } from "@/lib/seo-content.registry";
 import { siteConfig } from "@/lib/site";
@@ -103,6 +106,7 @@ export default function HomePage() {
   const kbArticles = getKBArticles();
   const corporateFixes = getCorporateFixes();
   const downloads = getDownloads();
+  const featuredApps = appsSectionEnabled ? getFeaturedApps().slice(0, 2) : [];
   const pillarGuides = getPillarContentIdeas().slice(0, 4);
   const featuredDownloadGuides = [...downloads]
     .filter((entry) => entry.releaseMetadata?.publishedAt)
@@ -386,6 +390,28 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {featuredApps.length > 0 ? (
+        <section className="section-shell pt-2">
+          <div className="page-shell">
+            <div className="surface-card p-5 sm:p-6">
+              <div className="mb-4 flex items-center justify-between gap-3">
+                <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100 sm:text-2xl">
+                  Built Apps
+                </h2>
+                <Link href="/apps" className="text-sm font-semibold text-accent hover:underline">
+                  Open Apps
+                </Link>
+              </div>
+              <div className="grid gap-5 md:grid-cols-2">
+                {featuredApps.map((app) => (
+                  <AppCard key={app.slug} app={app} variant="featured" />
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       <section className="section-shell pt-2">
         <div className="page-shell">

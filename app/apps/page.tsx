@@ -25,10 +25,17 @@ function uniqueKeywords(keywords: string[]): string[] {
 const seoApps = getApps();
 const topCategories = [...new Set(seoApps.map((app) => app.category))].slice(0, 8);
 const topAppKeywords = seoApps.slice(0, 12).map((app) => `${app.name} app`);
+const hasSeoApps = seoApps.length > 0;
+const seoDescription = hasSeoApps
+  ? `Browse ${seoApps.length} iOS app${seoApps.length === 1 ? "" : "s"} by Tamem J, including ${seoApps
+      .slice(0, 3)
+      .map((app) => app.name)
+      .join(", ")}.`
+  : "Browse iOS apps by Tamem J. New releases are in progress.";
 
 export const metadata: Metadata = {
   title: "Apps",
-  description: "Browse iOS apps by Tamem J. New releases are in progress.",
+  description: seoDescription,
   keywords: uniqueKeywords([
     "iOS apps",
     "iPhone apps",
@@ -44,12 +51,12 @@ export const metadata: Metadata = {
   robots: buildRobotsIndexRule("/apps/"),
   openGraph: buildOpenGraph(
     "Apps | Tamem J",
-    "Browse iOS apps by Tamem J. New releases are in progress.",
+    seoDescription,
     "/apps/"
   ),
   twitter: buildTwitter(
     "Apps | Tamem J",
-    "Browse iOS apps by Tamem J. New releases are in progress."
+    seoDescription
   )
 };
 
@@ -60,6 +67,8 @@ export default function AppsPage() {
 
   const apps = getApps();
   const hasApps = apps.length > 0;
+  const featuredApp = apps.find((app) => app.featured) ?? apps[0];
+  const remainingApps = apps.filter((app) => app.slug !== featuredApp?.slug);
   const appsCollectionSchema = buildCollectionPageJsonLd(
     "iOS Apps by Tamem J",
     "Browse iOS apps by Tamem J, including upcoming and published iPhone apps.",
@@ -80,19 +89,61 @@ export default function AppsPage() {
         <div className="page-shell">
           <SectionHeading
             eyebrow="Apps"
-            title={hasApps ? "iPhone apps built for clarity" : "New iPhone apps are on the way"}
+            title={hasApps ? "Published iPhone apps built for clarity" : "New iPhone apps are on the way"}
             description={
               hasApps
-                ? "All published apps are listed below."
+                ? "Published apps, screenshots, support paths, and App Store links are listed below."
                 : "This page is ready for launch. Published apps will appear here as they go live."
             }
           />
 
           {hasApps ? (
-            <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-              {apps.map((app) => (
-                <AppCard key={app.slug} app={app} variant="full" />
-              ))}
+            <div className="mt-8 space-y-8">
+              {featuredApp ? (
+                <section className="space-y-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
+                      Featured App
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      <Link href="/privacy" className="btn-secondary !px-4 !py-2 text-xs">
+                        Privacy Policy
+                      </Link>
+                      <Link href={`/support?app=${encodeURIComponent(featuredApp.slug)}`} className="btn-secondary !px-4 !py-2 text-xs">
+                        App Support
+                      </Link>
+                    </div>
+                  </div>
+                  <AppCard app={featuredApp} variant="featured" />
+                </section>
+              ) : null}
+
+              {remainingApps.length > 0 ? (
+                <section>
+                  <div className="mb-4 flex items-center justify-between gap-3">
+                    <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
+                      App Library
+                    </h3>
+                    <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                      {apps.length} published
+                    </p>
+                  </div>
+                  <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+                    {remainingApps.map((app) => (
+                      <AppCard key={app.slug} app={app} variant="full" />
+                    ))}
+                  </div>
+                </section>
+              ) : (
+                <section className="surface-card p-5 sm:p-6">
+                  <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                    More apps can be added here anytime
+                  </h3>
+                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                    The site is already wired to render additional apps from the shared apps data file as soon as you add their metadata, screenshots, and App Store links.
+                  </p>
+                </section>
+              )}
             </div>
           ) : (
             <div className="mt-8 grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
