@@ -76,6 +76,12 @@ function buildDownloadKeywords(entries: DownloadEntry[]): string[] {
   ]);
 }
 
+function parseDateValue(value?: string): number {
+  if (!value) return 0;
+  const parsed = Date.parse(value);
+  return Number.isNaN(parsed) ? 0 : parsed;
+}
+
 export async function generateMetadata(): Promise<Metadata> {
   const downloads = getDownloads();
   const assetStats = getDownloadAssetStats();
@@ -106,6 +112,14 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function DownloadsPage() {
   const downloads = getDownloads();
+  const trackedReleaseEntries = [...downloads]
+    .filter((entry) => entry.releaseMetadata?.publishedAt)
+    .sort(
+      (left, right) =>
+        parseDateValue(right.releaseMetadata?.publishedAt) -
+        parseDateValue(left.releaseMetadata?.publishedAt)
+    )
+    .slice(0, 6);
   const groupedByCategory = [...new Set(downloads.map((entry) => entry.category))]
     .sort((a, b) => a.localeCompare(b))
     .map((category) => ({
@@ -132,7 +146,7 @@ export default function DownloadsPage() {
     "/downloads/",
     downloads.map((entry) => ({
       name: entry.name,
-      path: `/downloads/#${entry.slug}`
+      path: `/downloads/${entry.slug}/`
     }))
   );
 
@@ -146,16 +160,16 @@ export default function DownloadsPage() {
     itemListElement: downloads.map((entry, index) => ({
       "@type": "ListItem",
       position: index + 1,
-      item: {
-        "@type": "SoftwareApplication",
-        name: entry.name,
-        description: entry.summary,
-        applicationCategory: entry.category,
-        operatingSystem: entry.platforms.join(", "),
-        url: toAbsoluteUrl(`/downloads/#${entry.slug}`),
-        downloadUrl: entry.directDownloads?.[0]?.url ?? entry.channels[0]?.url,
-        ...(entry.releaseNotesUrl ? { releaseNotes: entry.releaseNotesUrl } : {}),
-        ...(entry.license ? { license: entry.license } : {}),
+        item: {
+          "@type": "SoftwareApplication",
+          name: entry.name,
+          description: entry.summary,
+          applicationCategory: entry.category,
+          operatingSystem: entry.platforms.join(", "),
+          url: toAbsoluteUrl(`/downloads/${entry.slug}/`),
+          downloadUrl: entry.directDownloads?.[0]?.url ?? entry.channels[0]?.url,
+          ...(entry.releaseNotesUrl ? { releaseNotes: entry.releaseNotesUrl } : {}),
+          ...(entry.license ? { license: entry.license } : {}),
         ...(entry.developer
           ? {
               author: {
@@ -292,10 +306,43 @@ export default function DownloadsPage() {
             }))}
           />
 
+          {trackedReleaseEntries.length > 0 ? (
+            <section className="mt-6 surface-card p-5 sm:p-6">
+              <div className="mb-4 flex items-center justify-between gap-3">
+                <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
+                  Fresh Release Pages
+                </h2>
+                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                  Metadata-backed detail pages
+                </p>
+              </div>
+              <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                {trackedReleaseEntries.map((entry) => (
+                  <Link
+                    key={entry.slug}
+                    href={`/downloads/${entry.slug}/`}
+                    className="rounded-2xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-700 dark:bg-slate-900"
+                  >
+                    <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                      {entry.category}
+                    </p>
+                    <h3 className="mt-2 text-base font-semibold text-slate-900 dark:text-slate-100">
+                      {entry.name}
+                    </h3>
+                    <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{entry.summary}</p>
+                    <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">
+                      Latest tracked release: {entry.releaseMetadata?.releaseTag ?? "Available"}
+                    </p>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          ) : null}
+
           <section className="mt-6 surface-card p-5 sm:p-6">
             <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Full Downloads Index</h2>
             <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-              Crawlable index of all curated software download entries grouped by type.
+              Crawlable index of all curated software download pages grouped by type.
             </p>
             <div className="mt-4 space-y-3">
               {groupedByCategory.map((group) => (
@@ -310,10 +357,15 @@ export default function DownloadsPage() {
                     {group.entries.map((entry) => (
                       <Link
                         key={entry.slug}
-                        href={`/downloads/#${entry.slug}`}
+                        href={`/downloads/${entry.slug}/`}
                         className="rounded-lg border border-line/70 bg-slate-50 px-3 py-2 text-sm text-slate-700 transition hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-950/60 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-900"
                       >
-                        {entry.name}
+                        <span className="font-medium">{entry.name}</span>
+                        {entry.releaseMetadata?.releaseTag ? (
+                          <span className="mt-0.5 block text-xs text-slate-500 dark:text-slate-400">
+                            {entry.releaseMetadata.releaseTag}
+                          </span>
+                        ) : null}
                       </Link>
                     ))}
                   </div>

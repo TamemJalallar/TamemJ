@@ -166,6 +166,37 @@ export default async function AiAgentDetailPage({ params }: AiAgentDetailPagePro
     }))
   };
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: `What is the ${agent.title} AI agent best used for?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `${agent.title} is designed for ${agent.role.toLowerCase()} workflows inside the ${agent.category} category.`
+        }
+      },
+      {
+        "@type": "Question",
+        name: `Can I use the ${agent.title} prompt across multiple AI platforms?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `Yes. This prompt includes variants for ${aiAgentPlatforms.join(", ")}.`
+        }
+      },
+      {
+        "@type": "Question",
+        name: `How should I navigate after using this AI agent prompt?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `Use the related agents list and the ${agent.category} category page to branch into adjacent roles, then jump into guides or prompt libraries for broader workflow coverage.`
+        }
+      }
+    ]
+  };
+
   return (
     <>
       <section className="section-shell pt-10 sm:pt-14">
@@ -242,6 +273,39 @@ export default async function AiAgentDetailPage({ params }: AiAgentDetailPagePro
               </div>
             </section>
           ) : null}
+
+          <section className="surface-card p-5 sm:p-6">
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Use Alongside Other Hubs</h2>
+            <div className="mt-4 grid gap-3 md:grid-cols-3">
+              <Link
+                href={`/ai-agents/category/${categorySlug}/`}
+                className="rounded-2xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-800 dark:bg-slate-950/70"
+              >
+                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">More {agent.category} Agents</p>
+                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                  Compare adjacent roles inside the same category before finalizing your operating prompt.
+                </p>
+              </Link>
+              <Link
+                href="/genai-prompts/"
+                className="rounded-2xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-800 dark:bg-slate-950/70"
+              >
+                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">GenAI Prompt Library</p>
+                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                  Pair role-based system prompts with task-level prompt templates.
+                </p>
+              </Link>
+              <Link
+                href="/guides/"
+                className="rounded-2xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-800 dark:bg-slate-950/70"
+              >
+                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">IT Pillar Guides</p>
+                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                  Connect agent workflows to larger search-driven knowledge hubs and execution content.
+                </p>
+              </Link>
+            </div>
+          </section>
         </div>
       </section>
 
@@ -264,6 +328,10 @@ export default async function AiAgentDetailPage({ params }: AiAgentDetailPagePro
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
     </>
   );

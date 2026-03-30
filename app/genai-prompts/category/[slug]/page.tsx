@@ -14,6 +14,7 @@ import {
   buildTwitter,
   toAbsoluteUrl
 } from "@/lib/seo";
+import { buildGenAICategoryEditorial } from "@/src/content/editorial/genai-categories";
 
 interface GenAIPromptCategoryPageProps {
   params: Promise<{ slug: string }>;
@@ -84,6 +85,7 @@ export default async function GenAIPromptCategoryPage({ params }: GenAIPromptCat
   const allCategories = getGenAICategories();
   const tools = [...new Set(categoryPrompts.map((p) => p.tool))];
   const platforms = [...new Set(categoryPrompts.map((p) => p.platform))];
+  const editorial = buildGenAICategoryEditorial(category, categoryPrompts);
 
   const relatedCategories = allCategories
     .filter((candidate) => candidate !== category)
@@ -121,6 +123,19 @@ export default async function GenAIPromptCategoryPage({ params }: GenAIPromptCat
       name: "GenAI Prompts Library",
       url: toAbsoluteUrl("/genai-prompts/")
     }
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: editorial.faq.map((entry) => ({
+      "@type": "Question",
+      name: entry.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: entry.answer
+      }
+    }))
   };
 
   return (
@@ -163,6 +178,31 @@ export default async function GenAIPromptCategoryPage({ params }: GenAIPromptCat
                 {allCategories.length} total categories
               </span>
             </div>
+          </section>
+
+          <section className="grid gap-5 xl:grid-cols-[1fr_0.9fr]">
+            <section className="surface-card p-5 sm:p-6">
+              <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">How to Work This Category</h2>
+              <div className="mt-4 space-y-3 text-sm leading-7 text-slate-700 dark:text-slate-300">
+                {editorial.introParagraphs.map((paragraph) => (
+                  <p key={`${slug}-${paragraph}`}>{paragraph}</p>
+                ))}
+              </div>
+            </section>
+
+            <section className="surface-card p-5 sm:p-6">
+              <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Workflow Highlights</h2>
+              <ul className="mt-4 space-y-3">
+                {editorial.workflowHighlights.map((item, index) => (
+                  <li
+                    key={`${slug}-workflow-${index}`}
+                    className="rounded-2xl border border-line/80 bg-white p-4 text-sm leading-7 text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </section>
           </section>
 
           <section className="surface-card p-5 sm:p-6">
@@ -212,6 +252,39 @@ export default async function GenAIPromptCategoryPage({ params }: GenAIPromptCat
               ))}
             </div>
           </section>
+
+          <section className="surface-card p-5 sm:p-6">
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Use Alongside Other Hubs</h2>
+            <div className="mt-4 grid gap-3 md:grid-cols-3">
+              <Link
+                href="/ai-agents/"
+                className="rounded-2xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-700 dark:bg-slate-900"
+              >
+                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">AI Agents Library</p>
+                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                  Pair task-level prompts with broader role-based agents and operating models.
+                </p>
+              </Link>
+              <Link
+                href="/guides/"
+                className="rounded-2xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-700 dark:bg-slate-900"
+              >
+                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">IT Pillar Guides</p>
+                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                  Connect prompt workflows to larger knowledge hubs, troubleshooting topics, and monetizable content clusters.
+                </p>
+              </Link>
+              <Link
+                href="/downloads/"
+                className="rounded-2xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-700 dark:bg-slate-900"
+              >
+                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">Downloads</p>
+                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                  Surface practical tools, templates, and software resources alongside the prompt library.
+                </p>
+              </Link>
+            </div>
+          </section>
         </div>
       </section>
 
@@ -226,6 +299,10 @@ export default async function GenAIPromptCategoryPage({ params }: GenAIPromptCat
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
     </>
   );

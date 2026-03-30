@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import { buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
-import { getTopSeoKeywordOpportunities } from "@/lib/seo-content.registry";
+import { getPillarContentIdeas, getTopSeoKeywordOpportunities } from "@/lib/seo-content.registry";
 import { siteConfig } from "@/lib/site";
 import { getCorporateFixes } from "@/lib/corporate-fixes.registry";
 import { getDownloads } from "@/lib/downloads.registry";
@@ -20,6 +20,12 @@ function uniqueKeywords(keywords: string[]): string[] {
   }
 
   return result;
+}
+
+function parseDateValue(value?: string): number {
+  if (!value) return 0;
+  const parsed = Date.parse(value);
+  return Number.isNaN(parsed) ? 0 : parsed;
 }
 
 const homeKeywordOpportunities = getTopSeoKeywordOpportunities(30);
@@ -97,6 +103,15 @@ export default function HomePage() {
   const kbArticles = getKBArticles();
   const corporateFixes = getCorporateFixes();
   const downloads = getDownloads();
+  const pillarGuides = getPillarContentIdeas().slice(0, 4);
+  const featuredDownloadGuides = [...downloads]
+    .filter((entry) => entry.releaseMetadata?.publishedAt)
+    .sort(
+      (left, right) =>
+        parseDateValue(right.releaseMetadata?.publishedAt) -
+        parseDateValue(left.releaseMetadata?.publishedAt)
+    )
+    .slice(0, 4);
   const keywordOpportunities = homeKeywordOpportunities.slice(0, 15);
 
   const totalGuides = kbArticles.length + corporateFixes.length;
@@ -310,6 +325,64 @@ export default function HomePage() {
                 </Link>
               ))}
             </div>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-2">
+            <section className="surface-card p-5 sm:p-6">
+              <div className="mb-4 flex items-center justify-between gap-3">
+                <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100 sm:text-2xl">
+                  Featured IT Pillar Guides
+                </h2>
+                <Link href="/guides" className="text-sm font-semibold text-accent hover:underline">
+                  Open Guides
+                </Link>
+              </div>
+              <div className="grid gap-3">
+                {pillarGuides.map((guide) => (
+                  <Link
+                    key={guide.slug}
+                    href={`/guides/${guide.slug}/`}
+                    className="rounded-2xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-800 dark:bg-slate-950/70"
+                  >
+                    <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">
+                      {guide.title}
+                    </h3>
+                    <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{guide.description}</p>
+                  </Link>
+                ))}
+              </div>
+            </section>
+
+            <section className="surface-card p-5 sm:p-6">
+              <div className="mb-4 flex items-center justify-between gap-3">
+                <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100 sm:text-2xl">
+                  Verified Download Guides
+                </h2>
+                <Link href="/downloads" className="text-sm font-semibold text-accent hover:underline">
+                  Open Downloads
+                </Link>
+              </div>
+              <div className="grid gap-3">
+                {featuredDownloadGuides.map((entry) => (
+                  <Link
+                    key={entry.slug}
+                    href={`/downloads/${entry.slug}/`}
+                    className="rounded-2xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-800 dark:bg-slate-950/70"
+                  >
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+                      {entry.category}
+                    </p>
+                    <h3 className="mt-2 text-base font-semibold text-slate-900 dark:text-slate-100">
+                      {entry.name}
+                    </h3>
+                    <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{entry.summary}</p>
+                    <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">
+                      Latest tracked release: {entry.releaseMetadata?.releaseTag ?? "Available"}
+                    </p>
+                  </Link>
+                ))}
+              </div>
+            </section>
           </div>
         </div>
       </section>

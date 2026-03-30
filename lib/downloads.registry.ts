@@ -1,4 +1,14 @@
-import type { DownloadEntry } from "@/types/download";
+import downloadReleaseMetadataStore from "@/data/download-release-metadata.json";
+import type {
+  DirectDownloadArtifact,
+  DownloadEntry,
+  DownloadPlatform,
+  DownloadReleaseMetadataArtifact,
+  DownloadReleaseMetadataEntry,
+  DownloadReleaseMetadataStore
+} from "@/types/download";
+
+const downloadReleaseMetadata = downloadReleaseMetadataStore as DownloadReleaseMetadataStore;
 
 const downloadsRegistry: DownloadEntry[] = [
 // ── Communication ──────────────────────────────────────────────────────────
@@ -3038,6 +3048,183 @@ const downloadsRegistry: DownloadEntry[] = [
 },
 ];
 
+function normalizeText(value: string): string {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+}
+
+function inferPlatform(label?: string, assetName?: string): DownloadPlatform | null {
+  const haystack = normalizeText(`${label ?? ""} ${assetName ?? ""}`);
+
+  if (haystack.includes("mac") || haystack.includes("osx")) return "macOS";
+  if (haystack.includes("windows") || haystack.includes("win64") || haystack.includes("win32")) {
+    return "Windows";
+  }
+  if (haystack.includes("linux")) return "Linux";
+  if (haystack.includes("android")) return "Android";
+  if (haystack.includes(" ios ") || haystack.startsWith("ios ") || haystack.endsWith(" ios")) {
+    return "iOS";
+  }
+  if (haystack.includes("web")) return "Web";
+
+  return null;
+}
+
+function inferFileType(assetName?: string): string | undefined {
+  if (!assetName) return undefined;
+
+  const lower = assetName.toLowerCase();
+  if (lower.endsWith(".tar.gz")) return "TAR.GZ";
+  if (lower.endsWith(".msixbundle")) return "MSIXBUNDLE";
+  if (lower.endsWith(".appimage")) return "APPIMAGE";
+
+  const extension = lower.split(".").pop();
+  return extension ? extension.toUpperCase() : undefined;
+}
+
+function cloneReleaseMetadataEntry(
+  releaseMetadata?: DownloadReleaseMetadataEntry
+): DownloadReleaseMetadataEntry | undefined {
+  if (!releaseMetadata) {
+    return undefined;
+  }
+
+  return {
+    ...releaseMetadata,
+    artifacts: Object.fromEntries(
+      Object.entries(releaseMetadata.artifacts).map(([label, artifact]) => [label, { ...artifact }])
+    )
+  };
+}
+
+function getReleaseMetadataEntry(slug: string): DownloadReleaseMetadataEntry | undefined {
+  return downloadReleaseMetadata.entries?.[slug];
+}
+
+function getReleaseArtifactMatch(
+  artifact: DirectDownloadArtifact,
+  releaseMetadata?: DownloadReleaseMetadataEntry
+): DownloadReleaseMetadataArtifact | undefined {
+  if (!releaseMetadata) {
+    return undefined;
+  }
+
+  const releaseArtifacts = Object.entries(releaseMetadata.artifacts);
+  if (releaseArtifacts.length === 0) {
+    return undefined;
+  }
+
+  const normalizedLabel = normalizeText(artifact.label);
+  const exactMatch = releaseArtifacts.find(([label]) => normalizeText(label) === normalizedLabel);
+  if (exactMatch) {
+    return exactMatch[1];
+  }
+
+  const platformMatches = releaseArtifacts.filter((entry) => {
+    const [label, currentArtifact] = entry;
+    return inferPlatform(label, currentArtifact.assetName) === artifact.platform;
+  });
+
+  if (platformMatches.length === 1) {
+    return platformMatches[0][1];
+  }
+
+  const normalizedFileType = normalizeText(artifact.fileType ?? "");
+  if (normalizedFileType) {
+    const typedPlatformMatches = platformMatches.filter((entry) => {
+      const fileType = inferFileType(entry[1].assetName);
+      return normalizeText(fileType ?? "") === normalizedFileType;
+    });
+
+    if (typedPlatformMatches.length === 1) {
+      return typedPlatformMatches[0][1];
+    }
+  }
+
+  return undefined;
+}
+
+function hydrateDirectDownloadArtifact(
+  artifact: DirectDownloadArtifact,
+  releaseMetadata?: DownloadReleaseMetadataEntry
+): DirectDownloadArtifact {
+  const matchedReleaseArtifact = getReleaseArtifactMatch(artifact, releaseMetadata);
+
+  return {
+    ...artifact,
+    url: matchedReleaseArtifact?.resolvedUrl ?? artifact.url,
+    version: matchedReleaseArtifact?.version ?? artifact.version,
+    fileType: artifact.fileType ?? inferFileType(matchedReleaseArtifact?.assetName),
+    fileSize: matchedReleaseArtifact?.fileSize ?? artifact.fileSize,
+    checksumSha256: matchedReleaseArtifact?.checksumSha256 ?? artifact.checksumSha256
+  };
+}
+
+function cloneDownloadEntry(entry: DownloadEntry): DownloadEntry {
+  return {
+    ...entry,
+    platforms: [...entry.platforms],
+    tags: [...entry.tags],
+    channels: entry.channels.map((channel) => ({ ...channel })),
+    directDownloads: entry.directDownloads?.map((artifact) => ({ ...artifact })),
+    releaseMetadata: cloneReleaseMetadataEntry(entry.releaseMetadata)
+  };
+}
+
+function hydrateDownloadEntry(entry: DownloadEntry): DownloadEntry {
+  const releaseMetadata = getReleaseMetadataEntry(entry.slug);
+
+  return {
+    ...entry,
+    platforms: [...entry.platforms],
+    tags: [...entry.tags],
+    channels: entry.channels.map((channel) => ({ ...channel })),
+    directDownloads: entry.directDownloads?.map((artifact) =>
+      hydrateDirectDownloadArtifact(artifact, releaseMetadata)
+    ),
+    releaseMetadata: cloneReleaseMetadataEntry(releaseMetadata)
+  };
+}
+
+const hydratedDownloadsRegistry = downloadsRegistry.map((entry) => hydrateDownloadEntry(entry));
+
 export function getDownloads(): DownloadEntry[] {
-  return downloadsRegistry;
+  return hydratedDownloadsRegistry.map((entry) => cloneDownloadEntry(entry));
+}
+
+export function getDownloadBySlug(slug: string): DownloadEntry | undefined {
+  const match = hydratedDownloadsRegistry.find((entry) => entry.slug === slug);
+  return match ? cloneDownloadEntry(match) : undefined;
+}
+
+export function getDownloadCategories(): string[] {
+  return [...new Set(hydratedDownloadsRegistry.map((entry) => entry.category))].sort((a, b) =>
+    a.localeCompare(b)
+  );
+}
+
+export function getRelatedDownloads(entry: DownloadEntry, limit = 6): DownloadEntry[] {
+  const currentTags = new Set(entry.tags.map((tag) => normalizeText(tag)));
+
+  return hydratedDownloadsRegistry
+    .filter((candidate) => candidate.slug !== entry.slug)
+    .map((candidate) => {
+      const sharedTags = candidate.tags.filter((tag) => currentTags.has(normalizeText(tag))).length;
+      const sameCategory = candidate.category === entry.category ? 1 : 0;
+      const sharedPlatforms = candidate.platforms.filter((platform) => entry.platforms.includes(platform)).length;
+      const githubBonus = candidate.featuredOnGitHub && entry.featuredOnGitHub ? 1 : 0;
+      const score = sameCategory * 5 + sharedTags * 2 + sharedPlatforms + githubBonus;
+
+      return {
+        candidate,
+        score
+      };
+    })
+    .filter((entry) => entry.score > 0)
+    .sort(
+      (left, right) =>
+        right.score - left.score ||
+        left.candidate.name.localeCompare(right.candidate.name)
+    )
+    .slice(0, limit)
+    .map((entry) => cloneDownloadEntry(entry.candidate));
 }

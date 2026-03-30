@@ -15,6 +15,7 @@ import {
   buildTwitter,
   toAbsoluteUrl
 } from "@/lib/seo";
+import { buildAiCategoryEditorial } from "@/src/content/editorial/ai-agent-categories";
 
 interface AiAgentCategoryPageProps {
   params: Promise<{ slug: string }>;
@@ -83,6 +84,7 @@ export default async function AiAgentCategoryPage({ params }: AiAgentCategoryPag
 
   const categoryAgents = getAiAgentsByCategory(category);
   const allCategories = getAiAgentCategories();
+  const editorial = buildAiCategoryEditorial(category, categoryAgents, aiAgentPlatforms);
   const relatedCategories = allCategories
     .filter((candidate) => candidate !== category)
     .slice(0, 8)
@@ -121,6 +123,19 @@ export default async function AiAgentCategoryPage({ params }: AiAgentCategoryPag
     }
   };
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: editorial.faq.map((entry) => ({
+      "@type": "Question",
+      name: entry.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: entry.answer
+      }
+    }))
+  };
+
   return (
     <>
       <section className="section-shell pt-10 sm:pt-14">
@@ -155,6 +170,31 @@ export default async function AiAgentCategoryPage({ params }: AiAgentCategoryPag
                 {allCategories.length} total categories
               </span>
             </div>
+          </section>
+
+          <section className="grid gap-5 xl:grid-cols-[1fr_0.9fr]">
+            <section className="surface-card p-5 sm:p-6">
+              <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">How to Use This Category</h2>
+              <div className="mt-4 space-y-3 text-sm leading-7 text-slate-700 dark:text-slate-300">
+                {editorial.introParagraphs.map((paragraph) => (
+                  <p key={`${slug}-${paragraph}`}>{paragraph}</p>
+                ))}
+              </div>
+            </section>
+
+            <section className="surface-card p-5 sm:p-6">
+              <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Best-Fit Use Cases</h2>
+              <ul className="mt-4 space-y-3">
+                {editorial.useCases.map((item, index) => (
+                  <li
+                    key={`${slug}-use-case-${index}`}
+                    className="rounded-2xl border border-line/80 bg-white p-4 text-sm leading-7 text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </section>
           </section>
 
           <section className="surface-card p-5 sm:p-6">
@@ -199,6 +239,39 @@ export default async function AiAgentCategoryPage({ params }: AiAgentCategoryPag
               ))}
             </div>
           </section>
+
+          <section className="surface-card p-5 sm:p-6">
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Use Alongside Other Hubs</h2>
+            <div className="mt-4 grid gap-3 md:grid-cols-3">
+              <Link
+                href="/genai-prompts/"
+                className="rounded-2xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-700 dark:bg-slate-900"
+              >
+                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">GenAI Prompt Library</p>
+                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                  Pair persona-driven agent prompts with task-level prompt templates.
+                </p>
+              </Link>
+              <Link
+                href="/guides/"
+                className="rounded-2xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-700 dark:bg-slate-900"
+              >
+                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">IT Pillar Guides</p>
+                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                  Move from prompt discovery into broader operational and troubleshooting hubs.
+                </p>
+              </Link>
+              <Link
+                href="/support/tickets/"
+                className="rounded-2xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-700 dark:bg-slate-900"
+              >
+                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">Support Tickets</p>
+                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                  Connect AI workflow ideas to practical IT troubleshooting content and how-to pages.
+                </p>
+              </Link>
+            </div>
+          </section>
         </div>
       </section>
       <script
@@ -212,6 +285,10 @@ export default async function AiAgentCategoryPage({ params }: AiAgentCategoryPag
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
     </>
   );

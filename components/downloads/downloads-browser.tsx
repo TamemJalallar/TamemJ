@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import {
   autoUpdate,
@@ -739,7 +740,11 @@ function SpotlightCard({
         <div className="flex min-w-0 items-start gap-3">
           <DownloadEntryIcon entry={entry} />
           <div className="min-w-0">
-            <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">{entry.name}</h3>
+            <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">
+              <Link href={`/downloads/${entry.slug}`} className="transition hover:text-accent">
+                {entry.name}
+              </Link>
+            </h3>
             <p className="mt-1.5 text-sm leading-5">{entry.summary}</p>
           </div>
         </div>
@@ -786,6 +791,12 @@ function SpotlightCard({
       </div>
 
       <div className="mt-2 flex flex-wrap gap-1.5">
+        <Link
+          href={`/downloads/${entry.slug}`}
+          className="inline-flex items-center justify-center rounded-full border border-line bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
+        >
+          View Details
+        </Link>
         {entry.channels.slice(0, 3).map((channel) => (
           <a
             key={`${entry.slug}-${channel.type}-${channel.url}`}
@@ -864,7 +875,11 @@ function DownloadCard({
             </div>
           </div>
 
-          <h3 className="mt-2 text-lg font-semibold text-slate-900 dark:text-slate-100">{entry.name}</h3>
+          <h3 className="mt-2 text-lg font-semibold text-slate-900 dark:text-slate-100">
+            <Link href={`/downloads/${entry.slug}`} className="transition hover:text-accent">
+              {entry.name}
+            </Link>
+          </h3>
           <p className="mt-1.5 text-sm leading-5">{entry.summary}</p>
         </div>
       </div>
@@ -883,6 +898,12 @@ function DownloadCard({
       </div>
 
       <div className="mt-2.5 flex flex-wrap gap-1.5">
+        <Link
+          href={`/downloads/${entry.slug}`}
+          className="inline-flex items-center justify-center rounded-full border border-line bg-white px-3 py-1.5 text-[11px] font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
+        >
+          View Details
+        </Link>
         {entry.channels.map((channel) => (
           <a
             key={`${entry.slug}-${channel.type}-${channel.url}`}

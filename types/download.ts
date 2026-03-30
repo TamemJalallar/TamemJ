@@ -70,6 +70,7 @@ export interface DownloadEntry {
   pricing?: string;
   channels: DownloadChannelLink[];
   directDownloads?: DirectDownloadArtifact[];
+  releaseMetadata?: DownloadReleaseMetadataEntry;
 }
 
 export type DownloadAssetFormat = "ps1" | "xlsx" | "pdf" | "docx";

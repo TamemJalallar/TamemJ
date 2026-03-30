@@ -8,6 +8,7 @@ import { appsSectionEnabled } from "@/lib/apps-visibility";
 import { getAiAgentCategories, getAiAgentCategorySlug, getAiAgentsRegistry } from "@/lib/aiAgents.registry";
 import { getCorporateFixes } from "@/lib/corporate-fixes.registry";
 import { getDownloadAssets } from "@/lib/download-assets.registry";
+import { getDownloads } from "@/lib/downloads.registry";
 import { getGenAICategories, getGenAICategorySlug, getGenAIPrompts } from "@/lib/genai-prompts";
 import { getPCBuildGuides } from "@/lib/pc-build-guides.registry";
 import { getPillarContentIdeas } from "@/lib/seo-content.registry";
@@ -156,6 +157,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: generatedAt
   }));
 
+  const downloadEntries: MetadataRoute.Sitemap = getDownloads().map((entry) => ({
+    url: url(`/downloads/${entry.slug}/`),
+    changeFrequency: "weekly",
+    priority: 0.82,
+    lastModified: parseDateInput(entry.releaseMetadata?.publishedAt) ?? generatedAt
+  }));
+
   const guideEntries: MetadataRoute.Sitemap = getPillarContentIdeas().map((guide) => ({
     url: url(`/guides/${guide.slug}/`),
     changeFrequency: "weekly",
@@ -170,6 +178,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...aiAgentCategoryEntries,
     ...genAIPromptEntries,
     ...genAIPromptCategoryEntries,
+    ...downloadEntries,
     ...downloadAssetEntries,
     ...guideEntries,
     ...corporateFixEntries,

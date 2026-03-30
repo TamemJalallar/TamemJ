@@ -102,7 +102,8 @@ Set these in local `.env.local` and in your deployment environment.
 ### Core/site behavior
 
 - `NEXT_PUBLIC_SHOW_APPS_SECTION` - optional override (`true`/`false`) for `/apps` visibility (defaults to visible when unset)
-- `NEXT_PUBLIC_ADSENSE_REVIEW_MODE` - `true` to index only core app/support pages for AdSense review
+- `NEXT_PUBLIC_ADSENSE_REVIEW_MODE` - request AdSense review mode
+- `NEXT_PUBLIC_ADSENSE_REVIEW_MODE_ACKNOWLEDGE` - must be set to `production-noindex` before review mode will actually noindex non-core sections
 - `NEXT_PUBLIC_NEWEGG_AFFILIATE_SID` - enables Newegg affiliate deep links
 - `NEXT_PUBLIC_AMAZON_ASSOCIATE_TAG` - Amazon Associates tag used for PC build recommendations (default `tamemj-20`)
 
@@ -148,6 +149,7 @@ Example:
 ```env
 NEXT_PUBLIC_SHOW_APPS_SECTION=false
 NEXT_PUBLIC_ADSENSE_REVIEW_MODE=true
+NEXT_PUBLIC_ADSENSE_REVIEW_MODE_ACKNOWLEDGE=production-noindex
 NEXT_PUBLIC_NEWEGG_AFFILIATE_SID=4670565
 
 NEXT_PUBLIC_CORPORATE_FIXES_BUILDER_AUTH_MODE=cloudflare-access
@@ -192,6 +194,7 @@ To prepare for AdSense review, enable:
 
 ```env
 NEXT_PUBLIC_ADSENSE_REVIEW_MODE=true
+NEXT_PUBLIC_ADSENSE_REVIEW_MODE_ACKNOWLEDGE=production-noindex
 ```
 
 When enabled:

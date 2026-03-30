@@ -12,8 +12,10 @@ function normalizePath(path: string): string {
 }
 
 const reviewModeEnv = process.env.NEXT_PUBLIC_ADSENSE_REVIEW_MODE;
+const reviewModeAcknowledgeEnv = process.env.NEXT_PUBLIC_ADSENSE_REVIEW_MODE_ACKNOWLEDGE;
 
-export const adsenseReviewModeEnabled = toBool(reviewModeEnv);
+export const adsenseReviewModeEnabled =
+  toBool(reviewModeEnv) && reviewModeAcknowledgeEnv?.trim() === "production-noindex";
 
 const coreExactPaths = new Set(["/", "/apps/", "/privacy/", "/support/", "/contact/"]);
 

@@ -10,6 +10,7 @@ import {
   getSuggestedKBArticlesForPillar,
   type OpportunitySegment
 } from "@/lib/seo-content.registry";
+import { buildPillarGuideEditorial } from "@/src/content/editorial/pillar-guides";
 import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 
 interface GuidePageProps {
@@ -87,6 +88,7 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
   const relatedKBArticles = getSuggestedKBArticlesForPillar(pillar, 28);
   const relatedAssets = getSuggestedDownloadAssetsForPillar(pillar, 14);
   const opportunities = getKeywordOpportunitiesForPillar(pillar, 12);
+  const editorial = buildPillarGuideEditorial(pillar, cluster, relatedKBArticles, relatedAssets);
 
   const guideSchema = {
     "@context": "https://schema.org",
@@ -114,6 +116,19 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
     { name: "IT Pillar Guides", path: "/guides/" },
     { name: pillar.title, path: `/guides/${pillar.slug}/` }
   ]);
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: editorial.faq.map((entry) => ({
+      "@type": "Question",
+      name: entry.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: entry.answer
+      }
+    }))
+  };
 
   return (
     <>
@@ -155,6 +170,17 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
           <section className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
             <div className="surface-card p-5 sm:p-6">
               <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
+                Why This Hub Matters
+              </h2>
+              <div className="mt-3 space-y-3 text-sm leading-7 text-slate-700 dark:text-slate-300">
+                {editorial.introParagraphs.map((paragraph) => (
+                  <p key={`${pillar.slug}-${paragraph}`}>{paragraph}</p>
+                ))}
+              </div>
+            </div>
+
+            <div className="surface-card p-5 sm:p-6">
+              <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
                 Priority Target Keywords
               </h2>
               <div className="mt-3 flex flex-wrap gap-2">
@@ -168,22 +194,39 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
                 ))}
               </div>
             </div>
+          </section>
 
-            <div className="surface-card p-5 sm:p-6">
-              <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
-                Secondary Terms
-              </h2>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {pillar.relatedTerms.map((term) => (
-                  <span
-                    key={`${pillar.slug}-${term}`}
-                    className="rounded-full border border-line/80 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+          <section className="grid gap-5 xl:grid-cols-[1fr_1fr]">
+            <section className="surface-card p-5 sm:p-6">
+              <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">How to Work This Guide</h2>
+              <ol className="mt-4 space-y-3">
+                {editorial.playbookSteps.map((step, index) => (
+                  <li
+                    key={`${pillar.slug}-playbook-${index}`}
+                    className="rounded-2xl border border-line/80 bg-white p-4 text-sm leading-7 text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
                   >
-                    {term}
-                  </span>
+                    <span className="mr-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-900 text-xs font-semibold text-white dark:bg-slate-100 dark:text-slate-900">
+                      {index + 1}
+                    </span>
+                    {step}
+                  </li>
                 ))}
-              </div>
-            </div>
+              </ol>
+            </section>
+
+            <section className="surface-card p-5 sm:p-6">
+              <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Coverage Highlights</h2>
+              <ul className="mt-4 space-y-3">
+                {editorial.coverageHighlights.map((highlight, index) => (
+                  <li
+                    key={`${pillar.slug}-highlight-${index}`}
+                    className="rounded-2xl border border-line/80 bg-white p-4 text-sm leading-7 text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
+                  >
+                    {highlight}
+                  </li>
+                ))}
+              </ul>
+            </section>
           </section>
 
           <section className="surface-card p-5 sm:p-6">
@@ -290,6 +333,21 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
               );
             })}
           </section>
+
+          <section className="surface-card p-5 sm:p-6">
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Frequently Asked Questions</h2>
+            <div className="mt-4 space-y-3">
+              {editorial.faq.map((entry) => (
+                <article
+                  key={`${pillar.slug}-${entry.question}`}
+                  className="rounded-2xl border border-line/80 bg-white p-4 dark:border-slate-700 dark:bg-slate-900"
+                >
+                  <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">{entry.question}</h3>
+                  <p className="mt-2 text-sm leading-7 text-slate-600 dark:text-slate-300">{entry.answer}</p>
+                </article>
+              ))}
+            </div>
+          </section>
         </div>
       </section>
       <script
@@ -299,6 +357,10 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
     </>
   );

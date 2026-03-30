@@ -130,6 +130,39 @@ export default async function GenAIPromptPage({ params }: GenAIPromptPageProps) 
     }
   };
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: `What is the ${prompt.title} prompt best used for?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `${prompt.title} is intended for ${prompt.tool} workflows inside the ${prompt.category} category on ${prompt.platform}.`
+        }
+      },
+      {
+        "@type": "Question",
+        name: `Can I customize the ${prompt.title} prompt before copying it?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: prompt.variables && prompt.variables.length > 0
+            ? "Yes. This prompt includes variable fields so you can tailor the copied output before using it."
+            : "Yes. You can adapt the prompt text directly before or after copying it into your AI tool."
+        }
+      },
+      {
+        "@type": "Question",
+        name: `What should I explore after using this prompt?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `Use the related prompts section, the ${prompt.category} category page, and the wider AI agents or guides hubs to expand into adjacent workflows.`
+        }
+      }
+    ]
+  };
+
   return (
     <>
       <section className="section-shell pt-10 sm:pt-14">
@@ -145,6 +178,39 @@ export default async function GenAIPromptPage({ params }: GenAIPromptPageProps) 
 
           <GenAIPromptDetail prompt={prompt} />
           <RelatedGenAIPrompts prompts={related} />
+
+          <section className="surface-card p-5 sm:p-6">
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Use Alongside Other Hubs</h2>
+            <div className="mt-4 grid gap-3 md:grid-cols-3">
+              <Link
+                href={`/genai-prompts/category/${categorySlug}/`}
+                className="rounded-2xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-700 dark:bg-slate-900"
+              >
+                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">More {prompt.category} Prompts</p>
+                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                  Compare adjacent prompt templates in the same category before locking in the workflow.
+                </p>
+              </Link>
+              <Link
+                href="/ai-agents/"
+                className="rounded-2xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-700 dark:bg-slate-900"
+              >
+                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">AI Agents Library</p>
+                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                  Pair task prompts with broader role-based system prompts and operating personas.
+                </p>
+              </Link>
+              <Link
+                href="/guides/"
+                className="rounded-2xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-700 dark:bg-slate-900"
+              >
+                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">IT Pillar Guides</p>
+                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                  Connect prompt workflows to larger search-led knowledge hubs and supporting site resources.
+                </p>
+              </Link>
+            </div>
+          </section>
         </div>
       </section>
 
@@ -159,6 +225,10 @@ export default async function GenAIPromptPage({ params }: GenAIPromptPageProps) 
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
     </>
   );

@@ -75,7 +75,7 @@ jobs:
             -cvf "$RUNNER_TEMP/artifact.tar" \
             --exclude=.git \
             --exclude=.github \
-            --exclude=".[^/]*" \
+            --exclude=.DS_Store \
             .
 
       - name: Upload artifact

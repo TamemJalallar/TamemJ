@@ -304,6 +304,39 @@ export default function GenAIPromptsPage() {
               ))}
             </div>
           </section>
+
+          <section className="surface-card p-5 sm:p-6">
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Use Alongside Other Hubs</h2>
+            <div className="mt-4 grid gap-3 md:grid-cols-3">
+              <Link
+                href="/ai-agents/"
+                className="rounded-2xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-800 dark:bg-slate-950/70"
+              >
+                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">AI Agents Library</p>
+                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                  Pair task prompts with broader role-based agent frameworks and system prompts.
+                </p>
+              </Link>
+              <Link
+                href="/guides/"
+                className="rounded-2xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-800 dark:bg-slate-950/70"
+              >
+                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">IT Pillar Guides</p>
+                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                  Connect prompt workflows to larger knowledge hubs and search-led content clusters.
+                </p>
+              </Link>
+              <Link
+                href="/downloads/"
+                className="rounded-2xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-800 dark:bg-slate-950/70"
+              >
+                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">Downloads</p>
+                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                  Surface practical tools, software, and templates alongside creative and production prompts.
+                </p>
+              </Link>
+            </div>
+          </section>
         </div>
       </section>
 
