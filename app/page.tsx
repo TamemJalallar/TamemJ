@@ -106,7 +106,7 @@ export default function HomePage() {
   const kbArticles = getKBArticles();
   const corporateFixes = getCorporateFixes();
   const downloads = getDownloads();
-  const featuredApps = appsSectionEnabled ? getFeaturedApps().slice(0, 2) : [];
+  const featuredApps = appsSectionEnabled ? getFeaturedApps().slice(0, 3) : [];
   const pillarGuides = getPillarContentIdeas().slice(0, 4);
   const featuredDownloadGuides = [...downloads]
     .filter((entry) => entry.releaseMetadata?.publishedAt)
@@ -397,15 +397,15 @@ export default function HomePage() {
             <div className="surface-card p-5 sm:p-6">
               <div className="mb-4 flex items-center justify-between gap-3">
                 <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100 sm:text-2xl">
-                  Built Apps
+                  Published Apps
                 </h2>
                 <Link href="/apps" className="text-sm font-semibold text-accent hover:underline">
                   Open Apps
                 </Link>
               </div>
-              <div className="grid gap-5 md:grid-cols-2">
+              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 {featuredApps.map((app) => (
-                  <AppCard key={app.slug} app={app} variant="featured" />
+                  <AppCard key={app.slug} app={app} />
                 ))}
               </div>
             </div>

@@ -67,8 +67,6 @@ export default function AppsPage() {
 
   const apps = getApps();
   const hasApps = apps.length > 0;
-  const featuredApp = apps.find((app) => app.featured) ?? apps[0];
-  const remainingApps = apps.filter((app) => app.slug !== featuredApp?.slug);
   const appsCollectionSchema = buildCollectionPageJsonLd(
     "iOS Apps by Tamem J",
     "Browse iOS apps by Tamem J, including upcoming and published iPhone apps.",
@@ -98,52 +96,52 @@ export default function AppsPage() {
           />
 
           {hasApps ? (
-            <div className="mt-8 space-y-8">
-              {featuredApp ? (
-                <section className="space-y-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
-                      Featured App
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      <Link href="/privacy" className="btn-secondary !px-4 !py-2 text-xs">
-                        Privacy Policy
-                      </Link>
-                      <Link href={`/support?app=${encodeURIComponent(featuredApp.slug)}`} className="btn-secondary !px-4 !py-2 text-xs">
-                        App Support
-                      </Link>
-                    </div>
-                  </div>
-                  <AppCard app={featuredApp} variant="featured" />
-                </section>
-              ) : null}
+            <div className="mt-8 space-y-6">
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                <div>
+                  <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
+                    Published Apps
+                  </h3>
+                  <p className="mt-2 max-w-2xl text-sm text-slate-600 dark:text-slate-300">
+                    Each tile links to the app detail page, and the app icon opens the live App
+                    Store listing when one is available.
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Link href="/privacy" className="btn-secondary !px-4 !py-2 text-xs">
+                    Privacy Policy
+                  </Link>
+                  <Link href="/support" className="btn-secondary !px-4 !py-2 text-xs">
+                    App Support
+                  </Link>
+                </div>
+              </div>
 
-              {remainingApps.length > 0 ? (
-                <section>
-                  <div className="mb-4 flex items-center justify-between gap-3">
-                    <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
-                      App Library
-                    </h3>
-                    <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
-                      {apps.length} published
-                    </p>
-                  </div>
-                  <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-                    {remainingApps.map((app) => (
-                      <AppCard key={app.slug} app={app} variant="full" />
-                    ))}
-                  </div>
-                </section>
-              ) : (
+              <section>
+                <div className="mb-4 flex items-center justify-between gap-3">
+                  <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                    {apps.length} published
+                  </p>
+                </div>
+                <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                  {apps.map((app) => (
+                    <AppCard key={app.slug} app={app} />
+                  ))}
+                </div>
+              </section>
+
+              {apps.length < 3 ? (
                 <section className="surface-card p-5 sm:p-6">
                   <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
                     More apps can be added here anytime
                   </h3>
                   <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-                    The site is already wired to render additional apps from the shared apps data file as soon as you add their metadata, screenshots, and App Store links.
+                    The layout is already set up for a wider published apps grid, so new launches
+                    will drop straight into place as soon as you add their metadata and App Store
+                    links.
                   </p>
                 </section>
-              )}
+              ) : null}
             </div>
           ) : (
             <div className="mt-8 grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">

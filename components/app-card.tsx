@@ -1,49 +1,73 @@
 import Image from "next/image";
 import Link from "next/link";
-import { AppStoreButton } from "@/components/app-store-button";
 import type { IOSApp } from "@/types/app";
 
 interface AppCardProps {
   app: IOSApp;
-  variant: "featured" | "full";
 }
 
-export function AppCard({ app, variant }: AppCardProps) {
+export function AppCard({ app }: AppCardProps) {
+  const hasAppStoreUrl = app.appStoreUrl.trim().length > 0;
+  const appDetailHref = `/apps/${app.slug}`;
+  const iconHref = hasAppStoreUrl ? app.appStoreUrl : appDetailHref;
+  const iconTargetProps =
+    hasAppStoreUrl
+      ? { target: "_blank", rel: "noreferrer" as const }
+      : {};
+
   return (
-    <article className="surface-card-strong overflow-hidden transition hover:-translate-y-0.5 hover:shadow-card">
-      {variant === "featured" ? (
-        <div className="relative aspect-[16/9] border-b border-line bg-slate-100">
-          <Image
-            src={app.screenshots[0]?.src ?? app.icon}
-            alt={app.screenshots[0]?.alt ?? `${app.name} screenshot`}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-            className="object-cover"
-          />
+    <article className="surface-card-strong flex h-full flex-col p-5 transition hover:-translate-y-0.5 hover:shadow-card sm:p-6">
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0">
+          <p className="text-xs uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+            {app.category}
+          </p>
+          <h3 className="mt-2 text-xl font-semibold text-slate-900 dark:text-slate-100">
+            <Link href={appDetailHref} className="transition hover:text-accent">
+              {app.name}
+            </Link>
+          </h3>
+          <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{app.tagline}</p>
         </div>
-      ) : null}
 
-      <div className="p-5 sm:p-6">
-        <div className="flex items-start gap-4">
-          <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-2xl border border-line bg-white">
-            <Image src={app.icon} alt={`${app.name} icon`} fill sizes="56px" className="object-cover" />
+        <a
+          href={iconHref}
+          aria-label={
+            hasAppStoreUrl ? `Open ${app.name} on the App Store` : `Open ${app.name} details`
+          }
+          className="group/icon shrink-0 text-center"
+          {...iconTargetProps}
+        >
+          <div className="relative h-20 w-20 overflow-hidden rounded-[1.6rem] border border-line bg-white shadow-soft transition group-hover/icon:-translate-y-0.5 group-hover/icon:shadow-card">
+            <Image src={app.icon} alt={`${app.name} icon`} fill sizes="80px" className="object-cover" />
           </div>
+          <span className="mt-2 block text-center text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500 group-hover/icon:text-slate-900 dark:text-slate-400 dark:group-hover/icon:text-slate-100">
+            {hasAppStoreUrl ? "Open app" : "Details"}
+          </span>
+        </a>
+      </div>
 
-          <div className="min-w-0">
-            <p className="text-xs uppercase tracking-[0.14em] text-slate-500">{app.category}</p>
-            <h3 className="mt-1 text-lg font-semibold text-slate-900">{app.name}</h3>
-            <p className="mt-1 text-sm text-slate-600">{app.tagline}</p>
-          </div>
+      <p className="mt-4 text-sm text-slate-700 dark:text-slate-300">{app.shortDescription}</p>
+
+      <div className="mt-4 flex flex-wrap gap-2">
+        {app.features.slice(0, 3).map((feature) => (
+          <span
+            key={`${app.slug}-${feature}`}
+            className="rounded-full border border-line/80 bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
+          >
+            {feature}
+          </span>
+        ))}
+      </div>
+
+      <div className="mt-auto flex items-end justify-between gap-4 pt-6">
+        <div className="text-xs text-slate-500 dark:text-slate-400">
+          <p>{app.pricing}</p>
+          <p className="mt-1">{app.minIOSVersion}</p>
         </div>
-
-        <p className="mt-4 text-sm">{app.shortDescription}</p>
-
-        <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-          <Link href={`/apps/${app.slug}`} className="btn-secondary">
-            {variant === "featured" ? "Learn More" : "Learn More"}
-          </Link>
-          <AppStoreButton href={app.appStoreUrl} />
-        </div>
+        <Link href={appDetailHref} className="text-sm font-semibold text-accent hover:underline">
+          View details
+        </Link>
       </div>
     </article>
   );
