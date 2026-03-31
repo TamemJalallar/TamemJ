@@ -397,7 +397,7 @@ export default function HomePage() {
             <div className="surface-card p-5 sm:p-6">
               <div className="mb-4 flex items-center justify-between gap-3">
                 <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100 sm:text-2xl">
-                  Published Apps
+                  Built Apps
                 </h2>
                 <Link href="/apps" className="text-sm font-semibold text-accent hover:underline">
                   Open Apps

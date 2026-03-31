@@ -26,18 +26,22 @@ const seoApps = getApps();
 const topCategories = [...new Set(seoApps.map((app) => app.category))].slice(0, 8);
 const topAppKeywords = seoApps.slice(0, 12).map((app) => `${app.name} app`);
 const hasSeoApps = seoApps.length > 0;
+const liveSeoApps = seoApps.filter((app) => app.appStoreUrl.trim().length > 0).length;
+const upcomingSeoApps = seoApps.length - liveSeoApps;
 const seoDescription = hasSeoApps
-  ? `Browse ${seoApps.length} iOS app${seoApps.length === 1 ? "" : "s"} by Tamem J, including ${seoApps
+  ? `Browse ${seoApps.length} Apple app${seoApps.length === 1 ? "" : "s"} by Tamem J, including ${seoApps
       .slice(0, 3)
       .map((app) => app.name)
-      .join(", ")}.`
-  : "Browse iOS apps by Tamem J. New releases are in progress.";
+      .join(", ")}${upcomingSeoApps > 0 ? ", with live and upcoming releases" : ""}.`
+  : "Browse Apple apps by Tamem J. New releases are in progress.";
 
 export const metadata: Metadata = {
   title: "Apps",
   description: seoDescription,
   keywords: uniqueKeywords([
     "iOS apps",
+    "macOS apps",
+    "watchOS apps",
     "iPhone apps",
     "app portfolio",
     "App Store apps",
@@ -67,9 +71,11 @@ export default function AppsPage() {
 
   const apps = getApps();
   const hasApps = apps.length > 0;
+  const liveApps = apps.filter((app) => app.appStoreUrl.trim().length > 0).length;
+  const upcomingApps = apps.length - liveApps;
   const appsCollectionSchema = buildCollectionPageJsonLd(
-    "iOS Apps by Tamem J",
-    "Browse iOS apps by Tamem J, including upcoming and published iPhone apps.",
+    "Apple Apps by Tamem J",
+    "Browse Apple platform apps by Tamem J, including live releases and coming-soon launches.",
     "/apps/",
     apps.map((app) => ({
       name: app.name,
@@ -87,11 +93,11 @@ export default function AppsPage() {
         <div className="page-shell">
           <SectionHeading
             eyebrow="Apps"
-            title={hasApps ? "Published iPhone apps built for clarity" : "New iPhone apps are on the way"}
+            title={hasApps ? "Apple apps built for real-world workflows" : "New Apple apps are on the way"}
             description={
               hasApps
-                ? "Published apps, screenshots, support paths, and App Store links are listed below."
-                : "This page is ready for launch. Published apps will appear here as they go live."
+                ? "Live App Store releases and coming-soon apps are listed here with screenshots, support paths, and launch status."
+                : "This page is ready for launch. New apps will appear here as they move toward release."
             }
           />
 
@@ -99,12 +105,11 @@ export default function AppsPage() {
             <div className="mt-8 space-y-6">
               <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div>
-                  <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
-                    Published Apps
-                  </h3>
+                  <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Apps</h3>
                   <p className="mt-2 max-w-2xl text-sm text-slate-600 dark:text-slate-300">
                     Each tile links to the app detail page, and the app icon opens the live App
-                    Store listing when one is available.
+                    Store listing when one is available or the app details when it is still in
+                    progress.
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -120,7 +125,7 @@ export default function AppsPage() {
               <section>
                 <div className="mb-4 flex items-center justify-between gap-3">
                   <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
-                    {apps.length} published
+                    {apps.length} total · {liveApps} live · {upcomingApps} coming soon
                   </p>
                 </div>
                 <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -136,9 +141,8 @@ export default function AppsPage() {
                     More apps can be added here anytime
                   </h3>
                   <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-                    The layout is already set up for a wider published apps grid, so new launches
-                    will drop straight into place as soon as you add their metadata and App Store
-                    links.
+                    The layout is already set up for a wider apps grid, so new launches will drop
+                    straight into place as soon as you add their metadata and launch links.
                   </p>
                 </section>
               ) : null}

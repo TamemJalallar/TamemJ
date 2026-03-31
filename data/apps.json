@@ -60,5 +60,63 @@
     "pricing": "Coming soon",
     "minIOSVersion": "iOS 16.0+",
     "supportEmail": "support@tamemj.com"
+  },
+  {
+    "slug": "gigtracker",
+    "name": "GigTracker",
+    "category": "Mileage Tracker",
+    "tagline": "Track miles, earnings, expenses, and invoices across Apple devices.",
+    "shortDescription": "GigTracker helps gig workers and independent drivers log trips, review earnings, capture expenses, manage invoices, and stay on top of business follow-ups from iPhone, Mac, and Apple Watch.",
+    "description": "GigTracker is a mileage and business tracker built for delivery drivers, freelancers, and independent operators who need more than a simple trip log. Track drives automatically, organize trips, review earnings, capture expenses, draft invoices, monitor reports, and work through a business inbox from one cross-device Apple workflow.",
+    "featured": true,
+    "appStoreUrl": "",
+    "icon": "/images/apps/gigtracker/icon.jpg",
+    "screenshots": [
+      {
+        "src": "/images/apps/gigtracker/01-dashboard.png",
+        "alt": "GigTracker dashboard with daily mileage, earnings, and trip activity overview"
+      },
+      {
+        "src": "/images/apps/gigtracker/02-trips.png",
+        "alt": "GigTracker trips screen with logged drives and mileage history"
+      },
+      {
+        "src": "/images/apps/gigtracker/03-earnings.png",
+        "alt": "GigTracker earnings screen with payout tracking and performance totals"
+      },
+      {
+        "src": "/images/apps/gigtracker/04-expenses.png",
+        "alt": "GigTracker expenses screen for tracking costs and receipts"
+      },
+      {
+        "src": "/images/apps/gigtracker/05-invoices.png",
+        "alt": "GigTracker invoices screen for drafting and managing client billing"
+      },
+      {
+        "src": "/images/apps/gigtracker/06-reports.png",
+        "alt": "GigTracker reports screen with business summaries and trend breakdowns"
+      },
+      {
+        "src": "/images/apps/gigtracker/07-inbox.png",
+        "alt": "GigTracker inbox surfacing follow-ups, unclassified work, and outstanding tasks"
+      },
+      {
+        "src": "/images/apps/gigtracker/08-more.png",
+        "alt": "GigTracker more screen with settings, tools, and additional business controls"
+      }
+    ],
+    "features": [
+      "Automatic and manual trip tracking",
+      "Mileage history with trip review and classification",
+      "Earnings tracking across gigs and clients",
+      "Expense logging with receipt-friendly workflows",
+      "Invoice drafting and follow-up management",
+      "Business reports and summary insights",
+      "Cross-device workflow across iPhone, Mac, and Apple Watch",
+      "Widget and Live Activity support for quick status views"
+    ],
+    "pricing": "Coming soon",
+    "minIOSVersion": "iPhone, Mac, and Apple Watch",
+    "supportEmail": "support@tamemj.com"
   }
 ]
