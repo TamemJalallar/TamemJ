@@ -5,18 +5,28 @@ import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "Privacy policy for iOS apps developed by Tamem J.",
-  keywords: ["privacy policy", "iOS app privacy", "app data handling", "Tamem J privacy"],
+  description: "Privacy policy for apps developed by Tamem J, including EverAfter Planner and GigTracker.",
+  keywords: [
+    "privacy policy",
+    "iOS app privacy",
+    "app data handling",
+    "Tamem J privacy",
+    "GigTracker privacy policy",
+    "EverAfter Planner privacy policy"
+  ],
   alternates: {
     canonical: "/privacy/"
   },
   robots: buildRobotsIndexRule("/privacy/"),
   openGraph: buildOpenGraph(
     "Privacy Policy | Tamem J",
-    "Privacy policy for iOS apps developed by Tamem J.",
+    "Privacy policy for apps developed by Tamem J, including EverAfter Planner and GigTracker.",
     "/privacy/"
   ),
-  twitter: buildTwitter("Privacy Policy | Tamem J", "Privacy policy for iOS apps developed by Tamem J.")
+  twitter: buildTwitter(
+    "Privacy Policy | Tamem J",
+    "Privacy policy for apps developed by Tamem J, including EverAfter Planner and GigTracker."
+  )
 };
 
 const sections = [
@@ -28,18 +38,33 @@ const sections = [
     ]
   },
   {
-    title: "Data Collection",
+    title: "Apps Covered by This Policy",
     body: [
-      "Apps are designed to collect only the minimum data needed to provide core functionality.",
-      "Depending on the app, this may include user-entered content (such as tasks, budgets, planning details, or guest RSVP information).",
-      "For RSVP features, collected data may include guest names, phone numbers, RSVP status, and related event notes submitted by users."
+      "This policy applies to apps developed and published by Tamem J, including EverAfter Planner and GigTracker, as well as future apps released under the same publisher identity unless a separate app-specific policy is provided.",
+      "EverAfter Planner is designed for wedding planning workflows such as budgets, checklists, guest lists, RSVPs, vendors, and reminders. GigTracker is designed for mileage tracking, trip organization, earnings review, expense logging, invoice drafting, reporting, and related business workflows."
     ]
   },
   {
-    title: "RSVP Data Processing (Cloudflare Hosting)",
+    title: "Data Collection",
+    body: [
+      "Apps are designed to collect only the minimum data needed to provide core functionality.",
+      "Depending on the app, this may include user-entered content such as tasks, budgets, planning details, guest RSVP information, trip logs, earnings records, expense entries, invoice details, and related notes.",
+      "For RSVP features, collected data may include guest names, phone numbers, RSVP status, and related event notes submitted by users.",
+      "For GigTracker features, collected data may include trip details, mileage records, earnings information, expense records, invoice information, and business workflow notes entered or reviewed by the user."
+    ]
+  },
+  {
+    title: "EverAfter Planner RSVP Data Processing",
     body: [
       "RSVP submissions are processed through a Cloudflare-hosted RSVP backend to support invite and response workflows.",
       "This Cloudflare-hosted RSVP processing may handle guest RSVP data, including names and phone numbers, for the purpose of delivering RSVP functionality."
+    ]
+  },
+  {
+    title: "GigTracker Device Access and Business Data",
+    body: [
+      "If GigTracker uses features such as automatic trip tracking, receipt capture, notifications, widgets, or Apple Watch support, the app may request access to device capabilities needed to provide those features. This can include permissions such as location, notifications, camera, photos, or motion-related access, depending on the specific feature being used.",
+      "Business data entered into GigTracker may include mileage history, trip classification, earnings, expenses, invoice details, and workflow follow-up items. Access requests are intended to support app functionality and are subject to user control through iOS settings."
     ]
   },
   {
@@ -78,7 +103,7 @@ export default function PrivacyPage() {
     "@type": "WebPage",
     name: "Privacy Policy",
     url: toAbsoluteUrl("/privacy/"),
-    description: "Privacy policy for iOS apps developed by Tamem J."
+    description: "Privacy policy for apps developed by Tamem J, including EverAfter Planner and GigTracker."
   };
   const breadcrumbSchema = buildBreadcrumbJsonLd([
     { name: "Home", path: "/" },
@@ -93,7 +118,7 @@ export default function PrivacyPage() {
             <p className="eyebrow">Legal</p>
             <h1 className="mt-4 text-3xl font-semibold sm:text-4xl">Privacy Policy</h1>
             <p className="mt-4 text-sm sm:text-base">
-              Last updated: March 29, 2026. This template is intentionally structured so it can
+              Last updated: April 2, 2026. This template is intentionally structured so it can
               be updated quickly as apps or services change.
             </p>
 
