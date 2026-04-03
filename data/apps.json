@@ -118,5 +118,45 @@
     "pricing": "Coming soon",
     "minIOSVersion": "iPhone, Mac, and Apple Watch",
     "supportEmail": "support@tamemj.com"
+  },
+  {
+    "slug": "fantasy-football-hub",
+    "name": "Fantasy Football Hub",
+    "category": "Fantasy Sports",
+    "tagline": "Track matchups, manage leagues, and monitor fantasy football insights from one place.",
+    "shortDescription": "Fantasy Football Hub is an in-development fantasy football companion app focused on league dashboards, matchup views, waiver planning, roster notes, and API-powered player and scoring workflows.",
+    "description": "Fantasy Football Hub is a fantasy football management and companion app currently in development. The product is being designed to help fantasy players review league activity, track matchups, watch waiver priorities, compare roster decisions, monitor player trends, and work from one cleaner interface as external fantasy sports APIs are integrated.",
+    "featured": true,
+    "appStoreUrl": "",
+    "icon": "/images/apps/fantasy-football-hub/icon.svg",
+    "screenshots": [
+      {
+        "src": "/images/apps/fantasy-football-hub/dashboard.svg",
+        "alt": "Fantasy Football Hub dashboard concept with league summary, standings, and matchup status"
+      },
+      {
+        "src": "/images/apps/fantasy-football-hub/matchups.svg",
+        "alt": "Fantasy Football Hub matchup screen concept with team comparisons and projected scoring"
+      },
+      {
+        "src": "/images/apps/fantasy-football-hub/waivers.svg",
+        "alt": "Fantasy Football Hub waiver and roster moves concept with add-drop planning"
+      },
+      {
+        "src": "/images/apps/fantasy-football-hub/players.svg",
+        "alt": "Fantasy Football Hub player research concept with trends, notes, and API-backed insights"
+      }
+    ],
+    "features": [
+      "League overview and standings dashboard",
+      "Weekly matchup tracking and score monitoring",
+      "Waiver wire and roster move planning",
+      "Player trend, matchup, and note workflows",
+      "API-powered fantasy data integrations in progress",
+      "Designed for iPhone-first fantasy football management"
+    ],
+    "pricing": "In development",
+    "minIOSVersion": "Planned for iPhone",
+    "supportEmail": "support@tamemj.com"
   }
 ]

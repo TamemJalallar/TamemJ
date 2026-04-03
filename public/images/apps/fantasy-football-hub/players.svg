@@ -1,0 +1,24 @@
+<svg width="1290" height="2796" viewBox="0 0 1290 2796" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1290" height="2796" rx="96" fill="#020617"/>
+  <rect x="64" y="64" width="1162" height="2668" rx="72" fill="#0F172A"/>
+  <text x="128" y="212" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="72" font-weight="700">Players & Trends</text>
+  <text x="128" y="286" fill="#94A3B8" font-family="Arial, sans-serif" font-size="34">Research players, compare usage trends, and centralize fantasy notes</text>
+  <rect x="128" y="378" width="1034" height="612" rx="36" fill="#111827" stroke="#334155" stroke-width="8"/>
+  <text x="176" y="468" fill="#E2E8F0" font-family="Arial, sans-serif" font-size="42" font-weight="700">Player Card</text>
+  <circle cx="252" cy="616" r="72" fill="#F97316"/>
+  <text x="360" y="602" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="40" font-weight="700">WR1 Trend Candidate</text>
+  <text x="360" y="658" fill="#94A3B8" font-family="Arial, sans-serif" font-size="28">Targets up 3 straight weeks • Red zone role increasing</text>
+  <rect x="176" y="756" width="938" height="108" rx="28" fill="#1E293B"/>
+  <text x="212" y="822" fill="#38BDF8" font-family="Arial, sans-serif" font-size="30">API-backed trend modules planned for targets, snaps, injuries, and depth chart changes.</text>
+  <rect x="128" y="1078" width="1034" height="792" rx="36" fill="#111827" stroke="#334155" stroke-width="8"/>
+  <text x="176" y="1162" fill="#E2E8F0" font-family="Arial, sans-serif" font-size="38" font-weight="700">Research workspace</text>
+  <rect x="176" y="1240" width="938" height="110" rx="28" fill="#1E293B"/>
+  <rect x="176" y="1390" width="938" height="110" rx="28" fill="#1E293B"/>
+  <rect x="176" y="1540" width="938" height="110" rx="28" fill="#1E293B"/>
+  <rect x="176" y="1690" width="938" height="110" rx="28" fill="#1E293B"/>
+  <text x="212" y="1306" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="30">Matchup notes</text>
+  <text x="212" y="1456" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="30">Usage change log</text>
+  <text x="212" y="1606" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="30">Start / sit confidence</text>
+  <text x="212" y="1756" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="30">Watchlist and reminders</text>
+  <text x="176" y="1972" fill="#94A3B8" font-family="Arial, sans-serif" font-size="28">This page can be used as the public-facing app detail URL while API access and integrations are under review.</text>
+</svg>
