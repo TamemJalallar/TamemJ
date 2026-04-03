@@ -155,7 +155,7 @@ export function SiteHeader() {
                 </button>
                 {exploreMenuOpen ? (
                   <div
-                    className="absolute right-0 top-[calc(100%+0.75rem)] w-[21rem] rounded-2xl border border-line/80 bg-white p-3 shadow-card dark:border-slate-700 dark:bg-slate-950"
+                    className="absolute right-0 top-[calc(100%+0.75rem)] w-[21rem] rounded-2xl border border-line/80 bg-card/95 p-3 shadow-card backdrop-blur-sm"
                     role="menu"
                   >
                     <div className="grid gap-2">
@@ -165,16 +165,14 @@ export function SiteHeader() {
                           href={item.href}
                           className={`rounded-2xl border px-3 py-3 text-left transition ${
                             pathMatches(pathname, item.href)
-                              ? "border-slate-300 bg-slate-50 text-slate-900 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100"
-                              : "border-transparent text-slate-700 hover:border-line/80 hover:bg-slate-50 dark:text-slate-300 dark:hover:border-slate-700 dark:hover:bg-slate-900"
+                              ? "border-line bg-card text-fg"
+                              : "border-transparent text-muted hover:border-line/80 hover:bg-card/80 hover:text-fg"
                           }`}
                           role="menuitem"
                         >
                           <p className="text-sm font-semibold">{item.label}</p>
                           {item.description ? (
-                            <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
-                              {item.description}
-                            </p>
+                            <p className="mt-1 text-xs leading-5 text-muted">{item.description}</p>
                           ) : null}
                         </Link>
                       ))}
@@ -198,7 +196,7 @@ export function SiteHeader() {
           <button
             type="button"
             onClick={() => setMobileMenuOpen((current) => !current)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-line bg-white text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 lg:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-line bg-card text-fg transition hover:bg-card/80 lg:hidden"
             aria-expanded={mobileMenuOpen}
             aria-label="Toggle navigation menu"
           >
@@ -217,7 +215,7 @@ export function SiteHeader() {
       </div>
 
       {mobileMenuOpen ? (
-        <div className="border-t border-line/70 bg-white/95 px-4 py-4 backdrop-blur dark:border-slate-800 dark:bg-slate-950/95 lg:hidden">
+        <div className="border-t border-line/70 bg-card/95 px-4 py-4 backdrop-blur lg:hidden">
           <div className="page-shell !px-0">
             <nav aria-label="Mobile navigation" className="grid grid-cols-2 gap-2 sm:grid-cols-3">
               {mobileNavItems.map((item) => (

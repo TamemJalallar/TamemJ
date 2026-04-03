@@ -17,12 +17,12 @@ const config: Config = {
         sans: ["var(--font-inter)", "Inter", "system-ui", "sans-serif"]
       },
       boxShadow: {
-        soft: "0 8px 24px rgba(15, 23, 42, 0.06)",
-        card: "0 14px 40px rgba(15, 23, 42, 0.07)"
+        soft: "0 10px 28px rgba(43, 18, 76, 0.12)",
+        card: "0 18px 46px rgba(43, 18, 76, 0.16)"
       },
       backgroundImage: {
         "mesh-soft":
-          "radial-gradient(circle at 12% 10%, rgba(14,165,233,0.08), transparent 45%), radial-gradient(circle at 88% 18%, rgba(2,132,199,0.06), transparent 40%), radial-gradient(circle at 50% 100%, rgba(15,23,42,0.04), transparent 55%)"
+          "radial-gradient(circle at 12% 10%, rgba(223,182,178,0.35), transparent 30%), radial-gradient(circle at 85% 15%, rgba(133,79,108,0.14), transparent 28%), radial-gradient(circle at 50% 100%, rgba(82,43,91,0.1), transparent 52%)"
       }
     }
   },

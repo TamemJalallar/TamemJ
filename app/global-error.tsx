@@ -9,15 +9,13 @@ export default function GlobalError({
 }) {
   return (
     <html lang="en">
-      <body className="bg-slate-100 p-6 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
-        <div className="mx-auto max-w-xl rounded-2xl border border-line/80 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+      <body className="bg-bg p-6 text-fg">
+        <div className="mx-auto max-w-xl rounded-2xl border border-line/80 bg-card p-6 shadow-soft">
           <h1 className="text-2xl font-semibold">Something went wrong</h1>
-          <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">
+          <p className="mt-3 text-sm text-muted">
             An unexpected runtime error occurred. This incident was recorded for troubleshooting.
           </p>
-          {error.digest ? (
-            <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">Digest: {error.digest}</p>
-          ) : null}
+          {error.digest ? <p className="mt-2 text-xs text-muted">Digest: {error.digest}</p> : null}
           <button
             type="button"
             onClick={() => reset()}

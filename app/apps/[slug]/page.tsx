@@ -101,7 +101,7 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
               <div className="mb-6">
                 <Link
                   href="/apps"
-                  className="text-sm font-medium text-slate-600 hover:text-slate-900"
+                  className="text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-slate-100"
                 >
                   ← Back to Apps
                 </Link>
@@ -160,7 +160,10 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
       <section className="section-shell pt-10 sm:pt-14">
         <div className="page-shell">
           <div className="mb-6">
-            <Link href="/apps" className="text-sm font-medium text-slate-600 hover:text-slate-900">
+            <Link
+              href="/apps"
+              className="text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-slate-100"
+            >
               ← Back to Apps
             </Link>
           </div>
@@ -181,13 +184,17 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
                 </div>
 
                 <div className="min-w-0">
-                  <p className="text-xs uppercase tracking-[0.14em] text-slate-500">{app.category}</p>
-                  <h1 className="mt-1 text-2xl font-semibold sm:text-3xl">{app.name}</h1>
-                  <p className="mt-2 text-sm text-slate-600 sm:text-base">{app.tagline}</p>
+                  <p className="text-xs uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+                    {app.category}
+                  </p>
+                  <h1 className="mt-1 text-2xl font-semibold text-slate-900 dark:text-slate-100 sm:text-3xl">
+                    {app.name}
+                  </h1>
+                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-300 sm:text-base">{app.tagline}</p>
                 </div>
               </div>
 
-              <p className="mt-6 text-sm sm:text-base">{app.description}</p>
+              <p className="mt-6 text-sm text-slate-700 dark:text-slate-200 sm:text-base">{app.description}</p>
 
               <div className="mt-6 flex flex-wrap gap-3">
                 <AppStoreButton href={app.appStoreUrl} />
@@ -199,25 +206,25 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
                 </Link>
               </div>
 
-              <dl className="mt-6 grid gap-4 rounded-xl border border-line bg-slate-50 p-4 text-sm sm:grid-cols-2">
+              <dl className="mt-6 grid gap-4 rounded-xl border border-line bg-slate-50 p-4 text-sm dark:border-slate-700 dark:bg-slate-900 sm:grid-cols-2">
                 <div>
-                  <dt className="font-medium text-slate-900">Pricing</dt>
-                  <dd className="mt-1 text-slate-600">{app.pricing}</dd>
+                  <dt className="font-medium text-slate-900 dark:text-slate-100">Pricing</dt>
+                  <dd className="mt-1 text-slate-600 dark:text-slate-300">{app.pricing}</dd>
                 </div>
                 <div>
-                  <dt className="font-medium text-slate-900">Compatibility</dt>
-                  <dd className="mt-1 text-slate-600">{app.minIOSVersion}</dd>
+                  <dt className="font-medium text-slate-900 dark:text-slate-100">Compatibility</dt>
+                  <dd className="mt-1 text-slate-600 dark:text-slate-300">{app.minIOSVersion}</dd>
                 </div>
               </dl>
             </div>
 
             <div className="surface-card p-6 sm:p-8">
-              <h2 className="text-lg font-semibold sm:text-xl">Features</h2>
+              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 sm:text-xl">Features</h2>
               <ul className="mt-4 space-y-3">
                 {app.features.map((feature) => (
                   <li key={feature} className="flex items-start gap-3 text-sm sm:text-base">
                     <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-accent" />
-                    <span className="text-slate-700">{feature}</span>
+                    <span className="text-slate-700 dark:text-slate-200">{feature}</span>
                   </li>
                 ))}
               </ul>
@@ -226,8 +233,8 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
 
           <div className="surface-card p-4 sm:p-5">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold sm:text-xl">Screenshots</h2>
-              <span className="text-xs uppercase tracking-[0.14em] text-slate-500">
+              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 sm:text-xl">Screenshots</h2>
+              <span className="text-xs uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
                 Mobile Preview
               </span>
             </div>
