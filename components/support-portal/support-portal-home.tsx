@@ -21,9 +21,9 @@ import type { SupportAnalyticsSummary } from "@/lib/support-portal.analytics";
 
 function StatCard({ label, value, href }: { label: string; value: number; href: string }) {
   return (
-    <Link href={href} className="rounded-2xl border border-line/70 bg-white p-4 shadow-soft transition hover:-translate-y-0.5 hover:shadow-card dark:border-slate-800 dark:bg-slate-950/70 sm:p-5">
-      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">{label}</p>
-      <p className="mt-2 text-2xl font-semibold text-slate-900 dark:text-slate-100">{value}</p>
+    <Link href={href} className="surface-card-interactive block p-4 sm:p-5">
+      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{label}</p>
+      <p className="mt-2 font-display text-2xl font-semibold text-fg">{value}</p>
     </Link>
   );
 }
@@ -126,26 +126,26 @@ export function SupportPortalHome() {
       </div>
 
       <div className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
-        <section className="rounded-2xl border border-line/70 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-6">
+        <section className="surface-card p-5 sm:p-6">
           <div className="mb-4 flex items-center justify-between gap-3">
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Portal Modules</h2>
-            <span className="text-xs text-slate-500 dark:text-slate-400">ServiceNow-inspired layout</span>
+            <h2 className="text-lg font-semibold text-fg">Portal Modules</h2>
+            <span className="text-xs text-muted">ServiceNow-inspired layout</span>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
             {quickLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="group rounded-2xl border border-line/70 bg-slate-50/60 p-4 transition hover:-translate-y-0.5 hover:border-slate-300 hover:bg-white dark:border-slate-800 dark:bg-slate-900/70 dark:hover:border-slate-700"
+                className="group surface-card-interactive rounded-2xl bg-card-2/70 p-4"
               >
                 <div className="flex items-start gap-3">
-                  <div className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-line/70 bg-white dark:border-slate-700 dark:bg-slate-900">
-                    <SupportIcon name={link.icon} className="h-4 w-4 text-slate-700 dark:text-slate-200" />
+                  <div className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-primary-200 bg-primary-50 dark:border-primary-400/30 dark:bg-primary-500/10">
+                    <SupportIcon name={link.icon} className="h-4 w-4 text-primary-600 dark:text-primary-300" />
                   </div>
                   <div className="min-w-0">
-                    <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">{link.title}</h3>
-                    <p className="mt-1 text-sm leading-6 text-slate-600 dark:text-slate-300">{link.description}</p>
-                    <span className="mt-2 inline-block text-xs font-medium text-slate-500 transition group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">
+                    <h3 className="text-sm font-semibold text-fg">{link.title}</h3>
+                    <p className="mt-1 text-sm leading-6 text-fg-secondary">{link.description}</p>
+                    <span className="mt-2 inline-block text-xs font-medium text-muted transition group-hover:text-primary-600 dark:group-hover:text-primary-300">
                       Open →
                     </span>
                   </div>
@@ -156,38 +156,38 @@ export function SupportPortalHome() {
         </section>
 
         <div className="space-y-5">
-          <section className="rounded-2xl border border-line/70 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-6">
-            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Most Common Issues (Local Analytics)</h2>
+          <section className="surface-card p-5 sm:p-6">
+            <h2 className="text-sm font-semibold text-fg">Most Common Issues (Local Analytics)</h2>
             {summary?.mostViewedKBArticles && summary.mostViewedKBArticles.length > 0 ? (
               <ul className="mt-3 space-y-2">
                 {summary.mostViewedKBArticles.slice(0, 5).map((item) => (
-                  <li key={item.label} className="rounded-xl border border-line/70 bg-slate-50/70 px-3 py-2 text-sm dark:border-slate-800 dark:bg-slate-900/70">
+                  <li key={item.label} className="rounded-xl border border-line bg-card-2/80 px-3 py-2 text-sm">
                     <div className="flex items-center justify-between gap-3">
-                      <span className="text-slate-700 dark:text-slate-200">{item.label}</span>
-                      <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">{item.count}</span>
+                      <span className="text-fg-secondary">{item.label}</span>
+                      <span className="text-xs font-semibold text-muted">{item.count}</span>
                     </div>
                   </li>
                 ))}
               </ul>
             ) : (
-              <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">Open tickets and use search to populate local analytics.</p>
+              <p className="mt-3 text-sm text-fg-secondary">Open tickets and use search to populate local analytics.</p>
             )}
           </section>
 
-          <section className="rounded-2xl border border-line/70 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-6">
-            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Recent Demo Ticket Activity</h2>
+          <section className="surface-card p-5 sm:p-6">
+            <h2 className="text-sm font-semibold text-fg">Recent Demo Ticket Activity</h2>
             {recentTickets.length > 0 ? (
               <ul className="mt-3 space-y-2">
                 {recentTickets.map((ticket) => (
-                  <li key={ticket.id} className="rounded-xl border border-line/70 bg-slate-50/70 px-3 py-2 dark:border-slate-800 dark:bg-slate-900/70">
-                    <p className="text-sm font-medium text-slate-900 dark:text-slate-100">{ticket.id}</p>
-                    <p className="mt-1 text-xs text-slate-600 dark:text-slate-300">{ticket.summary}</p>
-                    <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{ticket.status} • {new Date(ticket.updatedAt).toLocaleString()}</p>
+                  <li key={ticket.id} className="rounded-xl border border-line bg-card-2/80 px-3 py-2">
+                    <p className="text-sm font-medium text-fg">{ticket.id}</p>
+                    <p className="mt-1 text-xs text-fg-secondary">{ticket.summary}</p>
+                    <p className="mt-1 text-xs text-muted">{ticket.status} • {new Date(ticket.updatedAt).toLocaleString()}</p>
                   </li>
                 ))}
               </ul>
             ) : (
-              <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">No local tickets yet. Submit an incident or catalog request to populate this list.</p>
+              <p className="mt-3 text-sm text-fg-secondary">No local tickets yet. Submit an incident or catalog request to populate this list.</p>
             )}
           </section>
         </div>

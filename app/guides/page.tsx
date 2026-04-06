@@ -92,12 +92,12 @@ export default function GuidesPage() {
     <>
       <section className="section-shell pt-10 sm:pt-14">
         <div className="page-shell space-y-6">
-          <div className="surface-card-strong p-6 sm:p-8">
+          <div className="hero-surface p-6 sm:p-8">
             <p className="eyebrow">SEO Growth Architecture</p>
-            <h1 className="mt-4 text-3xl font-semibold text-slate-900 dark:text-slate-100 sm:text-4xl">
+            <h1 className="mt-4 font-display text-3xl font-semibold text-fg sm:text-4xl">
               IT Pillar Guides and Content Clusters
             </h1>
-            <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600 dark:text-slate-300 sm:text-base">
+            <p className="mt-3 max-w-3xl text-sm leading-7 text-fg-secondary sm:text-base">
               Structured hubs for high-intent enterprise IT search demand. Each pillar links to related
               troubleshooting tickets, download assets, and monetization-aligned keyword opportunities.
             </p>
@@ -117,13 +117,13 @@ export default function GuidesPage() {
           <section className="surface-card p-5 sm:p-6">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
                   Business Guide
                 </p>
-                <h2 className="mt-1 text-xl font-semibold text-slate-900 dark:text-slate-100">
+                <h2 className="mt-1 font-display text-xl font-semibold text-fg">
                   Revenue Scaling Roadmap (0-24 Months)
                 </h2>
-                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                <p className="mt-2 text-sm text-fg-secondary">
                   Phase-based execution plan for traffic growth, affiliate monetization, digital products,
                   and SaaS productization.
                 </p>
@@ -135,7 +135,7 @@ export default function GuidesPage() {
           </section>
 
           <section className="surface-card p-5 sm:p-6">
-            <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Content Clusters</h2>
+            <h2 className="font-display text-xl font-semibold text-fg">Content Clusters</h2>
             <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
               {clusters.map((cluster) => {
                 const clusterPillarCount = pillars.filter((pillar) => pillar.cluster === cluster.slug).length;
@@ -143,20 +143,20 @@ export default function GuidesPage() {
                 return (
                   <article
                     key={cluster.slug}
-                    className="rounded-2xl border border-line/80 bg-white p-4 dark:border-slate-700 dark:bg-slate-900"
+                    className="surface-card rounded-2xl p-4"
                   >
-                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
                       {clusterPillarCount} pillar pages
                     </p>
-                    <h3 className="mt-2 text-base font-semibold text-slate-900 dark:text-slate-100">
+                    <h3 className="mt-2 text-base font-semibold text-fg">
                       {cluster.title}
                     </h3>
-                    <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{cluster.description}</p>
+                    <p className="mt-2 text-sm text-fg-secondary">{cluster.description}</p>
                     <div className="mt-3 flex flex-wrap gap-1.5">
                       {cluster.focusAreas.map((item) => (
                         <span
                           key={`${cluster.slug}-${item}`}
-                          className="rounded-full border border-line/80 bg-slate-50 px-2 py-0.5 text-[11px] font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                          className="filter-chip px-2 py-0.5 text-[11px]"
                         >
                           {item}
                         </span>
@@ -169,7 +169,7 @@ export default function GuidesPage() {
           </section>
 
           <section className="space-y-3">
-            <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Pillar Pages</h2>
+            <h2 className="font-display text-xl font-semibold text-fg">Pillar Pages</h2>
             <div className="grid gap-4 md:grid-cols-2">
               {pillars.map((pillar) => {
                 const kbCount = getSuggestedKBArticlesForPillar(pillar, 999).length;
@@ -180,24 +180,24 @@ export default function GuidesPage() {
                   <Link
                     key={pillar.slug}
                     href={`/guides/${pillar.slug}`}
-                    className="surface-card-strong p-5 transition hover:-translate-y-0.5 hover:shadow-card"
+                    className="surface-card-strong p-5 transition hover:-translate-y-1 hover:border-primary-200 hover:shadow-card dark:hover:border-primary-400/30"
                   >
-                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
                       {cluster?.title}
                     </p>
-                    <h3 className="mt-2 text-lg font-semibold text-slate-900 dark:text-slate-100">
+                    <h3 className="mt-2 font-display text-lg font-semibold text-fg">
                       {pillar.title}
                     </h3>
-                    <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{pillar.description}</p>
+                    <p className="mt-2 text-sm text-fg-secondary">{pillar.description}</p>
                     <div className="mt-3 flex flex-wrap gap-2 text-xs">
-                      <span className="rounded-full border border-line/80 bg-slate-50 px-2.5 py-1 font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
+                      <span className="filter-chip px-2.5 py-1 font-semibold">
                         {kbCount} related tickets
                       </span>
-                      <span className="rounded-full border border-line/80 bg-slate-50 px-2.5 py-1 font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
+                      <span className="filter-chip px-2.5 py-1 font-semibold">
                         {assetCount} related assets
                       </span>
                     </div>
-                    <p className="mt-3 text-xs font-semibold text-accent">Open pillar guide →</p>
+                    <p className="mt-3 text-xs font-semibold text-primary-600 dark:text-primary-300">Open pillar guide →</p>
                   </Link>
                 );
               })}
@@ -205,17 +205,17 @@ export default function GuidesPage() {
           </section>
 
           <section className="surface-card p-5 sm:p-6">
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+            <h2 className="font-display text-lg font-semibold text-fg">
               Top Cross-Cluster Keyword Opportunities
             </h2>
             <div className="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
               {topKeywords.map((entry) => (
                 <div
                   key={entry.keyword}
-                  className="rounded-xl border border-line/80 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-900"
+                  className="surface-card rounded-xl px-3 py-2 text-sm"
                 >
-                  <p className="font-medium text-slate-900 dark:text-slate-100">{entry.keyword}</p>
-                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                  <p className="font-medium text-fg">{entry.keyword}</p>
+                  <p className="mt-1 text-xs text-muted">
                     Traffic {entry.traffic} • Monetization {entry.monetization} • Competition {entry.competition}
                   </p>
                 </div>

@@ -162,12 +162,12 @@ export default function HomePage() {
     <>
       <section className="section-shell pt-10 sm:pt-14 lg:pt-20">
         <div className="page-shell">
-          <div className="surface-card-strong p-6 sm:p-8 lg:p-12">
+          <div className="hero-surface p-6 sm:p-8 lg:p-12">
             <span className="eyebrow">Enterprise IT Support Portal</span>
-            <h1 className="mt-5 text-balance text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
-              Search 200+ IT troubleshooting guides
+            <h1 className="mt-5 text-balance font-display text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
+              Search <span className="text-primary-500 dark:text-accent-300">200+ IT troubleshooting guides</span>
             </h1>
-            <p className="mt-4 max-w-3xl text-base sm:text-lg">
+            <p className="mt-4 max-w-3xl text-base text-fg-secondary sm:text-lg">
               Fast, enterprise-safe fixes for Microsoft 365, endpoint management, identity,
               networking, and corporate workflows.
             </p>
@@ -183,7 +183,7 @@ export default function HomePage() {
                   type="search"
                   defaultValue=""
                   placeholder="Search 200+ IT troubleshooting guides"
-                  className="h-12 w-full rounded-xl border border-line bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-300 focus:shadow-soft dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500"
+                  className="form-input h-12"
                 />
                 <button type="submit" className="btn-primary h-12 shrink-0 px-6 py-0">
                   Search Guides
@@ -211,25 +211,25 @@ export default function HomePage() {
 
             <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               <div className="surface-card p-4">
-                <p className="text-2xl font-bold text-accent">{totalGuides}+</p>
+                <p className="font-display text-2xl font-bold text-primary-600 dark:text-primary-300">{totalGuides}+</p>
                 <p className="mt-1 text-xs font-medium uppercase tracking-wide text-muted">
                   Total Troubleshooting Guides
                 </p>
               </div>
               <div className="surface-card p-4">
-                <p className="text-2xl font-bold text-accent">{kbArticles.length}</p>
+                <p className="font-display text-2xl font-bold text-primary-600 dark:text-primary-300">{kbArticles.length}</p>
                 <p className="mt-1 text-xs font-medium uppercase tracking-wide text-muted">
                   Verified Tickets
                 </p>
               </div>
               <div className="surface-card p-4">
-                <p className="text-2xl font-bold text-accent">{downloads.length}+</p>
+                <p className="font-display text-2xl font-bold text-primary-600 dark:text-primary-300">{downloads.length}+</p>
                 <p className="mt-1 text-xs font-medium uppercase tracking-wide text-muted">
                   Curated Downloads
                 </p>
               </div>
               <div className="surface-card p-4">
-                <p className="text-2xl font-bold text-accent">11</p>
+                <p className="font-display text-2xl font-bold text-primary-600 dark:text-primary-300">11</p>
                 <p className="mt-1 text-xs font-medium uppercase tracking-wide text-muted">
                   IT Support Categories
                 </p>

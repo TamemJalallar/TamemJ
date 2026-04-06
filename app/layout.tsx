@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, JetBrains_Mono, Manrope } from "next/font/google";
 import type { ReactNode } from "react";
 import type { Organization, Person, SearchAction, WebSite, WithContext } from "schema-dts";
 import "./globals.css";
@@ -15,6 +15,18 @@ import { seoKeywords, siteConfig } from "@/lib/site";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap"
+});
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  variable: "--font-manrope",
+  display: "swap"
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
   display: "swap"
 });
 
@@ -63,7 +75,10 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#E7F5DC"
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F8FAFC" },
+    { media: "(prefers-color-scheme: dark)", color: "#020617" }
+  ]
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
@@ -109,7 +124,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
   };
 
   return (
-    <html lang="en" className={inter.variable} suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${manrope.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
       <head>
         <meta
           name="impact-site-verification"
@@ -148,7 +163,7 @@ gtag('config', '${googleAnalyticsId}');`
           crossOrigin="anonymous"
         />
       </head>
-      <body className="font-sans antialiased">
+      <body className="bg-bg font-sans antialiased text-fg">
         {googleTagManagerId ? (
           <noscript>
             <iframe

@@ -55,10 +55,10 @@ export function MspInquiryForm() {
 
   return (
     <div className="surface-card-strong p-6 sm:p-8">
-      <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 sm:text-2xl">
+      <h3 className="font-display text-xl font-semibold text-fg sm:text-2xl">
         Retainer inquiry form
       </h3>
-      <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+      <p className="mt-2 text-sm text-fg-secondary">
         This opens a pre-filled email draft so you can send a structured services inquiry without a
         backend form service.
       </p>
@@ -72,7 +72,7 @@ export function MspInquiryForm() {
       >
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label htmlFor="msp-name" className="mb-2 block text-sm font-medium text-slate-900 dark:text-slate-100">
+            <label htmlFor="msp-name" className="mb-2 block text-sm font-medium text-fg">
               Name
             </label>
             <input
@@ -81,12 +81,12 @@ export function MspInquiryForm() {
               value={name}
               onChange={(event) => setName(event.target.value)}
               placeholder="Your name"
-              className="w-full rounded-xl border border-line bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500"
+              className="form-input"
             />
           </div>
 
           <div>
-            <label htmlFor="msp-company" className="mb-2 block text-sm font-medium text-slate-900 dark:text-slate-100">
+            <label htmlFor="msp-company" className="mb-2 block text-sm font-medium text-fg">
               Company
             </label>
             <input
@@ -95,14 +95,14 @@ export function MspInquiryForm() {
               value={company}
               onChange={(event) => setCompany(event.target.value)}
               placeholder="Company name"
-              className="w-full rounded-xl border border-line bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500"
+              className="form-input"
             />
           </div>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label htmlFor="msp-email" className="mb-2 block text-sm font-medium text-slate-900 dark:text-slate-100">
+            <label htmlFor="msp-email" className="mb-2 block text-sm font-medium text-fg">
               Work email
             </label>
             <input
@@ -111,19 +111,19 @@ export function MspInquiryForm() {
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               placeholder="you@company.com"
-              className="w-full rounded-xl border border-line bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500"
+              className="form-input"
             />
           </div>
 
           <div>
-            <label htmlFor="msp-team-size" className="mb-2 block text-sm font-medium text-slate-900 dark:text-slate-100">
+            <label htmlFor="msp-team-size" className="mb-2 block text-sm font-medium text-fg">
               Team size
             </label>
             <select
               id="msp-team-size"
               value={teamSize}
               onChange={(event) => setTeamSize(event.target.value)}
-              className="w-full rounded-xl border border-line bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+              className="form-select"
             >
               {teamSizeOptions.map((option) => (
                 <option key={option} value={option}>
@@ -135,14 +135,14 @@ export function MspInquiryForm() {
         </div>
 
         <div>
-          <label htmlFor="msp-engagement-type" className="mb-2 block text-sm font-medium text-slate-900 dark:text-slate-100">
+          <label htmlFor="msp-engagement-type" className="mb-2 block text-sm font-medium text-fg">
             What do you need help with?
           </label>
           <select
             id="msp-engagement-type"
             value={engagementType}
             onChange={(event) => setEngagementType(event.target.value)}
-            className="w-full rounded-xl border border-line bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+            className="form-select"
           >
             {engagementTypeOptions.map((option) => (
               <option key={option} value={option}>
@@ -153,7 +153,7 @@ export function MspInquiryForm() {
         </div>
 
         <div>
-          <label htmlFor="msp-stack" className="mb-2 block text-sm font-medium text-slate-900 dark:text-slate-100">
+          <label htmlFor="msp-stack" className="mb-2 block text-sm font-medium text-fg">
             Current stack
           </label>
           <textarea
@@ -162,12 +162,12 @@ export function MspInquiryForm() {
             value={stack}
             onChange={(event) => setStack(event.target.value)}
             placeholder="Example: Microsoft 365, Google Workspace, macOS, Windows, SharePoint, Teams, Okta, Jamf, SaaS apps"
-            className="w-full rounded-xl border border-line bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500"
+            className="form-textarea"
           />
         </div>
 
         <div>
-          <label htmlFor="msp-priorities" className="mb-2 block text-sm font-medium text-slate-900 dark:text-slate-100">
+          <label htmlFor="msp-priorities" className="mb-2 block text-sm font-medium text-fg">
             Main priorities or pain points
           </label>
           <textarea
@@ -176,7 +176,7 @@ export function MspInquiryForm() {
             value={priorities}
             onChange={(event) => setPriorities(event.target.value)}
             placeholder="Tell me what needs attention right now: onboarding/offboarding, permissions, file structure, endpoint management, documentation, workflow issues, support backlog, or broader systems cleanup."
-            className="w-full rounded-xl border border-line bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500"
+            className="form-textarea"
           />
         </div>
 

@@ -30,13 +30,11 @@ export function GenAIFilters({
   return (
     <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
       <label className="space-y-1.5">
-        <span className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
-          Platform
-        </span>
+        <span className="text-xs font-semibold uppercase tracking-[0.12em] text-muted">Platform</span>
         <select
           value={filters.platform}
           onChange={(event) => updateFilters(filters, onFiltersChange, "platform", event.target.value)}
-          className="h-10 w-full rounded-xl border border-line bg-white px-2.5 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+          className="form-select h-10 px-2.5"
         >
           <option value="All">All</option>
           <option value="MetaAI">Meta AI</option>
@@ -46,13 +44,11 @@ export function GenAIFilters({
       </label>
 
       <label className="space-y-1.5">
-        <span className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
-          Tool
-        </span>
+        <span className="text-xs font-semibold uppercase tracking-[0.12em] text-muted">Tool</span>
         <select
           value={filters.tool}
           onChange={(event) => updateFilters(filters, onFiltersChange, "tool", event.target.value)}
-          className="h-10 w-full rounded-xl border border-line bg-white px-2.5 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+          className="form-select h-10 px-2.5"
         >
           <option value="All">All</option>
           {tools.map((tool) => (
@@ -64,13 +60,11 @@ export function GenAIFilters({
       </label>
 
       <label className="space-y-1.5">
-        <span className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
-          Complexity
-        </span>
+        <span className="text-xs font-semibold uppercase tracking-[0.12em] text-muted">Complexity</span>
         <select
           value={filters.complexity}
           onChange={(event) => updateFilters(filters, onFiltersChange, "complexity", event.target.value)}
-          className="h-10 w-full rounded-xl border border-line bg-white px-2.5 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+          className="form-select h-10 px-2.5"
         >
           <option value="All">All</option>
           <option value="Simple">Simple</option>
@@ -79,13 +73,11 @@ export function GenAIFilters({
       </label>
 
       <label className="space-y-1.5">
-        <span className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
-          Category
-        </span>
+        <span className="text-xs font-semibold uppercase tracking-[0.12em] text-muted">Category</span>
         <select
           value={filters.category}
           onChange={(event) => updateFilters(filters, onFiltersChange, "category", event.target.value)}
-          className="h-10 w-full rounded-xl border border-line bg-white px-2.5 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+          className="form-select h-10 px-2.5"
         >
           <option value="All">All</option>
           {categories.map((category) => (
@@ -97,13 +89,11 @@ export function GenAIFilters({
       </label>
 
       <label className="space-y-1.5">
-        <span className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
-          Sort
-        </span>
+        <span className="text-xs font-semibold uppercase tracking-[0.12em] text-muted">Sort</span>
         <select
           value={sort}
           onChange={(event) => onSortChange(event.target.value as GenAISort)}
-          className="h-10 w-full rounded-xl border border-line bg-white px-2.5 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+          className="form-select h-10 px-2.5"
         >
           <option value="newest">Newest</option>
           <option value="a-z">A–Z</option>

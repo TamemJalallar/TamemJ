@@ -29,22 +29,22 @@ export default function DonatePage() {
   return (
     <section className="section-shell pt-10 sm:pt-14">
       <div className="page-shell max-w-5xl">
-        <div className="surface-card-strong p-6 sm:p-8">
+        <div className="hero-surface p-6 sm:p-8">
           <p className="eyebrow">Support This Project</p>
-          <h1 className="mt-4 text-3xl font-semibold text-slate-900 dark:text-slate-100 sm:text-4xl">
+          <h1 className="mt-4 font-display text-3xl font-semibold text-fg sm:text-4xl">
             Support the Site
           </h1>
-          <p className="mt-3 max-w-3xl text-sm sm:text-base">
+          <p className="mt-3 max-w-3xl text-sm text-fg-secondary sm:text-base">
             Donations are optional and help fund ongoing maintenance for enterprise support
             documentation, troubleshooting runbooks, and tool updates.
           </p>
         </div>
 
-        <section className="mt-6 rounded-2xl border border-line/70 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-6">
-          <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
+        <section className="surface-card mt-6 p-5 sm:p-6">
+          <h2 className="font-display text-xl font-semibold text-fg">
             Donation Providers
           </h2>
-          <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+          <p className="mt-2 text-sm text-fg-secondary">
             Choose the provider you prefer. Each option opens in a new tab.
           </p>
 
@@ -56,9 +56,9 @@ export default function DonatePage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`Donate using ${provider.name}`}
-                className="group flex h-full flex-col items-center rounded-2xl border border-line/80 bg-slate-50/80 p-4 text-center shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300 hover:bg-white hover:shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-slate-700 dark:bg-slate-900/70 dark:hover:border-slate-600 dark:hover:bg-slate-900 dark:focus-visible:ring-cyan-300 dark:focus-visible:ring-offset-slate-950"
+                className="surface-card-interactive group flex h-full flex-col items-center p-4 text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-primary-300 dark:focus-visible:ring-offset-slate-950"
               >
-                <div className="flex h-20 w-20 items-center justify-center rounded-xl border border-line/70 bg-white p-2 dark:border-slate-700 dark:bg-slate-950">
+                <div className="flex h-20 w-20 items-center justify-center rounded-xl border border-line/70 bg-card p-2 dark:bg-card">
                   <Image
                     src={provider.imgSrc}
                     alt={provider.imgAlt}
@@ -67,13 +67,11 @@ export default function DonatePage() {
                     className="h-16 w-16 object-contain"
                   />
                 </div>
-                <h3 className="mt-3 text-base font-semibold text-slate-900 dark:text-slate-100">
-                  {provider.name}
-                </h3>
+                <h3 className="mt-3 text-base font-semibold text-fg">{provider.name}</h3>
                 {provider.note ? (
-                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{provider.note}</p>
+                  <p className="mt-1 text-xs text-muted">{provider.note}</p>
                 ) : null}
-                <p className="mt-3 text-xs font-semibold text-cyan-700 transition group-hover:text-cyan-800 dark:text-cyan-300 dark:group-hover:text-cyan-200">
+                <p className="mt-3 text-xs font-semibold text-primary-600 transition group-hover:text-primary-700 dark:text-primary-300 dark:group-hover:text-primary-200">
                   Donate →
                 </p>
               </a>

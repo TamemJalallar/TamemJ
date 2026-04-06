@@ -73,17 +73,17 @@ function channelButtonLabel(channel: DownloadChannelLink): string {
 function channelChipTone(channel: DownloadChannelLink): string {
   switch (channel.type) {
     case "Mac App Store":
-      return "border-slate-800 bg-slate-900 text-white dark:border-slate-100 dark:bg-slate-100 dark:text-slate-900";
+      return "border-primary-700 bg-primary-700 text-white dark:border-primary-400 dark:bg-primary-500 dark:text-white";
     case "Microsoft Store":
-      return "border-emerald-300 bg-emerald-50 text-emerald-700 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100";
+      return "border-success-100 bg-success-50 text-success-700 dark:border-success-500/25 dark:bg-success-500/12 dark:text-green-200";
     case "GitHub Releases":
-      return "border-zinc-300 bg-zinc-100 text-zinc-800 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100";
+      return "border-line bg-neutral-100 text-fg dark:border-white/15 dark:bg-card-3 dark:text-fg";
     case "Direct Download":
-      return "border-cyan-200 bg-cyan-50 text-cyan-700 dark:border-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-100";
+      return "border-accent-200 bg-accent-50 text-accent-700 dark:border-accent-500/25 dark:bg-accent-500/12 dark:text-accent-200";
     case "Website":
-      return "border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-700 dark:bg-blue-900/40 dark:text-blue-100";
+      return "border-primary-200 bg-primary-50 text-primary-700 dark:border-primary-500/25 dark:bg-primary-500/12 dark:text-primary-200";
     default:
-      return "border-line bg-white text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200";
+      return "border-line bg-white text-fg-secondary dark:border-white/15 dark:bg-card dark:text-fg-secondary";
   }
 }
 
@@ -353,16 +353,16 @@ export function DownloadsBrowser({
 
   return (
     <div className="space-y-6">
-      <section className="relative overflow-hidden rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950 p-5 text-white shadow-card sm:p-6">
-        <div className="pointer-events-none absolute -right-16 -top-20 h-52 w-52 rounded-full bg-cyan-300/20 blur-2xl" />
-        <div className="pointer-events-none absolute -bottom-24 -left-20 h-56 w-56 rounded-full bg-sky-400/20 blur-3xl" />
+      <section className="hero-surface p-5 text-white sm:p-6">
+        <div className="pointer-events-none absolute -right-16 -top-20 h-52 w-52 rounded-full bg-primary-300/20 blur-2xl" />
+        <div className="pointer-events-none absolute -bottom-24 -left-20 h-56 w-56 rounded-full bg-accent-400/20 blur-3xl" />
 
         <div className="relative grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
           <div>
-            <p className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-cyan-100">
+            <p className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-primary-100">
               Downloads Hub
             </p>
-            <h1 className="mt-3 text-balance text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+            <h1 className="mt-3 text-balance font-display text-2xl font-semibold tracking-tight text-white sm:text-3xl">
               Popular free downloads with trusted sources and direct binaries
             </h1>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-200 sm:text-base">
@@ -391,12 +391,12 @@ export function DownloadsBrowser({
         </div>
       </section>
 
-      <section className="surface-card p-4 sm:p-5 dark:border-slate-700 dark:bg-slate-950">
-        <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">How to use this page</h2>
-        <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+      <section className="surface-card p-4 sm:p-5">
+        <h2 className="text-lg font-semibold text-fg">How to use this page</h2>
+        <p className="mt-2 text-xs text-muted">
           {user ? "Signed in: download history is being tracked to your profile." : "Tip: sign in to track your downloads in your profile."}
         </p>
-        <ul className="mt-3 space-y-2 pl-5 text-sm text-slate-700 dark:text-slate-200 sm:text-base">
+        <ul className="mt-3 space-y-2 pl-5 text-sm text-fg-secondary sm:text-base">
           <li className="list-disc">Use search + filters to narrow by app, platform, category, and channel.</li>
           <li className="list-disc">
             In each app card, use the OS chips at the top-right: hover on desktop or tap on mobile to open download details.
@@ -411,19 +411,19 @@ export function DownloadsBrowser({
       </section>
 
       {amazonAffiliateUrl || amazonFeaturedProducts.length > 0 ? (
-        <section className="surface-card p-4 sm:p-5 dark:border-slate-700 dark:bg-slate-950">
+        <section className="surface-card p-4 sm:p-5">
           <div className="flex flex-col gap-3">
             <div className="max-w-3xl">
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
                 Recommended Gear
               </p>
-              <h2 className="mt-1.5 text-lg font-semibold text-slate-900 dark:text-slate-100">
+              <h2 className="mt-1.5 text-lg font-semibold text-fg">
                 Shop curated Amazon picks
               </h2>
-              <p className="mt-1.5 text-sm leading-6 text-slate-600 dark:text-slate-300">
+              <p className="mt-1.5 text-sm leading-6 text-fg-secondary">
                 Monitors, docks, cables, and support-team essentials.
               </p>
-              <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+              <p className="mt-2 text-xs text-muted">
                 Disclosure: This section contains affiliate links. If you buy through these links, I may
                 earn a commission at no extra cost to you.
               </p>
@@ -437,10 +437,10 @@ export function DownloadsBrowser({
                     href={product.url}
                     target="_blank"
                     rel="sponsored nofollow noreferrer"
-                    className="group rounded-xl border border-line bg-white/90 p-3 text-sm transition hover:border-cyan-300 hover:bg-cyan-50 dark:border-slate-700 dark:bg-slate-900/80 dark:hover:border-cyan-700 dark:hover:bg-cyan-900/30"
+                    className="group rounded-xl border border-line bg-white/90 p-3 text-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-200 hover:bg-primary-50 dark:border-white/15 dark:bg-card/80 dark:hover:border-primary-400/30 dark:hover:bg-primary-500/12"
                   >
-                    <p className="font-medium text-slate-900 dark:text-slate-100">{product.label}</p>
-                    <p className="mt-1 text-xs text-cyan-700 transition group-hover:translate-x-0.5 dark:text-cyan-300">
+                    <p className="font-medium text-fg">{product.label}</p>
+                    <p className="mt-1 text-xs text-primary-700 transition group-hover:translate-x-0.5 dark:text-primary-300">
                       Open product link
                     </p>
                   </a>
@@ -454,7 +454,7 @@ export function DownloadsBrowser({
                   href={amazonAffiliateUrl}
                   target="_blank"
                   rel="sponsored nofollow noreferrer"
-                  className="btn-secondary shrink-0 !px-4 !py-2.5 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
+                  className="btn-secondary shrink-0 !px-4 !py-2.5"
                 >
                   Open Full Amazon Picks
                 </a>
@@ -464,10 +464,10 @@ export function DownloadsBrowser({
         </section>
       ) : null}
 
-      <section className="surface-card p-4 sm:p-5 dark:border-slate-700 dark:bg-slate-950">
+      <section className="surface-card p-4 sm:p-5">
         <div className="grid gap-3 lg:grid-cols-[1fr_auto] lg:items-end">
           <label className="block">
-            <span className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+            <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
               Search Downloads
             </span>
             <input
@@ -475,18 +475,18 @@ export function DownloadsBrowser({
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search by app, platform, category, or tag..."
-              className="mt-2 w-full rounded-xl border border-line bg-white px-4 py-2.5 text-sm outline-none transition focus:border-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+              className="form-input mt-2 py-2.5"
             />
           </label>
 
           <label className="block lg:min-w-48">
-            <span className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+            <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
               Sort
             </span>
             <select
               value={sortBy}
               onChange={(event) => setSortBy(event.target.value as SortOption)}
-              className="mt-2 w-full rounded-xl border border-line bg-white px-4 py-2.5 text-sm outline-none transition focus:border-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+              className="form-select mt-2 py-2.5"
             >
               {sortOptions.map((option) => (
                 <option key={option} value={option}>
@@ -499,7 +499,7 @@ export function DownloadsBrowser({
 
         <div className="mt-4 grid gap-3 xl:grid-cols-3">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
               Platform
             </p>
             <div className="mt-2 flex flex-wrap gap-2">
@@ -516,7 +516,7 @@ export function DownloadsBrowser({
           </div>
 
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
               Category
             </p>
             <div className="mt-2 flex flex-wrap gap-2">
@@ -533,7 +533,7 @@ export function DownloadsBrowser({
           </div>
 
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
               Channel
             </p>
             <div className="mt-2 flex flex-wrap gap-2">
@@ -564,12 +564,12 @@ export function DownloadsBrowser({
             accent="amber"
           />
           {hasCustomFilters ? (
-            <button type="button" onClick={resetFilters} className="btn-secondary !px-3.5 !py-1.5 text-xs dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800">
+            <button type="button" onClick={resetFilters} className="btn-secondary !px-3.5 !py-1.5 text-xs">
               Reset Filters
             </button>
           ) : null}
 
-          <p className="ml-auto text-xs text-slate-500 dark:text-slate-400">
+          <p className="ml-auto text-xs text-muted">
             Showing {Math.min(visibleCount, filtered.length)} of {filtered.length} apps ({entries.length} total)
           </p>
         </div>
@@ -597,7 +597,7 @@ export function DownloadsBrowser({
             <h2 className="text-xl font-semibold tracking-tight">All Downloads</h2>
             <p className="text-sm sm:text-base">Organized by type/category with curated links across stores, official sites, and release channels.</p>
           </div>
-          <span className="rounded-full border border-line bg-white px-3 py-1 text-xs font-semibold text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
+          <span className="rounded-full border border-line bg-white px-3 py-1 text-xs font-semibold text-fg-secondary dark:border-white/15 dark:bg-card dark:text-fg-secondary">
             {filtered.length} Results
           </span>
         </div>
@@ -608,15 +608,15 @@ export function DownloadsBrowser({
               <details
                 key={`group-${group.category}`}
                 open
-                className="group rounded-2xl border border-line/80 bg-white/70 p-3 shadow-soft dark:border-slate-700 dark:bg-slate-950"
+                className="group rounded-2xl border border-line/80 bg-white/70 p-3 shadow-soft dark:border-white/15 dark:bg-card"
               >
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-xl px-1 py-1 text-left [&::-webkit-details-marker]:hidden">
-                  <h3 className="text-sm font-semibold uppercase tracking-[0.12em] text-slate-600 dark:text-slate-300">
+                  <h3 className="text-sm font-semibold uppercase tracking-[0.12em] text-fg-secondary">
                     {group.category}
                   </h3>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-slate-500 dark:text-slate-400">{group.items.length} apps</span>
-                    <span className="text-xs text-slate-500 transition group-open:rotate-180 dark:text-slate-400">
+                    <span className="text-xs text-muted">{group.items.length} apps</span>
+                    <span className="text-xs text-muted transition group-open:rotate-180">
                       ▾
                     </span>
                   </div>
@@ -632,8 +632,8 @@ export function DownloadsBrowser({
             ))}
           </div>
         ) : (
-          <div className="surface-card border-dashed p-5 dark:border-slate-700 dark:bg-slate-950">
-            <p className="text-sm text-slate-600 dark:text-slate-300">
+          <div className="surface-card border-dashed p-5">
+            <p className="text-sm text-fg-secondary">
               No downloads match the current filters. Reset filters and try a broader search.
             </p>
           </div>
@@ -651,7 +651,7 @@ export function DownloadsBrowser({
             <button
               type="button"
               onClick={() => setVisibleCount(filtered.length)}
-              className="rounded-xl border border-line bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-800"
+              className="btn-ghost rounded-xl border border-line bg-white px-4 py-2.5 text-sm font-semibold dark:border-white/15 dark:bg-card"
             >
               Show All ({filtered.length})
             </button>
@@ -659,9 +659,9 @@ export function DownloadsBrowser({
         ) : null}
       </section>
 
-      <section className="surface-card p-4 sm:p-5 dark:border-slate-700 dark:bg-slate-950">
-        <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Trust and legal checklist</h2>
-        <ul className="mt-3 space-y-1.5 pl-5 text-sm text-slate-800 dark:text-slate-100 sm:text-base">
+      <section className="surface-card p-4 sm:p-5">
+        <h2 className="text-lg font-semibold text-fg">Trust and legal checklist</h2>
+        <ul className="mt-3 space-y-1.5 pl-5 text-sm text-fg-secondary sm:text-base">
           <li className="list-disc">
             Prefer official Apple and Microsoft store pages when store distribution is available.
           </li>
@@ -691,19 +691,19 @@ function FilterButton({
   const palette =
     accent === "cyan"
       ? active
-        ? "border-cyan-700 bg-cyan-600 text-white"
-        : "border-cyan-200 bg-cyan-50 text-cyan-700 hover:bg-cyan-100 dark:border-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-100 dark:hover:bg-cyan-900/60"
+        ? "border-accent-600 bg-accent-500 text-white dark:border-accent-400 dark:bg-accent-500 dark:text-white"
+        : "filter-chip border-accent-200 bg-accent-50 text-accent-700 hover:bg-accent-100 dark:border-accent-500/25 dark:bg-accent-500/12 dark:text-accent-200 dark:hover:bg-accent-500/18"
       : accent === "emerald"
         ? active
-          ? "border-emerald-700 bg-emerald-600 text-white"
-          : "border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100 dark:hover:bg-emerald-900/60"
+          ? "border-success-600 bg-success-600 text-white"
+          : "filter-chip border-success-100 bg-success-50 text-success-700 hover:bg-success-100 dark:border-success-500/25 dark:bg-success-500/12 dark:text-green-200 dark:hover:bg-success-500/18"
         : accent === "amber"
           ? active
-            ? "border-amber-700 bg-amber-500 text-white"
-            : "border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100 dark:border-amber-700 dark:bg-amber-900/40 dark:text-amber-100 dark:hover:bg-amber-900/60"
+            ? "border-warning-600 bg-warning-500 text-white"
+            : "filter-chip border-warning-100 bg-warning-50 text-warning-700 hover:bg-warning-100 dark:border-warning-500/25 dark:bg-warning-500/12 dark:text-warning-100 dark:hover:bg-warning-500/18"
           : active
-            ? "border-slate-900 bg-slate-900 text-white dark:border-slate-100 dark:bg-slate-100 dark:text-slate-900"
-            : "border-line bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800";
+            ? "border-primary-600 bg-primary-600 text-white dark:border-primary-400 dark:bg-primary-500 dark:text-white"
+            : "filter-chip";
 
   return (
     <button
@@ -719,8 +719,8 @@ function FilterButton({
 function StatCard({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-xl border border-white/20 bg-white/10 p-2.5 backdrop-blur-sm">
-      <p className="text-xs uppercase tracking-[0.14em] text-cyan-100">{label}</p>
-      <p className="mt-1.5 text-xl font-semibold text-white">{value}</p>
+      <p className="text-xs uppercase tracking-[0.14em] text-primary-100">{label}</p>
+      <p className="mt-1.5 font-display text-xl font-semibold text-white">{value}</p>
     </div>
   );
 }
@@ -735,13 +735,13 @@ function SpotlightCard({
   const featuredDownloadLinks = getFeaturedDownloadLinks(entry);
 
   return (
-    <article className="surface-card-strong p-4 dark:border-slate-700 dark:bg-slate-900">
+    <article className="surface-card-strong p-4">
       <div className="flex items-start justify-between gap-2.5">
         <div className="flex min-w-0 items-start gap-3">
           <DownloadEntryIcon entry={entry} />
           <div className="min-w-0">
-            <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">
-              <Link href={`/downloads/${entry.slug}`} className="transition hover:text-accent">
+            <h3 className="text-base font-semibold text-fg">
+              <Link href={`/downloads/${entry.slug}`} className="transition hover:text-primary-600 dark:hover:text-primary-300">
                 {entry.name}
               </Link>
             </h3>
@@ -749,7 +749,7 @@ function SpotlightCard({
           </div>
         </div>
         {isFreeEntry(entry) ? (
-          <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100">
+          <span className="rounded-full border border-success-100 bg-success-50 px-2 py-0.5 text-[11px] font-semibold text-success-700 dark:border-success-500/25 dark:bg-success-500/12 dark:text-green-200">
             Free
           </span>
         ) : null}
@@ -759,7 +759,7 @@ function SpotlightCard({
         {entry.platforms.slice(0, 4).map((platform) => (
           <span
             key={`${entry.slug}-spotlight-${platform}`}
-            className="rounded-full border border-line bg-white px-2 py-0.5 text-[11px] font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+            className="filter-chip px-2 py-0.5 text-[11px]"
           >
             {platform}
           </span>
@@ -783,7 +783,7 @@ function SpotlightCard({
                 url: link.url
               })
             }
-            className="inline-flex items-center justify-center rounded-full border border-cyan-300 bg-cyan-50 px-2.5 py-1 text-[11px] font-semibold text-cyan-700 transition hover:bg-cyan-100 dark:border-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-100 dark:hover:bg-cyan-900/60"
+            className="inline-flex items-center justify-center rounded-full border border-accent-200 bg-accent-50 px-2.5 py-1 text-[11px] font-semibold text-accent-700 transition hover:bg-accent-100 dark:border-accent-500/25 dark:bg-accent-500/12 dark:text-accent-200 dark:hover:bg-accent-500/18"
           >
             Download{link.platform ? ` (${link.platform})` : ""}
           </a>
@@ -793,7 +793,7 @@ function SpotlightCard({
       <div className="mt-2 flex flex-wrap gap-1.5">
         <Link
           href={`/downloads/${entry.slug}`}
-          className="inline-flex items-center justify-center rounded-full border border-line bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
+          className="filter-chip px-2.5 py-1 text-[11px] font-semibold"
         >
           View Details
         </Link>
@@ -846,37 +846,37 @@ function DownloadCard({
   );
 
   return (
-    <article id={entry.slug} className="surface-card-strong scroll-mt-24 overflow-visible p-4 sm:p-5 dark:border-slate-700 dark:bg-slate-900">
-      <div className="pointer-events-none mb-3 h-1 rounded-full bg-gradient-to-r from-cyan-500 via-sky-500 to-slate-900" />
+    <article id={entry.slug} className="surface-card-strong scroll-mt-24 overflow-visible p-4 sm:p-5">
+      <div className="pointer-events-none mb-3 h-1 rounded-full bg-gradient-to-r from-primary-500 via-primary-400 to-accent-500" />
 
       <div className="flex items-start gap-3">
         <DownloadEntryIcon entry={entry} />
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-2">
             <div className="flex flex-wrap items-center gap-1.5">
-              <span className="rounded-full border border-line bg-slate-50 px-2 py-0.5 text-[11px] font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+              <span className="filter-chip px-2 py-0.5 text-[11px]">
                 {entry.category}
               </span>
               {entry.popularityLabel ? (
-                <span className="rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-700 dark:border-amber-700 dark:bg-amber-900/40 dark:text-amber-100">
+                <span className="rounded-full border border-warning-100 bg-warning-50 px-2 py-0.5 text-[11px] font-semibold text-warning-700 dark:border-warning-500/25 dark:bg-warning-500/12 dark:text-warning-100">
                   {entry.popularityLabel}
                 </span>
               ) : null}
               {isFreeEntry(entry) ? (
-                <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100">
+                <span className="rounded-full border border-success-100 bg-success-50 px-2 py-0.5 text-[11px] font-semibold text-success-700 dark:border-success-500/25 dark:bg-success-500/12 dark:text-green-200">
                   Free
                 </span>
               ) : null}
             </div>
-            <div className="shrink-0 text-right text-[11px] text-slate-500 dark:text-slate-400">
+            <div className="shrink-0 text-right text-[11px] text-muted">
               {entry.developer ? <p>{entry.developer}</p> : null}
               {entry.license ? <p className="mt-0.5">License: {entry.license}</p> : null}
               {entry.pricing ? <p className="mt-0.5">{entry.pricing}</p> : null}
             </div>
           </div>
 
-          <h3 className="mt-2 text-lg font-semibold text-slate-900 dark:text-slate-100">
-            <Link href={`/downloads/${entry.slug}`} className="transition hover:text-accent">
+          <h3 className="mt-2 text-lg font-semibold text-fg">
+            <Link href={`/downloads/${entry.slug}`} className="transition hover:text-primary-600 dark:hover:text-primary-300">
               {entry.name}
             </Link>
           </h3>
@@ -900,7 +900,7 @@ function DownloadCard({
       <div className="mt-2.5 flex flex-wrap gap-1.5">
         <Link
           href={`/downloads/${entry.slug}`}
-          className="inline-flex items-center justify-center rounded-full border border-line bg-white px-3 py-1.5 text-[11px] font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
+          className="filter-chip px-3 py-1.5 text-[11px] font-semibold"
         >
           View Details
         </Link>
@@ -947,10 +947,10 @@ function DownloadEntryIcon({ entry }: { entry: DownloadEntry }) {
           loading="lazy"
           decoding="async"
           onError={() => setImageErrored(true)}
-          className="h-11 w-11 rounded-xl border border-line/80 bg-white p-2 object-contain shadow-soft dark:border-slate-700 dark:bg-slate-900"
+          className="h-11 w-11 rounded-xl border border-line/80 bg-white p-2 object-contain shadow-soft dark:border-white/15 dark:bg-card"
         />
       ) : (
-        <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-line/80 bg-slate-100 text-xs font-semibold text-slate-700 shadow-soft dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100">
+        <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-line/80 bg-slate-100 text-xs font-semibold text-fg-secondary shadow-soft dark:border-white/15 dark:bg-card-3 dark:text-fg">
           {initials}
         </div>
       )}
@@ -994,7 +994,7 @@ function PlatformDownloadChip({
 
   if (artifacts.length === 0) {
     return (
-      <span className="rounded-full border border-line bg-white px-2 py-0.5 text-[10px] font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
+      <span className="filter-chip px-2 py-0.5 text-[10px] font-semibold">
         {platform}
       </span>
     );
@@ -1010,7 +1010,7 @@ function PlatformDownloadChip({
           "aria-expanded": open,
           "aria-label": `Show ${platform} download details`
         })}
-        className="rounded-full border border-cyan-300 bg-cyan-50 px-2 py-0.5 text-[10px] font-semibold text-cyan-700 transition hover:bg-cyan-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-1 dark:border-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-100 dark:hover:bg-cyan-900/60"
+        className="rounded-full border border-accent-200 bg-accent-50 px-2 py-0.5 text-[10px] font-semibold text-accent-700 transition hover:bg-accent-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1 dark:border-accent-500/25 dark:bg-accent-500/12 dark:text-accent-200 dark:hover:bg-accent-500/18"
       >
         {platform}
       </button>
@@ -1019,32 +1019,32 @@ function PlatformDownloadChip({
           <div
             ref={refs.setFloating}
             style={floatingStyles}
-            className="z-40 w-[19rem] rounded-lg border border-line bg-white p-2 shadow-card dark:border-slate-700 dark:bg-slate-900"
+            className="z-40 w-[19rem] rounded-xl border border-line bg-white p-2 shadow-card dark:border-white/15 dark:bg-card"
             {...getFloatingProps()}
           >
-            <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-muted">
               {platform} Downloads
             </p>
             <ul className="mt-1.5 space-y-1.5">
               {artifacts.map((artifact) => (
                 <li
                   key={`${platform}-${artifact.label}-${artifact.url}`}
-                  className="rounded-md border border-line/80 bg-slate-50/80 p-2 dark:border-slate-700 dark:bg-slate-800/80"
+                  className="rounded-md border border-line/80 bg-slate-50/80 p-2 dark:border-white/15 dark:bg-card-3/80"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
-                      <p className="truncate text-[11px] font-semibold text-slate-900 dark:text-slate-100">
+                      <p className="truncate text-[11px] font-semibold text-fg">
                         {artifact.label}
                       </p>
-                      <p className="mt-0.5 text-[10px] text-slate-500 dark:text-slate-400">
+                      <p className="mt-0.5 text-[10px] text-muted">
                         {artifact.fileType ? `${artifact.fileType}` : "Installer"}
                         {artifact.version ? ` | ${formatVersion(artifact.version)}` : ""}
                         {artifact.fileSize ? ` | ${artifact.fileSize}` : ""}
                       </p>
                       {artifact.checksumSha256 ? (
-                        <div className="mt-1 rounded-md border border-line/80 bg-white/70 p-1.5 dark:border-slate-700 dark:bg-slate-900/70">
+                        <div className="mt-1 rounded-md border border-line/80 bg-white/70 p-1.5 dark:border-white/15 dark:bg-card/70">
                           <div className="flex items-center justify-between gap-1.5">
-                            <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-slate-500 dark:text-slate-400">
+                            <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted">
                               SHA-256
                             </p>
                             <button
@@ -1061,12 +1061,12 @@ function PlatformDownloadChip({
                                   setCopiedChecksumKey((current) => (current === key ? null : current));
                                 }, 1200);
                               }}
-                              className="rounded border border-line bg-white px-1.5 py-0.5 text-[10px] font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
+                              className="filter-chip rounded border px-1.5 py-0.5 text-[10px] font-semibold"
                             >
                               {copiedChecksumKey === `${platform}-${artifact.label}-${artifact.url}` ? "Copied" : "Copy"}
                             </button>
                           </div>
-                          <p className="mt-1 break-all font-mono text-[10px] text-slate-600 dark:text-slate-300">
+                          <p className="mt-1 break-all font-mono text-[10px] text-fg-secondary">
                             {artifact.checksumSha256}
                           </p>
                         </div>
@@ -1086,7 +1086,7 @@ function PlatformDownloadChip({
                           url: artifact.url
                         })
                       }
-                      className="rounded-md border border-line bg-white px-2 py-1 text-[10px] font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
+                      className="filter-chip rounded-md px-2 py-1 text-[10px] font-semibold"
                     >
                       Download
                     </a>

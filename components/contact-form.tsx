@@ -36,7 +36,7 @@ export function ContactForm() {
         }}
       >
         <div>
-          <label htmlFor="contact-name" className="mb-2 block text-sm font-medium text-slate-900">
+          <label htmlFor="contact-name" className="mb-2 block text-sm font-medium text-fg">
             Name
           </label>
           <input
@@ -45,12 +45,12 @@ export function ContactForm() {
             value={name}
             onChange={(event) => setName(event.target.value)}
             placeholder="Your name"
-            className="w-full rounded-xl border border-line bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400"
+            className="form-input"
           />
         </div>
 
         <div>
-          <label htmlFor="contact-email" className="mb-2 block text-sm font-medium text-slate-900">
+          <label htmlFor="contact-email" className="mb-2 block text-sm font-medium text-fg">
             Email
           </label>
           <input
@@ -59,12 +59,12 @@ export function ContactForm() {
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             placeholder="you@example.com"
-            className="w-full rounded-xl border border-line bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400"
+            className="form-input"
           />
         </div>
 
         <div>
-          <label htmlFor="contact-message" className="mb-2 block text-sm font-medium text-slate-900">
+          <label htmlFor="contact-message" className="mb-2 block text-sm font-medium text-fg">
             Message
           </label>
           <textarea
@@ -73,7 +73,7 @@ export function ContactForm() {
             value={message}
             onChange={(event) => setMessage(event.target.value)}
             placeholder="How can I help?"
-            className="w-full rounded-xl border border-line bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400"
+            className="form-textarea"
           />
         </div>
 

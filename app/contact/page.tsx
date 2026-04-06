@@ -55,24 +55,24 @@ export default function ContactPage() {
                 business inquiries, send a message below or email directly.
               </p>
               <div className="mt-6 space-y-4">
-                <div className="rounded-xl border border-line bg-slate-50 p-4">
-                  <p className="text-sm font-medium text-slate-900">General Email</p>
+                <div className="surface-card p-4">
+                  <p className="text-sm font-medium text-fg">General Email</p>
                   <a
                     href={`mailto:${siteConfig.email}`}
-                    className="mt-1 inline-block text-sm text-slate-700 underline decoration-slate-300 underline-offset-4 hover:decoration-slate-500"
+                    className="mt-1 inline-block text-sm text-primary-700 underline decoration-primary-200 underline-offset-4 hover:decoration-primary-500 dark:text-primary-300"
                   >
                     {siteConfig.email}
                   </a>
                 </div>
-                <div className="rounded-xl border border-line bg-white p-4">
-                  <p className="text-sm font-medium text-slate-900">Support Requests</p>
+                <div className="surface-card p-4">
+                  <p className="text-sm font-medium text-fg">Support Requests</p>
                   <p className="mt-1 text-sm">
                     For faster support, use the <a href="/support" className="underline">Support page</a>{" "}
                     and include the app name and iOS version.
                   </p>
                 </div>
-                <div className="rounded-xl border border-line bg-white p-4">
-                  <p className="text-sm font-medium text-slate-900">Managed IT / MSP Services</p>
+                <div className="surface-card p-4">
+                  <p className="text-sm font-medium text-fg">Managed IT / MSP Services</p>
                   <p className="mt-1 text-sm">
                     If you are looking for retained systems administration, platform support, or an
                     ongoing technical partner, start with the managed services page.

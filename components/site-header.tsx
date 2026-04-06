@@ -120,11 +120,13 @@ export function SiteHeader() {
   }, [exploreMenuOpen]);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line/60 bg-bg/90 backdrop-blur">
+    <header className="glass-nav sticky top-0 z-40 border-b">
       <div className="page-shell">
-        <div className="flex min-h-16 items-center justify-between gap-4 py-3">
+        <div className="flex min-h-[4.5rem] items-center justify-between gap-4 py-3">
           <Link href="/" className="shrink-0">
-            <span className="text-sm font-semibold tracking-tight sm:text-base">TamemJ</span>
+            <span className="font-display text-sm font-semibold tracking-tight text-fg sm:text-base">
+              TamemJ
+            </span>
           </Link>
 
           <nav aria-label="Primary navigation" className="hidden items-center gap-1 lg:flex">
@@ -155,7 +157,7 @@ export function SiteHeader() {
                 </button>
                 {exploreMenuOpen ? (
                   <div
-                    className="absolute right-0 top-[calc(100%+0.75rem)] w-[21rem] rounded-2xl border border-line/80 bg-card/95 p-3 shadow-card backdrop-blur-sm"
+                    className="absolute right-0 top-[calc(100%+0.75rem)] w-[21rem] rounded-[22px] border border-line bg-card/95 p-3 shadow-card backdrop-blur-md"
                     role="menu"
                   >
                     <div className="grid gap-2">
@@ -163,10 +165,10 @@ export function SiteHeader() {
                         <Link
                           key={item.href}
                           href={item.href}
-                          className={`rounded-2xl border px-3 py-3 text-left transition ${
+                          className={`rounded-2xl border px-3 py-3 text-left transition-all duration-200 ${
                             pathMatches(pathname, item.href)
-                              ? "border-line bg-card text-fg"
-                              : "border-transparent text-muted hover:border-line/80 hover:bg-card/80 hover:text-fg"
+                              ? "border-primary-200 bg-primary-50 text-primary-700 dark:border-primary-400/30 dark:bg-primary-500/10 dark:text-primary-300"
+                              : "border-transparent text-muted hover:border-line hover:bg-white/70 hover:text-fg dark:hover:bg-white/5"
                           }`}
                           role="menuitem"
                         >
@@ -189,14 +191,16 @@ export function SiteHeader() {
                 <AccountNavLabel />
               </NavLink>
             ) : null}
-            <NavLink href="/contact">Contact</NavLink>
+            <Link href="/contact" className="btn-primary !px-4 !py-2.5">
+              Contact
+            </Link>
             <ThemeToggle />
           </div>
 
           <button
             type="button"
             onClick={() => setMobileMenuOpen((current) => !current)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-line bg-card text-fg transition hover:bg-card/80 lg:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-line bg-card/90 text-fg shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-200 hover:bg-white/90 lg:hidden dark:hover:bg-white/5"
             aria-expanded={mobileMenuOpen}
             aria-label="Toggle navigation menu"
           >
@@ -215,7 +219,7 @@ export function SiteHeader() {
       </div>
 
       {mobileMenuOpen ? (
-        <div className="border-t border-line/70 bg-card/95 px-4 py-4 backdrop-blur lg:hidden">
+        <div className="border-t border-line bg-card/95 px-4 py-4 backdrop-blur-md lg:hidden">
           <div className="page-shell !px-0">
             <nav aria-label="Mobile navigation" className="grid grid-cols-2 gap-2 sm:grid-cols-3">
               {mobileNavItems.map((item) => (

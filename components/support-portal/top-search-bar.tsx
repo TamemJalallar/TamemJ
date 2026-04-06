@@ -59,7 +59,7 @@ export function TopSearchBar({
       <div className="relative flex-1">
         <SupportIcon
           name="search"
-          className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+          className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted"
           aria-hidden="true"
         />
         <input
@@ -68,7 +68,7 @@ export function TopSearchBar({
           onChange={(event) => setValue(event.target.value)}
           placeholder={placeholder}
           autoFocus={autoFocus}
-          className="w-full rounded-xl border border-line bg-white py-2.5 pl-9 pr-10 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-300 focus:shadow-soft dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500"
+          className="form-input py-2.5 pl-9 pr-10"
         />
         {currentValue ? (
           <button
@@ -78,7 +78,7 @@ export function TopSearchBar({
               setValue("");
               onClear?.();
             }}
-            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg px-2 py-1 text-xs font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg px-2 py-1 text-xs font-medium text-muted transition hover:bg-neutral-100 hover:text-fg dark:hover:bg-white/10"
           >
             Clear
           </button>

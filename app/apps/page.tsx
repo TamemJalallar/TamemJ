@@ -105,8 +105,8 @@ export default function AppsPage() {
             <div className="mt-8 space-y-6">
               <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div>
-                  <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Apps</h3>
-                  <p className="mt-2 max-w-2xl text-sm text-slate-600 dark:text-slate-300">
+                  <h3 className="font-display text-xl font-semibold text-fg">Apps</h3>
+                  <p className="mt-2 max-w-2xl text-sm text-fg-secondary">
                     Each tile links to the app detail page, and the app icon opens the live App
                     Store listing when one is available or the app details when it is still in
                     progress.
@@ -124,7 +124,7 @@ export default function AppsPage() {
 
               <section>
                 <div className="mb-4 flex items-center justify-between gap-3">
-                  <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                  <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted">
                     {apps.length} total · {liveApps} live · {upcomingApps} coming soon
                   </p>
                 </div>
@@ -137,10 +137,10 @@ export default function AppsPage() {
 
               {apps.length < 3 ? (
                 <section className="surface-card p-5 sm:p-6">
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                  <h3 className="font-display text-lg font-semibold text-fg">
                     More apps can be added here anytime
                   </h3>
-                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                  <p className="mt-2 text-sm text-fg-secondary">
                     The layout is already set up for a wider apps grid, so new launches will drop
                     straight into place as soon as you add their metadata and launch links.
                   </p>

@@ -36,15 +36,15 @@ export function SupportPortalShell({ children }: { children: ReactNode }) {
           <div className="hidden lg:block">
             <aside
               className={cx(
-                "h-full rounded-2xl border border-line/70 bg-slate-50/80 shadow-soft backdrop-blur dark:border-slate-800 dark:bg-slate-950/70",
+                "h-full rounded-[22px] border border-line bg-white/74 shadow-soft backdrop-blur-md dark:bg-card/78",
                 collapsed ? "w-20" : "w-72"
               )}
             >
-              <div className="flex h-14 items-center justify-end border-b border-line/70 px-3 dark:border-slate-800">
+              <div className="flex h-14 items-center justify-end border-b border-line px-3">
                 <button
                   type="button"
                   onClick={handleToggleCollapse}
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-line/70 bg-white text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
+                  className="btn-ghost !h-9 !w-9 !rounded-xl !px-0 !py-0"
                   aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
                   title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
                 >
@@ -58,19 +58,19 @@ export function SupportPortalShell({ children }: { children: ReactNode }) {
           </div>
 
           <div className="min-w-0 lg:pl-4">
-            <div className="sticky top-16 z-20 border-b border-line/70 bg-bg/95 px-4 py-3 backdrop-blur sm:px-6 lg:hidden dark:border-slate-800 dark:bg-slate-950/90">
+            <div className="glass-nav sticky top-16 z-20 border-b px-4 py-3 sm:px-6 lg:hidden">
               <div className="flex items-center justify-between gap-3">
                 <button
                   type="button"
                   onClick={() => setMobileOpen(true)}
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-line/70 bg-white text-slate-700 shadow-soft dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+                  className="btn-ghost !h-10 !w-10 !rounded-xl !px-0 !py-0"
                   aria-label="Open support navigation"
                 >
                   <SupportIcon name="menu" className="h-4 w-4" />
                 </button>
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold text-slate-900 dark:text-slate-100">IT Support Portal</p>
-                  <p className="truncate text-xs text-slate-500 dark:text-slate-400">ServiceNow-style demo portal</p>
+                  <p className="truncate text-sm font-semibold text-fg">IT Support Portal</p>
+                  <p className="truncate text-xs text-muted">ServiceNow-style demo portal</p>
                 </div>
                 <div className="h-10 w-10" aria-hidden="true" />
               </div>
@@ -88,18 +88,18 @@ export function SupportPortalShell({ children }: { children: ReactNode }) {
         <div className="lg:hidden">
           <button
             type="button"
-            className="fixed inset-0 z-40 bg-slate-950/50 backdrop-blur-sm"
+            className="fixed inset-0 z-40 bg-neutral-950/55 backdrop-blur-sm"
             onClick={() => setMobileOpen(false)}
             aria-label="Close support navigation"
           />
           <div className="fixed inset-y-0 left-0 z-50 w-[88vw] max-w-sm p-3">
-            <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-line/70 bg-slate-50 shadow-card dark:border-slate-800 dark:bg-slate-950">
-              <div className="flex h-14 items-center justify-between border-b border-line/70 px-3 dark:border-slate-800">
-                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">Support Navigation</p>
+            <div className="flex h-full flex-col overflow-hidden rounded-[22px] border border-line bg-white/94 shadow-card backdrop-blur-md dark:bg-card">
+              <div className="flex h-14 items-center justify-between border-b border-line px-3">
+                <p className="text-sm font-semibold text-fg">Support Navigation</p>
                 <button
                   type="button"
                   onClick={() => setMobileOpen(false)}
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-line/70 bg-white text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+                  className="btn-ghost !h-9 !w-9 !rounded-xl !px-0 !py-0"
                   aria-label="Close menu"
                 >
                   <SupportIcon name="close" className="h-4 w-4" />

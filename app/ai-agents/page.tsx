@@ -191,27 +191,27 @@ export default function AiAgentsPage() {
       <section className="section-shell pt-10 sm:pt-14">
         <div className="page-shell space-y-6">
           {/* Static crawlable hero — above client browser for SEO */}
-          <div className="surface-card-strong p-6 sm:p-8">
+          <div className="hero-surface p-6 sm:p-8">
             <span className="eyebrow">AI Agents Prompt Library</span>
-            <h1 className="mt-3 text-3xl font-semibold text-slate-900 dark:text-slate-100 sm:text-4xl lg:text-5xl">
+            <h1 className="mt-3 font-display text-3xl font-semibold text-fg sm:text-4xl lg:text-5xl">
               300+ Professional AI Agent System Prompts
             </h1>
-            <p className="mt-3 max-w-3xl text-base text-slate-600 dark:text-slate-300 sm:text-lg">
+            <p className="mt-3 max-w-3xl text-base text-fg-secondary sm:text-lg">
               Browse copy-ready AI agent prompts across {categories.length} specialist categories.
               Each prompt ships with platform-tuned variants for ChatGPT, Claude, Grok/xAI, Perplexity, and Google Gemini.
             </p>
 
             <div className="mt-5 flex flex-wrap gap-2">
-              <span className="rounded-full border border-line/80 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
+              <span className="filter-chip px-3 py-1.5 text-xs font-semibold">
                 {agents.length}+ system prompts
               </span>
-              <span className="rounded-full border border-line/80 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
+              <span className="filter-chip px-3 py-1.5 text-xs font-semibold">
                 {categories.length} categories
               </span>
-              <span className="rounded-full border border-line/80 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
+              <span className="filter-chip px-3 py-1.5 text-xs font-semibold">
                 5 AI platforms
               </span>
-              <span className="rounded-full border border-line/80 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
+              <span className="filter-chip px-3 py-1.5 text-xs font-semibold">
                 Free to copy
               </span>
             </div>
@@ -221,7 +221,7 @@ export default function AiAgentsPage() {
                 <Link
                   key={entry.slug}
                   href={`/ai-agents/category/${entry.slug}/`}
-                  className="rounded-full border border-line/70 bg-white px-3 py-1 text-xs font-medium text-slate-600 transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-500"
+                  className="filter-chip px-3 py-1 text-xs font-medium"
                 >
                   {entry.category} ({entry.count})
                 </Link>
@@ -233,8 +233,8 @@ export default function AiAgentsPage() {
 
           <section className="surface-card p-5 sm:p-6">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-              <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Browse by Category</h2>
-              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+              <h2 className="font-display text-xl font-semibold text-fg">Browse by Category</h2>
+              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted">
                 Crawlable category pages
               </p>
             </div>
@@ -243,10 +243,10 @@ export default function AiAgentsPage() {
                 <Link
                   key={entry.slug}
                   href={`/ai-agents/category/${entry.slug}/`}
-                  className="rounded-xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-800 dark:bg-slate-950/70"
+                  className="surface-card-interactive rounded-xl p-4"
                 >
-                  <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">{entry.category}</p>
-                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{entry.count} agents</p>
+                  <p className="text-sm font-semibold text-fg">{entry.category}</p>
+                  <p className="mt-1 text-xs text-muted">{entry.count} agents</p>
                 </Link>
               ))}
             </div>
@@ -254,35 +254,35 @@ export default function AiAgentsPage() {
 
           <section className="surface-card p-5 sm:p-6">
             <div className="mb-4 flex items-center justify-between gap-3">
-              <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Popular AI Agent Prompts</h2>
-              <span className="text-xs text-slate-500 dark:text-slate-400">Search-optimized detail pages</span>
+              <h2 className="font-display text-xl font-semibold text-fg">Popular AI Agent Prompts</h2>
+              <span className="text-xs text-muted">Search-optimized detail pages</span>
             </div>
             <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {popularAgents.map((agent) => (
                 <Link
                   key={agent.slug}
                   href={`/ai-agents/${agent.slug}/`}
-                  className="rounded-lg border border-line/80 bg-white px-3 py-2 text-sm text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-950/60 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-900"
+                  className="surface-card-interactive rounded-lg px-3 py-2 text-sm"
                 >
-                  <span className="font-semibold">{agent.title}</span>
-                  <span className="ml-2 text-xs text-slate-500 dark:text-slate-400">{agent.category}</span>
+                  <span className="font-semibold text-fg">{agent.title}</span>
+                  <span className="ml-2 text-xs text-muted">{agent.category}</span>
                 </Link>
               ))}
             </div>
           </section>
 
           <section className="surface-card p-5 sm:p-6">
-            <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Full AI Agent Index</h2>
-            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+            <h2 className="font-display text-xl font-semibold text-fg">Full AI Agent Index</h2>
+            <p className="mt-2 text-sm text-fg-secondary">
               Crawlable index of all AI agent detail pages grouped by category.
             </p>
             <div className="mt-4 space-y-3">
               {groupedByCategory.map((group) => (
                 <details
                   key={group.slug}
-                  className="rounded-xl border border-line/80 bg-white p-4 dark:border-slate-700 dark:bg-slate-900"
+                  className="surface-card rounded-xl p-4"
                 >
-                  <summary className="cursor-pointer list-none text-sm font-semibold text-slate-900 dark:text-slate-100">
+                  <summary className="cursor-pointer list-none text-sm font-semibold text-fg">
                     {group.category} ({group.agents.length})
                   </summary>
                   <div className="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
@@ -290,7 +290,7 @@ export default function AiAgentsPage() {
                       <Link
                         key={agent.slug}
                         href={`/ai-agents/${agent.slug}/`}
-                        className="rounded-lg border border-line/70 bg-slate-50 px-3 py-2 text-sm text-slate-700 transition hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-950/60 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-900"
+                        className="filter-chip justify-start rounded-lg px-3 py-2 text-sm"
                       >
                         {agent.title}
                       </Link>
@@ -302,32 +302,32 @@ export default function AiAgentsPage() {
           </section>
 
           <section className="surface-card p-5 sm:p-6">
-            <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Use Alongside Other Hubs</h2>
+            <h2 className="font-display text-xl font-semibold text-fg">Use Alongside Other Hubs</h2>
             <div className="mt-4 grid gap-3 md:grid-cols-3">
               <Link
                 href="/genai-prompts/"
-                className="rounded-2xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-800 dark:bg-slate-950/70"
+                className="surface-card-interactive rounded-2xl p-4"
               >
-                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">GenAI Prompt Library</p>
-                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                <p className="text-sm font-semibold text-fg">GenAI Prompt Library</p>
+                <p className="mt-2 text-sm text-fg-secondary">
                   Move from role-based agent prompts into task-level prompt templates.
                 </p>
               </Link>
               <Link
                 href="/guides/"
-                className="rounded-2xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-800 dark:bg-slate-950/70"
+                className="surface-card-interactive rounded-2xl p-4"
               >
-                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">IT Pillar Guides</p>
-                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                <p className="text-sm font-semibold text-fg">IT Pillar Guides</p>
+                <p className="mt-2 text-sm text-fg-secondary">
                   Connect AI workflow ideas to broader troubleshooting, operations, and growth hubs.
                 </p>
               </Link>
               <Link
                 href="/downloads/"
-                className="rounded-2xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-800 dark:bg-slate-950/70"
+                className="surface-card-interactive rounded-2xl p-4"
               >
-                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">Downloads</p>
-                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                <p className="text-sm font-semibold text-fg">Downloads</p>
+                <p className="mt-2 text-sm text-fg-secondary">
                   Surface practical software, scripts, and templates that pair with AI workflows.
                 </p>
               </Link>

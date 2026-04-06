@@ -52,14 +52,14 @@ export function SupportForm({ apps }: SupportFormProps) {
         }}
       >
         <div>
-          <label htmlFor="support-app" className="mb-2 block text-sm font-medium text-slate-900">
+          <label htmlFor="support-app" className="mb-2 block text-sm font-medium text-fg">
             App
           </label>
           <select
             id="support-app"
             value={selectedApp}
             onChange={(event) => setSelectedApp(event.target.value)}
-            className="w-full rounded-xl border border-line bg-white px-4 py-3 text-sm text-slate-900 outline-none ring-0 transition focus:border-slate-400"
+            className="form-select ring-0"
           >
             <option value="">Select an app</option>
             {apps.map((app) => (
@@ -71,7 +71,7 @@ export function SupportForm({ apps }: SupportFormProps) {
         </div>
 
         <div>
-          <label htmlFor="support-email" className="mb-2 block text-sm font-medium text-slate-900">
+          <label htmlFor="support-email" className="mb-2 block text-sm font-medium text-fg">
             Your Email
           </label>
           <input
@@ -80,12 +80,12 @@ export function SupportForm({ apps }: SupportFormProps) {
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             placeholder="you@example.com"
-            className="w-full rounded-xl border border-line bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400"
+            className="form-input"
           />
         </div>
 
         <div>
-          <label htmlFor="support-subject" className="mb-2 block text-sm font-medium text-slate-900">
+          <label htmlFor="support-subject" className="mb-2 block text-sm font-medium text-fg">
             Subject
           </label>
           <input
@@ -94,12 +94,12 @@ export function SupportForm({ apps }: SupportFormProps) {
             value={subject}
             onChange={(event) => setSubject(event.target.value)}
             placeholder="Short summary of the issue"
-            className="w-full rounded-xl border border-line bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400"
+            className="form-input"
           />
         </div>
 
         <div>
-          <label htmlFor="support-message" className="mb-2 block text-sm font-medium text-slate-900">
+          <label htmlFor="support-message" className="mb-2 block text-sm font-medium text-fg">
             Message
           </label>
           <textarea
@@ -108,7 +108,7 @@ export function SupportForm({ apps }: SupportFormProps) {
             value={message}
             onChange={(event) => setMessage(event.target.value)}
             placeholder="Explain the issue and how to reproduce it."
-            className="w-full rounded-xl border border-line bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400"
+            className="form-textarea"
           />
         </div>
 
