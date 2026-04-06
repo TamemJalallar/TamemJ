@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { FAQPage, ItemList, SoftwareApplication, WebPage, WithContext } from "schema-dts";
+import { ResourceLinkGrid } from "@/components/shared/resource-link-grid";
 import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
+import { getRelatedAssetsForDownload, getRelatedPillarsForTerms } from "@/lib/detail-page-related";
 import { getDownloadBySlug, getDownloads, getRelatedDownloads } from "@/lib/downloads.registry";
 import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 import type { DirectDownloadArtifact, DownloadEntry } from "@/types/download";
@@ -71,6 +73,25 @@ function getVerificationSummary(artifacts: DirectDownloadArtifact[]): string {
   return `${checksummedCount} direct download ${checksummedCount === 1 ? "artifact includes" : "artifacts include"} SHA-256 verification data on this page.`;
 }
 
+function buildBestFitHighlights(entry: DownloadEntry): string[] {
+  const highlights = [
+    `Use the ${entry.name} guide when you want an official install path for ${entry.platforms.join(", ")} without bouncing between vendor pages.`,
+    `This page is strongest when you need store links, direct binaries, or release references collected in one place for ${entry.category.toLowerCase()} workflows.`
+  ];
+
+  if (entry.directDownloads && entry.directDownloads.length > 0) {
+    highlights.push("Direct download artifacts are listed when the vendor or GitHub release path exposes a clean binary URL.");
+  } else {
+    highlights.push("When direct binaries are not reliable, the page stays anchored to official channels so the install path remains trustworthy.");
+  }
+
+  if (entry.featuredOnGitHub) {
+    highlights.push("Source and release references are included so developer-focused teams can audit the project or review changelogs before deployment.");
+  }
+
+  return highlights.slice(0, 4);
+}
+
 export const dynamicParams = false;
 
 export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
@@ -127,8 +148,41 @@ export default async function DownloadDetailPage({ params }: DownloadDetailPageP
   const relatedDownloads = getRelatedDownloads(entry, 6);
   const primaryLinks = getPrimaryLinks(entry);
   const latestReleaseDate = formatDate(entry.releaseMetadata?.publishedAt);
+  const isoLatestReleaseDate =
+    entry.releaseMetadata?.publishedAt && !Number.isNaN(Date.parse(entry.releaseMetadata.publishedAt))
+      ? new Date(entry.releaseMetadata.publishedAt).toISOString()
+      : undefined;
   const latestVersion = formatVersion(entry.releaseMetadata?.releaseTag ?? directDownloads[0]?.version);
   const supportSearchHref = `/support/tickets/?q=${encodeURIComponent(entry.name)}`;
+  const relatedAssets = getRelatedAssetsForDownload(entry, 3);
+  const relatedPillars = getRelatedPillarsForTerms(
+    [entry.name, entry.summary, entry.category, ...entry.tags, ...entry.platforms],
+    2
+  );
+  const resourceLinks = [
+    {
+      href: supportSearchHref,
+      eyebrow: "Support Search",
+      title: `Search support guides for ${entry.name}`,
+      description:
+        "Check whether this software appears in troubleshooting tickets, endpoint workflows, or enterprise support documentation.",
+      meta: "Support Portal"
+    },
+    ...relatedAssets.map((asset) => ({
+      href: `/downloads/assets/${asset.slug}/`,
+      eyebrow: "IT Asset",
+      title: asset.title,
+      description: asset.description,
+      meta: `${asset.category} • ${asset.format.toUpperCase()}`
+    })),
+    ...relatedPillars.map((pillar) => ({
+      href: `/guides/${pillar.slug}/`,
+      eyebrow: "Pillar Guide",
+      title: pillar.title,
+      description: pillar.description,
+      meta: pillar.targetKeywords.slice(0, 2).join(" • ")
+    }))
+  ].filter((item, index, array) => array.findIndex((candidate) => candidate.href === item.href) === index).slice(0, 6);
   const breadcrumbSchema = buildBreadcrumbJsonLd([
     { name: "Home", path: "/" },
     { name: "Downloads", path: "/downloads/" },
@@ -142,6 +196,7 @@ export default async function DownloadDetailPage({ params }: DownloadDetailPageP
     url: toAbsoluteUrl(`/downloads/${entry.slug}/`),
     description: entry.summary,
     inLanguage: "en-US",
+    ...(isoLatestReleaseDate ? { dateModified: isoLatestReleaseDate } : {}),
     isPartOf: {
       "@type": "CollectionPage",
       name: "Software Downloads",
@@ -167,6 +222,7 @@ export default async function DownloadDetailPage({ params }: DownloadDetailPageP
           }
         }
       : {}),
+    mainEntityOfPage: toAbsoluteUrl(`/downloads/${entry.slug}/`),
     ...(latestVersion ? { softwareVersion: latestVersion } : {}),
     ...(entry.license ? { license: entry.license } : {}),
     ...(isFreeEntry(entry)
@@ -323,6 +379,50 @@ export default async function DownloadDetailPage({ params }: DownloadDetailPageP
             </div>
           </section>
 
+          <section className="grid gap-5 xl:grid-cols-[1.15fr_0.85fr]">
+            <section className="surface-card p-5 sm:p-6">
+              <p className="eyebrow">Why This Page Exists</p>
+              <h2 className="mt-3 font-display text-2xl font-semibold text-fg">A cleaner path to the right install source</h2>
+              <p className="mt-3 text-sm leading-7 text-fg-secondary sm:text-base">
+                This page turns scattered vendor, store, and release links into a single install guide for {entry.name}.
+                The goal is simple: help someone land here, pick the right channel, and move forward without guessing which download path is current or official.
+              </p>
+              <ul className="mt-4 space-y-2 text-sm leading-7 text-fg-secondary sm:text-base">
+                {buildBestFitHighlights(entry).map((item) => (
+                  <li key={item} className="flex items-start gap-3">
+                    <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-accent-500" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            <section className="surface-card p-5 sm:p-6">
+              <p className="eyebrow">At a Glance</p>
+              <h2 className="mt-3 font-display text-2xl font-semibold text-fg">Best fit and delivery notes</h2>
+              <dl className="mt-4 space-y-3 text-sm text-fg-secondary sm:text-base">
+                <div className="flex items-start justify-between gap-4">
+                  <dt className="font-medium text-fg">Best for</dt>
+                  <dd className="max-w-[70%] text-right">{entry.category} workflows, endpoint rollouts, and quick install lookups</dd>
+                </div>
+                <div className="flex items-start justify-between gap-4">
+                  <dt className="font-medium text-fg">Platforms</dt>
+                  <dd className="max-w-[70%] text-right">{entry.platforms.join(", ")}</dd>
+                </div>
+                <div className="flex items-start justify-between gap-4">
+                  <dt className="font-medium text-fg">Primary delivery</dt>
+                  <dd className="max-w-[70%] text-right">
+                    {directDownloads.length > 0 ? "Direct binaries + official channels" : "Official vendor or store channels"}
+                  </dd>
+                </div>
+                <div className="flex items-start justify-between gap-4">
+                  <dt className="font-medium text-fg">Latest tracked release</dt>
+                  <dd className="max-w-[70%] text-right">{latestVersion ?? "Track vendor channel"}</dd>
+                </div>
+              </dl>
+            </section>
+          </section>
+
           {entry.releaseMetadata ? (
             <section className="surface-card p-5 sm:p-6">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -420,38 +520,11 @@ export default async function DownloadDetailPage({ params }: DownloadDetailPageP
               </div>
             </section>
 
-            <section className="surface-card p-5 sm:p-6">
-              <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Use With Other Site Resources</h2>
-              <div className="mt-4 space-y-3">
-                <Link
-                  href={supportSearchHref}
-                  className="block rounded-2xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-700 dark:bg-slate-900"
-                >
-                  <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">Search support fixes for {entry.name}</p>
-                  <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
-                    See whether this app appears in troubleshooting tickets, endpoint guidance, or IT support workflows.
-                  </p>
-                </Link>
-                <Link
-                  href="/downloads/assets/"
-                  className="block rounded-2xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-700 dark:bg-slate-900"
-                >
-                  <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">Browse IT assets and templates</p>
-                  <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
-                    Pair software installs with scripts, checklists, and runbooks from the IT asset library.
-                  </p>
-                </Link>
-                <Link
-                  href="/guides/"
-                  className="block rounded-2xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-700 dark:bg-slate-900"
-                >
-                  <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">Open pillar guides</p>
-                  <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
-                    Jump into bigger resource hubs covering troubleshooting, operations, downloads, and monetization-aligned topics.
-                  </p>
-                </Link>
-              </div>
-            </section>
+            <ResourceLinkGrid
+              title="Use With Other Site Resources"
+              description="Move from the install guide into support documentation, related IT assets, and broader operational guides."
+              items={resourceLinks}
+            />
           </section>
 
           {relatedDownloads.length > 0 ? (

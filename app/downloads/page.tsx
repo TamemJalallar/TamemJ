@@ -7,7 +7,13 @@ import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import { getAffiliateLinkByKey, getAffiliateLinksByKeys } from "@/lib/affiliate-links";
 import { getDownloadAssetBundles, getDownloadAssetStats } from "@/lib/download-assets.registry";
 import { getDownloads } from "@/lib/downloads.registry";
-import { buildBreadcrumbJsonLd, buildCollectionPageJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
+import {
+  buildBreadcrumbJsonLd,
+  buildCollectionPageJsonLd,
+  buildOpenGraph,
+  buildTwitter,
+  toAbsoluteUrl
+} from "@/lib/seo";
 import type { DownloadEntry } from "@/types/download";
 
 function uniqueKeywords(keywords: string[]): string[] {
@@ -26,6 +32,16 @@ function uniqueKeywords(keywords: string[]): string[] {
 
 function isFreeEntry(entry: DownloadEntry): boolean {
   return (entry.pricing ?? "").toLowerCase().includes("free");
+}
+
+function hasStoreChannel(entry: DownloadEntry): boolean {
+  return entry.channels.some(
+    (channel) => channel.type === "Mac App Store" || channel.type === "Microsoft Store"
+  );
+}
+
+function hasDirectDownloads(entry: DownloadEntry): boolean {
+  return (entry.directDownloads?.length ?? 0) > 0;
 }
 
 function downloadSeoScore(entry: DownloadEntry): number {
@@ -86,10 +102,10 @@ export async function generateMetadata(): Promise<Metadata> {
   const downloads = getDownloads();
   const assetStats = getDownloadAssetStats();
   const freeCount = downloads.filter(isFreeEntry).length;
-  const description = `Browse ${downloads.length} curated software downloads with official store links, GitHub Releases, and direct binaries. Includes ${freeCount} free apps and ${assetStats.total} IT templates/scripts/checklists for enterprise support teams.`;
+  const description = `Browse ${downloads.length} curated software downloads with official store links, GitHub Releases, and direct binaries. Includes ${freeCount} free apps and ${assetStats.total} IT templates, scripts, and support assets.`;
 
   return {
-    title: "Downloads",
+    title: "Downloads & IT Assets",
     description,
     keywords: uniqueKeywords([
       ...buildDownloadKeywords(downloads),
@@ -105,13 +121,18 @@ export async function generateMetadata(): Promise<Metadata> {
       canonical: "/downloads/"
     },
     robots: buildRobotsIndexRule("/downloads/"),
-    openGraph: buildOpenGraph("Downloads | Tamem J", description, "/downloads/"),
-    twitter: buildTwitter("Downloads | Tamem J", description)
+    openGraph: buildOpenGraph("Downloads & IT Assets | Tamem J", description, "/downloads/"),
+    twitter: buildTwitter("Downloads & IT Assets | Tamem J", description)
   };
 }
 
 export default function DownloadsPage() {
   const downloads = getDownloads();
+  const assetStats = getDownloadAssetStats();
+  const assetBundles = getDownloadAssetBundles();
+  const freeCount = downloads.filter(isFreeEntry).length;
+  const storeLinkedCount = downloads.filter(hasStoreChannel).length;
+  const directBinaryCount = downloads.filter(hasDirectDownloads).length;
   const trackedReleaseEntries = [...downloads]
     .filter((entry) => entry.releaseMetadata?.publishedAt)
     .sort(
@@ -128,9 +149,7 @@ export default function DownloadsPage() {
         .filter((entry) => entry.category === category)
         .sort((a, b) => a.name.localeCompare(b.name))
     }));
-  const assetStats = getDownloadAssetStats();
-  const assetBundles = getDownloadAssetBundles();
-  const freeCount = downloads.filter(isFreeEntry).length;
+  const featuredCategories = groupedByCategory.slice(0, 6);
   const amazonAffiliate = getAffiliateLinkByKey("amazon-it-gear");
   const amazonFeaturedProductLinks = getAffiliateLinksByKeys([
     "amazon-pick-raspberry-pi-5-starter-kit-pro",
@@ -141,8 +160,8 @@ export default function DownloadsPage() {
   ]);
 
   const downloadsCollectionSchema = buildCollectionPageJsonLd(
-    "Software Downloads",
-    `Browse ${downloads.length} curated software downloads with official store listings and direct binaries.`,
+    "Software Downloads and IT Assets",
+    `Browse ${downloads.length} curated software downloads with official store listings, direct binaries, and IT support assets.`,
     "/downloads/",
     downloads.map((entry) => ({
       name: entry.name,
@@ -160,16 +179,16 @@ export default function DownloadsPage() {
     itemListElement: downloads.map((entry, index) => ({
       "@type": "ListItem",
       position: index + 1,
-        item: {
-          "@type": "SoftwareApplication",
-          name: entry.name,
-          description: entry.summary,
-          applicationCategory: entry.category,
-          operatingSystem: entry.platforms.join(", "),
-          url: toAbsoluteUrl(`/downloads/${entry.slug}/`),
-          downloadUrl: entry.directDownloads?.[0]?.url ?? entry.channels[0]?.url,
-          ...(entry.releaseNotesUrl ? { releaseNotes: entry.releaseNotesUrl } : {}),
-          ...(entry.license ? { license: entry.license } : {}),
+      item: {
+        "@type": "SoftwareApplication",
+        name: entry.name,
+        description: entry.summary,
+        applicationCategory: entry.category,
+        operatingSystem: entry.platforms.join(", "),
+        url: toAbsoluteUrl(`/downloads/${entry.slug}/`),
+        downloadUrl: entry.directDownloads?.[0]?.url ?? entry.channels[0]?.url,
+        ...(entry.releaseNotesUrl ? { releaseNotes: entry.releaseNotesUrl } : {}),
+        ...(entry.license ? { license: entry.license } : {}),
         ...(entry.developer
           ? {
               author: {
@@ -195,15 +214,15 @@ export default function DownloadsPage() {
   const downloadsWebPageSchema: WithContext<WebPage> = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    name: "Downloads",
+    name: "Downloads & IT Assets",
     url: toAbsoluteUrl("/downloads/"),
     description:
-      "Curated software downloads with official store links, free direct binaries, and GitHub Releases references.",
+      "Curated software downloads with official store links, direct binaries, GitHub Releases references, and IT support asset bundles.",
     about: [
       { "@type": "Thing", name: "Mac App Store software" },
       { "@type": "Thing", name: "Microsoft Store software" },
       { "@type": "Thing", name: "GitHub Releases software" },
-      { "@type": "Thing", name: "Free desktop apps" }
+      { "@type": "Thing", name: "IT support scripts and templates" }
     ]
   };
 
@@ -213,18 +232,26 @@ export default function DownloadsPage() {
     mainEntity: [
       {
         "@type": "Question",
-        name: "Are these downloads free?",
+        name: "Are these download links official?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: `${freeCount} entries are marked free, including popular open-source tools and official store listings.`
+          text: "Store apps link to official Mac App Store or Microsoft Store pages. Direct binaries use vendor websites or GitHub Releases when available."
         }
       },
       {
         "@type": "Question",
-        name: "Are download links official?",
+        name: "What is included in IT Download Assets?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Store apps link to official Mac App Store or Microsoft Store pages. Direct binaries use vendor websites or GitHub Releases."
+          text: `The asset library includes ${assetStats.total} scripts, templates, checklists, and runbooks for enterprise support workflows.`
+        }
+      },
+      {
+        "@type": "Question",
+        name: "Are there download bundles?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `Yes. ${assetBundles.length} bundle packs group related IT assets for onboarding, Microsoft 365 administration, PowerShell operations, and security workflows.`
         }
       },
       {
@@ -233,22 +260,6 @@ export default function DownloadsPage() {
         acceptedAnswer: {
           "@type": "Answer",
           text: "For GitHub-backed direct downloads, version, file size, and SHA-256 metadata are included when available."
-        }
-      },
-      {
-        "@type": "Question",
-        name: "Do you use affiliate links?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Some recommendation sections may use affiliate links. Disclosures are shown near those links, and purchase price does not change."
-        }
-      },
-      {
-        "@type": "Question",
-        name: "Do you provide IT scripts and templates?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Yes. The IT Download Assets section includes PowerShell scripts, templates, checklists, and runbooks for enterprise operations and support workflows."
         }
       }
     ]
@@ -262,95 +273,229 @@ export default function DownloadsPage() {
   return (
     <>
       <section className="section-shell pt-8 sm:pt-10">
-        <div className="page-shell">
-          <AffiliateDisclosureBanner className="mb-6" />
-          <div className="mb-6 rounded-2xl border border-line/80 bg-white/85 p-5 shadow-soft dark:border-slate-700 dark:bg-slate-950/70">
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
-                  New: IT Admin Download Assets
-                </p>
-                <h2 className="mt-2 text-xl font-semibold text-slate-900 dark:text-slate-100">
-                  {assetStats.total} scripts, templates, checklists, and runbooks
-                </h2>
-                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-                  Includes {assetStats.byAccess.free} free assets, {assetStats.byAccess.emailGate} email-gated assets, and {assetStats.byAccess.premium} premium assets.
-                </p>
-              </div>
-              <a href="/downloads/assets" className="btn-secondary !px-4 !py-2.5">
-                Browse IT Assets
-              </a>
-            </div>
-            <div className="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
-              {assetBundles.map((bundle) => (
-                <a
-                  key={bundle.slug}
-                  href={`/downloads/assets#${bundle.slug}`}
-                  className="rounded-xl border border-line/80 bg-slate-50 px-3 py-2 text-sm text-slate-700 transition hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-800"
-                >
-                  <span className="font-medium">{bundle.title}</span>
-                  <span className="mt-0.5 block text-xs text-slate-500 dark:text-slate-400">
-                    {bundle.itemSlugs.length} assets
-                    {bundle.priceLabel ? ` • ${bundle.priceLabel}` : ""}
-                  </span>
-                </a>
-              ))}
-            </div>
-          </div>
-          <DownloadsBrowser
-            entries={downloads}
-            amazonAffiliateUrl={amazonAffiliate?.url}
-            amazonFeaturedProducts={amazonFeaturedProductLinks.map((entry) => ({
-              label: entry.label,
-              url: entry.url
-            }))}
-          />
+        <div className="page-shell space-y-6">
+          <AffiliateDisclosureBanner className="mb-0" />
 
-          {trackedReleaseEntries.length > 0 ? (
-            <section className="mt-6 surface-card p-5 sm:p-6">
-              <div className="mb-4 flex items-center justify-between gap-3">
-                <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
-                  Fresh Release Pages
-                </h2>
-                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
-                  Metadata-backed detail pages
+          <section className="hero-surface p-6 sm:p-8">
+            <div className="pointer-events-none absolute -right-20 top-0 h-56 w-56 rounded-full bg-primary-300/15 blur-3xl" />
+            <div className="pointer-events-none absolute -left-12 bottom-0 h-52 w-52 rounded-full bg-accent-400/10 blur-3xl" />
+
+            <div className="relative grid gap-6 xl:grid-cols-[1.15fr_0.85fr] xl:items-start">
+              <div>
+                <p className="eyebrow text-primary-100">Downloads</p>
+                <h1 className="mt-4 max-w-3xl text-balance font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+                  Software downloads, direct binaries, and IT assets in one cleaner workspace.
+                </h1>
+                <p className="mt-4 max-w-3xl text-sm leading-7 text-primary-100/90 sm:text-base">
+                  This page now acts as the front door for both curated software and practical support assets.
+                  Use it to find trusted app links, direct downloads, fresh release pages, and bundled IT resources
+                  without digging through separate sections first.
                 </p>
-              </div>
-              <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-                {trackedReleaseEntries.map((entry) => (
-                  <Link
-                    key={entry.slug}
-                    href={`/downloads/${entry.slug}/`}
-                    className="rounded-2xl border border-line/80 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-700 dark:bg-slate-900"
-                  >
-                    <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
-                      {entry.category}
-                    </p>
-                    <h3 className="mt-2 text-base font-semibold text-slate-900 dark:text-slate-100">
-                      {entry.name}
-                    </h3>
-                    <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{entry.summary}</p>
-                    <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">
-                      Latest tracked release: {entry.releaseMetadata?.releaseTag ?? "Available"}
-                    </p>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <a href="#downloads-browser" className="btn-primary">
+                    Browse Software
+                  </a>
+                  <Link href="/downloads/assets" className="btn-secondary">
+                    Open IT Assets
                   </Link>
+                  <Link href="/support/tickets" className="btn-ghost !text-white hover:!bg-white/10 hover:!text-white">
+                    Open Support Tickets
+                  </Link>
+                </div>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                <article className="rounded-3xl border border-white/15 bg-white/10 p-4 backdrop-blur">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary-100/80">
+                    Curated Software
+                  </p>
+                  <p className="mt-2 font-display text-3xl font-semibold text-white">{downloads.length}</p>
+                  <p className="mt-1 text-sm text-primary-100/85">Apps with official store and download paths</p>
+                </article>
+                <article className="rounded-3xl border border-white/15 bg-white/10 p-4 backdrop-blur">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary-100/80">
+                    Free Picks
+                  </p>
+                  <p className="mt-2 font-display text-3xl font-semibold text-white">{freeCount}</p>
+                  <p className="mt-1 text-sm text-primary-100/85">Free apps prioritized in the browse experience</p>
+                </article>
+                <article className="rounded-3xl border border-white/15 bg-white/10 p-4 backdrop-blur">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary-100/80">
+                    IT Assets
+                  </p>
+                  <p className="mt-2 font-display text-3xl font-semibold text-white">{assetStats.total}</p>
+                  <p className="mt-1 text-sm text-primary-100/85">Scripts, templates, checklists, and runbooks</p>
+                </article>
+                <article className="rounded-3xl border border-white/15 bg-white/10 p-4 backdrop-blur">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary-100/80">
+                    Bundles
+                  </p>
+                  <p className="mt-2 font-display text-3xl font-semibold text-white">{assetBundles.length}</p>
+                  <p className="mt-1 text-sm text-primary-100/85">Role-based packs for faster download decisions</p>
+                </article>
+              </div>
+            </div>
+          </section>
+
+          <section className="grid gap-4 lg:grid-cols-3">
+            <article className="surface-card-interactive p-5 sm:p-6">
+              <p className="eyebrow">Software Library</p>
+              <h2 className="mt-3 font-display text-xl font-semibold text-fg">Find trusted download paths faster</h2>
+              <p className="mt-3 text-sm leading-7 text-fg-secondary">
+                Search by app, platform, category, and release channel. Store links stay first when available,
+                and direct binaries surface with metadata when they are safe to expose.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2 text-xs text-muted">
+                <span className="filter-chip px-2.5 py-1">{storeLinkedCount} store-backed listings</span>
+                <span className="filter-chip px-2.5 py-1">{directBinaryCount} apps with direct binaries</span>
+              </div>
+            </article>
+
+            <article className="surface-card-interactive p-5 sm:p-6">
+              <p className="eyebrow">IT Assets</p>
+              <h2 className="mt-3 font-display text-xl font-semibold text-fg">Pair downloads with operational assets</h2>
+              <p className="mt-3 text-sm leading-7 text-fg-secondary">
+                The asset library carries the support-side resources behind the software catalog: PowerShell scripts,
+                Excel trackers, checklists, and runbooks for day-to-day IT work.
+              </p>
+              <div className="mt-5">
+                <Link href="/downloads/assets" className="btn-secondary">
+                  Browse IT Assets
+                </Link>
+              </div>
+            </article>
+
+            <article className="surface-card-interactive p-5 sm:p-6">
+              <p className="eyebrow">Bundle Packs</p>
+              <h2 className="mt-3 font-display text-xl font-semibold text-fg">Download grouped starter packs</h2>
+              <p className="mt-3 text-sm leading-7 text-fg-secondary">
+                Bundles turn individual assets into clearer starter paths for helpdesk, M365 admins, PowerShell-heavy workflows,
+                and security/compliance planning.
+              </p>
+              <div className="mt-4 space-y-2 text-sm text-fg-secondary">
+                {assetBundles.slice(0, 3).map((bundle) => (
+                  <p key={bundle.slug}>
+                    <span className="font-semibold text-fg">{bundle.title}:</span> {bundle.itemSlugs.length} related assets.
+                  </p>
                 ))}
               </div>
-            </section>
-          ) : null}
+            </article>
+          </section>
 
-          <section className="mt-6 surface-card p-5 sm:p-6">
-            <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Full Downloads Index</h2>
-            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-              Crawlable index of all curated software download pages grouped by type.
-            </p>
-            <div className="mt-4 space-y-3">
+          <section className="surface-card p-5 sm:p-6">
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+              <div>
+                <p className="eyebrow">Browse by Category</p>
+                <h2 className="mt-3 font-display text-2xl font-semibold text-fg">Top software lanes</h2>
+                <p className="mt-2 max-w-3xl text-sm leading-7 text-fg-secondary">
+                  These are the main categories people will scan first. The browser below still includes the full catalog,
+                  but this gives a cleaner starting point before filtering.
+                </p>
+              </div>
+              <a href="#all-downloads" className="btn-secondary">
+                Jump to Full Index
+              </a>
+            </div>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              {featuredCategories.map((group) => (
+                <article key={group.category} className="surface-card rounded-2xl p-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <h3 className="text-base font-semibold text-fg">{group.category}</h3>
+                    <span className="filter-chip px-2.5 py-1 text-xs">{group.entries.length} apps</span>
+                  </div>
+                  <p className="mt-3 text-sm text-fg-secondary">
+                    {group.entries.slice(0, 3).map((entry) => entry.name).join(", ")}
+                    {group.entries.length > 3 ? `, and ${group.entries.length - 3} more.` : "."}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section className="grid gap-4 xl:grid-cols-[1.05fr_0.95fr]">
+            <article className="surface-card p-5 sm:p-6">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="eyebrow">Bundle Downloads</p>
+                  <h2 className="mt-3 font-display text-2xl font-semibold text-fg">Start with grouped asset packs</h2>
+                </div>
+                <Link href="/downloads/assets" className="btn-secondary !px-4 !py-2 text-xs">
+                  View Asset Library
+                </Link>
+              </div>
+              <div className="mt-5 grid gap-3 md:grid-cols-2">
+                {assetBundles.map((bundle) => (
+                  <a
+                    key={bundle.slug}
+                    href={`/downloads/assets#${bundle.slug}`}
+                    className="surface-card-interactive rounded-2xl p-4"
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <h3 className="text-base font-semibold text-fg">{bundle.title}</h3>
+                      <span className="filter-chip px-2.5 py-1 text-xs">{bundle.itemSlugs.length} assets</span>
+                    </div>
+                    <p className="mt-2 text-sm leading-6 text-fg-secondary">{bundle.description}</p>
+                    <p className="mt-3 text-xs font-medium text-primary-600 dark:text-primary-300">Open bundle →</p>
+                  </a>
+                ))}
+              </div>
+            </article>
+
+            {trackedReleaseEntries.length > 0 ? (
+              <article className="surface-card p-5 sm:p-6">
+                <p className="eyebrow">Fresh Release Pages</p>
+                <h2 className="mt-3 font-display text-2xl font-semibold text-fg">Latest tracked updates</h2>
+                <p className="mt-2 text-sm leading-7 text-fg-secondary">
+                  These detail pages have recent release metadata attached, which makes them the best starting point when you need current versions quickly.
+                </p>
+                <div className="mt-5 space-y-3">
+                  {trackedReleaseEntries.map((entry) => (
+                    <Link
+                      key={entry.slug}
+                      href={`/downloads/${entry.slug}/`}
+                      className="surface-card-interactive block rounded-2xl p-4"
+                    >
+                      <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted">{entry.category}</p>
+                      <h3 className="mt-2 text-base font-semibold text-fg">{entry.name}</h3>
+                      <p className="mt-2 text-sm text-fg-secondary">{entry.summary}</p>
+                      <p className="mt-3 text-xs text-muted">
+                        Latest tracked release: {entry.releaseMetadata?.releaseTag ?? "Available"}
+                      </p>
+                    </Link>
+                  ))}
+                </div>
+              </article>
+            ) : null}
+          </section>
+
+          <div id="downloads-browser">
+            <DownloadsBrowser
+              entries={downloads}
+              amazonAffiliateUrl={amazonAffiliate?.url}
+              amazonFeaturedProducts={amazonFeaturedProductLinks.map((entry) => ({
+                label: entry.label,
+                url: entry.url
+              }))}
+            />
+          </div>
+
+          <section className="surface-card p-5 sm:p-6" id="all-downloads">
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+              <div>
+                <p className="eyebrow">Crawlable Index</p>
+                <h2 className="mt-3 font-display text-2xl font-semibold text-fg">Full downloads directory</h2>
+                <p className="mt-2 text-sm leading-7 text-fg-secondary">
+                  Every curated software page lives here in a plain category index. This helps both visitors and search engines move through the library without relying on filters alone.
+                </p>
+              </div>
+              <span className="filter-chip px-3 py-1 text-xs">
+                {downloads.length} total software pages
+              </span>
+            </div>
+            <div className="mt-5 space-y-3">
               {groupedByCategory.map((group) => (
-                <details
-                  key={group.category}
-                  className="rounded-xl border border-line/80 bg-white p-4 dark:border-slate-700 dark:bg-slate-900"
-                >
-                  <summary className="cursor-pointer list-none text-sm font-semibold text-slate-900 dark:text-slate-100">
+                <details key={group.category} className="surface-card rounded-2xl p-4">
+                  <summary className="cursor-pointer list-none text-sm font-semibold text-fg">
                     {group.category} ({group.entries.length})
                   </summary>
                   <div className="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
@@ -358,13 +503,11 @@ export default function DownloadsPage() {
                       <Link
                         key={entry.slug}
                         href={`/downloads/${entry.slug}/`}
-                        className="rounded-lg border border-line/70 bg-slate-50 px-3 py-2 text-sm text-slate-700 transition hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-950/60 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-900"
+                        className="filter-chip justify-start rounded-lg px-3 py-2 text-sm"
                       >
                         <span className="font-medium">{entry.name}</span>
                         {entry.releaseMetadata?.releaseTag ? (
-                          <span className="mt-0.5 block text-xs text-slate-500 dark:text-slate-400">
-                            {entry.releaseMetadata.releaseTag}
-                          </span>
+                          <span className="ml-2 text-xs text-muted">{entry.releaseMetadata.releaseTag}</span>
                         ) : null}
                       </Link>
                     ))}

@@ -103,7 +103,7 @@ export function buildSupportOpenGraph(
     siteName: "Tamem J Support Portal",
     images: [
       {
-        url: "/images/site/og-image.svg",
+        url: "/images/site/og-image.png",
         width: 1200,
         height: 630,
         alt: "Tamem J Support Portal tickets and IT support documentation"
@@ -117,7 +117,7 @@ export function buildSupportTwitter(title: string, description: string): NonNull
     card: "summary_large_image",
     title,
     description,
-    images: ["/images/site/og-image.svg"]
+    images: ["/images/site/og-image.png"]
   };
 }
 
@@ -134,8 +134,8 @@ export function buildSupportKbIndexMetadataWithArticles(articles: KBArticle[]): 
   const title = "Tickets";
   const description =
     articleCount > 0
-      ? `Browse ${articleCount} enterprise-safe troubleshooting guides for Microsoft 365, Adobe, Figma, Okta, Windows, macOS, iOS, Android, networking, browsers, printers, and affiliate operations.`
-      : "Enterprise-safe troubleshooting guides for Microsoft 365, Adobe, Figma, Okta, Windows, macOS, iOS, Android, networking, browsers, printers, and affiliate operations.";
+      ? `Browse ${articleCount} enterprise-safe troubleshooting guides for Microsoft 365, Adobe, Figma, Okta, Windows, macOS, iOS, Android, networking, browsers, printers, and support operations.`
+      : "Enterprise-safe troubleshooting guides for Microsoft 365, Adobe, Figma, Okta, Windows, macOS, iOS, Android, networking, browsers, printers, and support operations.";
 
   return {
     title,
@@ -150,8 +150,8 @@ export function buildSupportKbIndexMetadataWithArticles(articles: KBArticle[]): 
       "mobile device support",
       "Windows support",
       "macOS support",
-      "affiliate operations support",
-      "affiliate link governance",
+      "helpdesk runbooks",
+      "enterprise support workflows",
       ...seoOpportunityKeywords,
       ...productFamilies.map((family) => `${family} support`),
       ...categories.map((category) => `${category} troubleshooting`)
@@ -260,7 +260,7 @@ export function buildCatalogIndexJsonLd(items: CatalogItem[]): WithContext<Colle
 
 export function buildKbArticleMetadata(article: KBArticle): Metadata {
   const title = article.title;
-  const description = article.description;
+  const description = `${article.description} Environment: ${article.environment}. Estimated time: ${article.estimatedTime}. Access level: ${article.accessLevel}.`;
   const path = `/support/tickets/${article.slug}/`;
   const keywords = uniqueKeywords([
     ...supportPortalBaseKeywords,
@@ -377,6 +377,10 @@ export function buildKbArticleJsonLd(article: KBArticle): WithContext<TechArticl
       name: article.author.name,
       jobTitle: article.author.title
     },
+    mentions: article.testedOn.map((environment) => ({
+      "@type": "Thing",
+      name: environment
+    })),
     dateModified: isoLastVerified,
     datePublished: isoLastVerified,
     inLanguage: "en",

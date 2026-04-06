@@ -69,12 +69,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: url("/ai-agents/"), changeFrequency: "weekly", priority: 0.85, lastModified: generatedAt },
     { url: url("/genai-prompts/"), changeFrequency: "weekly", priority: 0.86, lastModified: generatedAt },
     { url: url("/guides/"), changeFrequency: "weekly", priority: 0.9, lastModified: generatedAt },
-    {
-      url: url("/guides/revenue-scaling-roadmap/"),
-      changeFrequency: "monthly",
-      priority: 0.86,
-      lastModified: generatedAt
-    },
     { url: url("/corporate-tech-fixes/"), changeFrequency: "daily", priority: 0.9, lastModified: generatedAt },
     { url: url("/pc-build-guides/"), changeFrequency: "weekly", priority: 0.9, lastModified: generatedAt },
     { url: url("/support/"), changeFrequency: "weekly", priority: 0.85, lastModified: generatedAt },

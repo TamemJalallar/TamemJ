@@ -259,7 +259,7 @@ export function FixGuide({ fix }: { fix: CorporateTechFix }) {
 
   return (
     <div className="space-y-6 print:space-y-4">
-      <section className="surface-card-strong p-6 sm:p-8 dark:border-slate-800 dark:bg-slate-950/70 print:shadow-none">
+      <section id="fix-overview" className="surface-card-strong p-6 sm:p-8 dark:border-slate-800 dark:bg-slate-950/70 print:shadow-none">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <p className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
@@ -348,6 +348,18 @@ export function FixGuide({ fix }: { fix: CorporateTechFix }) {
             <TagChip key={tag} label={tag} asSpan />
           ))}
         </div>
+
+        <nav className="mt-5 flex flex-wrap gap-2 print:hidden">
+          {[
+            { href: "#fix-overview", label: "Overview" },
+            { href: "#fix-steps-heading", label: "Resolution Steps" },
+            { href: "#related-fix-resources", label: "Related Resources" }
+          ].map((item) => (
+            <a key={item.href} href={item.href} className="filter-chip px-3 py-1.5 text-xs">
+              {item.label}
+            </a>
+          ))}
+        </nav>
 
         <p className="mt-4 text-xs text-slate-500 dark:text-slate-400 print:hidden">
           Note: “Download as PDF” opens the browser print dialog. Choose “Save as PDF” for a

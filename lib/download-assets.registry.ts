@@ -1,5 +1,8 @@
 import type { DownloadAsset, DownloadAssetBundle } from "@/types/download";
 
+const DOWNLOAD_ASSET_BASE_URL = "https://downloads.tamemj.com";
+const DEFAULT_DOWNLOAD_ASSET_UPDATED_AT = "2026-03-12";
+
 interface DownloadAssetSeed {
   slug: string;
   title: string;
@@ -21,6 +24,26 @@ function createAsset(seed: DownloadAssetSeed): DownloadAsset {
   return {
     ...seed,
     tags: [...new Set(seed.tags.map(normalizeTag).filter(Boolean))]
+  };
+}
+
+function normalizeAssetForDelivery(asset: DownloadAsset): DownloadAsset {
+  return {
+    ...asset,
+    access: "Free",
+    monetization: "Direct download",
+    priceLabel: undefined,
+    tags: [...asset.tags]
+  };
+}
+
+function normalizeBundleForDelivery(bundle: DownloadAssetBundle): DownloadAssetBundle {
+  return {
+    ...bundle,
+    access: "Free",
+    monetization: "Direct download",
+    priceLabel: undefined,
+    itemSlugs: [...bundle.itemSlugs]
   };
 }
 
@@ -402,14 +425,12 @@ const bundleRegistry: DownloadAssetBundle[] = [
 ];
 
 export function getDownloadAssets(): DownloadAsset[] {
-  return assetsRegistry.map((asset) => ({
-    ...asset,
-    tags: [...asset.tags]
-  }));
+  return assetsRegistry.map(normalizeAssetForDelivery);
 }
 
 export function getDownloadAssetBySlug(slug: string): DownloadAsset | undefined {
-  return assetsRegistry.find((asset) => asset.slug === slug);
+  const asset = assetsRegistry.find((entry) => entry.slug === slug);
+  return asset ? normalizeAssetForDelivery(asset) : undefined;
 }
 
 export function getDownloadAssetCategories(): DownloadAsset["category"][] {
@@ -423,10 +444,12 @@ export function getDownloadAssetFormats(): DownloadAsset["format"][] {
 }
 
 export function getDownloadAssetBundles(): DownloadAssetBundle[] {
-  return bundleRegistry.map((bundle) => ({
-    ...bundle,
-    itemSlugs: [...bundle.itemSlugs]
-  }));
+  return bundleRegistry.map(normalizeBundleForDelivery);
+}
+
+export function getDownloadAssetBundleBySlug(slug: string): DownloadAssetBundle | undefined {
+  const bundle = bundleRegistry.find((entry) => entry.slug === slug);
+  return bundle ? normalizeBundleForDelivery(bundle) : undefined;
 }
 
 export function getDownloadAssetsForBundle(bundleSlug: string): DownloadAsset[] {
@@ -438,18 +461,15 @@ export function getDownloadAssetsForBundle(bundleSlug: string): DownloadAsset[] 
   return bundle.itemSlugs
     .map((slug) => getDownloadAssetBySlug(slug))
     .filter((asset): asset is DownloadAsset => Boolean(asset))
-    .map((asset) => ({
-      ...asset,
-      tags: [...asset.tags]
-    }));
+    .map(normalizeAssetForDelivery);
 }
 
 export function getDownloadAssetStats() {
   const total = assetsRegistry.length;
   const byAccess = {
-    free: assetsRegistry.filter((asset) => asset.access === "Free").length,
-    emailGate: assetsRegistry.filter((asset) => asset.access === "Email gate").length,
-    premium: assetsRegistry.filter((asset) => asset.access === "Premium").length
+    free: assetsRegistry.length,
+    emailGate: 0,
+    premium: 0
   };
   const highDemand = assetsRegistry.filter((asset) => asset.searchDemand === "High").length;
 
@@ -459,6 +479,26 @@ export function getDownloadAssetStats() {
     highDemand,
     byAccess
   };
+}
+
+export function getDownloadAssetFileName(asset: DownloadAsset): string {
+  return `${asset.slug}.${asset.format}`;
+}
+
+export function getDownloadAssetDownloadUrl(asset: DownloadAsset): string {
+  return `${DOWNLOAD_ASSET_BASE_URL}/${getDownloadAssetFileName(asset)}`;
+}
+
+export function getDownloadAssetUpdatedAt(_asset: DownloadAsset): string {
+  return DEFAULT_DOWNLOAD_ASSET_UPDATED_AT;
+}
+
+export function getDownloadAssetBundleFileName(bundle: DownloadAssetBundle): string {
+  return `${bundle.slug}.zip`;
+}
+
+export function getDownloadAssetBundleDownloadUrl(bundle: DownloadAssetBundle): string {
+  return `${DOWNLOAD_ASSET_BASE_URL}/bundles/${getDownloadAssetBundleFileName(bundle)}`;
 }
 
 export function buildDownloadAssetRequestMailto(

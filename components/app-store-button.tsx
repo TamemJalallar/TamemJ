@@ -14,7 +14,7 @@ export function AppStoreButton({
   if (!hasHref) {
     return (
       <span
-        className={`inline-flex items-center justify-center rounded-full border border-line bg-card px-4 py-2.5 text-sm font-semibold text-muted ${className}`}
+        className={`btn-secondary cursor-default ${className}`}
         aria-label={unavailableText}
       >
         {unavailableText}
@@ -27,7 +27,7 @@ export function AppStoreButton({
       href={href}
       target="_blank"
       rel="noreferrer"
-      className={`inline-flex items-center justify-center rounded-full border border-accent/80 bg-accent px-4 py-2.5 text-sm font-semibold text-bg transition hover:brightness-110 ${className}`}
+      className={`btn-primary ${className}`}
       aria-label="Download on the App Store"
     >
       Download on the App Store

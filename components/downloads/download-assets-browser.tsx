@@ -2,9 +2,12 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { buildDownloadAssetRequestMailto } from "@/lib/download-assets.registry";
-import { siteConfig } from "@/lib/site";
-import type { DownloadAsset, DownloadAssetAccess, DownloadAssetBundle, DownloadAssetSearchDemand } from "@/types/download";
+import {
+  getDownloadAssetBundleDownloadUrl,
+  getDownloadAssetDownloadUrl,
+  getDownloadAssetUpdatedAt
+} from "@/lib/download-assets.registry";
+import type { DownloadAsset, DownloadAssetBundle, DownloadAssetSearchDemand } from "@/types/download";
 
 interface DownloadAssetsBrowserProps {
   assets: DownloadAsset[];
@@ -15,7 +18,7 @@ function cx(...classes: Array<string | false | null | undefined>): string {
   return classes.filter(Boolean).join(" ");
 }
 
-function formatBadgeTone(access: DownloadAssetAccess): string {
+function formatBadgeTone(access: DownloadAsset["access"]): string {
   if (access === "Free") {
     return "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100";
   }
@@ -42,7 +45,6 @@ function demandBadgeTone(demand: DownloadAssetSearchDemand): string {
 export function DownloadAssetsBrowser({ assets, bundles }: DownloadAssetsBrowserProps) {
   const [query, setQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<DownloadAsset["category"] | "All">("All");
-  const [accessFilter, setAccessFilter] = useState<DownloadAssetAccess | "All">("All");
   const [demandFilter, setDemandFilter] = useState<DownloadAssetSearchDemand | "All">("All");
   const [formatFilter, setFormatFilter] = useState<DownloadAsset["format"] | "All">("All");
 
@@ -57,7 +59,6 @@ export function DownloadAssetsBrowser({ assets, bundles }: DownloadAssetsBrowser
     return assets
       .filter((asset) => {
         if (categoryFilter !== "All" && asset.category !== categoryFilter) return false;
-        if (accessFilter !== "All" && asset.access !== accessFilter) return false;
         if (demandFilter !== "All" && asset.searchDemand !== demandFilter) return false;
         if (formatFilter !== "All" && asset.format !== formatFilter) return false;
 
@@ -72,7 +73,7 @@ export function DownloadAssetsBrowser({ assets, bundles }: DownloadAssetsBrowser
         return haystack.includes(normalizedQuery);
       })
       .sort((a, b) => a.title.localeCompare(b.title));
-  }, [accessFilter, assets, categoryFilter, demandFilter, formatFilter, query]);
+  }, [assets, categoryFilter, demandFilter, formatFilter, query]);
 
   const stats = useMemo(() => {
     return {
@@ -134,7 +135,19 @@ export function DownloadAssetsBrowser({ assets, bundles }: DownloadAssetsBrowser
               </div>
               <h3 className="mt-2 text-base font-semibold text-slate-900 dark:text-slate-100">{bundle.title}</h3>
               <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{bundle.description}</p>
-              <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">{bundle.monetization}</p>
+              <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                ZIP bundle download for faster rollout and review.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <a
+                  href={getDownloadAssetBundleDownloadUrl(bundle)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn-primary !px-3.5 !py-2 text-xs"
+                >
+                  Download ZIP
+                </a>
+              </div>
             </article>
           ))}
         </div>
@@ -161,14 +174,6 @@ export function DownloadAssetsBrowser({ assets, bundles }: DownloadAssetsBrowser
             onChange={(value) => setCategoryFilter(value as DownloadAsset["category"] | "All")}
             options={["All", ...categories]}
           />
-
-          <SelectFilter
-            label="Access"
-            value={accessFilter}
-            onChange={(value) => setAccessFilter(value as DownloadAssetAccess | "All")}
-            options={["All", "Free", "Email gate", "Premium"]}
-          />
-
           <SelectFilter
             label="Format"
             value={formatFilter}
@@ -220,21 +225,21 @@ export function DownloadAssetsBrowser({ assets, bundles }: DownloadAssetsBrowser
                   {asset.title}
                 </h3>
                 <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{asset.description}</p>
-                <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">{asset.monetization}</p>
+                <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                  Updated {new Date(getDownloadAssetUpdatedAt(asset)).toLocaleDateString("en-US", { dateStyle: "medium" })} • {asset.slug}.{asset.format}
+                </p>
 
                 <div className="mt-4 flex flex-wrap gap-2">
                   <Link href={`/downloads/assets/${asset.slug}`} className="btn-secondary !px-3.5 !py-2 text-xs">
                     View Asset
                   </Link>
                   <a
-                    href={buildDownloadAssetRequestMailto(asset, siteConfig.email)}
-                    className="btn-secondary !px-3.5 !py-2 text-xs dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
+                    href={getDownloadAssetDownloadUrl(asset)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn-primary !px-3.5 !py-2 text-xs"
                   >
-                    {asset.access === "Premium"
-                      ? "Purchase"
-                      : asset.access === "Email gate"
-                        ? "Request Access"
-                        : "Get Free Copy"}
+                    Download File
                   </a>
                 </div>
               </article>

@@ -108,31 +108,8 @@ export default function GuidesPage() {
               <Link href="/downloads/assets" className="btn-secondary">
                 Open IT Assets
               </Link>
-              <Link href="/guides/revenue-scaling-roadmap" className="btn-secondary">
-                Open Revenue Roadmap
-              </Link>
             </div>
           </div>
-
-          <section className="surface-card p-5 sm:p-6">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
-                  Business Guide
-                </p>
-                <h2 className="mt-1 font-display text-xl font-semibold text-fg">
-                  Revenue Scaling Roadmap (0-24 Months)
-                </h2>
-                <p className="mt-2 text-sm text-fg-secondary">
-                  Phase-based execution plan for traffic growth, affiliate monetization, digital products,
-                  and SaaS productization.
-                </p>
-              </div>
-              <Link href="/guides/revenue-scaling-roadmap" className="btn-secondary">
-                View Roadmap
-              </Link>
-            </div>
-          </section>
 
           <section className="surface-card p-5 sm:p-6">
             <h2 className="font-display text-xl font-semibold text-fg">Content Clusters</h2>

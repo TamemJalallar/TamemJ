@@ -5,11 +5,13 @@ import { useEffect, useMemo, useState } from "react";
 import type { KBArticle } from "@/types/support";
 import type { KBRecommendedAffiliate } from "@/lib/affiliate-support.registry";
 import type { KBSeoAlignment, SeoKeywordArticleTarget } from "@/lib/seo-content.registry";
+import type { ResourceLinkItem } from "@/components/shared/resource-link-grid";
 import { SupportPageHeader } from "@/components/support-portal/page-header";
 import { AccordionSteps } from "@/components/support-portal/accordion-steps";
 import { CodeBlock } from "@/components/support-portal/code-block";
 import { TroubleshootingDecisionTree } from "@/components/support-portal/troubleshooting-decision-tree";
 import { AccessLevelBadge, EnvironmentBadge, SeverityBadge } from "@/components/support-portal/badges";
+import { ResourceLinkGrid } from "@/components/shared/resource-link-grid";
 import { getKBHelpfulVote, setKBHelpfulVote } from "@/lib/support-portal.storage";
 import {
   getSupportAnalyticsStore,
@@ -64,13 +66,15 @@ export function KnowledgeBaseArticleView({
   relatedArticles,
   recommendedAffiliates,
   keywordTargets,
-  seoAlignment
+  seoAlignment,
+  resourceLinks
 }: {
   article: KBArticle;
   relatedArticles: KBArticle[];
   recommendedAffiliates: KBRecommendedAffiliate[];
   keywordTargets: SeoKeywordArticleTarget[];
   seoAlignment?: KBSeoAlignment;
+  resourceLinks?: ResourceLinkItem[];
 }) {
   const [helpfulVote, setHelpfulVote] = useState<"yes" | "no" | null>(null);
   const [helpfulSummary, setHelpfulSummary] = useState<HelpfulSummary>({
@@ -150,6 +154,7 @@ export function KnowledgeBaseArticleView({
       <SupportPageHeader
         title={article.title}
         description={seoAlignment?.optimizedLeadParagraph ?? article.description}
+        showDescription
         breadcrumbs={[
           { label: "Support Portal", href: "/support" },
           { label: "Tickets", href: "/support/tickets" },
@@ -165,9 +170,7 @@ export function KnowledgeBaseArticleView({
 
       {seoAlignment ? (
         <section className="rounded-2xl border border-cyan-200/70 bg-cyan-50/70 p-5 shadow-soft dark:border-cyan-900/60 dark:bg-cyan-950/25 sm:p-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-cyan-700 dark:text-cyan-200">
-            Editorial Intro (SEO-Aligned)
-          </p>
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-cyan-700 dark:text-cyan-200">Overview</p>
           <p className="mt-2 text-sm leading-7 text-slate-700 dark:text-slate-200 sm:text-base">
             {seoAlignment.editorialIntro}
           </p>
@@ -234,7 +237,7 @@ export function KnowledgeBaseArticleView({
         </div>
 
         <div className="mt-4 grid gap-4 lg:grid-cols-2">
-          <div className="rounded-2xl border border-line/70 bg-slate-50/70 p-4 dark:border-slate-800 dark:bg-slate-900/70">
+          <div id="kb-symptoms" className="rounded-2xl border border-line/70 bg-slate-50/70 p-4 dark:border-slate-800 dark:bg-slate-900/70">
             <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">{symptomsHeading}</h2>
             <ul className="mt-3 space-y-2 pl-5 text-sm text-slate-700 dark:text-slate-200">
               {article.symptoms.map((item) => (
@@ -244,7 +247,7 @@ export function KnowledgeBaseArticleView({
               ))}
             </ul>
           </div>
-          <div className="rounded-2xl border border-line/70 bg-slate-50/70 p-4 dark:border-slate-800 dark:bg-slate-900/70">
+          <div id="kb-causes" className="rounded-2xl border border-line/70 bg-slate-50/70 p-4 dark:border-slate-800 dark:bg-slate-900/70">
             <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">{causesHeading}</h2>
             <ul className="mt-3 space-y-2 pl-5 text-sm text-slate-700 dark:text-slate-200">
               {article.causes.map((item) => (
@@ -255,6 +258,20 @@ export function KnowledgeBaseArticleView({
             </ul>
           </div>
         </div>
+
+        <nav className="mt-4 flex flex-wrap gap-2">
+          {[
+            { href: "#kb-symptoms", label: "Symptoms" },
+            { href: "#kb-causes", label: "Causes" },
+            { href: "#resolution-steps", label: "Resolution" },
+            { href: "#kb-commands", label: "Commands" },
+            { href: "#kb-escalation", label: "Escalation" }
+          ].map((item) => (
+            <a key={item.href} href={item.href} className="filter-chip px-3 py-1.5 text-xs">
+              {item.label}
+            </a>
+          ))}
+        </nav>
       </section>
 
       <TroubleshootingDecisionTree symptoms={article.symptoms} accessLevel={article.accessLevel} />
@@ -267,7 +284,7 @@ export function KnowledgeBaseArticleView({
         <AccordionSteps steps={article.resolutionSteps} />
       </section>
 
-      <section className="rounded-2xl border border-line/70 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-6">
+      <section id="kb-commands" className="rounded-2xl border border-line/70 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-6">
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Commands</h2>
@@ -298,7 +315,7 @@ export function KnowledgeBaseArticleView({
       </section>
 
       <section className="grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
-        <div className="rounded-2xl border border-line/70 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-6">
+        <div id="kb-escalation" className="rounded-2xl border border-line/70 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-6">
           <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">When to Contact IT / Security</h2>
           <ul className="mt-4 space-y-2 pl-5 text-sm text-slate-700 dark:text-slate-200 sm:text-base">
             {article.escalationCriteria.map((item) => (
@@ -376,11 +393,9 @@ export function KnowledgeBaseArticleView({
 
           {keywordTargets.length > 0 ? (
             <div className="rounded-2xl border border-line/70 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-6">
-              <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-                Related Exact-Match Queries
-              </h2>
+              <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Related Search Queries</h2>
               <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-                Internal fix guides aligned to high-intent search phrases.
+                Other common ways people describe this issue in search and ticket intake.
               </p>
               <ul className="mt-3 space-y-2">
                 {keywordTargets.map((target) => {
@@ -464,6 +479,14 @@ export function KnowledgeBaseArticleView({
           </div>
         </div>
       </section>
+
+      {resourceLinks && resourceLinks.length > 0 ? (
+        <ResourceLinkGrid
+          title="Continue With Related Resources"
+          description="Move from the troubleshooting article into related downloads, broader fix libraries, and pillar guides without restarting your search."
+          items={resourceLinks}
+        />
+      ) : null}
     </div>
   );
 }

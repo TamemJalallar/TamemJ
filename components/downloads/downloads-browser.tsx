@@ -353,31 +353,26 @@ export function DownloadsBrowser({
 
   return (
     <div className="space-y-6">
-      <section className="hero-surface p-5 text-white sm:p-6">
-        <div className="pointer-events-none absolute -right-16 -top-20 h-52 w-52 rounded-full bg-primary-300/20 blur-2xl" />
-        <div className="pointer-events-none absolute -bottom-24 -left-20 h-56 w-56 rounded-full bg-accent-400/20 blur-3xl" />
-
-        <div className="relative grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
+      <section className="surface-card-strong p-5 sm:p-6">
+        <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
           <div>
-            <p className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-primary-100">
-              Downloads Hub
+            <p className="eyebrow">Software Browser</p>
+            <h2 className="mt-3 text-balance font-display text-2xl font-semibold tracking-tight text-fg sm:text-3xl">
+              Filter the catalog by platform, channel, and software type
+            </h2>
+            <p className="mt-3 max-w-3xl text-sm leading-6 text-fg-secondary sm:text-base">
+              Use this browser when you already know the kind of app you need. Store listings stay easy
+              to spot, direct binaries keep their metadata, and the full catalog stays grouped by type below.
             </p>
-            <h1 className="mt-3 text-balance font-display text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-              Popular free downloads with trusted sources and direct binaries
-            </h1>
-            <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-200 sm:text-base">
-              Browse high-signal software picks with Mac and Microsoft Store links, plus GitHub Releases
-              and official direct download paths where available.
-            </p>
-            <div className="mt-4 flex flex-wrap gap-2 text-xs text-slate-200">
-              <span className="rounded-full border border-white/20 bg-white/10 px-2.5 py-1">
+            <div className="mt-4 flex flex-wrap gap-2 text-xs text-muted">
+              <span className="filter-chip px-2.5 py-1">
                 Store links first
               </span>
-              <span className="rounded-full border border-white/20 bg-white/10 px-2.5 py-1">
+              <span className="filter-chip px-2.5 py-1">
                 Version + checksum metadata
               </span>
-              <span className="rounded-full border border-white/20 bg-white/10 px-2.5 py-1">
-                Static-site friendly
+              <span className="filter-chip px-2.5 py-1">
+                Grouped by category
               </span>
             </div>
           </div>

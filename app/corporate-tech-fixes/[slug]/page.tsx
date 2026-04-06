@@ -3,8 +3,16 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FixGuide } from "@/components/corporate-fixes/fix-guide";
 import { EnterpriseSupportBanner } from "@/components/corporate-fixes/fix-shared";
+import { ResourceLinkGrid } from "@/components/shared/resource-link-grid";
 import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import { getCorporateFixBySlug, getCorporateFixes } from "@/lib/corporate-fixes.registry";
+import {
+  getRelatedAssetsForFix,
+  getRelatedCorporateFixes,
+  getRelatedDownloadsForFix,
+  getRelatedPillarsForTerms,
+  getRelatedSupportArticlesForFix
+} from "@/lib/detail-page-related";
 import { getTopKeywordArticleTargets } from "@/lib/seo-content.registry";
 import { supportAuthorProfile } from "@/lib/site";
 import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
@@ -109,9 +117,11 @@ export async function generateMetadata({
     .slice(0, 10)
     .map((entry) => entry.keyword);
 
+  const description = `${fix.description} Severity: ${fix.severity}. Access level: ${fix.accessLevel}. Estimated fix time: ${fix.estimatedTime}.`;
+
   return {
     title: `${fix.title} | Corporate Tech Fixes`,
-    description: fix.description,
+    description,
     authors: [{ name: authorName }],
     keywords: uniqueKeywords([
       ...fix.tags,
@@ -131,11 +141,11 @@ export async function generateMetadata({
     robots: buildRobotsIndexRule(`/corporate-tech-fixes/${fix.slug}/`),
     openGraph: buildOpenGraph(
       `${fix.title} | Corporate Tech Fixes`,
-      fix.description,
+      description,
       `/corporate-tech-fixes/${fix.slug}/`,
       "article"
     ),
-    twitter: buildTwitter(`${fix.title} | Corporate Tech Fixes`, fix.description),
+    twitter: buildTwitter(`${fix.title} | Corporate Tech Fixes`, description),
     other: {
       "support:severity": fix.severity,
       "support:access-level": fix.accessLevel,
@@ -184,6 +194,51 @@ export default async function CorporateFixDetailPage({ params }: CorporateFixPag
         a.keyword.localeCompare(b.keyword)
     )
     .slice(0, 8);
+  const relatedSupportArticles = getRelatedSupportArticlesForFix(fix, 2);
+  const relatedDownloads = getRelatedDownloadsForFix(fix, 2);
+  const relatedAssets = getRelatedAssetsForFix(fix, 2);
+  const relatedFixes = getRelatedCorporateFixes(fix, 2);
+  const relatedPillars = getRelatedPillarsForTerms(
+    [fix.title, fix.description, fix.category, ...fix.tags, ...fix.steps.map((step) => step.title)],
+    2
+  );
+  const resourceLinks = [
+    ...relatedSupportArticles.map((article) => ({
+      href: `/support/tickets/${article.slug}/`,
+      eyebrow: "Support Ticket",
+      title: article.title,
+      description: article.description,
+      meta: `${article.productFamily} • ${article.environment}`
+    })),
+    ...relatedDownloads.map((entry) => ({
+      href: `/downloads/${entry.slug}/`,
+      eyebrow: "Software Download",
+      title: entry.name,
+      description: entry.summary,
+      meta: `${entry.category} • ${entry.platforms.join(", ")}`
+    })),
+    ...relatedAssets.map((asset) => ({
+      href: `/downloads/assets/${asset.slug}/`,
+      eyebrow: "IT Asset",
+      title: asset.title,
+      description: asset.description,
+      meta: `${asset.category} • ${asset.format.toUpperCase()}`
+    })),
+    ...relatedFixes.map((entry) => ({
+      href: `/corporate-tech-fixes/${entry.slug}/`,
+      eyebrow: "Related Fix",
+      title: entry.title,
+      description: entry.description,
+      meta: `${entry.category} • ${entry.estimatedTime}`
+    })),
+    ...relatedPillars.map((pillar) => ({
+      href: `/guides/${pillar.slug}/`,
+      eyebrow: "Pillar Guide",
+      title: pillar.title,
+      description: pillar.description,
+      meta: pillar.targetKeywords.slice(0, 2).join(" • ")
+    }))
+  ].filter((item, index, array) => array.findIndex((candidate) => candidate.href === item.href) === index).slice(0, 6);
 
   const fixArticleSchema = {
     "@context": "https://schema.org",
@@ -209,6 +264,12 @@ export default async function CorporateFixDetailPage({ params }: CorporateFixPag
     audience: {
       "@type": "Audience",
       audienceType: "Enterprise IT support and help desk analysts"
+    },
+    mainEntityOfPage: toAbsoluteUrl(`/corporate-tech-fixes/${fix.slug}/`),
+    publisher: {
+      "@type": "Organization",
+      name: supportAuthorProfile.name,
+      url: toAbsoluteUrl("/")
     }
   };
 
@@ -272,6 +333,19 @@ export default async function CorporateFixDetailPage({ params }: CorporateFixPag
     { name: "Corporate Tech Fixes", path: "/corporate-tech-fixes/" },
     { name: fix.title, path: `/corporate-tech-fixes/${fix.slug}/` }
   ]);
+  const webPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: fix.title,
+    url: toAbsoluteUrl(`/corporate-tech-fixes/${fix.slug}/`),
+    description: fix.description,
+    ...(isoLastVerified ? { dateModified: isoLastVerified } : {}),
+    isPartOf: {
+      "@type": "CollectionPage",
+      name: "Corporate Tech Fixes",
+      url: toAbsoluteUrl("/corporate-tech-fixes/")
+    }
+  };
 
   return (
     <>
@@ -292,10 +366,10 @@ export default async function CorporateFixDetailPage({ params }: CorporateFixPag
           {exactQueryTargets.length > 0 ? (
             <section className="mt-6 surface-card p-5 sm:p-6">
               <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                Related Fixes by Exact Query
+                Related Search Queries
               </h2>
               <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-                High-intent troubleshooting phrases mapped to related internal guides.
+                Other common ways people describe this issue when they are searching or escalating it.
               </p>
               <div className="mt-4 grid gap-3 md:grid-cols-2">
                 {exactQueryTargets.map((target) => (
@@ -325,8 +399,20 @@ export default async function CorporateFixDetailPage({ params }: CorporateFixPag
               </div>
             </section>
           ) : null}
+
+          <div id="related-fix-resources" className="mt-6">
+            <ResourceLinkGrid
+              title="Keep Moving With Related Resources"
+              description="Use adjacent downloads, support articles, and pillar guides to turn a single fix into a complete response path."
+              items={resourceLinks}
+            />
+          </div>
         </div>
       </section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(fixArticleSchema) }}

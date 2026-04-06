@@ -17,6 +17,10 @@ interface AppPageProps {
   }>;
 }
 
+function appPath(slug: string): string {
+  return "/apps/" + slug + "/";
+}
+
 export const dynamicParams = false;
 
 export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
@@ -44,11 +48,11 @@ export async function generateMetadata({ params }: AppPageProps): Promise<Metada
     };
   }
 
-  const { slug } = await params;
-  const app = getAppBySlug(slug);
+  const resolved = await params;
+  const app = getAppBySlug(resolved.slug);
 
   if (!app) {
-    if (slug === STATIC_EXPORT_PLACEHOLDER_SLUG) {
+    if (resolved.slug === STATIC_EXPORT_PLACEHOLDER_SLUG) {
       return {
         title: "App Coming Soon",
         description: "Placeholder page used for static export while no apps are published yet.",
@@ -64,10 +68,12 @@ export async function generateMetadata({ params }: AppPageProps): Promise<Metada
     };
   }
 
+  const path = appPath(app.slug);
+
   return {
     title: app.name,
     description: app.shortDescription,
-    robots: buildRobotsIndexRule(`/apps/${app.slug}/`),
+    robots: buildRobotsIndexRule(path),
     keywords: [
       app.name,
       app.category,
@@ -77,10 +83,10 @@ export async function generateMetadata({ params }: AppPageProps): Promise<Metada
       ...app.features.slice(0, 6)
     ],
     alternates: {
-      canonical: `/apps/${app.slug}/`
+      canonical: path
     },
-    openGraph: buildOpenGraph(`${app.name} | Tamem J`, app.shortDescription, `/apps/${app.slug}/`, "article"),
-    twitter: buildTwitter(`${app.name} | Tamem J`, app.shortDescription)
+    openGraph: buildOpenGraph(app.name + " | Tamem J", app.shortDescription, path, "article"),
+    twitter: buildTwitter(app.name + " | Tamem J", app.shortDescription)
   };
 }
 
@@ -89,28 +95,24 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
     notFound();
   }
 
-  const { slug } = await params;
-  const app = getAppBySlug(slug);
+  const resolved = await params;
+  const app = getAppBySlug(resolved.slug);
 
   if (!app) {
-    if (slug === STATIC_EXPORT_PLACEHOLDER_SLUG) {
+    if (resolved.slug === STATIC_EXPORT_PLACEHOLDER_SLUG) {
       return (
         <section className="section-shell pt-10 sm:pt-14">
           <div className="page-shell max-w-3xl">
             <div className="surface-card-strong p-6 sm:p-8">
               <div className="mb-6">
-                <Link
-                  href="/apps"
-                  className="text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-slate-100"
-                >
+                <Link href="/apps" className="text-sm font-medium text-fg-secondary transition hover:text-fg">
                   ← Back to Apps
                 </Link>
               </div>
               <p className="eyebrow">Hidden Build Placeholder</p>
-              <h1 className="mt-4 text-2xl font-semibold sm:text-3xl">No apps published yet</h1>
-              <p className="mt-3 text-sm sm:text-base">
-                This internal page exists only so static export can build while the apps catalog is
-                empty. It is not linked anywhere in the site UI.
+              <h1 className="mt-4 font-display text-2xl font-semibold text-fg sm:text-3xl">No apps published yet</h1>
+              <p className="mt-3 text-sm leading-7 text-fg-secondary sm:text-base">
+                This internal page exists only so static export can build while the apps catalog is empty. It is not linked anywhere in the site UI.
               </p>
             </div>
           </div>
@@ -121,6 +123,15 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
     notFound();
   }
 
+  const path = appPath(app.slug);
+  const isLive = app.appStoreUrl.trim().length > 0;
+  const supportHref = "/support?app=" + encodeURIComponent(app.slug);
+  const relatedApps = getApps().filter((candidate) => candidate.slug !== app.slug).slice(0, 2);
+  const statusLabel = isLive ? "Live on the App Store" : "In Development";
+  const statusClasses = isLive
+    ? "inline-flex items-center rounded-full border border-success-100 bg-success-50 px-3 py-1 text-xs font-semibold text-success-700 dark:border-success-500/25 dark:bg-success-500/12 dark:text-green-200"
+    : "inline-flex items-center rounded-full border border-primary-200 bg-primary-50 px-3 py-1 text-xs font-semibold text-primary-700 dark:border-primary-500/25 dark:bg-primary-500/12 dark:text-primary-200";
+
   const appSchema = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
@@ -128,11 +139,11 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
     applicationCategory: app.category,
     operatingSystem: "iOS",
     description: app.shortDescription,
-    url: toAbsoluteUrl(`/apps/${app.slug}/`),
+    url: toAbsoluteUrl(path),
     image: toAbsoluteUrl(app.icon),
     screenshot: app.screenshots.map((screenshot) => toAbsoluteUrl(screenshot.src)),
     isAccessibleForFree: app.pricing.toLowerCase().includes("free"),
-    ...(app.appStoreUrl.trim().length > 0
+    ...(isLive
       ? {
           downloadUrl: app.appStoreUrl
         }
@@ -152,105 +163,133 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
   const breadcrumbSchema = buildBreadcrumbJsonLd([
     { name: "Home", path: "/" },
     { name: "Apps", path: "/apps/" },
-    { name: app.name, path: `/apps/${app.slug}/` }
+    { name: app.name, path }
   ]);
 
   return (
     <>
       <section className="section-shell pt-10 sm:pt-14">
-        <div className="page-shell">
-          <div className="mb-6">
-            <Link
-              href="/apps"
-              className="text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-slate-100"
-            >
+        <div className="page-shell space-y-6">
+          <div>
+            <Link href="/apps" className="text-sm font-medium text-fg-secondary transition hover:text-fg">
               ← Back to Apps
             </Link>
           </div>
 
-        <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:gap-8">
-          <div className="space-y-6">
+          <section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:gap-8">
             <div className="surface-card-strong p-6 sm:p-8">
-              <div className="flex items-start gap-4">
-                <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl border border-line bg-white">
-                  <Image
-                    src={app.icon}
-                    alt={`${app.name} app icon`}
-                    fill
-                    sizes="64px"
-                    className="object-cover"
-                    priority
-                  />
+              <div className="flex flex-wrap items-start gap-4">
+                <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-[1.75rem] border border-line bg-card shadow-soft">
+                  <Image src={app.icon} alt={app.name + " app icon"} fill sizes="80px" className="object-cover" priority />
                 </div>
 
-                <div className="min-w-0">
-                  <p className="text-xs uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
-                    {app.category}
-                  </p>
-                  <h1 className="mt-1 text-2xl font-semibold text-slate-900 dark:text-slate-100 sm:text-3xl">
-                    {app.name}
-                  </h1>
-                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-300 sm:text-base">{app.tagline}</p>
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{app.category}</p>
+                    <span className={statusClasses}>{statusLabel}</span>
+                  </div>
+                  <h1 className="mt-3 font-display text-3xl font-semibold text-fg sm:text-4xl">{app.name}</h1>
+                  <p className="mt-2 text-base text-fg-secondary">{app.tagline}</p>
                 </div>
               </div>
 
-              <p className="mt-6 text-sm text-slate-700 dark:text-slate-200 sm:text-base">{app.description}</p>
+              <p className="mt-6 max-w-3xl text-sm leading-7 text-fg-secondary sm:text-base">{app.description}</p>
 
               <div className="mt-6 flex flex-wrap gap-3">
                 <AppStoreButton href={app.appStoreUrl} />
                 <Link href="/privacy" className="btn-secondary">
                   Privacy Policy
                 </Link>
-                <Link href={`/support?app=${encodeURIComponent(app.slug)}`} className="btn-secondary">
+                <Link href={supportHref} className="btn-secondary">
                   Support
                 </Link>
               </div>
 
-              <dl className="mt-6 grid gap-4 rounded-xl border border-line bg-slate-50 p-4 text-sm dark:border-slate-700 dark:bg-slate-900 sm:grid-cols-2">
-                <div>
-                  <dt className="font-medium text-slate-900 dark:text-slate-100">Pricing</dt>
-                  <dd className="mt-1 text-slate-600 dark:text-slate-300">{app.pricing}</dd>
-                </div>
-                <div>
-                  <dt className="font-medium text-slate-900 dark:text-slate-100">Compatibility</dt>
-                  <dd className="mt-1 text-slate-600 dark:text-slate-300">{app.minIOSVersion}</dd>
-                </div>
-              </dl>
+              <div className="mt-6 grid gap-3 md:grid-cols-3">
+                <article className="surface-card rounded-2xl p-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Pricing</p>
+                  <p className="mt-2 text-sm font-semibold text-fg">{app.pricing}</p>
+                </article>
+                <article className="surface-card rounded-2xl p-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Compatibility</p>
+                  <p className="mt-2 text-sm font-semibold text-fg">{app.minIOSVersion}</p>
+                </article>
+                <article className="surface-card rounded-2xl p-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Support</p>
+                  <p className="mt-2 text-sm font-semibold text-fg">{app.supportEmail ?? "support@tamemj.com"}</p>
+                </article>
+              </div>
             </div>
 
+            <div className="surface-card p-4 sm:p-5">
+              <div className="mb-4 flex items-center justify-between gap-3">
+                <div>
+                  <p className="eyebrow">Preview</p>
+                  <h2 className="mt-2 font-display text-2xl font-semibold text-fg">Screenshots</h2>
+                </div>
+                <span className="filter-chip px-2.5 py-1 text-xs">{app.screenshots.length} screens</span>
+              </div>
+              <ScreenshotCarousel screenshots={app.screenshots} appName={app.name} />
+            </div>
+          </section>
+
+          <section className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
             <div className="surface-card p-6 sm:p-8">
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 sm:text-xl">Features</h2>
-              <ul className="mt-4 space-y-3">
-                {app.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-3 text-sm sm:text-base">
-                    <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-accent" />
-                    <span className="text-slate-700 dark:text-slate-200">{feature}</span>
-                  </li>
+              <p className="eyebrow">Core Workflow</p>
+              <h2 className="mt-3 font-display text-2xl font-semibold text-fg">What this product helps users do</h2>
+              <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                {app.features.map((feature, index) => (
+                  <article key={feature} className="surface-card rounded-2xl p-4">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Feature {index + 1}</p>
+                    <p className="mt-2 text-sm leading-6 text-fg-secondary">{feature}</p>
+                  </article>
                 ))}
-              </ul>
+              </div>
             </div>
-          </div>
 
-          <div className="surface-card p-4 sm:p-5">
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 sm:text-xl">Screenshots</h2>
-              <span className="text-xs uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
-                Mobile Preview
-              </span>
+            <div className="space-y-6">
+              <section className="surface-card p-5 sm:p-6">
+                <p className="eyebrow">Product Snapshot</p>
+                <h2 className="mt-3 font-display text-2xl font-semibold text-fg">Launch and support context</h2>
+                <div className="mt-5 space-y-3 text-sm leading-7 text-fg-secondary">
+                  <p>
+                    <span className="font-semibold text-fg">Status:</span> {statusLabel}.
+                  </p>
+                  <p>
+                    <span className="font-semibold text-fg">Support route:</span> Use the linked support flow for app issues, bug reports, and product questions.
+                  </p>
+                  <p>
+                    <span className="font-semibold text-fg">Privacy path:</span> Every app page stays tied to the shared privacy policy so support and trust signals remain close to the product.
+                  </p>
+                </div>
+              </section>
+
+              {relatedApps.length > 0 ? (
+                <section className="surface-card p-5 sm:p-6">
+                  <p className="eyebrow">More Products</p>
+                  <h2 className="mt-3 font-display text-2xl font-semibold text-fg">Related app pages</h2>
+                  <div className="mt-5 space-y-3">
+                    {relatedApps.map((relatedApp) => (
+                      <Link
+                        key={relatedApp.slug}
+                        href={appPath(relatedApp.slug)}
+                        className="surface-card-interactive block rounded-2xl p-4"
+                      >
+                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{relatedApp.category}</p>
+                        <h3 className="mt-2 text-base font-semibold text-fg">{relatedApp.name}</h3>
+                        <p className="mt-2 text-sm text-fg-secondary">{relatedApp.shortDescription}</p>
+                        <p className="mt-3 text-xs font-medium text-primary-600 dark:text-primary-300">Open product page →</p>
+                      </Link>
+                    ))}
+                  </div>
+                </section>
+              ) : null}
             </div>
-            <ScreenshotCarousel screenshots={app.screenshots} appName={app.name} />
-          </div>
-        </div>
+          </section>
         </div>
       </section>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(appSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(appSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
     </>
   );
 }

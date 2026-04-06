@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Ticket } from "@/types/support";
-import { SupportPageHeader } from "@/components/support-portal/page-header";
 import { TopSearchBar } from "@/components/support-portal/top-search-bar";
 import { SupportIcon } from "@/components/support-portal/icons";
 import {
@@ -61,7 +60,7 @@ const quickLinks = [
   }
 ];
 
-export function SupportPortalHome() {
+export function SupportPortalHome({ showHeader = true }: { showHeader?: boolean }) {
   const router = useRouter();
   const [summary, setSummary] = useState<SupportAnalyticsSummary | null>(null);
   const [searchValue, setSearchValue] = useState("");
@@ -103,20 +102,46 @@ export function SupportPortalHome() {
 
   return (
     <div className="space-y-5">
-      <SupportPageHeader
-        title="IT Support Portal"
-        description="ServiceNow-style demo portal with ticket articles, service catalog, incident intake, local ticketing, and analytics. Built to remain static-hosting compatible (GitHub Pages safe)."
-        breadcrumbs={[{ label: "Support Portal" }]}
-        search={
-          <TopSearchBar
-            value={searchValue}
-            onChange={setSearchValue}
-            onSubmit={submitPortalSearch}
-            placeholder="Search tickets (e.g., Outlook search, Adobe sign-in, Figma fonts)"
-            buttonLabel="Search Tickets"
-          />
-        }
-      />
+      {showHeader ? (
+        <section className="surface-card-strong p-5 sm:p-6">
+          <div className="grid gap-4 xl:grid-cols-[1fr_auto] xl:items-end">
+            <div>
+              <p className="eyebrow">Support Workspace</p>
+              <h2 className="mt-3 font-display text-2xl font-semibold text-fg">Search tickets and open the right support path</h2>
+              <p className="mt-2 max-w-3xl text-sm leading-7 text-fg-secondary">
+                ServiceNow-style demo portal with ticket articles, service catalog, incident intake,
+                local ticketing, and analytics that remain static-hosting compatible.
+              </p>
+            </div>
+            <TopSearchBar
+              value={searchValue}
+              onChange={setSearchValue}
+              onSubmit={submitPortalSearch}
+              placeholder="Search tickets (e.g., Outlook search, Adobe sign-in, Figma fonts)"
+              buttonLabel="Search Tickets"
+            />
+          </div>
+        </section>
+      ) : (
+        <section className="surface-card p-5 sm:p-6">
+          <div className="grid gap-4 xl:grid-cols-[1fr_auto] xl:items-end">
+            <div>
+              <p className="eyebrow">Support Workspace</p>
+              <h2 className="mt-3 font-display text-2xl font-semibold text-fg">Search tickets, open modules, and track support activity</h2>
+              <p className="mt-2 max-w-3xl text-sm leading-7 text-fg-secondary">
+                Use search when you know the issue already, or move through the portal modules below if you need the right ticket, request, or incident path first.
+              </p>
+            </div>
+            <TopSearchBar
+              value={searchValue}
+              onChange={setSearchValue}
+              onSubmit={submitPortalSearch}
+              placeholder="Search tickets (e.g., Outlook search, Adobe sign-in, Figma fonts)"
+              buttonLabel="Search Tickets"
+            />
+          </div>
+        </section>
+      )}
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard label="Ticket Views" value={summary?.totals.kbViews ?? 0} href="/support/analytics" />
