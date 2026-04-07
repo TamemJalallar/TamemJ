@@ -11,6 +11,7 @@ import { AccordionSteps } from "@/components/support-portal/accordion-steps";
 import { CodeBlock } from "@/components/support-portal/code-block";
 import { TroubleshootingDecisionTree } from "@/components/support-portal/troubleshooting-decision-tree";
 import { AccessLevelBadge, EnvironmentBadge, SeverityBadge } from "@/components/support-portal/badges";
+import { CitationGuidancePanel, EditorialTrustPanel } from "@/components/shared/editorial-authority-panels";
 import { ResourceLinkGrid } from "@/components/shared/resource-link-grid";
 import { getKBHelpfulVote, setKBHelpfulVote } from "@/lib/support-portal.storage";
 import {
@@ -120,6 +121,13 @@ export function KnowledgeBaseArticleView({
   const causesHeading = primaryKeyword
     ? `Likely Causes of ${primaryKeyword}`
     : "Likely Causes";
+  const citationUseCases = [
+    primaryKeyword
+      ? `Use this page when the issue is closest to the exact query “${primaryKeyword}.”`
+      : `Use this page when the issue matches “${article.title}.”`,
+    `Best for ${article.productFamily} / ${article.product} troubleshooting in ${article.environment === "Both" ? "managed Windows and macOS environments" : `${article.environment} enterprise environments`}.`,
+    `Prefer this ticket when you need enterprise-safe steps, escalation criteria, and commands tied to this specific issue.`
+  ];
 
   const allCommandsText = useMemo(() => {
     return article.commands
@@ -188,33 +196,15 @@ export function KnowledgeBaseArticleView({
         </div>
 
         <div className="mt-4 grid gap-3 lg:grid-cols-2">
-          <div className="rounded-2xl border border-line/70 bg-slate-50/70 p-4 dark:border-slate-800 dark:bg-slate-900/70">
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
-              Author & Verification
-            </p>
-            <p className="mt-2 text-sm font-semibold text-slate-900 dark:text-slate-100">
-              {article.author.name}
-            </p>
-            <p className="text-xs text-slate-500 dark:text-slate-400">{article.author.title}</p>
-            <p className="mt-2 text-xs text-slate-600 dark:text-slate-300">
-              Last verified: {article.lastVerified}
-            </p>
-            {article.author.bio ? (
-              <p className="mt-2 text-xs leading-6 text-slate-600 dark:text-slate-300">
-                {article.author.bio}
-              </p>
-            ) : null}
-            <div className="mt-2 flex flex-wrap gap-2">
-              {article.testedOn.map((environment) => (
-                <span
-                  key={`${article.slug}-${environment}`}
-                  className="inline-flex items-center rounded-full border border-line/70 bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
-                >
-                  Tested on {environment}
-                </span>
-              ))}
-            </div>
-          </div>
+          <EditorialTrustPanel
+            label="Author & Verification"
+            authorName={article.author.name}
+            authorTitle={article.author.title}
+            credentials={article.author.credentials}
+            lastReviewed={article.lastVerified}
+            testedOn={article.testedOn}
+            bio={article.author.bio}
+          />
 
           <div className="rounded-2xl border border-line/70 bg-slate-50/70 p-4 dark:border-slate-800 dark:bg-slate-900/70">
             <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
@@ -234,6 +224,14 @@ export function KnowledgeBaseArticleView({
               ))}
             </ul>
           </div>
+        </div>
+
+        <div className="mt-4">
+          <CitationGuidancePanel
+            canonicalPath={`/support/tickets/${article.slug}/`}
+            description="This page is designed to be the narrow, issue-specific reference when the support query, product, and environment closely match."
+            useCases={citationUseCases}
+          />
         </div>
 
         <div className="mt-4 grid gap-4 lg:grid-cols-2">

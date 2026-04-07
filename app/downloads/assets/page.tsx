@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { EditorialStandardsStrip } from "@/components/shared/editorial-authority-panels";
 import { DownloadAssetsBrowser } from "@/components/downloads/download-assets-browser";
 import {
   getDownloadAssetBundles,
@@ -167,6 +168,8 @@ export default function DownloadAssetsPage() {
               </div>
             </div>
           </section>
+
+          <EditorialStandardsStrip description="Asset detail pages are reviewed as reference surfaces, not just file listings. The goal is to keep each script, template, checklist, or runbook page clear about format, update timing, workflow fit, and the surrounding support context." />
 
           <section className="grid gap-4 lg:grid-cols-3">
             <article className="surface-card-interactive p-5 sm:p-6">

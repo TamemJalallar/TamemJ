@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import type { CorporateTechFix } from "@/lib/corporate-fixes.registry";
+import { CitationGuidancePanel, EditorialTrustPanel } from "@/components/shared/editorial-authority-panels";
 import {
   AccessLevelBadge,
   MetaPill,
@@ -219,6 +220,11 @@ export function FixGuide({ fix }: { fix: CorporateTechFix }) {
       ? "No ratings yet"
       : `${Math.round(helpfulSummary.ratio * 100)}% helpful`;
   const lastVerified = fix.lastVerified ?? "March 3, 2026";
+  const citationUseCases = [
+    `Use this fix when you need a shorter runbook-style response for ${fix.title}.`,
+    `Best for ${fix.category.toLowerCase()} issues where the access level is ${fix.accessLevel.toLowerCase()} and the estimated effort is ${fix.estimatedTime.toLowerCase()}.`,
+    "Prefer this page when you want concise remediation, tested environments, and explicit escalation guidance without the longer support-portal framing."
+  ];
 
   async function handleCopyAll() {
     const compiled = [
@@ -295,33 +301,15 @@ export function FixGuide({ fix }: { fix: CorporateTechFix }) {
         </div>
 
         <div className="mt-5 grid gap-3 lg:grid-cols-2">
-          <div className="rounded-2xl border border-line/70 bg-slate-50/70 p-4 dark:border-slate-800 dark:bg-slate-900/70">
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
-              Author & Verification
-            </p>
-            <p className="mt-2 text-sm font-semibold text-slate-900 dark:text-slate-100">
-              {trustAuthor.name}
-            </p>
-            <p className="text-xs text-slate-500 dark:text-slate-400">{trustAuthor.title}</p>
-            <p className="mt-2 text-xs text-slate-600 dark:text-slate-300">
-              Last verified: {lastVerified}
-            </p>
-            {trustAuthor.bio ? (
-              <p className="mt-2 text-xs leading-6 text-slate-600 dark:text-slate-300">
-                {trustAuthor.bio}
-              </p>
-            ) : null}
-            <div className="mt-2 flex flex-wrap gap-2">
-              {testedOn.map((environment) => (
-                <span
-                  key={`${fix.slug}-${environment}`}
-                  className="inline-flex items-center rounded-full border border-line/70 bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
-                >
-                  Tested on {environment}
-                </span>
-              ))}
-            </div>
-          </div>
+          <EditorialTrustPanel
+            label="Author & Verification"
+            authorName={trustAuthor.name}
+            authorTitle={trustAuthor.title}
+            credentials={trustAuthor.credentials}
+            lastReviewed={lastVerified}
+            testedOn={testedOn}
+            bio={trustAuthor.bio}
+          />
 
           <div className="rounded-2xl border border-line/70 bg-slate-50/70 p-4 dark:border-slate-800 dark:bg-slate-900/70">
             <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
@@ -341,6 +329,14 @@ export function FixGuide({ fix }: { fix: CorporateTechFix }) {
               ))}
             </ul>
           </div>
+        </div>
+
+        <div className="mt-4">
+          <CitationGuidancePanel
+            canonicalPath={`/corporate-tech-fixes/${fix.slug}/`}
+            description="This page is meant to be the faster runbook reference when the issue pattern and access requirements align closely with the fix scope."
+            useCases={citationUseCases}
+          />
         </div>
 
         <div className="mt-5 flex flex-wrap gap-2">

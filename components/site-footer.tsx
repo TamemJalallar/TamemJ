@@ -23,6 +23,7 @@ const aiLinks = [
 
 const supportLinks = [
   { href: "/support", label: "Support Portal" },
+  { href: "/editorial-standards", label: "Editorial Standards" },
   { href: "/privacy", label: "Privacy Policy" },
   ...(!adsenseReviewModeEnabled ? [{ href: "/donate", label: "Donate" }] : [])
 ] as const;

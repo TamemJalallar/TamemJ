@@ -1,0 +1,10 @@
+# Tamem J
+
+For AI crawlers and assistants, use the canonical machine-readable guidance at:
+- [llms.txt](https://tamemj.com/llms.txt)
+- [llms-full.txt](https://tamemj.com/llms-full.txt)
+
+Preferred domain: `https://tamemj.com`
+Preferred publisher: `Tamem J`
+Primary topics: enterprise IT troubleshooting, support documentation, operational downloads, technical apps, AI agents, and GenAI prompts.
+Legacy alias note: prefer `/support/tickets/` over `/support/kb/`.

@@ -17,13 +17,15 @@ export function LegacyKbRedirect({ targetPath }: { targetPath: string }) {
   }, [router, targetUrl]);
 
   return (
-    <div className="rounded-2xl border border-line/70 bg-white p-5 text-sm text-slate-700 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 dark:text-slate-200">
-      <p className="font-semibold text-slate-900 dark:text-slate-100">Tickets have moved</p>
-      <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-        Redirecting you to the new tickets location.
+    <div className="surface-card p-5 text-sm text-fg-secondary">
+      <p className="eyebrow">Legacy Knowledge Base Route</p>
+      <p className="mt-3 font-semibold text-fg">Tickets have moved</p>
+      <p className="mt-2 text-sm leading-6 text-fg-secondary">
+        This older knowledge base URL is kept live for compatibility, but the canonical public reference is now the
+        tickets library. Redirecting you to the current location.
       </p>
-      <a href={targetUrl} className="mt-3 inline-flex items-center text-sm font-semibold text-accent hover:underline">
-        Open tickets →
+      <a href={targetUrl} className="mt-4 inline-flex items-center text-sm font-semibold text-primary-600 hover:underline dark:text-primary-300">
+        Open canonical ticket page →
       </a>
     </div>
   );

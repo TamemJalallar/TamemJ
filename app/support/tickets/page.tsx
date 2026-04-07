@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { EditorialStandardsStrip } from "@/components/shared/editorial-authority-panels";
 import { KnowledgeBaseBrowser } from "@/components/support-portal/knowledge-base-browser";
 import { getTopKBSeoAlignments, getTopSeoKeywordOpportunities } from "@/lib/seo-content.registry";
 import { getKBArticles } from "@/lib/support.kb.registry";
@@ -53,6 +54,8 @@ export default function KBPage() {
       <KnowledgeBaseBrowser articles={articles} />
       <section className="section-shell pb-10 pt-2 sm:pb-14">
         <div className="page-shell space-y-5">
+          <EditorialStandardsStrip description="Support tickets are written as issue-specific reference pages. Each one is reviewed for enterprise-safe remediation, environment clarity, escalation guidance, and direct linkage to related fixes, guides, and downloads." />
+
           <section className="surface-card p-5 sm:p-6">
             <h2 className="font-display text-xl font-semibold text-fg">Popular Search Intents</h2>
             <p className="mt-2 text-sm text-fg-secondary">

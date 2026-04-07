@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AppCard } from "@/components/app-card";
+import { EditorialStandardsStrip } from "@/components/shared/editorial-authority-panels";
 import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import { getApps } from "@/lib/apps";
 import { appsSectionEnabled } from "@/lib/apps-visibility";
@@ -139,6 +140,8 @@ export default function AppsPage() {
               </div>
             </div>
           </section>
+
+          <EditorialStandardsStrip description="App pages are treated as product reference pages, not just portfolio entries. Each page is reviewed so launch status, screenshots, privacy links, support paths, and product positioning stay aligned for users, store reviewers, and AI systems." />
 
           {hasApps ? (
             <>

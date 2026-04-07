@@ -50,3 +50,12 @@ export const supportAuthorProfile = {
   ],
   bio: "Runbooks and troubleshooting guides are reviewed for enterprise-safe usage and avoid security bypass patterns."
 } as const;
+
+
+export const editorialStandards = {
+  title: "Editorial Standards",
+  path: "/editorial-standards/",
+  lastUpdated: "April 7, 2026",
+  summary:
+    "Content is reviewed for enterprise-safe troubleshooting, practical operational clarity, and clear escalation guidance before it is treated as a reference page."
+} as const;

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { CitationGuidancePanel, EditorialTrustPanel } from "@/components/shared/editorial-authority-panels";
 import { ResourceLinkGrid } from "@/components/shared/resource-link-grid";
 import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import {
@@ -12,6 +13,7 @@ import {
   getDownloadAssetUpdatedAt
 } from "@/lib/download-assets.registry";
 import { getRelatedPillarsForTerms } from "@/lib/detail-page-related";
+import { editorialStandards, supportAuthorProfile } from "@/lib/site";
 import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 
 interface DownloadAssetPageProps {
@@ -72,6 +74,7 @@ export async function generateMetadata({ params }: DownloadAssetPageProps): Prom
   return {
     title: `${asset.title} Download | IT Asset Library`,
     description,
+    authors: [{ name: supportAuthorProfile.name }],
     keywords: uniqueKeywords([
       asset.title,
       `${asset.category} download`,
@@ -94,7 +97,8 @@ export async function generateMetadata({ params }: DownloadAssetPageProps): Prom
     other: {
       "download:format": asset.format.toUpperCase(),
       "download:category": asset.category,
-      "download:updated": updatedAt
+      "download:updated": updatedAt,
+      "download:last-reviewed": editorialStandards.lastUpdated
     }
   };
 }
@@ -114,6 +118,11 @@ export default async function DownloadAssetDetailPage({ params }: DownloadAssetP
   const updatedAt = getDownloadAssetUpdatedAt(asset);
   const supportSearchHref = `/support/tickets/?q=${encodeURIComponent(asset.title)}`;
   const directDownloadUrl = getDownloadAssetDownloadUrl(asset);
+  const citationUseCases = [
+    `Use this page when the claim is about the ${asset.title} file itself, its format, or how it fits into ${asset.category.toLowerCase()} work.`,
+    `Best for direct references to the downloadable ${asset.format.toUpperCase()} asset, update date, and related workflow links.`,
+    "Prefer this page over the asset index when the user needs a specific template, script, checklist, or runbook."
+  ];
   const relatedPillars = getRelatedPillarsForTerms(
     [asset.title, asset.description, asset.category, asset.format, ...asset.tags],
     2
@@ -164,6 +173,11 @@ export default async function DownloadAssetDetailPage({ params }: DownloadAssetP
     about: asset.category,
     keywords: asset.tags.join(", "),
     ...(isoUpdatedAt ? { dateModified: isoUpdatedAt, datePublished: isoUpdatedAt } : {}),
+    author: {
+      "@type": "Person",
+      name: supportAuthorProfile.name,
+      jobTitle: supportAuthorProfile.title
+    },
     audience: {
       "@type": "Audience",
       audienceType: "Enterprise IT administrators and support teams"
@@ -285,6 +299,22 @@ export default async function DownloadAssetDetailPage({ params }: DownloadAssetP
                 <p>That is especially useful when the file supports Microsoft 365, endpoint, identity, onboarding, or security work that needs both documentation and execution material.</p>
               </div>
             </section>
+          </section>
+
+          <section className="grid gap-5 xl:grid-cols-[1fr_1fr]">
+            <EditorialTrustPanel
+              label="Asset Review"
+              authorName={supportAuthorProfile.name}
+              authorTitle={supportAuthorProfile.title}
+              credentials={supportAuthorProfile.credentials}
+              lastReviewed={updatedAt}
+              bio={supportAuthorProfile.bio}
+            />
+            <CitationGuidancePanel
+              canonicalPath={`/downloads/assets/${asset.slug}/`}
+              description="This detail page is the best place to reference the asset itself, its hosted file, and the surrounding operational context."
+              useCases={citationUseCases}
+            />
           </section>
 
           {relatedBundles.length > 0 ? (

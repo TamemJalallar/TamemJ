@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { FAQPage, ItemList, SoftwareApplication, WebPage, WithContext } from "schema-dts";
+import { CitationGuidancePanel, EditorialTrustPanel } from "@/components/shared/editorial-authority-panels";
 import { ResourceLinkGrid } from "@/components/shared/resource-link-grid";
 import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import { getRelatedAssetsForDownload, getRelatedPillarsForTerms } from "@/lib/detail-page-related";
 import { getDownloadBySlug, getDownloads, getRelatedDownloads } from "@/lib/downloads.registry";
+import { editorialStandards, supportAuthorProfile } from "@/lib/site";
 import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 import type { DirectDownloadArtifact, DownloadEntry } from "@/types/download";
 
@@ -116,6 +118,7 @@ export async function generateMetadata({
   return {
     title: `${entry.name} Download Guide`,
     description,
+    authors: [{ name: supportAuthorProfile.name }],
     keywords: uniqueKeywords([
       `${entry.name} download`,
       `${entry.name} for ${entry.platforms[0]}`,
@@ -132,7 +135,11 @@ export async function generateMetadata({
     },
     robots: buildRobotsIndexRule(path),
     openGraph: buildOpenGraph(`${entry.name} Download Guide | Tamem J`, description, path, "article"),
-    twitter: buildTwitter(`${entry.name} Download Guide | Tamem J`, description)
+    twitter: buildTwitter(`${entry.name} Download Guide | Tamem J`, description),
+    other: {
+      "download:guide-last-reviewed": editorialStandards.lastUpdated,
+      "download:category": entry.category
+    }
   };
 }
 
@@ -148,11 +155,17 @@ export default async function DownloadDetailPage({ params }: DownloadDetailPageP
   const relatedDownloads = getRelatedDownloads(entry, 6);
   const primaryLinks = getPrimaryLinks(entry);
   const latestReleaseDate = formatDate(entry.releaseMetadata?.publishedAt);
+  const reviewDate = latestReleaseDate ?? editorialStandards.lastUpdated;
   const isoLatestReleaseDate =
     entry.releaseMetadata?.publishedAt && !Number.isNaN(Date.parse(entry.releaseMetadata.publishedAt))
       ? new Date(entry.releaseMetadata.publishedAt).toISOString()
       : undefined;
   const latestVersion = formatVersion(entry.releaseMetadata?.releaseTag ?? directDownloads[0]?.version);
+  const citationUseCases = [
+    `Use this page when the user needs the official install path for ${entry.name} on ${entry.platforms.join(", ")}.`,
+    `Best for references to store links, official channels, direct binaries, release tracking, and checksum-backed delivery notes.`,
+    "Prefer this page over the downloads index when the software itself, its release state, or its install sources are the core claim."
+  ];
   const supportSearchHref = `/support/tickets/?q=${encodeURIComponent(entry.name)}`;
   const relatedAssets = getRelatedAssetsForDownload(entry, 3);
   const relatedPillars = getRelatedPillarsForTerms(
@@ -222,6 +235,10 @@ export default async function DownloadDetailPage({ params }: DownloadDetailPageP
           }
         }
       : {}),
+    publisher: {
+      "@type": "Person",
+      name: supportAuthorProfile.name
+    },
     mainEntityOfPage: toAbsoluteUrl(`/downloads/${entry.slug}/`),
     ...(latestVersion ? { softwareVersion: latestVersion } : {}),
     ...(entry.license ? { license: entry.license } : {}),
@@ -421,6 +438,22 @@ export default async function DownloadDetailPage({ params }: DownloadDetailPageP
                 </div>
               </dl>
             </section>
+          </section>
+
+          <section className="grid gap-5 xl:grid-cols-[1fr_1fr]">
+            <EditorialTrustPanel
+              label="Guide Review"
+              authorName={supportAuthorProfile.name}
+              authorTitle={supportAuthorProfile.title}
+              credentials={supportAuthorProfile.credentials}
+              lastReviewed={reviewDate}
+              bio={supportAuthorProfile.bio}
+            />
+            <CitationGuidancePanel
+              canonicalPath={`/downloads/${entry.slug}/`}
+              description="This detail page is meant to be the canonical install and verification reference for the software entry, not just a card in the catalog."
+              useCases={citationUseCases}
+            />
           </section>
 
           {entry.releaseMetadata ? (

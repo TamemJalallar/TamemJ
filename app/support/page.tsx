@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { EditorialStandardsStrip } from "@/components/shared/editorial-authority-panels";
 import { SupportForm } from "@/components/support-form";
 import { SupportPortalHome } from "@/components/support-portal/support-portal-home";
 import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
@@ -149,6 +150,8 @@ export default function SupportPage() {
         </section>
 
         <SupportPortalHome showHeader={false} />
+
+        <EditorialStandardsStrip description="The support experience is built around enterprise-safe troubleshooting, clearly separated app support, and reference pages that stay useful to both users and AI systems. That means detail pages are reviewed for scope, escalation, tested environments, and canonical routing." />
 
         <section className="surface-card p-5 sm:p-6">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">

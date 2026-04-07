@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { CitationGuidancePanel, EditorialTrustPanel } from "@/components/shared/editorial-authority-panels";
 import {
   getContentClusterBySlug,
   getKeywordOpportunitiesForPillar,
@@ -11,6 +12,7 @@ import {
   type OpportunitySegment
 } from "@/lib/seo-content.registry";
 import { buildPillarGuideEditorial } from "@/src/content/editorial/pillar-guides";
+import { editorialStandards, supportAuthorProfile } from "@/lib/site";
 import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 
 interface GuidePageProps {
@@ -63,9 +65,14 @@ export async function generateMetadata({ params }: GuidePageProps): Promise<Meta
   return {
     title: `${pillar.title} | IT Pillar Guide`,
     description: pillar.description,
+    authors: [{ name: supportAuthorProfile.name }],
     keywords: keywordPool,
     alternates: {
       canonical: `/guides/${pillar.slug}/`
+    },
+    other: {
+      "guide:last-reviewed": editorialStandards.lastUpdated,
+      "guide:cluster": pillar.cluster
     },
     openGraph: buildOpenGraph(
       `${pillar.title} | IT Pillar Guide`,
@@ -89,6 +96,11 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
   const relatedAssets = getSuggestedDownloadAssetsForPillar(pillar, 14);
   const opportunities = getKeywordOpportunitiesForPillar(pillar, 12);
   const editorial = buildPillarGuideEditorial(pillar, cluster, relatedKBArticles, relatedAssets);
+  const citationUseCases = [
+    `Use this guide when the task spans multiple related tickets and needs a broader ${cluster?.title ?? "IT operations"} workflow.`,
+    `Best for planning around ${pillar.targetKeywords.slice(0, 3).join(", ")} without losing the linked ticket and asset detail pages.`,
+    "Prefer this page when the reader needs context, prioritization, and internal links across a topic cluster rather than a single fix."
+  ];
 
   const guideSchema = {
     "@context": "https://schema.org",
@@ -96,6 +108,12 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
     name: pillar.title,
     description: pillar.description,
     url: toAbsoluteUrl(`/guides/${pillar.slug}/`),
+    author: {
+      "@type": "Person",
+      name: supportAuthorProfile.name,
+      jobTitle: supportAuthorProfile.title
+    },
+    dateModified: new Date(editorialStandards.lastUpdated).toISOString(),
     mainEntity: {
       "@type": "ItemList",
       numberOfItems: relatedKBArticles.length,
@@ -165,6 +183,22 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
                 {relatedAssets.length} related IT assets
               </span>
             </div>
+          </section>
+
+          <section className="grid gap-5 xl:grid-cols-[1fr_1fr]">
+            <EditorialTrustPanel
+              label="Guide Review"
+              authorName={supportAuthorProfile.name}
+              authorTitle={supportAuthorProfile.title}
+              credentials={supportAuthorProfile.credentials}
+              lastReviewed={editorialStandards.lastUpdated}
+              bio={supportAuthorProfile.bio}
+            />
+            <CitationGuidancePanel
+              canonicalPath={`/guides/${pillar.slug}/`}
+              description="This guide is the broader editorial hub for the topic cluster. It is strongest when the reader needs workflow context and linked operational resources."
+              useCases={citationUseCases}
+            />
           </section>
 
           <section className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">

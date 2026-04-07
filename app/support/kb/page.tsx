@@ -20,19 +20,26 @@ export default function KBPage() {
       <div className="page-shell max-w-3xl">
         <Suspense
           fallback={
-            <div className="rounded-2xl border border-line/70 bg-white p-5 text-sm text-slate-700 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 dark:text-slate-200">
+            <div className="surface-card p-5 text-sm text-fg-secondary">
               Redirecting to tickets…
             </div>
           }
         >
           <LegacyKbRedirect targetPath="/support/tickets" />
         </Suspense>
-        <div className="mt-6 text-sm text-slate-600 dark:text-slate-300">
+        <div className="mt-6 rounded-2xl border border-line/70 bg-card-2/70 p-4 text-sm text-fg-secondary">
+          <p className="font-medium text-fg">Canonical support library</p>
+          <p className="mt-2 leading-6">
+            The public, indexed support knowledge base now lives under the tickets path so support documentation has a
+            single canonical home.
+          </p>
+          <p className="mt-3">
           If you are not redirected automatically, open{" "}
-          <Link href="/support/tickets" className="font-semibold text-accent hover:underline">
+          <Link href="/support/tickets" className="font-semibold text-primary-600 hover:underline dark:text-primary-300">
             the tickets library
           </Link>
           .
+          </p>
         </div>
       </div>
     </section>

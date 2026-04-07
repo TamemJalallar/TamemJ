@@ -3,10 +3,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AppStoreButton } from "@/components/app-store-button";
+import { CitationGuidancePanel, EditorialTrustPanel } from "@/components/shared/editorial-authority-panels";
 import { ScreenshotCarousel } from "@/components/screenshot-carousel";
 import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import { getAppBySlug, getApps } from "@/lib/apps";
 import { appsSectionEnabled } from "@/lib/apps-visibility";
+import { editorialStandards, supportAuthorProfile } from "@/lib/site";
 import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 
 const STATIC_EXPORT_PLACEHOLDER_SLUG = "__site-build-placeholder__";
@@ -73,6 +75,7 @@ export async function generateMetadata({ params }: AppPageProps): Promise<Metada
   return {
     title: app.name,
     description: app.shortDescription,
+    authors: [{ name: supportAuthorProfile.name }],
     robots: buildRobotsIndexRule(path),
     keywords: [
       app.name,
@@ -84,6 +87,10 @@ export async function generateMetadata({ params }: AppPageProps): Promise<Metada
     ],
     alternates: {
       canonical: path
+    },
+    other: {
+      "app:status": app.appStoreUrl.trim().length > 0 ? "live" : "in-development",
+      "app:last-reviewed": editorialStandards.lastUpdated
     },
     openGraph: buildOpenGraph(app.name + " | Tamem J", app.shortDescription, path, "article"),
     twitter: buildTwitter(app.name + " | Tamem J", app.shortDescription)
@@ -128,6 +135,17 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
   const supportHref = "/support?app=" + encodeURIComponent(app.slug);
   const relatedApps = getApps().filter((candidate) => candidate.slug !== app.slug).slice(0, 2);
   const statusLabel = isLive ? "Live on the App Store" : "In Development";
+  const citationUseCases = isLive
+    ? [
+        `Use this page for app-specific claims about ${app.name}, including product purpose, feature summary, support path, and App Store availability.`,
+        "Best when the user needs the canonical product page instead of a broader app catalog listing.",
+        "Prefer this page for privacy, support, screenshots, and launch-status context tied directly to the released app."
+      ]
+    : [
+        `Use this page for public information about ${app.name} while it is still in development, including product direction, support contact path, and preview context.`,
+        "Best for API review, partner review, and discovery of the product concept before release.",
+        "Do not treat this page as proof of released features until the app has a live App Store listing."
+      ];
   const statusClasses = isLive
     ? "inline-flex items-center rounded-full border border-success-100 bg-success-50 px-3 py-1 text-xs font-semibold text-success-700 dark:border-success-500/25 dark:bg-success-500/12 dark:text-green-200"
     : "inline-flex items-center rounded-full border border-primary-200 bg-primary-50 px-3 py-1 text-xs font-semibold text-primary-700 dark:border-primary-500/25 dark:bg-primary-500/12 dark:text-primary-200";
@@ -148,6 +166,14 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
           downloadUrl: app.appStoreUrl
         }
       : {}),
+    author: {
+      "@type": "Person",
+      name: supportAuthorProfile.name
+    },
+    publisher: {
+      "@type": "Person",
+      name: supportAuthorProfile.name
+    },
     ...(app.pricing.toLowerCase().includes("free")
       ? {
           offers: {
@@ -231,6 +257,30 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
               </div>
               <ScreenshotCarousel screenshots={app.screenshots} appName={app.name} />
             </div>
+          </section>
+
+          <section className="grid gap-6 xl:grid-cols-[1fr_1fr]">
+            <EditorialTrustPanel
+              label="Product Page Review"
+              authorName={supportAuthorProfile.name}
+              authorTitle={supportAuthorProfile.title}
+              credentials={supportAuthorProfile.credentials}
+              lastReviewed={editorialStandards.lastUpdated}
+              bio={
+                isLive
+                  ? "Live product pages are reviewed so the feature summary, support path, privacy path, and App Store status remain aligned."
+                  : "Pre-launch product pages are reviewed to keep API review, support contact, and public positioning clear before release."
+              }
+            />
+            <CitationGuidancePanel
+              canonicalPath={path}
+              description={
+                isLive
+                  ? "This page is the canonical source for the released app’s positioning, support links, screenshots, and store status."
+                  : "This page is the canonical public reference for the app while it is in development and before the store listing is live."
+              }
+              useCases={citationUseCases}
+            />
           </section>
 
           <section className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
