@@ -8,7 +8,11 @@ import {
 } from "@/lib/support-portal.seo";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return buildSupportCatalogIndexMetadataWithItems(getCatalogItems());
+  const base = buildSupportCatalogIndexMetadataWithItems(getCatalogItems());
+  return {
+    ...base,
+    robots: { index: false, follow: false }
+  };
 }
 
 export default function CatalogPage() {

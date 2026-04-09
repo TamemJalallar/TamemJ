@@ -26,7 +26,11 @@ export async function generateMetadata({ params }: CatalogDetailPageProps): Prom
     return { title: "Catalog Item Not Found" };
   }
 
-  return buildCatalogItemMetadata(item);
+  const base = buildCatalogItemMetadata(item);
+  return {
+    ...base,
+    robots: { index: false, follow: false }
+  };
 }
 
 export default async function CatalogDetailPage({ params }: CatalogDetailPageProps) {

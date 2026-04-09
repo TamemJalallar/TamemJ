@@ -134,6 +134,7 @@ These routes are real parts of the product experience, but they are not the pref
 - [https://tamemj.com/support/analytics/](https://tamemj.com/support/analytics/)
 - [https://tamemj.com/support/my-tickets/](https://tamemj.com/support/my-tickets/)
 - [https://tamemj.com/support/incident/new/](https://tamemj.com/support/incident/new/)
+- [https://tamemj.com/support/catalog/](https://tamemj.com/support/catalog/) (service-request workflow and demo surface, not a preferred factual citation page)
 - [https://tamemj.com/support/kb/](https://tamemj.com/support/kb/) (legacy alias; use the matching `/support/tickets/` URL instead)
 - [https://tamemj.com/corporate-tech-fixes/builder/](https://tamemj.com/corporate-tech-fixes/builder/)
 

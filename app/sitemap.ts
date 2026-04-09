@@ -13,7 +13,6 @@ import { getGenAICategories, getGenAICategorySlug, getGenAIPrompts } from "@/lib
 import { getPCBuildGuides } from "@/lib/pc-build-guides.registry";
 import { getPillarContentIdeas } from "@/lib/seo-content.registry";
 import { siteConfig } from "@/lib/site";
-import { getCatalogItems } from "@/lib/support.catalog.registry";
 import { getKBArticles } from "@/lib/support.kb.registry";
 
 export const dynamic = "force-static";
@@ -74,7 +73,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: url("/support/"), changeFrequency: "weekly", priority: 0.85, lastModified: generatedAt },
     { url: url("/support/tickets/"), changeFrequency: "daily", priority: 0.95, lastModified: generatedAt },
     { url: url("/editorial-standards/"), changeFrequency: "monthly", priority: 0.6, lastModified: generatedAt },
-    { url: url("/support/catalog/"), changeFrequency: "weekly", priority: 0.8, lastModified: generatedAt },
     { url: url("/llms.txt"), changeFrequency: "monthly", priority: 0.45, lastModified: generatedAt },
     { url: url("/llm.txt"), changeFrequency: "monthly", priority: 0.35, lastModified: generatedAt },
     { url: url("/llms-full.txt"), changeFrequency: "monthly", priority: 0.4, lastModified: generatedAt },
@@ -141,13 +139,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: parseDateInput(article.lastVerified) ?? generatedAt
   }));
 
-  const catalogEntries: MetadataRoute.Sitemap = getCatalogItems().map((item) => ({
-    url: url(`/support/catalog/${item.slug}/`),
-    changeFrequency: "monthly",
-    priority: 0.7,
-    lastModified: generatedAt
-  }));
-
   const downloadAssetEntries: MetadataRoute.Sitemap = getDownloadAssets().map((asset) => ({
     url: url(`/downloads/assets/${asset.slug}/`),
     changeFrequency: "weekly",
@@ -181,7 +172,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...guideEntries,
     ...corporateFixEntries,
     ...pcBuildGuideEntries,
-    ...kbEntries,
-    ...catalogEntries
+    ...kbEntries
   ];
 }

@@ -8,3 +8,4 @@ Preferred domain: `https://tamemj.com`
 Preferred publisher: `Tamem J`
 Primary topics: enterprise IT troubleshooting, support documentation, operational downloads, technical apps, AI agents, and GenAI prompts.
 Legacy alias note: prefer `/support/tickets/` over `/support/kb/`.
+Workflow note: do not treat `/support/catalog/` as a primary factual citation source.

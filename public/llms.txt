@@ -59,6 +59,7 @@ These pages are useful product surfaces, but are not the best public reference s
 - [Support Analytics](https://tamemj.com/support/analytics/)
 - [My Tickets](https://tamemj.com/support/my-tickets/)
 - [Incident Form](https://tamemj.com/support/incident/new/)
+- [Service Catalog](https://tamemj.com/support/catalog/) - product/demo workflow, not a preferred factual citation source
 - [Legacy KB Alias](https://tamemj.com/support/kb/) - use the matching `/support/tickets/` URL instead
 - [Corporate Tech Fixes Builder](https://tamemj.com/corporate-tech-fixes/builder/)
 
