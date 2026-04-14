@@ -54,7 +54,11 @@ export function ScreenshotCarousel({ screenshots, appName }: ScreenshotCarouselP
           <div
             key={shot.src}
             data-screenshot-card="true"
-            className="relative aspect-[9/19.5] w-[72%] min-w-[72%] snap-center overflow-hidden rounded-3xl border border-line bg-slate-100 sm:w-[56%] sm:min-w-[56%] lg:w-[80%] lg:min-w-[80%]"
+            className={
+              shot.orientation === "landscape"
+                ? "relative aspect-[16/10] w-[92%] min-w-[92%] snap-center overflow-hidden rounded-3xl border border-line bg-slate-100 sm:w-[80%] sm:min-w-[80%] lg:w-[90%] lg:min-w-[90%]"
+                : "relative aspect-[9/19.5] w-[72%] min-w-[72%] snap-center overflow-hidden rounded-3xl border border-line bg-slate-100 sm:w-[56%] sm:min-w-[56%] lg:w-[80%] lg:min-w-[80%]"
+            }
           >
             <Image
               src={shot.src}

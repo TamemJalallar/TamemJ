@@ -4,7 +4,7 @@ import { EditorialStandardsStrip } from "@/components/shared/editorial-authority
 import { SupportForm } from "@/components/support-form";
 import { SupportPortalHome } from "@/components/support-portal/support-portal-home";
 import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
-import { getApps } from "@/lib/apps";
+import { getApps, isPublishedApp } from "@/lib/apps";
 import { buildBreadcrumbJsonLd } from "@/lib/seo";
 import {
   buildSupportOpenGraph,
@@ -62,7 +62,7 @@ const faqs = [
 export default function SupportPage() {
   const apps = getApps();
   const hasApps = apps.length > 0;
-  const liveApps = apps.filter((app) => app.appStoreUrl.trim().length > 0).length;
+  const publishedApps = apps.filter(isPublishedApp).length;
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -136,9 +136,9 @@ export default function SupportPage() {
                 </p>
               </article>
               <article className="rounded-3xl border border-white/15 bg-white/10 p-4 backdrop-blur">
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary-100/80">Published Apps</p>
-                <p className="mt-2 font-display text-3xl font-semibold text-white">{liveApps}</p>
-                <p className="mt-1 text-sm text-primary-100/85">Live App Store products already linked into support</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary-100/80">Published Products</p>
+                <p className="mt-2 font-display text-3xl font-semibold text-white">{publishedApps}</p>
+                <p className="mt-1 text-sm text-primary-100/85">Released apps and tools already linked into support</p>
               </article>
               <article className="rounded-3xl border border-white/15 bg-white/10 p-4 backdrop-blur">
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary-100/80">Support Email</p>

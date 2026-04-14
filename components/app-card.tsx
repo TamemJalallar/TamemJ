@@ -1,17 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { IOSApp } from "@/types/app";
+import { getAppPrimaryLink, getAppStatusLabel, getCompatibilityText, hasAppStoreRelease } from "@/lib/apps";
 
 interface AppCardProps {
   app: IOSApp;
 }
 
 export function AppCard({ app }: AppCardProps) {
-  const hasAppStoreUrl = app.appStoreUrl.trim().length > 0;
+  const hasAppStoreUrl = hasAppStoreRelease(app);
+  const primaryLink = getAppPrimaryLink(app);
   const appDetailHref = `/apps/${app.slug}`;
-  const statusLabel = hasAppStoreUrl ? "Live on App Store" : "In Development";
-  const iconHref = hasAppStoreUrl ? app.appStoreUrl : appDetailHref;
-  const iconTargetProps = hasAppStoreUrl ? { target: "_blank", rel: "noreferrer" as const } : {};
+  const statusLabel = getAppStatusLabel(app);
+  const iconHref = primaryLink?.href ?? appDetailHref;
+  const iconTargetProps = primaryLink ? { target: "_blank", rel: "noreferrer" as const } : {};
 
   return (
     <article className="surface-card-strong flex h-full flex-col p-5 transition-all duration-200 hover:-translate-y-1 hover:border-primary-200 hover:shadow-card dark:hover:border-primary-400/30 sm:p-6">
@@ -37,7 +39,7 @@ export function AppCard({ app }: AppCardProps) {
 
         <a
           href={iconHref}
-          aria-label={hasAppStoreUrl ? `Open ${app.name} on the App Store` : `Open ${app.name} details`}
+          aria-label={primaryLink ? `${primaryLink.label} for ${app.name}` : `Open ${app.name} details`}
           className="group/icon shrink-0 text-center"
           {...iconTargetProps}
         >
@@ -45,7 +47,7 @@ export function AppCard({ app }: AppCardProps) {
             <Image src={app.icon} alt={`${app.name} icon`} fill sizes="80px" className="object-cover" />
           </div>
           <span className="mt-2 block text-center text-[10px] font-semibold uppercase tracking-[0.14em] text-muted transition group-hover/icon:text-primary-600 dark:group-hover/icon:text-primary-300">
-            {hasAppStoreUrl ? "Open store" : "Details"}
+            {primaryLink ? (hasAppStoreUrl ? "Open store" : "Open product") : "Details"}
           </span>
         </a>
       </div>
@@ -71,7 +73,7 @@ export function AppCard({ app }: AppCardProps) {
           </div>
           <div className="rounded-xl border border-line/80 bg-card-2/60 px-3 py-2">
             <p className="font-semibold text-fg">Compatibility</p>
-            <p className="mt-1">{app.minIOSVersion}</p>
+            <p className="mt-1">{getCompatibilityText(app)}</p>
           </div>
         </div>
         <div className="flex items-center justify-between gap-4">

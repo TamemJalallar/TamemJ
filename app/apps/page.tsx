@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { AppCard } from "@/components/app-card";
 import { EditorialStandardsStrip } from "@/components/shared/editorial-authority-panels";
 import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
-import { getApps } from "@/lib/apps";
+import { getApps, hasAppStoreRelease, isPublishedApp } from "@/lib/apps";
 import { appsSectionEnabled } from "@/lib/apps-visibility";
 import {
   buildBreadcrumbJsonLd,
@@ -29,22 +29,25 @@ function uniqueKeywords(keywords: string[]): string[] {
 
 const seoApps = getApps();
 const topCategories = [...new Set(seoApps.map((app) => app.category))].slice(0, 8);
-const topAppKeywords = seoApps.slice(0, 12).map((app) => `${app.name} app`);
+const topAppKeywords = seoApps.slice(0, 12).flatMap((app) => [app.name, `${app.name} product`]);
 const hasSeoApps = seoApps.length > 0;
-const liveSeoApps = seoApps.filter((app) => app.appStoreUrl.trim().length > 0).length;
-const upcomingSeoApps = seoApps.length - liveSeoApps;
+const publishedSeoApps = seoApps.filter(isPublishedApp).length;
+const upcomingSeoApps = seoApps.length - publishedSeoApps;
 const seoDescription = hasSeoApps
-  ? `Browse ${seoApps.length} Apple app${seoApps.length === 1 ? "" : "s"} by Tamem J, including ${seoApps
+  ? `Browse ${seoApps.length} apps and products by Tamem J, including ${seoApps
       .slice(0, 3)
       .map((app) => app.name)
-      .join(", ")}${upcomingSeoApps > 0 ? ", with live and upcoming releases" : ""}.`
-  : "Browse Apple apps by Tamem J. New releases are in progress.";
+      .join(", ")}${upcomingSeoApps > 0 ? ", with published and upcoming releases" : ""}.`
+  : "Browse apps and products by Tamem J. New releases are in progress.";
 
 export const metadata: Metadata = {
   title: "Apps",
   description: seoDescription,
   keywords: uniqueKeywords([
     "iOS apps",
+    "developer products",
+    "software products",
+    "OBS tools",
     "macOS apps",
     "watchOS apps",
     "iPhone apps",
@@ -69,12 +72,13 @@ export default function AppsPage() {
 
   const apps = getApps();
   const hasApps = apps.length > 0;
-  const liveApps = apps.filter((app) => app.appStoreUrl.trim().length > 0);
-  const upcomingApps = apps.filter((app) => app.appStoreUrl.trim().length === 0);
+  const publishedApps = apps.filter(isPublishedApp);
+  const liveApps = apps.filter(hasAppStoreRelease);
+  const upcomingApps = apps.filter((app) => !isPublishedApp(app));
   const categoryCount = new Set(apps.map((app) => app.category)).size;
   const appsCollectionSchema = buildCollectionPageJsonLd(
-    "Apple Apps by Tamem J",
-    "Browse Apple platform apps by Tamem J, including live releases and coming-soon launches.",
+    "Apps and Products by Tamem J",
+    "Browse apps and technical products by Tamem J, including App Store releases and published developer tools.",
     "/apps/",
     apps.map((app) => ({
       name: app.name,
@@ -100,12 +104,11 @@ export default function AppsPage() {
                   Product pages built like real launch surfaces, not placeholder portfolio tiles.
                 </h1>
                 <p className="mt-4 max-w-3xl text-sm leading-7 text-primary-100/90 sm:text-base">
-                  This section is now positioned as a product catalog. Live apps get full support and privacy paths,
-                  while in-development products still have a clear landing page for API approvals, previews, and launch status.
+                  This section is positioned as a real product catalog. Published apps, shipped tools, and in-development products each get a page with screenshots, support context, privacy links, and honest status labels.
                 </p>
                 <div className="mt-6 flex flex-wrap gap-3">
                   <a href="#app-catalog" className="btn-primary">
-                    Browse Apps
+                    Browse Products
                   </a>
                   <Link href="/support" className="btn-secondary">
                     App Support
@@ -118,14 +121,19 @@ export default function AppsPage() {
 
               <div className="grid gap-3 sm:grid-cols-2">
                 <article className="rounded-3xl border border-white/15 bg-white/10 p-4 backdrop-blur">
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary-100/80">Total Apps</p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary-100/80">Total Products</p>
                   <p className="mt-2 font-display text-3xl font-semibold text-white">{apps.length}</p>
                   <p className="mt-1 text-sm text-primary-100/85">Product pages currently in the catalog</p>
                 </article>
                 <article className="rounded-3xl border border-white/15 bg-white/10 p-4 backdrop-blur">
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary-100/80">Live Releases</p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary-100/80">Published Products</p>
+                  <p className="mt-2 font-display text-3xl font-semibold text-white">{publishedApps.length}</p>
+                  <p className="mt-1 text-sm text-primary-100/85">Live App Store apps and released developer tools</p>
+                </article>
+                <article className="rounded-3xl border border-white/15 bg-white/10 p-4 backdrop-blur">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary-100/80">App Store Releases</p>
                   <p className="mt-2 font-display text-3xl font-semibold text-white">{liveApps.length}</p>
-                  <p className="mt-1 text-sm text-primary-100/85">Apps already available on the App Store</p>
+                  <p className="mt-1 text-sm text-primary-100/85">Products already published through Apple</p>
                 </article>
                 <article className="rounded-3xl border border-white/15 bg-white/10 p-4 backdrop-blur">
                   <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary-100/80">In Development</p>
@@ -154,8 +162,8 @@ export default function AppsPage() {
                   </p>
                 </article>
                 <article className="surface-card-interactive p-5 sm:p-6">
-                  <p className="eyebrow">Live and upcoming</p>
-                  <h2 className="mt-3 font-display text-xl font-semibold text-fg">Published apps and in-progress products can coexist cleanly</h2>
+                  <p className="eyebrow">Released and upcoming</p>
+                  <h2 className="mt-3 font-display text-xl font-semibold text-fg">Published apps, shipped tools, and in-progress products can coexist cleanly</h2>
                   <p className="mt-3 text-sm leading-7 text-fg-secondary">
                     Live releases drive the primary product story, while in-development pages still help with API reviews, waitlist-style previews, and product positioning.
                   </p>
@@ -164,22 +172,22 @@ export default function AppsPage() {
                   <p className="eyebrow">Support continuity</p>
                   <h2 className="mt-3 font-display text-xl font-semibold text-fg">Privacy and contact links stay close to the product</h2>
                   <p className="mt-3 text-sm leading-7 text-fg-secondary">
-                    That makes each app easier to trust and easier to review, especially when people land on a product page directly from search or the App Store.
+                    That makes each product easier to trust and easier to review, especially when people land on a product page directly from search, GitHub, or the App Store.
                   </p>
                 </article>
               </section>
 
-              {liveApps.length > 0 ? (
+              {publishedApps.length > 0 ? (
                 <section className="space-y-4" id="app-catalog">
                   <div className="flex flex-col gap-2">
-                    <p className="eyebrow">Live on the App Store</p>
-                    <h2 className="font-display text-2xl font-semibold text-fg">Published products</h2>
+                    <p className="eyebrow">Published Products</p>
+                    <h2 className="font-display text-2xl font-semibold text-fg">Released apps and tools</h2>
                     <p className="max-w-3xl text-sm leading-7 text-fg-secondary">
-                      These apps are live and should read like finished product pages, with support and privacy available right away.
+                      These products are already out in the world, whether through the App Store or as distributed technical tools with their own product pages, screenshots, and support context.
                     </p>
                   </div>
                   <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                    {liveApps.map((app) => (
+                    {publishedApps.map((app) => (
                       <AppCard key={app.slug} app={app} />
                     ))}
                   </div>
@@ -207,9 +215,9 @@ export default function AppsPage() {
                 <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
                   <div>
                     <p className="eyebrow">All Product Pages</p>
-                    <h2 className="mt-3 font-display text-2xl font-semibold text-fg">Full app catalog</h2>
+                    <h2 className="mt-3 font-display text-2xl font-semibold text-fg">Full product catalog</h2>
                     <p className="mt-2 max-w-3xl text-sm leading-7 text-fg-secondary">
-                      The featured and live groupings above help with pacing, while this grid remains the simple full catalog view.
+                      The published and upcoming groupings above help with pacing, while this grid remains the simple full catalog view.
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -235,8 +243,7 @@ export default function AppsPage() {
                   First app launch is on deck
                 </h2>
                 <p className="mt-3 max-w-2xl text-sm leading-7 text-fg-secondary sm:text-base">
-                  The product catalog shell is already in place. As soon as the first App Store release goes live,
-                  this page will switch from launch prep to a real product index with support and privacy paths built in.
+                  The product catalog shell is already in place. As soon as the first release goes live, this page will switch from launch prep to a real product index with support and privacy paths built in.
                 </p>
                 <div className="mt-6 flex flex-wrap gap-3">
                   <Link href="/contact" className="btn-primary">
@@ -253,7 +260,7 @@ export default function AppsPage() {
                 <ul className="mt-4 space-y-3 text-sm text-fg-secondary sm:text-base">
                   <li className="flex items-start gap-3">
                     <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-accent-500" />
-                    <span>Clear product pages for live App Store launches.</span>
+                    <span>Clear product pages for released apps and developer tools.</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-accent-500" />

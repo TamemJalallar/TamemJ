@@ -1,11 +1,15 @@
 interface AppStoreButtonProps {
   href?: string;
+  label?: string;
+  ariaLabel?: string;
   className?: string;
   unavailableText?: string;
 }
 
 export function AppStoreButton({
   href,
+  label = "Download on the App Store",
+  ariaLabel,
   className = "",
   unavailableText = "Coming Soon on the App Store"
 }: AppStoreButtonProps) {
@@ -28,9 +32,9 @@ export function AppStoreButton({
       target="_blank"
       rel="noreferrer"
       className={`btn-primary ${className}`}
-      aria-label="Download on the App Store"
+      aria-label={ariaLabel ?? label}
     >
-      Download on the App Store
+      {label}
     </a>
   );
 }

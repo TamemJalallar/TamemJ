@@ -6,7 +6,15 @@ import { AppStoreButton } from "@/components/app-store-button";
 import { CitationGuidancePanel, EditorialTrustPanel } from "@/components/shared/editorial-authority-panels";
 import { ScreenshotCarousel } from "@/components/screenshot-carousel";
 import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
-import { getAppBySlug, getApps } from "@/lib/apps";
+import {
+  getAppBySlug,
+  getAppPrimaryLink,
+  getApps,
+  getAppStatusLabel,
+  getCompatibilityText,
+  hasAppStoreRelease,
+  isPublishedApp
+} from "@/lib/apps";
 import { appsSectionEnabled } from "@/lib/apps-visibility";
 import { editorialStandards, supportAuthorProfile } from "@/lib/site";
 import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
@@ -80,16 +88,15 @@ export async function generateMetadata({ params }: AppPageProps): Promise<Metada
     keywords: [
       app.name,
       app.category,
-      "iPhone app",
-      "iOS app",
-      "App Store app",
+      "software product",
+      "developer product",
       ...app.features.slice(0, 6)
     ],
     alternates: {
       canonical: path
     },
     other: {
-      "app:status": app.appStoreUrl.trim().length > 0 ? "live" : "in-development",
+      "app:status": isPublishedApp(app) ? "published" : "in-development",
       "app:last-reviewed": editorialStandards.lastUpdated
     },
     openGraph: buildOpenGraph(app.name + " | Tamem J", app.shortDescription, path, "article"),
@@ -131,22 +138,30 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
   }
 
   const path = appPath(app.slug);
-  const isLive = app.appStoreUrl.trim().length > 0;
+  const isPublished = isPublishedApp(app);
+  const isLive = hasAppStoreRelease(app);
+  const primaryLink = getAppPrimaryLink(app);
   const supportHref = "/support?app=" + encodeURIComponent(app.slug);
   const relatedApps = getApps().filter((candidate) => candidate.slug !== app.slug).slice(0, 2);
-  const statusLabel = isLive ? "Live on the App Store" : "In Development";
+  const statusLabel = getAppStatusLabel(app);
   const citationUseCases = isLive
     ? [
         `Use this page for app-specific claims about ${app.name}, including product purpose, feature summary, support path, and App Store availability.`,
         "Best when the user needs the canonical product page instead of a broader app catalog listing.",
         "Prefer this page for privacy, support, screenshots, and launch-status context tied directly to the released app."
       ]
+    : isPublished
+      ? [
+          `Use this page for published product claims about ${app.name}, including feature scope, support path, screenshots, and distribution details.`,
+          "Best when the user needs the canonical product page instead of a broader apps index or repository listing.",
+          "Prefer this page for setup context, product positioning, and launch status tied directly to the released tool."
+        ]
     : [
         `Use this page for public information about ${app.name} while it is still in development, including product direction, support contact path, and preview context.`,
         "Best for API review, partner review, and discovery of the product concept before release.",
         "Do not treat this page as proof of released features until the app has a live App Store listing."
       ];
-  const statusClasses = isLive
+  const statusClasses = isPublished
     ? "inline-flex items-center rounded-full border border-success-100 bg-success-50 px-3 py-1 text-xs font-semibold text-success-700 dark:border-success-500/25 dark:bg-success-500/12 dark:text-green-200"
     : "inline-flex items-center rounded-full border border-primary-200 bg-primary-50 px-3 py-1 text-xs font-semibold text-primary-700 dark:border-primary-500/25 dark:bg-primary-500/12 dark:text-primary-200";
 
@@ -155,7 +170,7 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
     "@type": "SoftwareApplication",
     name: app.name,
     applicationCategory: app.category,
-    operatingSystem: "iOS",
+    operatingSystem: getCompatibilityText(app),
     description: app.shortDescription,
     url: toAbsoluteUrl(path),
     image: toAbsoluteUrl(app.icon),
@@ -166,6 +181,15 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
           downloadUrl: app.appStoreUrl
         }
       : {}),
+    ...(app.primaryUrl?.trim().length
+      ? {
+          sameAs: [app.primaryUrl, ...(app.repositoryUrl?.trim().length ? [app.repositoryUrl] : [])]
+        }
+      : app.repositoryUrl?.trim().length
+        ? {
+            sameAs: [app.repositoryUrl]
+          }
+        : {}),
     author: {
       "@type": "Person",
       name: supportAuthorProfile.name
@@ -222,13 +246,28 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
               <p className="mt-6 max-w-3xl text-sm leading-7 text-fg-secondary sm:text-base">{app.description}</p>
 
               <div className="mt-6 flex flex-wrap gap-3">
-                <AppStoreButton href={app.appStoreUrl} />
+                <AppStoreButton
+                  href={primaryLink?.href}
+                  label={primaryLink?.label}
+                  ariaLabel={primaryLink ? `${primaryLink.label} for ${app.name}` : undefined}
+                  unavailableText="Product page coming soon"
+                />
                 <Link href="/privacy" className="btn-secondary">
                   Privacy Policy
                 </Link>
                 <Link href={supportHref} className="btn-secondary">
                   Support
                 </Link>
+                {app.repositoryUrl?.trim().length && app.repositoryUrl !== primaryLink?.href ? (
+                  <a href={app.repositoryUrl} target="_blank" rel="noreferrer" className="btn-secondary">
+                    Repository
+                  </a>
+                ) : null}
+                {app.secondaryLinks?.map((link) => (
+                  <a key={`${app.slug}-${link.label}`} href={link.href} target="_blank" rel="noreferrer" className="btn-secondary">
+                    {link.label}
+                  </a>
+                ))}
               </div>
 
               <div className="mt-6 grid gap-3 md:grid-cols-3">
@@ -238,7 +277,7 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
                 </article>
                 <article className="surface-card rounded-2xl p-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Compatibility</p>
-                  <p className="mt-2 text-sm font-semibold text-fg">{app.minIOSVersion}</p>
+                  <p className="mt-2 text-sm font-semibold text-fg">{getCompatibilityText(app)}</p>
                 </article>
                 <article className="surface-card rounded-2xl p-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Support</p>
@@ -266,10 +305,12 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
               authorTitle={supportAuthorProfile.title}
               credentials={supportAuthorProfile.credentials}
               lastReviewed={editorialStandards.lastUpdated}
-              bio={
+                bio={
                 isLive
                   ? "Live product pages are reviewed so the feature summary, support path, privacy path, and App Store status remain aligned."
-                  : "Pre-launch product pages are reviewed to keep API review, support contact, and public positioning clear before release."
+                  : isPublished
+                    ? "Published product pages are reviewed so the feature summary, support path, privacy path, and distribution details remain aligned."
+                    : "Pre-launch product pages are reviewed to keep API review, support contact, and public positioning clear before release."
               }
             />
             <CitationGuidancePanel
@@ -305,6 +346,15 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
                   <p>
                     <span className="font-semibold text-fg">Status:</span> {statusLabel}.
                   </p>
+                  {primaryLink ? (
+                    <p>
+                      <span className="font-semibold text-fg">Primary access:</span>{" "}
+                      <a href={primaryLink.href} target="_blank" rel="noreferrer" className="text-primary-600 hover:underline dark:text-primary-300">
+                        {primaryLink.label}
+                      </a>
+                      .
+                    </p>
+                  ) : null}
                   <p>
                     <span className="font-semibold text-fg">Support route:</span> Use the linked support flow for app issues, bug reports, and product questions.
                   </p>

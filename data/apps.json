@@ -3,6 +3,7 @@
     "slug": "everafter-planner",
     "name": "EverAfter Planner",
     "category": "Wedding Planner",
+    "status": "published",
     "tagline": "Plan your wedding in one calm place.",
     "shortDescription": "Manage checklist, budget, guests, vendors, timeline, seating, reminders, and settings in one shared planning space.",
     "description": "EverAfter Planner helps couples organize wedding planning from one clean iPhone workspace. Track progress across checklist phases, keep budget visibility, manage guests and RSVPs, coordinate vendors, run a clear day-of timeline, and handle reminders in one place.",
@@ -65,6 +66,7 @@
     "slug": "gigtracker",
     "name": "GigTracker",
     "category": "Mileage Tracker",
+    "status": "published",
     "tagline": "Track miles, earnings, expenses, and invoices across Apple devices.",
     "shortDescription": "GigTracker helps gig workers and independent drivers log trips, review earnings, capture expenses, manage invoices, and stay on top of business follow-ups from iPhone, Mac, and Apple Watch.",
     "description": "GigTracker is a mileage and business tracker built for delivery drivers, freelancers, and independent operators who need more than a simple trip log. Track drives automatically, organize trips, review earnings, capture expenses, draft invoices, monitor reports, and work through a business inbox from one cross-device Apple workflow.",
@@ -120,9 +122,72 @@
     "supportEmail": "support@tamemj.com"
   },
   {
+    "slug": "fantasy-football-obs-overlay",
+    "name": "Fantasy Football OBS Overlay",
+    "category": "Broadcast Overlay",
+    "status": "published",
+    "tagline": "Run real-time fantasy football broadcast overlays for Yahoo, ESPN, and Sleeper inside OBS.",
+    "shortDescription": "A local-first Node.js overlay system for OBS Browser Source with matchup rotations, ticker mode, touchdown alerts, provider-aware themes, setup tooling, and admin controls.",
+    "description": "Fantasy Football OBS Overlay is a published local-first broadcast tool built for fantasy football creators and streamers who want real-time overlays in OBS. The product supports Yahoo, ESPN, Sleeper, and mock mode, with scene-ready browser routes, a guided setup center, an admin control panel, provider-aware themes, event alerts, and production-minded reliability features for live fantasy coverage.",
+    "featured": true,
+    "appStoreUrl": "",
+    "primaryUrl": "https://github.com/TamemJalallar/FantasyFootball-Yahoo",
+    "primaryUrlLabel": "View on GitHub",
+    "repositoryUrl": "https://github.com/TamemJalallar/FantasyFootball-Yahoo",
+    "secondaryLinks": [
+      {
+        "label": "Project README",
+        "href": "https://github.com/TamemJalallar/FantasyFootball-Yahoo#readme"
+      }
+    ],
+    "icon": "/images/apps/fantasy-football-obs-overlay/icon.svg",
+    "screenshots": [
+      {
+        "src": "/images/apps/fantasy-football-obs-overlay/admin-config.png",
+        "alt": "Fantasy Football OBS Overlay admin configuration panel with provider settings and runtime controls",
+        "orientation": "landscape"
+      },
+      {
+        "src": "/images/apps/fantasy-football-obs-overlay/overlay-centered-card.png",
+        "alt": "Fantasy Football OBS Overlay centered card scene showing a featured fantasy matchup",
+        "orientation": "landscape"
+      },
+      {
+        "src": "/images/apps/fantasy-football-obs-overlay/overlay-lower-third.png",
+        "alt": "Fantasy Football OBS Overlay lower-third scene for a compact fantasy football broadcast layout",
+        "orientation": "landscape"
+      },
+      {
+        "src": "/images/apps/fantasy-football-obs-overlay/overlay-sidebar-two-up.png",
+        "alt": "Fantasy Football OBS Overlay sidebar two-up scene with multiple matchups visible at once",
+        "orientation": "landscape"
+      },
+      {
+        "src": "/images/apps/fantasy-football-obs-overlay/overlay-bottom-ticker.png",
+        "alt": "Fantasy Football OBS Overlay bottom ticker scene for scrolling matchup updates in OBS",
+        "orientation": "landscape"
+      }
+    ],
+    "features": [
+      "Local-first Node.js app designed for OBS Browser Source workflows",
+      "Yahoo, ESPN, Sleeper, and mock provider support",
+      "Setup Center with copy-ready scene URLs for OBS",
+      "Admin control panel for provider configuration and runtime controls",
+      "Multiple overlay modes including centered card, lower-third, sidebar, and ticker",
+      "Touchdown, lead-change, and score-delta alert support",
+      "Production-minded reliability with cache fallback, retries, and safe-mode startup",
+      "Optional OBS WebSocket, Discord, Slack, and export integrations"
+    ],
+    "pricing": "Published open-source product",
+    "minIOSVersion": "OBS Browser Source + local Node.js runtime",
+    "compatibility": "OBS Browser Source, macOS, Windows, or Linux with Node.js 18.17+",
+    "supportEmail": "support@tamemj.com"
+  },
+  {
     "slug": "fantasy-football-hub",
     "name": "Fantasy Football Hub",
     "category": "Fantasy Sports",
+    "status": "in-development",
     "tagline": "Track matchups, manage leagues, and monitor fantasy football insights from one place.",
     "shortDescription": "Fantasy Football Hub is an in-development fantasy football companion app focused on league dashboards, matchup views, waiver planning, roster notes, and API-powered player and scoring workflows.",
     "description": "Fantasy Football Hub is a fantasy football management and companion app currently in development. The product is being designed to help fantasy players review league activity, track matchups, watch waiver priorities, compare roster decisions, monitor player trends, and work from one cleaner interface as external fantasy sports APIs are integrated.",
