@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AppStoreButton } from "@/components/app-store-button";
+import { ProductProviderBadges } from "@/components/product-provider-badges";
 import { CitationGuidancePanel, EditorialTrustPanel } from "@/components/shared/editorial-authority-panels";
 import { ScreenshotCarousel } from "@/components/screenshot-carousel";
 import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
@@ -20,6 +21,55 @@ import { editorialStandards, supportAuthorProfile } from "@/lib/site";
 import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 
 const STATIC_EXPORT_PLACEHOLDER_SLUG = "__site-build-placeholder__";
+const FANTASY_OBS_OVERLAY_SLUG = "fantasy-football-obs-overlay";
+
+const fantasyObsQuickStartCommands = [
+  "npm install",
+  "cp .env.example .env",
+  "npm run dev"
+];
+
+const fantasyObsSetupSteps = [
+  {
+    title: "Start in mock mode",
+    body: "Run the app locally first so you can confirm OBS, browser sources, and overlay rendering work before connecting a live fantasy provider."
+  },
+  {
+    title: "Open the admin page",
+    body: "Use the admin panel to pick a provider, save league details, test the connection, and adjust runtime settings before stream time."
+  },
+  {
+    title: "Copy scene URLs",
+    body: "Open the setup center, choose the overlay layout you want, and copy the generated browser-source URL for OBS."
+  },
+  {
+    title: "Add to OBS",
+    body: "Create a Browser Source in OBS, paste the copied URL, then position the overlay as a full scene, lower-third, sidebar, or ticker."
+  }
+];
+
+const fantasyObsRoutes = [
+  {
+    label: "Admin",
+    path: "http://localhost:3030/admin",
+    description: "Configure provider, league, runtime, and test connection settings."
+  },
+  {
+    label: "Setup Center",
+    path: "http://localhost:3030/setup",
+    description: "Copy ready-to-use OBS Browser Source URLs."
+  },
+  {
+    label: "Main Overlay",
+    path: "http://localhost:3030/overlay",
+    description: "Default overlay route for browser-source testing."
+  },
+  {
+    label: "Centered Card",
+    path: "http://localhost:3030/overlay/centered-card",
+    description: "A larger matchup card layout for feature scenes."
+  }
+];
 
 interface AppPageProps {
   params: Promise<{
@@ -90,6 +140,20 @@ export async function generateMetadata({ params }: AppPageProps): Promise<Metada
       app.category,
       "software product",
       "developer product",
+      ...(app.slug === FANTASY_OBS_OVERLAY_SLUG
+        ? [
+            "fantasy football OBS overlay",
+            "OBS fantasy football overlay",
+            "Yahoo fantasy football OBS overlay",
+            "ESPN fantasy football overlay",
+            "Sleeper fantasy football overlay",
+            "fantasy football streaming graphics"
+          ]
+        : []),
+      ...(app.providerBadges?.flatMap((badge) => [
+        `${badge.name} ${app.name}`,
+        `${badge.name} fantasy football overlay`
+      ]) ?? []),
       ...app.features.slice(0, 6)
     ],
     alternates: {
@@ -140,6 +204,7 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
   const path = appPath(app.slug);
   const isPublished = isPublishedApp(app);
   const isLive = hasAppStoreRelease(app);
+  const isFantasyObsOverlay = app.slug === FANTASY_OBS_OVERLAY_SLUG;
   const primaryLink = getAppPrimaryLink(app);
   const supportHref = "/support?app=" + encodeURIComponent(app.slug);
   const relatedApps = getApps().filter((candidate) => candidate.slug !== app.slug).slice(0, 2);
@@ -161,9 +226,11 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
         "Best for API review, partner review, and discovery of the product concept before release.",
         "Do not treat this page as proof of released features until the app has a live App Store listing."
       ];
-  const statusClasses = isPublished
-    ? "inline-flex items-center rounded-full border border-success-100 bg-success-50 px-3 py-1 text-xs font-semibold text-success-700 dark:border-success-500/25 dark:bg-success-500/12 dark:text-green-200"
-    : "inline-flex items-center rounded-full border border-primary-200 bg-primary-50 px-3 py-1 text-xs font-semibold text-primary-700 dark:border-primary-500/25 dark:bg-primary-500/12 dark:text-primary-200";
+  const statusClasses = isLive
+    ? "inline-flex items-center rounded-full border border-success-100 bg-success-50 px-3 py-1 text-xs font-bold text-success-700 dark:border-success-500/50 dark:bg-success-500/25 dark:text-success-100"
+    : isPublished
+      ? "inline-flex items-center rounded-full border border-primary-200 bg-primary-50 px-3 py-1 text-xs font-bold text-primary-700 dark:border-primary-400/55 dark:bg-primary-500/25 dark:text-primary-100"
+      : "inline-flex items-center rounded-full border border-warning-100 bg-warning-50 px-3 py-1 text-xs font-bold text-warning-700 dark:border-warning-500/55 dark:bg-warning-500/20 dark:text-warning-100";
 
   const appSchema = {
     "@context": "https://schema.org",
@@ -298,6 +365,86 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
             </div>
           </section>
 
+          {app.providerBadges?.length ? <ProductProviderBadges badges={app.providerBadges} /> : null}
+
+          {isFantasyObsOverlay ? (
+            <section className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
+              <div className="surface-card-strong p-6 sm:p-8">
+                <p className="eyebrow">OBS Quick Start</p>
+                <h2 className="mt-3 font-display text-2xl font-semibold text-fg">
+                  From repo to working overlay in a few minutes
+                </h2>
+                <p className="mt-3 text-sm leading-7 text-fg-secondary sm:text-base">
+                  The overlay runs locally. Start it in mock mode first, confirm the browser-source route loads, then connect
+                  Yahoo, ESPN, or Sleeper when you are ready for live fantasy data.
+                </p>
+
+                <div className="mt-5 overflow-hidden rounded-2xl border border-line bg-neutral-950 p-4 text-sm text-neutral-100 shadow-soft">
+                  <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-primary-200">
+                    Local setup
+                  </p>
+                  <pre className="overflow-x-auto font-mono text-xs leading-6 sm:text-sm">
+                    <code>{fantasyObsQuickStartCommands.join("\n")}</code>
+                  </pre>
+                </div>
+
+                <div className="mt-5 flex flex-wrap gap-3">
+                  {primaryLink ? (
+                    <a href={primaryLink.href} target="_blank" rel="noreferrer" className="btn-primary">
+                      View Project on GitHub
+                    </a>
+                  ) : null}
+                  <a
+                    href="https://github.com/TamemJalallar/FantasyFootball-Yahoo#5-minute-local-start-mock-mode"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn-secondary"
+                  >
+                    Read Quick Start
+                  </a>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <section className="surface-card p-5 sm:p-6">
+                  <p className="eyebrow">Setup Flow</p>
+                  <h2 className="mt-3 font-display text-2xl font-semibold text-fg">
+                    How it gets into OBS
+                  </h2>
+                  <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                    {fantasyObsSetupSteps.map((step, index) => (
+                      <article key={step.title} className="surface-card rounded-2xl p-4">
+                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
+                          Step {index + 1}
+                        </p>
+                        <h3 className="mt-2 text-base font-semibold text-fg">{step.title}</h3>
+                        <p className="mt-2 text-sm leading-6 text-fg-secondary">{step.body}</p>
+                      </article>
+                    ))}
+                  </div>
+                </section>
+
+                <section className="surface-card p-5 sm:p-6">
+                  <p className="eyebrow">Scene URLs</p>
+                  <h2 className="mt-3 font-display text-xl font-semibold text-fg">
+                    Common local routes
+                  </h2>
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                    {fantasyObsRoutes.map((route) => (
+                      <article key={route.path} className="rounded-2xl border border-line bg-card-2/70 p-4">
+                        <p className="text-sm font-semibold text-fg">{route.label}</p>
+                        <code className="mt-2 block overflow-x-auto rounded-xl bg-card-3 px-3 py-2 font-mono text-xs text-fg-secondary">
+                          {route.path}
+                        </code>
+                        <p className="mt-2 text-xs leading-5 text-muted">{route.description}</p>
+                      </article>
+                    ))}
+                  </div>
+                </section>
+              </div>
+            </section>
+          ) : null}
+
           <section className="grid gap-6 xl:grid-cols-[1fr_1fr]">
             <EditorialTrustPanel
               label="Product Page Review"
@@ -318,7 +465,9 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
               description={
                 isLive
                   ? "This page is the canonical source for the released app’s positioning, support links, screenshots, and store status."
-                  : "This page is the canonical public reference for the app while it is in development and before the store listing is live."
+                  : isPublished
+                    ? "This page is the canonical source for the published product’s positioning, support links, screenshots, setup context, and distribution status."
+                    : "This page is the canonical public reference for the app while it is in development and before the store listing is live."
               }
               useCases={citationUseCases}
             />

@@ -58,7 +58,7 @@
       "Seating and table assignment overview",
       "Central reminder center for planning tasks"
     ],
-    "pricing": "Coming soon",
+    "pricing": "Free",
     "minIOSVersion": "iOS 16.0+",
     "supportEmail": "support@tamemj.com"
   },
@@ -117,7 +117,7 @@
       "Cross-device workflow across iPhone, Mac, and Apple Watch",
       "Widget and Live Activity support for quick status views"
     ],
-    "pricing": "Coming soon",
+    "pricing": "Free",
     "minIOSVersion": "iPhone, Mac, and Apple Watch",
     "supportEmail": "support@tamemj.com"
   },
@@ -126,9 +126,9 @@
     "name": "Fantasy Football OBS Overlay",
     "category": "Broadcast Overlay",
     "status": "published",
-    "tagline": "Run real-time fantasy football broadcast overlays for Yahoo, ESPN, and Sleeper inside OBS.",
-    "shortDescription": "A local-first Node.js overlay system for OBS Browser Source with matchup rotations, ticker mode, touchdown alerts, provider-aware themes, setup tooling, and admin controls.",
-    "description": "Fantasy Football OBS Overlay is a published local-first broadcast tool built for fantasy football creators and streamers who want real-time overlays in OBS. The product supports Yahoo, ESPN, Sleeper, and mock mode, with scene-ready browser routes, a guided setup center, an admin control panel, provider-aware themes, event alerts, and production-minded reliability features for live fantasy coverage.",
+    "tagline": "Show fantasy football scores, matchups, and alerts on your OBS stream.",
+    "shortDescription": "Fantasy Football OBS Overlay displays live fantasy football matchups, score changes, tickers, and alerts as browser-source overlays for OBS.",
+    "description": "Fantasy Football OBS Overlay is a local app for streamers who want fantasy football graphics inside OBS. It creates browser-source overlay pages that can show weekly matchups, score updates, ticker views, touchdown alerts, and simple broadcast layouts. It supports Yahoo, ESPN, Sleeper, and mock mode, with an admin page and setup center to help configure the overlay before going live.",
     "featured": true,
     "appStoreUrl": "",
     "primaryUrl": "https://github.com/TamemJalallar/FantasyFootball-Yahoo",
@@ -138,6 +138,28 @@
       {
         "label": "Project README",
         "href": "https://github.com/TamemJalallar/FantasyFootball-Yahoo#readme"
+      }
+    ],
+    "providerBadges": [
+      {
+        "name": "Yahoo",
+        "status": "Supported",
+        "description": "Connect Yahoo Fantasy league data after setting up the provider connection."
+      },
+      {
+        "name": "ESPN",
+        "status": "Supported",
+        "description": "Use ESPN league details to show matchup and scoring overlays."
+      },
+      {
+        "name": "Sleeper",
+        "status": "Supported",
+        "description": "Connect Sleeper league data for fantasy football overlay scenes."
+      },
+      {
+        "name": "Mock Mode",
+        "status": "Mock",
+        "description": "Test OBS scenes and layouts without connecting a live fantasy account."
       }
     ],
     "icon": "/images/apps/fantasy-football-obs-overlay/icon.png",
@@ -169,16 +191,16 @@
       }
     ],
     "features": [
-      "Local-first Node.js app designed for OBS Browser Source workflows",
-      "Yahoo, ESPN, Sleeper, and mock provider support",
-      "Setup Center with copy-ready scene URLs for OBS",
-      "Admin control panel for provider configuration and runtime controls",
-      "Multiple overlay modes including centered card, lower-third, sidebar, and ticker",
-      "Touchdown, lead-change, and score-delta alert support",
-      "Production-minded reliability with cache fallback, retries, and safe-mode startup",
-      "Optional OBS WebSocket, Discord, Slack, and export integrations"
+      "Adds fantasy football graphics to OBS as browser-source overlays",
+      "Shows matchups, score updates, ticker layouts, and game alerts",
+      "Supports Yahoo, ESPN, Sleeper, and mock mode",
+      "Includes a setup page with copy-ready OBS scene URLs",
+      "Includes an admin page for league and provider settings",
+      "Offers multiple layouts including centered card, lower-third, sidebar, and ticker",
+      "Can run locally before a stream so overlays can be tested safely",
+      "Includes optional OBS WebSocket, Discord, Slack, and export integrations"
     ],
-    "pricing": "Published open-source product",
+    "pricing": "Free",
     "minIOSVersion": "OBS Browser Source + local Node.js runtime",
     "compatibility": "OBS Browser Source, macOS, Windows, or Linux with Node.js 18.17+",
     "supportEmail": "support@tamemj.com"
@@ -220,7 +242,7 @@
       "API-powered fantasy data integrations in progress",
       "Designed for iPhone-first fantasy football management"
     ],
-    "pricing": "In development",
+    "pricing": "Free",
     "minIOSVersion": "Planned for iPhone",
     "supportEmail": "support@tamemj.com"
   }

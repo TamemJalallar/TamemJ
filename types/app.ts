@@ -9,6 +9,14 @@ export interface ProductAppLink {
   href: string;
 }
 
+export type ProductProviderStatus = "Supported" | "Optional" | "Mock" | "Planned";
+
+export interface ProductProviderBadge {
+  name: string;
+  status: ProductProviderStatus;
+  description: string;
+}
+
 export interface IOSApp {
   slug: string;
   name: string;
@@ -23,6 +31,7 @@ export interface IOSApp {
   primaryUrlLabel?: string;
   repositoryUrl?: string;
   secondaryLinks?: ProductAppLink[];
+  providerBadges?: ProductProviderBadge[];
   icon: string;
   screenshots: AppScreenshot[];
   features: string[];

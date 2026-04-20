@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AppCard } from "@/components/app-card";
-import { EditorialStandardsStrip } from "@/components/shared/editorial-authority-panels";
 import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
-import { getApps, hasAppStoreRelease, isPublishedApp } from "@/lib/apps";
+import { getApps, isPublishedApp } from "@/lib/apps";
 import { appsSectionEnabled } from "@/lib/apps-visibility";
 import {
   buildBreadcrumbJsonLd,
@@ -72,10 +71,8 @@ export default function AppsPage() {
 
   const apps = getApps();
   const hasApps = apps.length > 0;
-  const publishedApps = apps.filter(isPublishedApp);
-  const liveApps = apps.filter(hasAppStoreRelease);
-  const upcomingApps = apps.filter((app) => !isPublishedApp(app));
   const categoryCount = new Set(apps.map((app) => app.category)).size;
+  const publishedCount = apps.filter(isPublishedApp).length;
   const appsCollectionSchema = buildCollectionPageJsonLd(
     "Apps and Products by Tamem J",
     "Browse apps and technical products by Tamem J, including App Store releases and published developer tools.",
@@ -101,14 +98,14 @@ export default function AppsPage() {
               <div>
                 <p className="eyebrow text-primary-100">Apps</p>
                 <h1 className="mt-4 max-w-3xl font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-                  Product pages built like real launch surfaces, not placeholder portfolio tiles.
+                  Apps and products by Tamem J.
                 </h1>
                 <p className="mt-4 max-w-3xl text-sm leading-7 text-primary-100/90 sm:text-base">
-                  This section is positioned as a real product catalog. Published apps, shipped tools, and in-development products each get a page with screenshots, support context, privacy links, and honest status labels.
+                  Browse the full product catalog, including App Store releases, open-source tools, and in-development products with screenshots, support links, and clear status labels.
                 </p>
                 <div className="mt-6 flex flex-wrap gap-3">
                   <a href="#app-catalog" className="btn-primary">
-                    Browse Products
+                    Browse Catalog
                   </a>
                   <Link href="/support" className="btn-secondary">
                     App Support
@@ -127,18 +124,8 @@ export default function AppsPage() {
                 </article>
                 <article className="rounded-3xl border border-white/15 bg-white/10 p-4 backdrop-blur">
                   <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary-100/80">Published Products</p>
-                  <p className="mt-2 font-display text-3xl font-semibold text-white">{publishedApps.length}</p>
-                  <p className="mt-1 text-sm text-primary-100/85">Live App Store apps and released developer tools</p>
-                </article>
-                <article className="rounded-3xl border border-white/15 bg-white/10 p-4 backdrop-blur">
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary-100/80">App Store Releases</p>
-                  <p className="mt-2 font-display text-3xl font-semibold text-white">{liveApps.length}</p>
-                  <p className="mt-1 text-sm text-primary-100/85">Products already published through Apple</p>
-                </article>
-                <article className="rounded-3xl border border-white/15 bg-white/10 p-4 backdrop-blur">
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary-100/80">In Development</p>
-                  <p className="mt-2 font-display text-3xl font-semibold text-white">{upcomingApps.length}</p>
-                  <p className="mt-1 text-sm text-primary-100/85">Product pages ready before launch</p>
+                  <p className="mt-2 font-display text-3xl font-semibold text-white">{publishedCount}</p>
+                  <p className="mt-1 text-sm text-primary-100/85">Released apps and tools available now</p>
                 </article>
                 <article className="rounded-3xl border border-white/15 bg-white/10 p-4 backdrop-blur">
                   <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary-100/80">Categories</p>
@@ -149,93 +136,31 @@ export default function AppsPage() {
             </div>
           </section>
 
-          <EditorialStandardsStrip description="App pages are treated as product reference pages, not just portfolio entries. Each page is reviewed so launch status, screenshots, privacy links, support paths, and product positioning stay aligned for users, store reviewers, and AI systems." />
-
           {hasApps ? (
-            <>
-              <section className="grid gap-4 lg:grid-cols-3">
-                <article className="surface-card-interactive p-5 sm:p-6">
-                  <p className="eyebrow">Launch-ready pages</p>
-                  <h2 className="mt-3 font-display text-xl font-semibold text-fg">Every app gets a complete support surface</h2>
-                  <p className="mt-3 text-sm leading-7 text-fg-secondary">
-                    Product pages now tie together screenshots, privacy, support paths, and launch state so the catalog reads like a real software surface instead of a placeholder portfolio.
+            <section className="surface-card p-5 sm:p-6" id="app-catalog">
+              <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+                <div>
+                  <p className="eyebrow">Product Catalog</p>
+                  <h2 className="mt-3 font-display text-2xl font-semibold text-fg">Full product catalog</h2>
+                  <p className="mt-2 max-w-3xl text-sm leading-7 text-fg-secondary">
+                    A single catalog view for published apps, open-source products, and products currently in development.
                   </p>
-                </article>
-                <article className="surface-card-interactive p-5 sm:p-6">
-                  <p className="eyebrow">Released and upcoming</p>
-                  <h2 className="mt-3 font-display text-xl font-semibold text-fg">Published apps, shipped tools, and in-progress products can coexist cleanly</h2>
-                  <p className="mt-3 text-sm leading-7 text-fg-secondary">
-                    Live releases drive the primary product story, while in-development pages still help with API reviews, waitlist-style previews, and product positioning.
-                  </p>
-                </article>
-                <article className="surface-card-interactive p-5 sm:p-6">
-                  <p className="eyebrow">Support continuity</p>
-                  <h2 className="mt-3 font-display text-xl font-semibold text-fg">Privacy and contact links stay close to the product</h2>
-                  <p className="mt-3 text-sm leading-7 text-fg-secondary">
-                    That makes each product easier to trust and easier to review, especially when people land on a product page directly from search, GitHub, or the App Store.
-                  </p>
-                </article>
-              </section>
-
-              {publishedApps.length > 0 ? (
-                <section className="space-y-4" id="app-catalog">
-                  <div className="flex flex-col gap-2">
-                    <p className="eyebrow">Published Products</p>
-                    <h2 className="font-display text-2xl font-semibold text-fg">Released apps and tools</h2>
-                    <p className="max-w-3xl text-sm leading-7 text-fg-secondary">
-                      These products are already out in the world, whether through the App Store or as distributed technical tools with their own product pages, screenshots, and support context.
-                    </p>
-                  </div>
-                  <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                    {publishedApps.map((app) => (
-                      <AppCard key={app.slug} app={app} />
-                    ))}
-                  </div>
-                </section>
-              ) : null}
-
-              {upcomingApps.length > 0 ? (
-                <section className="space-y-4">
-                  <div className="flex flex-col gap-2">
-                    <p className="eyebrow">In Development</p>
-                    <h2 className="font-display text-2xl font-semibold text-fg">Upcoming products</h2>
-                    <p className="max-w-3xl text-sm leading-7 text-fg-secondary">
-                      These pages still matter even before launch. They give each product a real home for roadmap context, external review, and later App Store handoff.
-                    </p>
-                  </div>
-                  <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                    {upcomingApps.map((app) => (
-                      <AppCard key={app.slug} app={app} />
-                    ))}
-                  </div>
-                </section>
-              ) : null}
-
-              <section className="surface-card p-5 sm:p-6">
-                <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
-                  <div>
-                    <p className="eyebrow">All Product Pages</p>
-                    <h2 className="mt-3 font-display text-2xl font-semibold text-fg">Full product catalog</h2>
-                    <p className="mt-2 max-w-3xl text-sm leading-7 text-fg-secondary">
-                      The published and upcoming groupings above help with pacing, while this grid remains the simple full catalog view.
-                    </p>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    <Link href="/privacy" className="btn-secondary !px-4 !py-2 text-xs">
-                      Privacy Policy
-                    </Link>
-                    <Link href="/support" className="btn-secondary !px-4 !py-2 text-xs">
-                      App Support
-                    </Link>
-                  </div>
                 </div>
-                <div className="mt-5 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                  {apps.map((app) => (
-                    <AppCard key={`catalog-${app.slug}`} app={app} />
-                  ))}
+                <div className="flex flex-wrap gap-2">
+                  <Link href="/privacy" className="btn-secondary !px-4 !py-2 text-xs">
+                    Privacy Policy
+                  </Link>
+                  <Link href="/support" className="btn-secondary !px-4 !py-2 text-xs">
+                    App Support
+                  </Link>
                 </div>
-              </section>
-            </>
+              </div>
+              <div className="mt-5 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+                {apps.map((app) => (
+                  <AppCard key={`catalog-${app.slug}`} app={app} />
+                ))}
+              </div>
+            </section>
           ) : (
             <div className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
               <div className="surface-card-strong border-dashed p-6 sm:p-8">

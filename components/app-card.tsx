@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { IOSApp } from "@/types/app";
-import { getAppPrimaryLink, getAppStatusLabel, getCompatibilityText, hasAppStoreRelease } from "@/lib/apps";
+import { getAppPrimaryLink, getAppStatusLabel, getCompatibilityText, hasAppStoreRelease, isPublishedApp } from "@/lib/apps";
 
 interface AppCardProps {
   app: IOSApp;
@@ -9,11 +9,17 @@ interface AppCardProps {
 
 export function AppCard({ app }: AppCardProps) {
   const hasAppStoreUrl = hasAppStoreRelease(app);
+  const isPublished = isPublishedApp(app);
   const primaryLink = getAppPrimaryLink(app);
   const appDetailHref = `/apps/${app.slug}`;
   const statusLabel = getAppStatusLabel(app);
   const iconHref = primaryLink?.href ?? appDetailHref;
   const iconTargetProps = primaryLink ? { target: "_blank", rel: "noreferrer" as const } : {};
+  const statusClasses = hasAppStoreUrl
+    ? "border-success-100 bg-success-50 text-success-700 dark:border-success-500/50 dark:bg-success-500/25 dark:text-success-100"
+    : isPublished
+      ? "border-primary-200 bg-primary-50 text-primary-700 dark:border-primary-400/55 dark:bg-primary-500/25 dark:text-primary-100"
+      : "border-warning-100 bg-warning-50 text-warning-700 dark:border-warning-500/55 dark:bg-warning-500/20 dark:text-warning-100";
 
   return (
     <article className="surface-card-strong flex h-full flex-col p-5 transition-all duration-200 hover:-translate-y-1 hover:border-primary-200 hover:shadow-card dark:hover:border-primary-400/30 sm:p-6">
@@ -21,11 +27,7 @@ export function AppCard({ app }: AppCardProps) {
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{app.category}</p>
-            <span
-              className={hasAppStoreUrl
-                ? "inline-flex items-center rounded-full border border-success-100 bg-success-50 px-2.5 py-1 text-[11px] font-semibold text-success-700 dark:border-success-500/25 dark:bg-success-500/12 dark:text-green-200"
-                : "inline-flex items-center rounded-full border border-primary-200 bg-primary-50 px-2.5 py-1 text-[11px] font-semibold text-primary-700 dark:border-primary-500/25 dark:bg-primary-500/12 dark:text-primary-200"}
-            >
+            <span className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-bold ${statusClasses}`}>
               {statusLabel}
             </span>
           </div>
