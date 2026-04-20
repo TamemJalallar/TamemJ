@@ -50,8 +50,8 @@ const contextAffiliateKeys: Record<MonetizationContext, string[]> = {
 export const monetizationConfig = {
   adsenseClient: cleanEnv(process.env.NEXT_PUBLIC_ADSENSE_CLIENT) || "ca-pub-8852243900182779",
   adsenseSlots: {
-    display: cleanEnv(process.env.NEXT_PUBLIC_ADSENSE_DISPLAY_SLOT),
-    inArticle: cleanEnv(process.env.NEXT_PUBLIC_ADSENSE_IN_ARTICLE_SLOT),
+    display: cleanEnv(process.env.NEXT_PUBLIC_ADSENSE_DISPLAY_SLOT) || "2157838864",
+    inArticle: cleanEnv(process.env.NEXT_PUBLIC_ADSENSE_IN_ARTICLE_SLOT) || "7933384424",
     multiplex: cleanEnv(process.env.NEXT_PUBLIC_ADSENSE_MULTIPLEX_SLOT)
   },
   disclosure:
