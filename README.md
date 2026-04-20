@@ -106,6 +106,10 @@ Set these in local `.env.local` and in your deployment environment.
 - `NEXT_PUBLIC_ADSENSE_REVIEW_MODE_ACKNOWLEDGE` - must be set to `production-noindex` before review mode will actually noindex non-core sections
 - `NEXT_PUBLIC_NEWEGG_AFFILIATE_SID` - enables Newegg affiliate deep links
 - `NEXT_PUBLIC_AMAZON_ASSOCIATE_TAG` - Amazon Associates tag used for PC build recommendations (default `tamemj-20`)
+- `NEXT_PUBLIC_ADSENSE_CLIENT` - AdSense publisher client ID (default `ca-pub-8852243900182779`)
+- `NEXT_PUBLIC_ADSENSE_DISPLAY_SLOT` - optional display ad unit slot used on index/library pages
+- `NEXT_PUBLIC_ADSENSE_IN_ARTICLE_SLOT` - optional in-article ad unit slot used on long-form detail pages
+- `NEXT_PUBLIC_ADSENSE_MULTIPLEX_SLOT` - optional related-content/multiplex ad unit slot for future use
 
 ### Corporate Tech Fixes builder
 
@@ -150,6 +154,9 @@ Example:
 NEXT_PUBLIC_SHOW_APPS_SECTION=false
 NEXT_PUBLIC_ADSENSE_REVIEW_MODE=true
 NEXT_PUBLIC_ADSENSE_REVIEW_MODE_ACKNOWLEDGE=production-noindex
+NEXT_PUBLIC_ADSENSE_CLIENT=ca-pub-8852243900182779
+NEXT_PUBLIC_ADSENSE_DISPLAY_SLOT=your_display_slot_id
+NEXT_PUBLIC_ADSENSE_IN_ARTICLE_SLOT=your_in_article_slot_id
 NEXT_PUBLIC_NEWEGG_AFFILIATE_SID=4670565
 
 NEXT_PUBLIC_CORPORATE_FIXES_BUILDER_AUTH_MODE=cloudflare-access
@@ -203,6 +210,23 @@ When enabled:
 - sitemap output is trimmed to core pages + app detail pages
 - robots rules block non-core sections from crawling
 - header/footer navigation is reduced to core links during review mode
+
+### Low-friction monetization
+
+The site uses a restrained monetization layer designed for technical readers:
+
+- AdSense script is loaded globally from `NEXT_PUBLIC_ADSENSE_CLIENT`.
+- Ad slots only render when a slot ID is configured, so missing ad units will not create broken public placeholders.
+- Partner recommendations are centralized in `lib/monetization.ts` and reuse `lib/affiliate-links.ts`.
+- Public placements are limited to high-intent surfaces: homepage, support ticket index, guide pages, corporate fix detail pages, software download pages, and IT asset pages.
+- Partner links use `rel="sponsored nofollow noreferrer"` when active.
+- Keep troubleshooting instructions primary; never make an affiliate link look required for remediation.
+
+For GitHub Pages, add AdSense slot IDs as repository variables, not secrets:
+
+- `NEXT_PUBLIC_ADSENSE_DISPLAY_SLOT`
+- `NEXT_PUBLIC_ADSENSE_IN_ARTICLE_SLOT`
+- `NEXT_PUBLIC_ADSENSE_MULTIPLEX_SLOT`
 
 ### Static export compatibility
 

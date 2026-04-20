@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { AdSenseSlot } from "@/components/monetization/adsense-slot";
+import { SupportSiteCard } from "@/components/monetization/support-site-card";
 import { CitationGuidancePanel, EditorialTrustPanel } from "@/components/shared/editorial-authority-panels";
 import { ResourceLinkGrid } from "@/components/shared/resource-link-grid";
 import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
@@ -13,6 +15,7 @@ import {
   getDownloadAssetUpdatedAt
 } from "@/lib/download-assets.registry";
 import { getRelatedPillarsForTerms } from "@/lib/detail-page-related";
+import { getAdSenseSlot, getMonetizationRecommendations, monetizationConfig } from "@/lib/monetization";
 import { editorialStandards, supportAuthorProfile } from "@/lib/site";
 import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 
@@ -127,6 +130,8 @@ export default async function DownloadAssetDetailPage({ params }: DownloadAssetP
     [asset.title, asset.description, asset.category, asset.format, ...asset.tags],
     2
   );
+  const partnerLinks = getMonetizationRecommendations("download-assets");
+  const inArticleAdSlot = getAdSenseSlot("inArticle");
   const resourceLinks = [
     {
       href: directDownloadUrl,
@@ -316,6 +321,22 @@ export default async function DownloadAssetDetailPage({ params }: DownloadAssetP
               useCases={citationUseCases}
             />
           </section>
+
+          <div className="grid gap-4 xl:grid-cols-[1fr_0.45fr]">
+            <SupportSiteCard
+              title="Free download, no gate"
+              description="The asset is free because the page uses optional partner recommendations, quiet ads, and donation support instead of blocking the file behind a form."
+              affiliateLinks={partnerLinks}
+              compact
+            />
+            <AdSenseSlot
+              client={monetizationConfig.adsenseClient}
+              slot={inArticleAdSlot}
+              label="Advertisement"
+              format="fluid"
+              layout="in-article"
+            />
+          </div>
 
           {relatedBundles.length > 0 ? (
             <section className="surface-card p-5 sm:p-6">

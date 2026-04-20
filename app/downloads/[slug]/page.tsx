@@ -2,11 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { FAQPage, ItemList, SoftwareApplication, WebPage, WithContext } from "schema-dts";
+import { AdSenseSlot } from "@/components/monetization/adsense-slot";
+import { SupportSiteCard } from "@/components/monetization/support-site-card";
 import { CitationGuidancePanel, EditorialTrustPanel } from "@/components/shared/editorial-authority-panels";
 import { ResourceLinkGrid } from "@/components/shared/resource-link-grid";
 import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import { getRelatedAssetsForDownload, getRelatedPillarsForTerms } from "@/lib/detail-page-related";
 import { getDownloadBySlug, getDownloads, getRelatedDownloads } from "@/lib/downloads.registry";
+import { getAdSenseSlot, getMonetizationRecommendations, monetizationConfig } from "@/lib/monetization";
 import { editorialStandards, supportAuthorProfile } from "@/lib/site";
 import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 import type { DirectDownloadArtifact, DownloadEntry } from "@/types/download";
@@ -172,6 +175,8 @@ export default async function DownloadDetailPage({ params }: DownloadDetailPageP
     [entry.name, entry.summary, entry.category, ...entry.tags, ...entry.platforms],
     2
   );
+  const partnerLinks = getMonetizationRecommendations("downloads");
+  const inArticleAdSlot = getAdSenseSlot("inArticle");
   const resourceLinks = [
     {
       href: supportSearchHref,
@@ -455,6 +460,22 @@ export default async function DownloadDetailPage({ params }: DownloadDetailPageP
               useCases={citationUseCases}
             />
           </section>
+
+          <div className="grid gap-4 xl:grid-cols-[1fr_0.45fr]">
+            <SupportSiteCard
+              title="Support trustworthy download pages"
+              description="Download guides stay free through relevant partner recommendations and restrained ads while keeping official install sources front and center."
+              affiliateLinks={partnerLinks}
+              compact
+            />
+            <AdSenseSlot
+              client={monetizationConfig.adsenseClient}
+              slot={inArticleAdSlot}
+              label="Advertisement"
+              format="fluid"
+              layout="in-article"
+            />
+          </div>
 
           {entry.releaseMetadata ? (
             <section className="surface-card p-5 sm:p-6">

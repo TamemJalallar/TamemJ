@@ -86,6 +86,14 @@ const sections = [
     ]
   },
   {
+    title: "Website Advertising and Affiliate Links",
+    body: [
+      "The tamemj.com website may use advertising services such as Google AdSense and analytics services such as Google Analytics or Google Tag Manager to understand site usage and support free content.",
+      "Some pages may include affiliate or partner links. If a visitor purchases through an eligible affiliate link, the site may earn a commission at no additional cost to the visitor.",
+      "Affiliate links are intended to be optional recommendations. They do not replace enterprise security policies, official vendor guidance, or approved IT procurement processes."
+    ]
+  },
+  {
     title: "In-App Purchases",
     body: [
       "In-app purchases are processed by Apple through the App Store. Payment details are not received or stored by Tamem J.",

@@ -9,6 +9,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { GlobalCommandPalette } from "@/components/support-portal/global-command-palette";
 import { adsenseReviewModeEnabled } from "@/lib/adsense-review-mode";
+import { monetizationConfig } from "@/lib/monetization";
 import { buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 import { seoKeywords, siteConfig } from "@/lib/site";
 
@@ -34,6 +35,7 @@ const googleAnalyticsId =
   process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() || "G-ZJR5L6081Z";
 const googleTagManagerId =
   process.env.NEXT_PUBLIC_GTM_CONTAINER_ID?.trim() || "GTM-W7XQ7KBV";
+const adsenseClient = monetizationConfig.adsenseClient;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -157,11 +159,13 @@ gtag('config', '${googleAnalyticsId}');`
             />
           </>
         ) : null}
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8852243900182779"
-          crossOrigin="anonymous"
-        />
+        {adsenseClient ? (
+          <script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
+            crossOrigin="anonymous"
+          />
+        ) : null}
       </head>
       <body className="bg-bg font-sans antialiased text-fg">
         {googleTagManagerId ? (

@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FixGuide } from "@/components/corporate-fixes/fix-guide";
 import { EnterpriseSupportBanner } from "@/components/corporate-fixes/fix-shared";
+import { AdSenseSlot } from "@/components/monetization/adsense-slot";
+import { SupportSiteCard } from "@/components/monetization/support-site-card";
 import { ResourceLinkGrid } from "@/components/shared/resource-link-grid";
 import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import { getCorporateFixBySlug, getCorporateFixes } from "@/lib/corporate-fixes.registry";
@@ -16,6 +18,7 @@ import {
 import { getTopKeywordArticleTargets } from "@/lib/seo-content.registry";
 import { supportAuthorProfile } from "@/lib/site";
 import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
+import { getAdSenseSlot, getMonetizationRecommendations, monetizationConfig } from "@/lib/monetization";
 
 interface CorporateFixPageProps {
   params: Promise<{
@@ -202,6 +205,8 @@ export default async function CorporateFixDetailPage({ params }: CorporateFixPag
     [fix.title, fix.description, fix.category, ...fix.tags, ...fix.steps.map((step) => step.title)],
     2
   );
+  const fixPartnerLinks = getMonetizationRecommendations("corporate-fixes");
+  const inArticleAdSlot = getAdSenseSlot("inArticle");
   const resourceLinks = [
     ...relatedSupportArticles.map((article) => ({
       href: `/support/tickets/${article.slug}/`,
@@ -362,6 +367,22 @@ export default async function CorporateFixDetailPage({ params }: CorporateFixPag
 
           <EnterpriseSupportBanner className="mb-5" />
           <FixGuide fix={fix} />
+
+          <div className="mt-6 grid gap-4 print:hidden xl:grid-cols-[1fr_0.45fr]">
+            <SupportSiteCard
+              title="Support more enterprise-safe fixes"
+              description="This runbook stays free through optional partner recommendations, light ad placements, and direct support. The fix steps remain the priority."
+              affiliateLinks={fixPartnerLinks}
+              compact
+            />
+            <AdSenseSlot
+              client={monetizationConfig.adsenseClient}
+              slot={inArticleAdSlot}
+              label="Advertisement"
+              format="fluid"
+              layout="in-article"
+            />
+          </div>
 
           {exactQueryTargets.length > 0 ? (
             <section className="mt-6 surface-card p-5 sm:p-6">

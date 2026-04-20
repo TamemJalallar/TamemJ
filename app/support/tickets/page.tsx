@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AdSenseSlot } from "@/components/monetization/adsense-slot";
+import { SupportSiteCard } from "@/components/monetization/support-site-card";
 import { EditorialStandardsStrip } from "@/components/shared/editorial-authority-panels";
 import { KnowledgeBaseBrowser } from "@/components/support-portal/knowledge-base-browser";
+import { getAdSenseSlot, getMonetizationRecommendations, monetizationConfig } from "@/lib/monetization";
 import { getTopKBSeoAlignments, getTopSeoKeywordOpportunities } from "@/lib/seo-content.registry";
 import { getKBArticles } from "@/lib/support.kb.registry";
 import {
@@ -19,6 +22,8 @@ export default function KBPage() {
   const articles = getKBArticles();
   const keywordIntents = getTopSeoKeywordOpportunities(18);
   const seoAlignments = getTopKBSeoAlignments(50);
+  const supportPartnerLinks = getMonetizationRecommendations("support");
+  const displayAdSlot = getAdSenseSlot("display");
   const groupedByCategory = [...new Set(articles.map((article) => article.category))]
     .sort((a, b) => a.localeCompare(b))
     .map((category) => ({
@@ -55,6 +60,20 @@ export default function KBPage() {
       <section className="section-shell pb-10 pt-2 sm:pb-14">
         <div className="page-shell space-y-5">
           <EditorialStandardsStrip description="Support tickets are written as issue-specific reference pages. Each one is reviewed for enterprise-safe remediation, environment clarity, escalation guidance, and direct linkage to related fixes, guides, and downloads." />
+
+          <div className="grid gap-4 xl:grid-cols-[1fr_0.45fr]">
+            <SupportSiteCard
+              title="Keep the ticket library free"
+              description="Support tickets stay open and searchable through optional partner recommendations, downloadable assets, and restrained ad placements."
+              affiliateLinks={supportPartnerLinks}
+              compact
+            />
+            <AdSenseSlot
+              client={monetizationConfig.adsenseClient}
+              slot={displayAdSlot}
+              label="Advertisement"
+            />
+          </div>
 
           <section className="surface-card p-5 sm:p-6">
             <h2 className="font-display text-xl font-semibold text-fg">Popular Search Intents</h2>

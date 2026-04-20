@@ -2,11 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { EditorialStandardsStrip } from "@/components/shared/editorial-authority-panels";
 import { DownloadAssetsBrowser } from "@/components/downloads/download-assets-browser";
+import { AdSenseSlot } from "@/components/monetization/adsense-slot";
+import { SupportSiteCard } from "@/components/monetization/support-site-card";
 import {
   getDownloadAssetBundles,
   getDownloadAssets,
   getDownloadAssetStats
 } from "@/lib/download-assets.registry";
+import { getAdSenseSlot, getMonetizationRecommendations, monetizationConfig } from "@/lib/monetization";
 import {
   buildBreadcrumbJsonLd,
   buildCollectionPageJsonLd,
@@ -65,6 +68,8 @@ export default function DownloadAssetsPage() {
   const assets = getDownloadAssets();
   const bundles = getDownloadAssetBundles();
   const stats = getDownloadAssetStats();
+  const partnerLinks = getMonetizationRecommendations("download-assets");
+  const displayAdSlot = getAdSenseSlot("display");
   const categories = [...new Set(assets.map((asset) => asset.category))].sort((a, b) => a.localeCompare(b));
   const assetsByCategory = categories.map((category) => ({
     category,
@@ -170,6 +175,21 @@ export default function DownloadAssetsPage() {
           </section>
 
           <EditorialStandardsStrip description="Asset detail pages are reviewed as reference surfaces, not just file listings. The goal is to keep each script, template, checklist, or runbook page clear about format, update timing, workflow fit, and the surrounding support context." />
+
+          <div className="grid gap-4 xl:grid-cols-[1fr_0.45fr]">
+            <SupportSiteCard
+              title="All IT assets stay free to download"
+              description="These templates, scripts, checklists, and runbooks are supported by optional partner links, light ad placements, and direct donations instead of paywalls."
+              affiliateLinks={partnerLinks}
+              compact
+            />
+            <AdSenseSlot
+              client={monetizationConfig.adsenseClient}
+              slot={displayAdSlot}
+              label="Advertisement"
+              className="xl:min-h-full"
+            />
+          </div>
 
           <section className="grid gap-4 lg:grid-cols-3">
             <article className="surface-card-interactive p-5 sm:p-6">

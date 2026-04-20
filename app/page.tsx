@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AppCard } from "@/components/app-card";
+import { AdSenseSlot } from "@/components/monetization/adsense-slot";
+import { SupportSiteCard } from "@/components/monetization/support-site-card";
 import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import { getFeaturedApps } from "@/lib/apps";
 import { appsSectionEnabled } from "@/lib/apps-visibility";
@@ -10,6 +12,7 @@ import { siteConfig } from "@/lib/site";
 import { getCorporateFixes } from "@/lib/corporate-fixes.registry";
 import { getDownloads } from "@/lib/downloads.registry";
 import { getKBArticleBySlug, getKBArticles } from "@/lib/support.kb.registry";
+import { getAdSenseSlot, getMonetizationRecommendations, monetizationConfig } from "@/lib/monetization";
 
 function uniqueKeywords(keywords: string[]): string[] {
   const seen = new Set<string>();
@@ -156,6 +159,8 @@ export default function HomePage() {
   const corporateFixes = getCorporateFixes();
   const downloads = getDownloads();
   const featuredApps = appsSectionEnabled ? getFeaturedApps().slice(0, 3) : [];
+  const homePartnerLinks = getMonetizationRecommendations("homepage");
+  const displayAdSlot = getAdSenseSlot("display");
   const pillarGuides = getPillarContentIdeas().slice(0, 4);
   const featuredDownloadGuides = [...downloads]
     .filter((entry) => entry.releaseMetadata?.publishedAt)
@@ -493,6 +498,21 @@ export default function HomePage() {
           </div>
         </section>
       ) : null}
+
+      <section className="section-shell pt-2">
+        <div className="page-shell space-y-4">
+          <SupportSiteCard
+            title="A low-friction way to keep the resource library free"
+            description="The site can earn small revenue from relevant partner links, optional donations, and quiet ad placements while keeping troubleshooting content useful first."
+            affiliateLinks={homePartnerLinks}
+          />
+          <AdSenseSlot
+            client={monetizationConfig.adsenseClient}
+            slot={displayAdSlot}
+            label="Sponsor"
+          />
+        </div>
+      </section>
 
       <section className="section-shell pt-2">
         <div className="page-shell">

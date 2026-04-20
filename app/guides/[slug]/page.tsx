@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { AdSenseSlot } from "@/components/monetization/adsense-slot";
+import { SupportSiteCard } from "@/components/monetization/support-site-card";
 import { CitationGuidancePanel, EditorialTrustPanel } from "@/components/shared/editorial-authority-panels";
 import {
   getContentClusterBySlug,
@@ -14,6 +16,7 @@ import {
 import { buildPillarGuideEditorial } from "@/src/content/editorial/pillar-guides";
 import { editorialStandards, supportAuthorProfile } from "@/lib/site";
 import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
+import { getAdSenseSlot, getMonetizationRecommendations, monetizationConfig } from "@/lib/monetization";
 
 interface GuidePageProps {
   params: Promise<{ slug: string }>;
@@ -96,6 +99,8 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
   const relatedAssets = getSuggestedDownloadAssetsForPillar(pillar, 14);
   const opportunities = getKeywordOpportunitiesForPillar(pillar, 12);
   const editorial = buildPillarGuideEditorial(pillar, cluster, relatedKBArticles, relatedAssets);
+  const guidePartnerLinks = getMonetizationRecommendations("guides");
+  const inArticleAdSlot = getAdSenseSlot("inArticle");
   const citationUseCases = [
     `Use this guide when the task spans multiple related tickets and needs a broader ${cluster?.title ?? "IT operations"} workflow.`,
     `Best for planning around ${pillar.targetKeywords.slice(0, 3).join(", ")} without losing the linked ticket and asset detail pages.`,
@@ -262,6 +267,22 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
               </ul>
             </section>
           </section>
+
+          <div className="grid gap-4 xl:grid-cols-[1fr_0.45fr]">
+            <SupportSiteCard
+              title="Keep this pillar guide free"
+              description="This guide is monetized lightly with optional partner links and reserved ad placements so the troubleshooting content can stay accessible."
+              affiliateLinks={guidePartnerLinks}
+              compact
+            />
+            <AdSenseSlot
+              client={monetizationConfig.adsenseClient}
+              slot={inArticleAdSlot}
+              label="Advertisement"
+              format="fluid"
+              layout="in-article"
+            />
+          </div>
 
           <section className="surface-card p-5 sm:p-6">
             <div className="mb-4 flex items-center justify-between gap-3">
