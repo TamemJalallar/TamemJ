@@ -1,20 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import type { ReactNode } from "react";
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Cell,
-  Legend,
-  Pie,
-  PieChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis
-} from "recharts";
+import dynamic from "next/dynamic";
 import { SupportPageHeader } from "@/components/support-portal/page-header";
 import {
   getSupportAnalyticsStoreIndexedDbFirst,
@@ -27,6 +14,21 @@ import {
   subscribeToStoredTickets
 } from "@/lib/support-portal.storage";
 
+const AnalyticsCharts = dynamic(
+  () =>
+    import("@/components/support-portal/analytics-charts").then((module) => ({
+      default: module.AnalyticsCharts
+    })),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="rounded-2xl border border-line/70 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-950/70">
+        <p className="text-sm text-slate-600 dark:text-slate-300">Loading analytics charts...</p>
+      </div>
+    )
+  }
+);
+
 function MetricCard({ label, value, hint }: { label: string; value: string | number; hint?: string }) {
   return (
     <div className="rounded-2xl border border-line/70 bg-white p-4 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-5">
@@ -34,29 +36,6 @@ function MetricCard({ label, value, hint }: { label: string; value: string | num
       <p className="mt-2 text-2xl font-semibold text-slate-900 dark:text-slate-100">{value}</p>
       {hint ? <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{hint}</p> : null}
     </div>
-  );
-}
-
-function ChartCard({
-  title,
-  children,
-  emptyMessage,
-  hasData
-}: {
-  title: string;
-  children: ReactNode;
-  emptyMessage: string;
-  hasData: boolean;
-}) {
-  return (
-    <section className="rounded-2xl border border-line/70 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950/70 sm:p-6">
-      <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">{title}</h2>
-      {hasData ? (
-        <div className="mt-4 h-[260px]">{children}</div>
-      ) : (
-        <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">{emptyMessage}</p>
-      )}
-    </section>
   );
 }
 
@@ -129,6 +108,10 @@ export function AnalyticsDashboard() {
     () => toChartRows(summary?.incidentsByPriority ?? []),
     [summary]
   );
+  const categoryRows = useMemo(
+    () => toChartRows(summary?.topTicketCategories ?? []),
+    [summary]
+  );
 
   return (
     <div className="space-y-5">
@@ -154,115 +137,14 @@ export function AnalyticsDashboard() {
             <MetricCard label="Tracked Events" value={eventCount} />
           </div>
 
-          <div className="grid gap-5 xl:grid-cols-2">
-            <ChartCard
-              title="Most Viewed Tickets"
-              emptyMessage="No ticket views tracked yet. Open tickets to populate this chart."
-              hasData={kbViewsRows.length > 0}
-            >
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={kbViewsRows}>
-                  <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.2} />
-                  <XAxis dataKey="name" hide />
-                  <YAxis allowDecimals={false} />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="value" name="Views" fill="#0f172a" radius={[8, 8, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </ChartCard>
-
-            <ChartCard
-              title="Most Searched Issues"
-              emptyMessage="No search queries tracked yet. Use search across the portal to populate results."
-              hasData={searchRows.length > 0}
-            >
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={searchRows}>
-                  <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.2} />
-                  <XAxis dataKey="name" hide />
-                  <YAxis allowDecimals={false} />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="value" name="Searches" fill="#0ea5e9" radius={[8, 8, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </ChartCard>
-
-            <ChartCard
-              title="Top Products Causing Issues / Requests"
-              emptyMessage="No product-level activity tracked yet."
-              hasData={productRows.length > 0}
-            >
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={productRows} layout="vertical" margin={{ left: 20 }}>
-                  <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.2} />
-                  <XAxis type="number" allowDecimals={false} />
-                  <YAxis type="category" dataKey="name" width={120} />
-                  <Tooltip />
-                  <Bar dataKey="value" name="Events" fill="#4f46e5" radius={[0, 8, 8, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </ChartCard>
-
-            <ChartCard
-              title="Incidents by Priority"
-              emptyMessage="No incident tickets have been recorded yet."
-              hasData={priorityRows.length > 0}
-            >
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={priorityRows}>
-                  <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.2} />
-                  <XAxis dataKey="name" />
-                  <YAxis allowDecimals={false} />
-                  <Tooltip />
-                  <Bar dataKey="value" name="Incidents" fill="#dc2626" radius={[8, 8, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </ChartCard>
-
-            <ChartCard
-              title="Helpful vs Not Helpful Ratio"
-              emptyMessage="No helpfulness votes tracked yet."
-              hasData={helpfulData.length > 0}
-            >
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={helpfulData}
-                    dataKey="value"
-                    nameKey="name"
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={95}
-                    label
-                  >
-                    {helpfulData.map((entry) => (
-                      <Cell key={entry.name} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
-            </ChartCard>
-
-            <ChartCard
-              title="Most Selected Categories"
-              emptyMessage="No category activity recorded yet."
-              hasData={(summary.topTicketCategories ?? []).length > 0}
-            >
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={toChartRows(summary.topTicketCategories)}>
-                  <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.2} />
-                  <XAxis dataKey="name" hide />
-                  <YAxis allowDecimals={false} />
-                  <Tooltip />
-                  <Bar dataKey="value" name="Selections" fill="#0891b2" radius={[8, 8, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </ChartCard>
-          </div>
+          <AnalyticsCharts
+            kbViewsRows={kbViewsRows}
+            searchRows={searchRows}
+            productRows={productRows}
+            priorityRows={priorityRows}
+            helpfulData={helpfulData}
+            categoryRows={categoryRows}
+          />
         </>
       ) : (
         <div className="rounded-2xl border border-line/70 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-950/70">

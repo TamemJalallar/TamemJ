@@ -3,7 +3,7 @@ import {
   adsenseReviewCoreSitemapPaths,
   adsenseReviewModeEnabled
 } from "@/lib/adsense-review-mode";
-import { getApps } from "@/lib/apps";
+import { getAppCategories, getApps } from "@/lib/apps";
 import { appsSectionEnabled } from "@/lib/apps-visibility";
 import { getAiAgentCategories, getAiAgentCategorySlug, getAiAgentsRegistry } from "@/lib/aiAgents.registry";
 import { getCorporateFixes } from "@/lib/corporate-fixes.registry";
@@ -86,6 +86,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
         url: url(`/apps/${app.slug}/`),
         changeFrequency: "monthly",
         priority: 0.7,
+        lastModified: parseDateInput(app.lastUpdated) ?? generatedAt
+      }))
+    : [];
+
+  const appCategoryEntries: MetadataRoute.Sitemap = appsSectionEnabled
+    ? getAppCategories().map((category) => ({
+        url: url(`/apps/category/${category.slug}/`),
+        changeFrequency: "weekly",
+        priority: 0.76,
         lastModified: generatedAt
       }))
     : [];
@@ -163,6 +172,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     ...staticEntries,
     ...appEntries,
+    ...appCategoryEntries,
     ...aiAgentEntries,
     ...aiAgentCategoryEntries,
     ...genAIPromptEntries,

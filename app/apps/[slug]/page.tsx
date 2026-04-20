@@ -9,6 +9,8 @@ import { ScreenshotCarousel } from "@/components/screenshot-carousel";
 import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import {
   getAppBySlug,
+  getAppMaintainer,
+  getAppPricingText,
   getAppPrimaryLink,
   getApps,
   getAppStatusLabel,
@@ -242,6 +244,7 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
     url: toAbsoluteUrl(path),
     image: toAbsoluteUrl(app.icon),
     screenshot: app.screenshots.map((screenshot) => toAbsoluteUrl(screenshot.src)),
+    dateModified: app.lastUpdated,
     isAccessibleForFree: app.pricing.toLowerCase().includes("free"),
     ...(isLive
       ? {
@@ -282,6 +285,20 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
     { name: "Apps", path: "/apps/" },
     { name: app.name, path }
   ]);
+  const faqSchema = app.faqs?.length
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: app.faqs.map((faq) => ({
+          "@type": "Question",
+          name: faq.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: faq.answer
+          }
+        }))
+      }
+    : null;
 
   return (
     <>
@@ -318,6 +335,11 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
                   label={primaryLink?.label}
                   ariaLabel={primaryLink ? `${primaryLink.label} for ${app.name}` : undefined}
                   unavailableText="Product page coming soon"
+                  tracking={{
+                    appSlug: app.slug,
+                    appName: app.name,
+                    source: "app-detail-primary"
+                  }}
                 />
                 <Link href="/privacy" className="btn-secondary">
                   Privacy Policy
@@ -340,7 +362,7 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
               <div className="mt-6 grid gap-3 md:grid-cols-3">
                 <article className="surface-card rounded-2xl p-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Pricing</p>
-                  <p className="mt-2 text-sm font-semibold text-fg">{app.pricing}</p>
+                  <p className="mt-2 text-sm font-semibold text-fg">{getAppPricingText(app)}</p>
                 </article>
                 <article className="surface-card rounded-2xl p-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Compatibility</p>
@@ -390,9 +412,16 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
 
                 <div className="mt-5 flex flex-wrap gap-3">
                   {primaryLink ? (
-                    <a href={primaryLink.href} target="_blank" rel="noreferrer" className="btn-primary">
-                      View Project on GitHub
-                    </a>
+                    <AppStoreButton
+                      href={primaryLink.href}
+                      label="View Project on GitHub"
+                      ariaLabel={`View ${app.name} project on GitHub`}
+                      tracking={{
+                        appSlug: app.slug,
+                        appName: app.name,
+                        source: "app-detail-quickstart"
+                      }}
+                    />
                   ) : null}
                   <a
                     href="https://github.com/TamemJalallar/FantasyFootball-Yahoo#5-minute-local-start-mock-mode"
@@ -452,7 +481,7 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
               authorTitle={supportAuthorProfile.title}
               credentials={supportAuthorProfile.credentials}
               lastReviewed={editorialStandards.lastUpdated}
-                bio={
+              bio={
                 isLive
                   ? "Live product pages are reviewed so the feature summary, support path, privacy path, and App Store status remain aligned."
                   : isPublished
@@ -495,6 +524,17 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
                   <p>
                     <span className="font-semibold text-fg">Status:</span> {statusLabel}.
                   </p>
+                  <p>
+                    <span className="font-semibold text-fg">Pricing:</span> {getAppPricingText(app)}.
+                  </p>
+                  <p>
+                    <span className="font-semibold text-fg">Maintained by:</span> {getAppMaintainer(app)}.
+                  </p>
+                  {app.lastUpdated ? (
+                    <p>
+                      <span className="font-semibold text-fg">Last updated:</span> {app.lastUpdated}.
+                    </p>
+                  ) : null}
                   {primaryLink ? (
                     <p>
                       <span className="font-semibold text-fg">Primary access:</span>{" "}
@@ -512,6 +552,22 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
                   </p>
                 </div>
               </section>
+
+              {app.releaseNotes?.length ? (
+                <section className="surface-card p-5 sm:p-6">
+                  <p className="eyebrow">Release Notes</p>
+                  <h2 className="mt-3 font-display text-2xl font-semibold text-fg">Latest product updates</h2>
+                  <div className="mt-5 space-y-3">
+                    {app.releaseNotes.map((note) => (
+                      <article key={`${app.slug}-${note.date}-${note.title}`} className="rounded-2xl border border-line bg-card-2/70 p-4">
+                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{note.date}</p>
+                        <h3 className="mt-2 text-sm font-semibold text-fg">{note.title}</h3>
+                        <p className="mt-2 text-sm leading-6 text-fg-secondary">{note.description}</p>
+                      </article>
+                    ))}
+                  </div>
+                </section>
+              ) : null}
 
               {relatedApps.length > 0 ? (
                 <section className="surface-card p-5 sm:p-6">
@@ -535,10 +591,30 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
               ) : null}
             </div>
           </section>
+
+          {app.faqs?.length ? (
+            <section className="surface-card p-6 sm:p-8">
+              <p className="eyebrow">Product FAQ</p>
+              <h2 className="mt-3 font-display text-2xl font-semibold text-fg">Common questions about {app.name}</h2>
+              <div className="mt-5 grid gap-3 md:grid-cols-2">
+                {app.faqs.map((faq) => (
+                  <details key={`${app.slug}-${faq.question}`} className="rounded-2xl border border-line bg-card-2/70 p-4">
+                    <summary className="cursor-pointer text-sm font-semibold text-fg marker:text-primary-500">
+                      {faq.question}
+                    </summary>
+                    <p className="mt-3 text-sm leading-7 text-fg-secondary">{faq.answer}</p>
+                  </details>
+                ))}
+              </div>
+            </section>
+          ) : null}
         </div>
       </section>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(appSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      {faqSchema ? (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      ) : null}
     </>
   );
 }

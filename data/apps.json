@@ -60,7 +60,44 @@
     ],
     "pricing": "Free",
     "minIOSVersion": "iOS 16.0+",
-    "supportEmail": "support@tamemj.com"
+    "supportEmail": "support@tamemj.com",
+    "pricingNote": "Free on the App Store",
+    "maintainedBy": "Tamem J",
+    "lastUpdated": "2026-04-20",
+    "faqs": [
+      {
+        "question": "Is EverAfter Planner free?",
+        "answer": "Yes. EverAfter Planner is listed as free in the product catalog. If optional paid features are added later, the product page and privacy policy should be updated before release."
+      },
+      {
+        "question": "What does EverAfter Planner help with?",
+        "answer": "It helps couples organize wedding planning tasks such as checklists, budgets, guest tracking, vendor coordination, timelines, seating, and reminders from one calm planning workspace."
+      },
+      {
+        "question": "Where can I download EverAfter Planner?",
+        "answer": "Use the App Store button on the product page to open the official Apple App Store listing."
+      },
+      {
+        "question": "How do I get support?",
+        "answer": "Use the App Support link on the product page or the support portal to submit questions, bug reports, and app feedback."
+      },
+      {
+        "question": "Does the app have a privacy policy?",
+        "answer": "Yes. The product page links to the site privacy policy so reviewers and users can quickly review data and support information."
+      }
+    ],
+    "releaseNotes": [
+      {
+        "date": "2026-04-20",
+        "title": "Product catalog update",
+        "description": "Updated the product listing with clearer pricing, support context, and product-page trust details."
+      },
+      {
+        "date": "2026-04-03",
+        "title": "App Store listing connected",
+        "description": "Added the official App Store link and product screenshots to the public product page."
+      }
+    ]
   },
   {
     "slug": "gigtracker",
@@ -119,7 +156,44 @@
     ],
     "pricing": "Free",
     "minIOSVersion": "iPhone, Mac, and Apple Watch",
-    "supportEmail": "support@tamemj.com"
+    "supportEmail": "support@tamemj.com",
+    "pricingNote": "Free on the App Store",
+    "maintainedBy": "Tamem J",
+    "lastUpdated": "2026-04-20",
+    "faqs": [
+      {
+        "question": "Is GigTracker free?",
+        "answer": "Yes. GigTracker is listed as free in the product catalog and links to the official App Store listing when available."
+      },
+      {
+        "question": "Who is GigTracker for?",
+        "answer": "GigTracker is designed for delivery drivers, freelancers, and independent operators who need to track trips, earnings, expenses, invoices, and business follow-ups."
+      },
+      {
+        "question": "What Apple devices does GigTracker support?",
+        "answer": "The product page lists support across iPhone, Mac, and Apple Watch workflows, with compatibility details shown in the app card and product snapshot."
+      },
+      {
+        "question": "How do I report a problem with GigTracker?",
+        "answer": "Open the product page and use the Support link to route the issue through the support portal."
+      },
+      {
+        "question": "Does GigTracker collect personal data?",
+        "answer": "The privacy policy explains the categories of app data and device permissions that may be used for mileage, receipt, notification, and cross-device workflows."
+      }
+    ],
+    "releaseNotes": [
+      {
+        "date": "2026-04-20",
+        "title": "Product catalog update",
+        "description": "Updated the listing with free pricing, clearer compatibility, and product support paths."
+      },
+      {
+        "date": "2026-04-03",
+        "title": "Public product page added",
+        "description": "Added screenshots, feature summary, support links, and App Store metadata to the site."
+      }
+    ]
   },
   {
     "slug": "fantasy-football-obs-overlay",
@@ -203,7 +277,44 @@
     "pricing": "Free",
     "minIOSVersion": "OBS Browser Source + local Node.js runtime",
     "compatibility": "OBS Browser Source, macOS, Windows, or Linux with Node.js 18.17+",
-    "supportEmail": "support@tamemj.com"
+    "supportEmail": "support@tamemj.com",
+    "pricingNote": "Free open-source product",
+    "maintainedBy": "Tamem J",
+    "lastUpdated": "2026-04-20",
+    "faqs": [
+      {
+        "question": "Is Fantasy Football OBS Overlay free?",
+        "answer": "Yes. The overlay is listed as a free open-source product and links to the GitHub project from the product page."
+      },
+      {
+        "question": "What does the overlay do?",
+        "answer": "It creates browser-source overlay pages for OBS so streamers can show fantasy football matchups, score changes, ticker views, and simple broadcast graphics."
+      },
+      {
+        "question": "Which fantasy providers can it work with?",
+        "answer": "The product page lists Yahoo, ESPN, Sleeper, and Mock Mode as provider or testing workflows for the overlay setup."
+      },
+      {
+        "question": "Can I test it without connecting a real account?",
+        "answer": "Yes. Mock Mode is included so you can test OBS scenes and layout behavior before connecting live fantasy data."
+      },
+      {
+        "question": "What do I need to run it?",
+        "answer": "The product page lists OBS Browser Source compatibility and a local Node.js runtime requirement. The quick-start section includes basic setup commands."
+      }
+    ],
+    "releaseNotes": [
+      {
+        "date": "2026-04-20",
+        "title": "Provider badges and setup guide added",
+        "description": "Added Yahoo, ESPN, Sleeper, and Mock Mode badges plus OBS quick-start guidance to the product page."
+      },
+      {
+        "date": "2026-04-20",
+        "title": "Product description simplified",
+        "description": "Reworked the public copy to explain the overlay in plain language for streamers and reviewers."
+      }
+    ]
   },
   {
     "slug": "fantasy-football-hub",
@@ -244,6 +355,43 @@
     ],
     "pricing": "Free",
     "minIOSVersion": "Planned for iPhone",
-    "supportEmail": "support@tamemj.com"
+    "supportEmail": "support@tamemj.com",
+    "pricingNote": "Free while in development",
+    "maintainedBy": "Tamem J",
+    "lastUpdated": "2026-04-20",
+    "faqs": [
+      {
+        "question": "Is Fantasy Football Hub available now?",
+        "answer": "Fantasy Football Hub is currently listed as in development. The page is public so API reviewers, users, and collaborators can understand the product direction."
+      },
+      {
+        "question": "Will Fantasy Football Hub be free?",
+        "answer": "The product catalog lists Fantasy Football Hub as free while in development. Any future pricing change should be reflected on the product page before release."
+      },
+      {
+        "question": "What is Fantasy Football Hub intended to do?",
+        "answer": "It is intended to help fantasy football users track leagues, review matchups, plan waiver moves, compare players, and manage roster decisions from a cleaner app experience."
+      },
+      {
+        "question": "Does it use external fantasy APIs?",
+        "answer": "The product direction includes API-powered fantasy data integrations. Exact external services should be documented as integrations are finalized."
+      },
+      {
+        "question": "How can reviewers contact support?",
+        "answer": "Use the Support link on the product page to reach the site support workflow for questions about the product or API review."
+      }
+    ],
+    "releaseNotes": [
+      {
+        "date": "2026-04-20",
+        "title": "Development product page expanded",
+        "description": "Added clearer free pricing, FAQ content, and support context for API and product review."
+      },
+      {
+        "date": "2026-04-03",
+        "title": "Product page created",
+        "description": "Added Fantasy Football Hub to the product catalog with initial screenshots and product direction."
+      }
+    ]
   }
 ]

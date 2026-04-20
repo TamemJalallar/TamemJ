@@ -17,6 +17,17 @@ export interface ProductProviderBadge {
   description: string;
 }
 
+export interface ProductFaq {
+  question: string;
+  answer: string;
+}
+
+export interface ProductReleaseNote {
+  date: string;
+  title: string;
+  description: string;
+}
+
 export interface IOSApp {
   slug: string;
   name: string;
@@ -36,7 +47,12 @@ export interface IOSApp {
   screenshots: AppScreenshot[];
   features: string[];
   pricing: string;
+  pricingNote?: string;
   minIOSVersion: string;
   compatibility?: string;
+  maintainedBy?: string;
+  lastUpdated?: string;
+  faqs?: ProductFaq[];
+  releaseNotes?: ProductReleaseNote[];
   supportEmail?: string;
 }

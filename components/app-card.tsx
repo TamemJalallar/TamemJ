@@ -1,7 +1,19 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import type { IOSApp } from "@/types/app";
-import { getAppPrimaryLink, getAppStatusLabel, getCompatibilityText, hasAppStoreRelease, isPublishedApp } from "@/lib/apps";
+import {
+  getAppCategorySlug,
+  getAppMaintainer,
+  getAppPricingText,
+  getAppPrimaryLink,
+  getAppStatusLabel,
+  getCompatibilityText,
+  hasAppStoreRelease,
+  isPublishedApp
+} from "@/lib/apps";
+import { trackProductCtaClick } from "@/lib/product-cta-analytics";
 
 interface AppCardProps {
   app: IOSApp;
@@ -15,6 +27,7 @@ export function AppCard({ app }: AppCardProps) {
   const statusLabel = getAppStatusLabel(app);
   const iconHref = primaryLink?.href ?? appDetailHref;
   const iconTargetProps = primaryLink ? { target: "_blank", rel: "noreferrer" as const } : {};
+  const categoryHref = `/apps/category/${getAppCategorySlug(app.category)}/`;
   const statusClasses = hasAppStoreUrl
     ? "border-success-100 bg-success-50 text-success-700 dark:border-success-500/50 dark:bg-success-500/25 dark:text-success-100"
     : isPublished
@@ -26,7 +39,12 @@ export function AppCard({ app }: AppCardProps) {
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{app.category}</p>
+            <Link
+              href={categoryHref}
+              className="text-xs font-semibold uppercase tracking-[0.14em] text-muted transition hover:text-primary-600 dark:hover:text-primary-300"
+            >
+              {app.category}
+            </Link>
             <span className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-bold ${statusClasses}`}>
               {statusLabel}
             </span>
@@ -43,6 +61,16 @@ export function AppCard({ app }: AppCardProps) {
           href={iconHref}
           aria-label={primaryLink ? `${primaryLink.label} for ${app.name}` : `Open ${app.name} details`}
           className="group/icon shrink-0 text-center"
+          onClick={() => {
+            if (!primaryLink) return;
+            trackProductCtaClick({
+              appSlug: app.slug,
+              appName: app.name,
+              href: primaryLink.href,
+              label: primaryLink.label,
+              source: "app-card-icon"
+            });
+          }}
           {...iconTargetProps}
         >
           <div className="relative h-20 w-20 overflow-hidden rounded-[1.6rem] border border-line bg-card shadow-soft transition-all duration-200 group-hover/icon:-translate-y-0.5 group-hover/icon:border-primary-200 group-hover/icon:shadow-card dark:group-hover/icon:border-primary-400/30">
@@ -71,7 +99,7 @@ export function AppCard({ app }: AppCardProps) {
         <div className="grid gap-2 text-xs text-muted sm:grid-cols-2">
           <div className="rounded-xl border border-line/80 bg-card-2/60 px-3 py-2">
             <p className="font-semibold text-fg">Pricing</p>
-            <p className="mt-1">{app.pricing}</p>
+            <p className="mt-1">{getAppPricingText(app)}</p>
           </div>
           <div className="rounded-xl border border-line/80 bg-card-2/60 px-3 py-2">
             <p className="font-semibold text-fg">Compatibility</p>
@@ -79,7 +107,9 @@ export function AppCard({ app }: AppCardProps) {
           </div>
         </div>
         <div className="flex items-center justify-between gap-4">
-          <p className="text-xs text-muted">{app.screenshots.length} screenshots</p>
+          <p className="text-xs text-muted">
+            {app.lastUpdated ? `Updated ${app.lastUpdated}` : `${app.screenshots.length} screenshots`} • {getAppMaintainer(app)}
+          </p>
           <Link
             href={appDetailHref}
             className="text-sm font-semibold text-primary-600 transition hover:text-primary-700 hover:underline dark:text-primary-300 dark:hover:text-primary-200"

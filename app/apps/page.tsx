@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { AppCard } from "@/components/app-card";
+import { AppsCatalogBrowser } from "@/components/apps/apps-catalog-browser";
 import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import { getApps, isPublishedApp } from "@/lib/apps";
 import { appsSectionEnabled } from "@/lib/apps-visibility";
@@ -137,30 +137,7 @@ export default function AppsPage() {
           </section>
 
           {hasApps ? (
-            <section className="surface-card p-5 sm:p-6" id="app-catalog">
-              <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
-                <div>
-                  <p className="eyebrow">Product Catalog</p>
-                  <h2 className="mt-3 font-display text-2xl font-semibold text-fg">Full product catalog</h2>
-                  <p className="mt-2 max-w-3xl text-sm leading-7 text-fg-secondary">
-                    A single catalog view for published apps, open-source products, and products currently in development.
-                  </p>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  <Link href="/privacy" className="btn-secondary !px-4 !py-2 text-xs">
-                    Privacy Policy
-                  </Link>
-                  <Link href="/support" className="btn-secondary !px-4 !py-2 text-xs">
-                    App Support
-                  </Link>
-                </div>
-              </div>
-              <div className="mt-5 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                {apps.map((app) => (
-                  <AppCard key={`catalog-${app.slug}`} app={app} />
-                ))}
-              </div>
-            </section>
+            <AppsCatalogBrowser apps={apps} />
           ) : (
             <div className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
               <div className="surface-card-strong border-dashed p-6 sm:p-8">
