@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AdSenseSlot } from "@/components/monetization/adsense-slot";
 import { EditorialStandardsStrip } from "@/components/shared/editorial-authority-panels";
 import { SupportForm } from "@/components/support-form";
 import { SupportPortalHome } from "@/components/support-portal/support-portal-home";
 import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
+import { getAdSenseSlot, monetizationConfig } from "@/lib/monetization";
 import { getApps, isPublishedApp } from "@/lib/apps";
 import { buildBreadcrumbJsonLd } from "@/lib/seo";
 import {
@@ -150,6 +152,12 @@ export default function SupportPage() {
         </section>
 
         <SupportPortalHome showHeader={false} />
+
+        <AdSenseSlot
+          client={monetizationConfig.adsenseClient}
+          slot={getAdSenseSlot("display")}
+          label="Advertisement"
+        />
 
         <EditorialStandardsStrip description="The support experience is built around enterprise-safe troubleshooting, clearly separated app support, and reference pages that stay useful to both users and AI systems. That means detail pages are reviewed for scope, escalation, tested environments, and canonical routing." />
 

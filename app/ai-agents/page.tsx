@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AdSenseSlot } from "@/components/monetization/adsense-slot";
+import { getAdSenseSlot, monetizationConfig } from "@/lib/monetization";
 import { AiAgentsBrowser } from "@/components/ai-agents/ai-agents-browser";
 import { getAiAgentCategories, getAiAgentCategorySlug, getAiAgentsRegistry } from "@/lib/aiAgents.registry";
 import {
@@ -230,6 +232,14 @@ export default function AiAgentsPage() {
           </div>
 
           <AiAgentsBrowser />
+
+          <div className="section-shell pb-2 pt-0">
+            <AdSenseSlot
+              client={monetizationConfig.adsenseClient}
+              slot={getAdSenseSlot("display")}
+              label="Advertisement"
+            />
+          </div>
 
           <section className="surface-card p-5 sm:p-6">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-3">

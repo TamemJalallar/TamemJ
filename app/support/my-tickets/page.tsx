@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { AdSenseSlot } from "@/components/monetization/adsense-slot";
+import { getAdSenseSlot, monetizationConfig } from "@/lib/monetization";
 import { TicketsWorkbench } from "@/components/support-portal/tickets-workbench";
 
 export const metadata: Metadata = {
@@ -9,5 +11,18 @@ export const metadata: Metadata = {
 };
 
 export default function TicketsPage() {
-  return <TicketsWorkbench />;
+  return (
+    <>
+      <div className="section-shell pb-4 pt-6">
+        <div className="page-shell">
+          <AdSenseSlot
+            client={monetizationConfig.adsenseClient}
+            slot={getAdSenseSlot("display")}
+            label="Advertisement"
+          />
+        </div>
+      </div>
+      <TicketsWorkbench />
+    </>
+  );
 }

@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { AdSenseSlot } from "@/components/monetization/adsense-slot";
+import { getAdSenseSlot, monetizationConfig } from "@/lib/monetization";
 import { IncidentForm } from "@/components/support-portal/incident-form";
 
 export const metadata: Metadata = {
@@ -10,5 +12,18 @@ export const metadata: Metadata = {
 };
 
 export default function NewIncidentPage() {
-  return <IncidentForm />;
+  return (
+    <>
+      <div className="section-shell pb-4 pt-6">
+        <div className="page-shell">
+          <AdSenseSlot
+            client={monetizationConfig.adsenseClient}
+            slot={getAdSenseSlot("display")}
+            label="Advertisement"
+          />
+        </div>
+      </div>
+      <IncidentForm />
+    </>
+  );
 }

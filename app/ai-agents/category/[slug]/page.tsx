@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { AdSenseSlot } from "@/components/monetization/adsense-slot";
+import { getAdSenseSlot, monetizationConfig } from "@/lib/monetization";
 import {
   aiAgentPlatforms,
   getAiAgentCategories,
@@ -239,6 +241,12 @@ export default async function AiAgentCategoryPage({ params }: AiAgentCategoryPag
               ))}
             </div>
           </section>
+
+          <AdSenseSlot
+            client={monetizationConfig.adsenseClient}
+            slot={getAdSenseSlot("display")}
+            label="Advertisement"
+          />
 
           <section className="surface-card p-5 sm:p-6">
             <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Use Alongside Other Hubs</h2>

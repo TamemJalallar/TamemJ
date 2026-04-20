@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { AdSenseSlot } from "@/components/monetization/adsense-slot";
+import { getAdSenseSlot, monetizationConfig } from "@/lib/monetization";
 import { KnowledgeBaseArticleView } from "@/components/support-portal/knowledge-base-article-view";
 import type { ResourceLinkItem } from "@/components/shared/resource-link-grid";
 import { getRecommendedAffiliatesForKBArticle } from "@/lib/affiliate-support.registry";
@@ -160,6 +162,15 @@ export default async function KBArticlePage({ params }: KBArticlePageProps) {
         seoAlignment={seoAlignment}
         resourceLinks={resourceLinks}
       />
+      <div className="section-shell pb-6 pt-2">
+        <div className="page-shell">
+          <AdSenseSlot
+            client={monetizationConfig.adsenseClient}
+            slot={getAdSenseSlot("inArticle")}
+            label="Advertisement"
+          />
+        </div>
+      </div>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}

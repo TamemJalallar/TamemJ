@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { AdSenseSlot } from "@/components/monetization/adsense-slot";
+import { getAdSenseSlot, monetizationConfig } from "@/lib/monetization";
 import { CatalogItemRequestView } from "@/components/support-portal/catalog-item-request-view";
 import { getCatalogItemBySlug, getCatalogItems } from "@/lib/support.catalog.registry";
 import {
@@ -51,6 +53,15 @@ export default async function CatalogDetailPage({ params }: CatalogDetailPagePro
   return (
     <>
       <CatalogItemRequestView item={item} />
+      <div className="section-shell pb-6 pt-2">
+        <div className="page-shell">
+          <AdSenseSlot
+            client={monetizationConfig.adsenseClient}
+            slot={getAdSenseSlot("inArticle")}
+            label="Advertisement"
+          />
+        </div>
+      </div>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(itemJsonLd) }}
