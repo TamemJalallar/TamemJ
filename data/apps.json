@@ -321,9 +321,9 @@
     "name": "Fantasy Football Hub",
     "category": "Fantasy Sports",
     "status": "in-development",
-    "tagline": "Track matchups, manage leagues, and monitor fantasy football insights from one place.",
-    "shortDescription": "Fantasy Football Hub is an in-development fantasy football companion app focused on league dashboards, matchup views, waiver planning, roster notes, and API-powered player and scoring workflows.",
-    "description": "Fantasy Football Hub is a fantasy football management and companion app currently in development. The product is being designed to help fantasy players review league activity, track matchups, watch waiver priorities, compare roster decisions, monitor player trends, and work from one cleaner interface as external fantasy sports APIs are integrated.",
+    "tagline": "A free fantasy football companion app for leagues, news, mock drafts, and direct app links.",
+    "shortDescription": "Fantasy Football Hub, also known as FATT Football, is a free iPhone app that opens league views, news, mock drafts, and app sections through universal links.",
+    "description": "Fantasy Football Hub is the public product page for the FATT Football iPhone app. The app is designed to keep fantasy football navigation simple: users can open league views, news details, mock draft screens, and general app sections directly from supported tamemj.com universal links. It focuses on quick access to the fantasy football screens users revisit most instead of trying to replace a full fantasy platform.",
     "featured": true,
     "appStoreUrl": "",
     "icon": "/images/apps/fantasy-football-hub/icon.svg",
@@ -346,42 +346,47 @@
       }
     ],
     "features": [
-      "League overview and standings dashboard",
-      "Weekly matchup tracking and score monitoring",
-      "Waiver wire and roster move planning",
-      "Player trend, matchup, and note workflows",
-      "API-powered fantasy data integrations in progress",
-      "Designed for iPhone-first fantasy football management"
+      "Universal links for /open, /league, /news, and /mock-draft paths",
+      "Direct navigation into league views, team context, standings, and matchup screens",
+      "Fantasy football news detail links that open the relevant in-app view",
+      "Mock draft preparation screens for faster pre-draft planning",
+      "Scoped app-link handling so unrelated website URLs stay on the web",
+      "Free iPhone-first fantasy football companion workflow"
     ],
     "pricing": "Free",
-    "minIOSVersion": "Planned for iPhone",
+    "minIOSVersion": "iPhone",
     "supportEmail": "support@tamemj.com",
-    "pricingNote": "Free while in development",
+    "pricingNote": "Free app",
     "maintainedBy": "Tamem J",
-    "lastUpdated": "2026-04-20",
+    "lastUpdated": "2026-04-21",
     "faqs": [
       {
-        "question": "Is Fantasy Football Hub available now?",
-        "answer": "Fantasy Football Hub is currently listed as in development. The page is public so API reviewers, users, and collaborators can understand the product direction."
+        "question": "Is Fantasy Football Hub the same app as FATT Football?",
+        "answer": "Yes. Fantasy Football Hub is the public product page for the FATT Football iPhone app and its universal-link configuration."
       },
       {
-        "question": "Will Fantasy Football Hub be free?",
-        "answer": "The product catalog lists Fantasy Football Hub as free while in development. Any future pricing change should be reflected on the product page before release."
+        "question": "Is the app free?",
+        "answer": "Yes. The product catalog lists Fantasy Football Hub as a free app."
       },
       {
-        "question": "What is Fantasy Football Hub intended to do?",
-        "answer": "It is intended to help fantasy football users track leagues, review matchups, plan waiver moves, compare players, and manage roster decisions from a cleaner app experience."
+        "question": "Which universal links does the app support?",
+        "answer": "The app association file supports /open/*, /league/*, /news/*, and /mock-draft/* paths on tamemj.com. Other paths are excluded from opening the app."
       },
       {
-        "question": "Does it use external fantasy APIs?",
-        "answer": "The product direction includes API-powered fantasy data integrations. Exact external services should be documented as integrations are finalized."
+        "question": "What happens if the app is not installed?",
+        "answer": "Supported links continue to work as normal web URLs when the app is not installed, giving users a safe fallback experience."
       },
       {
-        "question": "How can reviewers contact support?",
-        "answer": "Use the Support link on the product page to reach the site support workflow for questions about the product or API review."
+        "question": "Why is the app still marked in development?",
+        "answer": "The page remains marked in development until a public App Store URL is added to the catalog. The universal-link identity can still be reviewed before release."
       }
     ],
     "releaseNotes": [
+      {
+        "date": "2026-04-21",
+        "title": "FATT Football universal links added",
+        "description": "Updated the product page around the new iPhone app identity and documented supported universal-link paths for open, league, news, and mock draft screens."
+      },
       {
         "date": "2026-04-20",
         "title": "Development product page expanded",
@@ -391,6 +396,47 @@
         "date": "2026-04-03",
         "title": "Product page created",
         "description": "Added Fantasy Football Hub to the product catalog with initial screenshots and product direction."
+      }
+    ],
+    "compatibility": "iPhone with iOS universal links",
+    "secondaryLinks": [
+      {
+        "label": "Open App Link",
+        "href": "https://tamemj.com/open/fantasy-football-hub/"
+      },
+      {
+        "label": "League Link",
+        "href": "https://tamemj.com/league/demo/"
+      },
+      {
+        "label": "News Link",
+        "href": "https://tamemj.com/news/fantasy-football/"
+      },
+      {
+        "label": "Mock Draft Link",
+        "href": "https://tamemj.com/mock-draft/demo/"
+      }
+    ],
+    "providerBadges": [
+      {
+        "name": "Universal Links",
+        "status": "Supported",
+        "description": "The site association file allows app sections to open directly from supported tamemj.com paths."
+      },
+      {
+        "name": "League Views",
+        "status": "Planned",
+        "description": "League-specific screens are planned around direct links, standings, team context, and matchup workflows."
+      },
+      {
+        "name": "News Views",
+        "status": "Planned",
+        "description": "News links are planned to open relevant fantasy football news detail screens in the app."
+      },
+      {
+        "name": "Mock Draft",
+        "status": "Planned",
+        "description": "Mock draft links are planned to open draft preparation and draft-related screens."
       }
     ]
   }
