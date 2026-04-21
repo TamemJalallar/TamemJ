@@ -1,0 +1,65 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "8AUFPHM26H.com.everafterplanner.app"
+        ],
+        "components": [
+          {
+            "/": "/apps/everafter-planner",
+            "comment": "HappilyEverAfter Planner product page"
+          },
+          {
+            "/": "/apps/everafter-planner/*",
+            "comment": "HappilyEverAfter Planner product subpages"
+          },
+          {
+            "/": "/privacy",
+            "comment": "App privacy policy"
+          },
+          {
+            "/": "/privacy/*",
+            "comment": "Privacy policy subpaths"
+          },
+          {
+            "/": "/support",
+            "comment": "App support page"
+          },
+          {
+            "/": "/support/*",
+            "comment": "Support subpaths"
+          }
+        ]
+      },
+      {
+        "appIDs": [
+          "8AUFPHM26H.com.FATTFootball.app"
+        ],
+        "components": [
+          {
+            "/": "/open/*",
+            "comment": "Open app sections via universal links"
+          },
+          {
+            "/": "/league/*",
+            "comment": "Open league views"
+          },
+          {
+            "/": "/news/*",
+            "comment": "Open news detail"
+          },
+          {
+            "/": "/mock-draft/*",
+            "comment": "Open mock draft screens"
+          },
+          {
+            "/": "/*",
+            "exclude": true,
+            "comment": "Block all other URLs from opening the app"
+          }
+        ]
+      }
+    ]
+  }
+}
