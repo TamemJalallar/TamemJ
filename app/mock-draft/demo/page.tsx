@@ -3,7 +3,7 @@ import { FattFootballLinkFallback } from "@/components/apps/fatt-football-link-f
 
 export const metadata: Metadata = {
   title: "Fantasy Football Mock Draft Link",
-  description: "Universal link fallback for Fantasy Football Hub mock draft screens.",
+  description: "Universal link fallback for FATT Football mock draft screens.",
   alternates: { canonical: "/mock-draft/demo/" }
 };
 

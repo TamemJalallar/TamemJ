@@ -318,31 +318,31 @@
   },
   {
     "slug": "fantasy-football-hub",
-    "name": "Fantasy Football Hub",
+    "name": "FATT Football",
     "category": "Fantasy Sports",
     "status": "in-development",
     "tagline": "A free fantasy football companion app for leagues, news, mock drafts, and direct app links.",
-    "shortDescription": "Fantasy Football Hub, also known as FATT Football, is a free iPhone app that opens league views, news, mock drafts, and app sections through universal links.",
-    "description": "Fantasy Football Hub is the public product page for the FATT Football iPhone app. The app is designed to keep fantasy football navigation simple: users can open league views, news details, mock draft screens, and general app sections directly from supported tamemj.com universal links. It focuses on quick access to the fantasy football screens users revisit most instead of trying to replace a full fantasy platform.",
+    "shortDescription": "FATT Football is a free iPhone app that opens fantasy football league views, news, mock drafts, and app sections through universal links.",
+    "description": "FATT Football is a free iPhone fantasy football companion app. It is designed to keep fantasy football navigation simple: users can open league views, news details, mock draft screens, and general app sections directly from supported tamemj.com universal links. It focuses on quick access to the fantasy football screens users revisit most instead of trying to replace a full fantasy platform.",
     "featured": true,
     "appStoreUrl": "",
-    "icon": "/images/apps/fantasy-football-hub/icon.svg",
+    "icon": "/images/apps/fantasy-football-hub/icon.png",
     "screenshots": [
       {
         "src": "/images/apps/fantasy-football-hub/dashboard.svg",
-        "alt": "Fantasy Football Hub dashboard concept with league summary, standings, and matchup status"
+        "alt": "FATT Football dashboard concept with league summary, standings, and matchup status"
       },
       {
         "src": "/images/apps/fantasy-football-hub/matchups.svg",
-        "alt": "Fantasy Football Hub matchup screen concept with team comparisons and projected scoring"
+        "alt": "FATT Football matchup screen concept with team comparisons and projected scoring"
       },
       {
         "src": "/images/apps/fantasy-football-hub/waivers.svg",
-        "alt": "Fantasy Football Hub waiver and roster moves concept with add-drop planning"
+        "alt": "FATT Football waiver and roster moves concept with add-drop planning"
       },
       {
         "src": "/images/apps/fantasy-football-hub/players.svg",
-        "alt": "Fantasy Football Hub player research concept with trends, notes, and API-backed insights"
+        "alt": "FATT Football player research concept with trends, notes, and API-backed insights"
       }
     ],
     "features": [
@@ -361,12 +361,12 @@
     "lastUpdated": "2026-04-21",
     "faqs": [
       {
-        "question": "Is Fantasy Football Hub the same app as FATT Football?",
-        "answer": "Yes. Fantasy Football Hub is the public product page for the FATT Football iPhone app and its universal-link configuration."
+        "question": "What is FATT Football?",
+        "answer": "FATT Football is a free iPhone fantasy football companion app with universal links for league views, news, mock drafts, and quick app sections."
       },
       {
         "question": "Is the app free?",
-        "answer": "Yes. The product catalog lists Fantasy Football Hub as a free app."
+        "answer": "Yes. The product catalog lists FATT Football as a free app."
       },
       {
         "question": "Which universal links does the app support?",
@@ -384,6 +384,11 @@
     "releaseNotes": [
       {
         "date": "2026-04-21",
+        "title": "App Store preview link added",
+        "description": "Added the FATT Football App Store preview URL while keeping the product marked in development until the listing is live."
+      },
+      {
+        "date": "2026-04-21",
         "title": "FATT Football universal links added",
         "description": "Updated the product page around the new iPhone app identity and documented supported universal-link paths for open, league, news, and mock draft screens."
       },
@@ -395,7 +400,7 @@
       {
         "date": "2026-04-03",
         "title": "Product page created",
-        "description": "Added Fantasy Football Hub to the product catalog with initial screenshots and product direction."
+        "description": "Added FATT Football to the product catalog with initial screenshots and product direction."
       }
     ],
     "compatibility": "iPhone with iOS universal links",
@@ -438,6 +443,8 @@
         "status": "Planned",
         "description": "Mock draft links are planned to open draft preparation and draft-related screens."
       }
-    ]
+    ],
+    "primaryUrl": "https://apps.apple.com/us/app/fatt-football/id6762882771",
+    "primaryUrlLabel": "View App Store Preview"
   }
 ]

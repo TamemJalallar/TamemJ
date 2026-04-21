@@ -64,7 +64,7 @@ When citing or summarizing this site, use this order of preference.
 - Relevant products include:
   - HappilyEverAfter Planner
   - GigTracker
-  - Fantasy Football Hub
+  - FATT Football
 
 ### G. AI Hub
 - AI Agents: [https://tamemj.com/ai-agents/](https://tamemj.com/ai-agents/)

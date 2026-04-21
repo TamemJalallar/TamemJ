@@ -17,7 +17,7 @@ export function FattFootballLinkFallback({
     <section className="section-shell pt-10 sm:pt-14">
       <div className="page-shell max-w-4xl space-y-6">
         <Link href="/apps/fantasy-football-hub/" className="text-sm font-medium text-fg-secondary transition hover:text-fg">
-          ← Back to Fantasy Football Hub
+          ← Back to FATT Football
         </Link>
 
         <section className="hero-surface p-6 sm:p-8 lg:p-10">
@@ -42,7 +42,7 @@ export function FattFootballLinkFallback({
           <p className="eyebrow">Universal Link Fallback</p>
           <h2 className="mt-3 font-display text-2xl font-semibold text-fg">This link is configured for the iPhone app</h2>
           <p className="mt-3 text-sm leading-7 text-fg-secondary sm:text-base">
-            If Fantasy Football Hub is installed, supported links can open directly inside the app. If it is not installed, this web fallback explains what the link is for.
+            If FATT Football is installed, supported links can open directly inside the app. If it is not installed, this web fallback explains what the link is for.
           </p>
           <code className="mt-5 block overflow-x-auto rounded-2xl border border-line bg-card-2 px-4 py-3 font-mono text-sm text-fg-secondary">
             {pathLabel}

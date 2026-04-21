@@ -3,7 +3,7 @@ import { FattFootballLinkFallback } from "@/components/apps/fatt-football-link-f
 
 export const metadata: Metadata = {
   title: "Fantasy Football News Link",
-  description: "Universal link fallback for Fantasy Football Hub news detail views.",
+  description: "Universal link fallback for FATT Football news detail views.",
   alternates: { canonical: "/news/fantasy-football/" }
 };
 
