@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { FattFootballLinkFallback } from "@/components/apps/fatt-football-link-fallback";
+import { buildAppSupportHref } from "@/lib/apps";
 
 export const metadata: Metadata = {
   title: "Open FATT Football",
@@ -14,6 +15,7 @@ export default function OpenFantasyFootballHubPage() {
       title="Open FATT Football"
       description="This universal link is intended to open a general FATT Football app section when the iPhone app is installed."
       pathLabel="/open/fantasy-football-hub/"
+      supportHref={buildAppSupportHref("FATT Football")}
     />
   );
 }

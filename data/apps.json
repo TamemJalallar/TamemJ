@@ -97,7 +97,8 @@
         "title": "App Store listing connected",
         "description": "Added the official App Store link and product screenshots to the public product page."
       }
-    ]
+    ],
+    "supportSubjectName": "HappilyEverAfter"
   },
   {
     "slug": "gigtracker",
@@ -193,7 +194,8 @@
         "title": "Public product page added",
         "description": "Added screenshots, feature summary, support links, and App Store metadata to the site."
       }
-    ]
+    ],
+    "supportSubjectName": "GigTracker"
   },
   {
     "slug": "fantasy-football-obs-overlay",
@@ -445,6 +447,7 @@
       }
     ],
     "primaryUrl": "https://apps.apple.com/us/app/fatt-football/id6762882771",
-    "primaryUrlLabel": "View App Store Preview"
+    "primaryUrlLabel": "View App Store Preview",
+    "supportSubjectName": "FATT Football"
   }
 ]

@@ -117,3 +117,34 @@ export function getAppPricingText(app: IOSApp): string {
 export function getAppMaintainer(app: IOSApp): string {
   return app.maintainedBy?.trim().length ? app.maintainedBy : "Tamem J";
 }
+
+export function buildAppSupportHref(appName: string, supportEmail = "support@tamemj.com"): string {
+  const email = supportEmail.trim().length ? supportEmail.trim() : "support@tamemj.com";
+  const subject = `${appName} Support`;
+  const body = [
+    "Hi Tamem,",
+    "",
+    `I need help with ${appName}.`,
+    "",
+    "Issue details:",
+    "Device:",
+    "OS version:",
+    "",
+    "Thanks"
+  ].join("\n");
+
+  const params = new URLSearchParams({
+    subject,
+    body
+  });
+
+  return `mailto:${email}?${params.toString()}`;
+}
+
+export function getAppSupportSubjectName(app: IOSApp): string {
+  return app.supportSubjectName?.trim().length ? app.supportSubjectName : app.name;
+}
+
+export function getAppSupportHref(app: IOSApp): string {
+  return buildAppSupportHref(getAppSupportSubjectName(app), app.supportEmail);
+}

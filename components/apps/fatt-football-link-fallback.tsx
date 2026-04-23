@@ -5,13 +5,15 @@ interface FattFootballLinkFallbackProps {
   title: string;
   description: string;
   pathLabel: string;
+  supportHref: string;
 }
 
 export function FattFootballLinkFallback({
   eyebrow,
   title,
   description,
-  pathLabel
+  pathLabel,
+  supportHref
 }: FattFootballLinkFallbackProps) {
   return (
     <section className="section-shell pt-10 sm:pt-14">
@@ -32,9 +34,9 @@ export function FattFootballLinkFallback({
             <Link href="/apps/fantasy-football-hub/" className="btn-primary">
               View App Page
             </Link>
-            <Link href="/support?app=fantasy-football-hub" className="btn-secondary">
+            <a href={supportHref} className="btn-secondary">
               Support
-            </Link>
+            </a>
           </div>
         </section>
 

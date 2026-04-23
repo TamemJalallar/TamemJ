@@ -55,4 +55,5 @@ export interface IOSApp {
   faqs?: ProductFaq[];
   releaseNotes?: ProductReleaseNote[];
   supportEmail?: string;
+  supportSubjectName?: string;
 }

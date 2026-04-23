@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { FattFootballLinkFallback } from "@/components/apps/fatt-football-link-fallback";
+import { buildAppSupportHref } from "@/lib/apps";
 
 export const metadata: Metadata = {
   title: "Fantasy Football Mock Draft Link",
@@ -14,6 +15,7 @@ export default function MockDraftDemoPage() {
       title="Fantasy Football Mock Draft"
       description="This universal link is intended to open a mock draft preparation screen when the iPhone app is installed."
       pathLabel="/mock-draft/demo/"
+      supportHref={buildAppSupportHref("FATT Football")}
     />
   );
 }

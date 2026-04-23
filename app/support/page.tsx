@@ -167,9 +167,8 @@ export default function SupportPage() {
               <p className="eyebrow">App Support</p>
               <h2 className="mt-3 font-display text-2xl font-semibold text-fg">App contact and issue reporting</h2>
               <p className="mt-3 max-w-3xl text-sm leading-7 text-fg-secondary sm:text-base">
-                The lightweight app support flow still lives here. Existing links such as
-                <code className="mx-1 rounded bg-card-3 px-1.5 py-0.5 text-xs text-fg">/support?app=&lt;slug&gt;</code>
-                continue to work because the app support form remains embedded on this page.
+                App product pages now open a prefilled support email for the specific app. This support page still exists as the shared fallback
+                for broader issue reporting, general product questions, and the embedded app support form.
               </p>
               <div className="status-info mt-4 p-4 text-sm">
                 <p className="font-semibold">Support Email</p>

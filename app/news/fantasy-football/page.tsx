@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { FattFootballLinkFallback } from "@/components/apps/fatt-football-link-fallback";
+import { buildAppSupportHref } from "@/lib/apps";
 
 export const metadata: Metadata = {
   title: "Fantasy Football News Link",
@@ -14,6 +15,7 @@ export default function FantasyFootballNewsPage() {
       title="Fantasy Football News"
       description="This universal link is intended to open a fantasy football news detail screen when the iPhone app is installed."
       pathLabel="/news/fantasy-football/"
+      supportHref={buildAppSupportHref("FATT Football")}
     />
   );
 }

@@ -15,6 +15,8 @@ import {
   getApps,
   getAppStatusLabel,
   getCompatibilityText,
+  getAppSupportSubjectName,
+  getAppSupportHref,
   hasAppStoreRelease,
   isPublishedApp
 } from "@/lib/apps";
@@ -208,7 +210,8 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
   const isLive = hasAppStoreRelease(app);
   const isFantasyObsOverlay = app.slug === FANTASY_OBS_OVERLAY_SLUG;
   const primaryLink = getAppPrimaryLink(app);
-  const supportHref = "/support?app=" + encodeURIComponent(app.slug);
+  const supportHref = getAppSupportHref(app);
+  const supportSubjectName = getAppSupportSubjectName(app);
   const relatedApps = getApps().filter((candidate) => candidate.slug !== app.slug).slice(0, 2);
   const statusLabel = getAppStatusLabel(app);
   const citationUseCases = isLive
@@ -344,9 +347,9 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
                 <Link href="/privacy" className="btn-secondary">
                   Privacy Policy
                 </Link>
-                <Link href={supportHref} className="btn-secondary">
+                <a href={supportHref} className="btn-secondary">
                   Support
-                </Link>
+                </a>
                 {app.repositoryUrl?.trim().length && app.repositoryUrl !== primaryLink?.href ? (
                   <a href={app.repositoryUrl} target="_blank" rel="noreferrer" className="btn-secondary">
                     Repository
@@ -545,7 +548,11 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
                     </p>
                   ) : null}
                   <p>
-                    <span className="font-semibold text-fg">Support route:</span> Use the linked support flow for app issues, bug reports, and product questions.
+                    <span className="font-semibold text-fg">Support:</span>{" "}
+                    <a href={supportHref} className="text-primary-600 hover:underline dark:text-primary-300">
+                      Email support with {supportSubjectName} prefilled in the subject
+                    </a>
+                    .
                   </p>
                   <p>
                     <span className="font-semibold text-fg">Privacy path:</span> Every app page stays tied to the shared privacy policy so support and trust signals remain close to the product.
