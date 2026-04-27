@@ -1,2 +1,7 @@
 google.com, pub-8852243900182779, DIRECT, f08c47fec0942fa0
 rubiconproject.com, 22884, DIRECT, 0bfd66d529a55807
+facebook.com, 1513788850439874, DIRECT
+applovin.com, [your AppLovin SDK key], DIRECT, [cert ID]
+is.com, 2625e6cf5, DIRECT
+pangleglobal.com, 983063867, DIRECT
+vungle.com, 69eef49163ed3b5eefe82373, DIRECT, c107d686becd2d77
