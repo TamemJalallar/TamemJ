@@ -61,5 +61,10 @@
         ]
       }
     ]
+  },
+  "appclips": {
+    "apps": [
+      "8AUFPHM26H.com.gigtracker.app.clip"
+    ]
   }
 }
