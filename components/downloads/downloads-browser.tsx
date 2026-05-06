@@ -189,7 +189,8 @@ function matchesChannelFilter(entry: DownloadEntry, filter: ChannelFilter): bool
 export function DownloadsBrowser({
   entries,
   amazonAffiliateUrl,
-  amazonFeaturedProducts = []
+  amazonFeaturedProducts = [],
+  amazonStorefrontHref
 }: {
   entries: DownloadEntry[];
   amazonAffiliateUrl?: string;
@@ -197,6 +198,7 @@ export function DownloadsBrowser({
     label: string;
     url: string;
   }>;
+  amazonStorefrontHref?: string;
 }) {
   const { user, trackDownload } = useAccount();
   const [query, setQuery] = useState("");
@@ -444,7 +446,12 @@ export function DownloadsBrowser({
             ) : null}
 
             {amazonAffiliateUrl ? (
-              <div className="flex">
+              <div className="flex flex-wrap gap-3">
+                {amazonStorefrontHref ? (
+                  <Link href={amazonStorefrontHref} className="btn-primary shrink-0 !px-4 !py-2.5">
+                    Browse Recommended Gear
+                  </Link>
+                ) : null}
                 <a
                   href={amazonAffiliateUrl}
                   target="_blank"

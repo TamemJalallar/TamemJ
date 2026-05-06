@@ -150,6 +150,7 @@ const trustPillars = [
 const quickActionLinks = [
   { label: "Search Tickets", href: "/support/tickets" },
   { label: "Browse Downloads", href: "/downloads" },
+  { label: "Recommended Gear", href: "/recommended-gear" },
   { label: "Open Tech Fixes", href: "/corporate-tech-fixes" },
   { label: "View Apps", href: "/apps" }
 ] as const;

@@ -9,6 +9,21 @@ export interface AffiliateLink {
   platform?: string;
 }
 
+const amazonAssociateTag = (process.env.NEXT_PUBLIC_AMAZON_ASSOCIATE_TAG ?? "tamemj-20").trim() || "tamemj-20";
+
+function buildAmazonSearchUrl(query: string): string {
+  const url = new URL("https://www.amazon.com/s");
+  url.searchParams.set("k", query);
+  url.searchParams.set("tag", amazonAssociateTag);
+  return url.toString();
+}
+
+function buildAmazonProductUrl(asin: string): string {
+  const url = new URL(`https://www.amazon.com/dp/${asin}`);
+  url.searchParams.set("tag", amazonAssociateTag);
+  return url.toString();
+}
+
 export const affiliateLinks: AffiliateLink[] = [
   {
     key: "amazon-it-gear",
@@ -67,6 +82,126 @@ export const affiliateLinks: AffiliateLink[] = [
     label: "CyberPowerPC Gaming Desktop (GXiVR8060A40)",
     description: "Prebuilt desktop option for users who want a ready-to-run gaming or creator setup.",
     url: "https://www.amazon.com/CyberPowerPC-i5-13400F-GeForce-Windows-GXiVR8060A40/dp/B0DW4BY993?crid=307FUPMKIFRB&dib=eyJ2IjoiMSJ9.WqYswoO68EEB8Wv7rU7S2OeGzcdP2g4fobCbwRM_rdM_42KuneU0hk-9XzXkkAwKhhgQv2xGHQUmOmEGDrpafTVt5EojhJ4AGrzDtUNMwTPuPcMB0XVJORavdIAGjxC7-MFIxpM5-QIWNbQlbJEmKzZqKAoWpnvDub3m944uajELF97KoCteiQV_SalZVoydnLbzzgXvmoO8H2RuzDUgSpdwgEDj1YW1FwXyWxP6zeY.PDGvsro4yV8lwi2VVD_KjQ9gdHmm6Kb2S1Vs-TKKvSE&dib_tag=se&keywords=high+refresh+rate+gaming+pc&qid=1772475599&sprefix=high+refresh+rate+gaming+pc%2Caps%2C108&sr=8-1&linkCode=ll2&tag=tamemj-20&linkId=9c92611413251b292f6080182483a0f1&language=en_US&ref_=as_li_ss_tl",
+    network: "Amazon Associates",
+    status: "Active",
+    platform: "Amazon"
+  },
+  {
+    key: "amazon-pick-synology-nas",
+    program: "Amazon Associates",
+    label: "Synology 4-Bay NAS Picks",
+    description: "Network-attached storage picks for home lab backups, file syncing, and lightweight private cloud setups.",
+    url: buildAmazonSearchUrl("Synology 4 bay NAS"),
+    network: "Amazon Associates",
+    status: "Active",
+    platform: "Amazon"
+  },
+  {
+    key: "amazon-pick-mini-pc-lab",
+    program: "Amazon Associates",
+    label: "Mini PC Home Lab Picks",
+    description: "Compact mini PCs suitable for Proxmox, lab virtualization, lightweight services, and automation hosts.",
+    url: buildAmazonSearchUrl("mini PC Intel N100 home lab"),
+    network: "Amazon Associates",
+    status: "Active",
+    platform: "Amazon"
+  },
+  {
+    key: "amazon-pick-samsung-t7-ssd",
+    program: "Amazon Associates",
+    label: "Samsung T7 Shield Portable SSD",
+    description: "Rugged external SSD for portable imaging kits, backups, field transfers, and fast staging workflows.",
+    url: buildAmazonProductUrl("B09VLHR4JC"),
+    network: "Amazon Associates",
+    status: "Active",
+    platform: "Amazon"
+  },
+  {
+    key: "amazon-pick-usb-c-dock",
+    program: "Amazon Associates",
+    label: "USB-C Dock Picks",
+    description: "Docking station recommendations for multi-monitor desks, laptop swap workflows, and cable-light setups.",
+    url: buildAmazonSearchUrl("USB C dock dual monitor laptop"),
+    network: "Amazon Associates",
+    status: "Active",
+    platform: "Amazon"
+  },
+  {
+    key: "amazon-pick-mx-keys",
+    program: "Amazon Associates",
+    label: "Wireless Keyboard Picks",
+    description: "Productivity keyboard recommendations for long-form typing, admin work, and cleaner desktop layouts.",
+    url: buildAmazonSearchUrl("Logitech MX Keys keyboard"),
+    network: "Amazon Associates",
+    status: "Active",
+    platform: "Amazon"
+  },
+  {
+    key: "amazon-pick-mx-master",
+    program: "Amazon Associates",
+    label: "Logitech MX Master 3S Mouse",
+    description: "Ergonomic productivity mouse for all-day admin work, research, spreadsheets, and documentation.",
+    url: buildAmazonProductUrl("B09HM94VDS"),
+    network: "Amazon Associates",
+    status: "Active",
+    platform: "Amazon"
+  },
+  {
+    key: "amazon-pick-omada-router",
+    program: "Amazon Associates",
+    label: "TP-Link Omada ER605 VPN Router",
+    description: "Multi-WAN VPN router for small office labs, segmented networks, and better control than consumer gear.",
+    url: buildAmazonProductUrl("B08QTXNWZ1"),
+    network: "Amazon Associates",
+    status: "Active",
+    platform: "Amazon"
+  },
+  {
+    key: "amazon-pick-managed-switch",
+    program: "Amazon Associates",
+    label: "TP-Link TL-SG105-M2 2.5G Switch",
+    description: "Fanless 2.5GbE switch for faster wired networking, uplinks, NAS connectivity, and lab expansion.",
+    url: buildAmazonProductUrl("B08ZHGT2ZP"),
+    network: "Amazon Associates",
+    status: "Active",
+    platform: "Amazon"
+  },
+  {
+    key: "amazon-pick-network-tester",
+    program: "Amazon Associates",
+    label: "Klein Tools LAN Scout Jr. Cable Tester",
+    description: "Basic Ethernet cable tester for tracing links, checking jacks, and reducing troubleshooting guesswork.",
+    url: buildAmazonProductUrl("B004CI9NRM"),
+    network: "Amazon Associates",
+    status: "Active",
+    platform: "Amazon"
+  },
+  {
+    key: "amazon-pick-ups",
+    program: "Amazon Associates",
+    label: "APC BR1500MS2 UPS Battery Backup",
+    description: "1500VA UPS for workstations, routers, NAS devices, and lab benches that should not hard-drop power.",
+    url: buildAmazonProductUrl("B08GRY1W93"),
+    network: "Amazon Associates",
+    status: "Active",
+    platform: "Amazon"
+  },
+  {
+    key: "amazon-pick-surge-protector",
+    program: "Amazon Associates",
+    label: "Tripp Lite ISOBAR6ULTRA Surge Protector",
+    description: "Heavy-duty surge protector for desks, labs, AV carts, and power-dense workstation setups.",
+    url: buildAmazonProductUrl("B0000513US"),
+    network: "Amazon Associates",
+    status: "Active",
+    platform: "Amazon"
+  },
+  {
+    key: "amazon-pick-gan-charger",
+    program: "Amazon Associates",
+    label: "Anker Prime 100W GaN Charger",
+    description: "Compact multi-port GaN charger for travel kits, desk charging, and mobile device staging.",
+    url: buildAmazonProductUrl("B0D73JBJ56"),
     network: "Amazon Associates",
     status: "Active",
     platform: "Amazon"

@@ -472,6 +472,7 @@ export default function DownloadsPage() {
             <DownloadsBrowser
               entries={downloads}
               amazonAffiliateUrl={amazonAffiliate?.url}
+              amazonStorefrontHref="/recommended-gear/"
               amazonFeaturedProducts={amazonFeaturedProductLinks.map((entry) => ({
                 label: entry.label,
                 url: entry.url

@@ -46,6 +46,7 @@ export const adsenseReviewDisallowPaths = [
   "/genai-prompts/",
   "/guides/",
   "/pc-build-guides/",
+  "/private/",
   "/services/",
   "/support/admin/",
   "/support/analytics/",

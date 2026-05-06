@@ -64,6 +64,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...(appsSectionEnabled ? appsIndexEntry : []),
     { url: url("/services/msp/"), changeFrequency: "monthly", priority: 0.82, lastModified: generatedAt },
     { url: url("/downloads/"), changeFrequency: "daily", priority: 0.9, lastModified: generatedAt },
+    { url: url("/recommended-gear/"), changeFrequency: "weekly", priority: 0.72, lastModified: generatedAt },
     { url: url("/downloads/assets/"), changeFrequency: "weekly", priority: 0.88, lastModified: generatedAt },
     { url: url("/ai-agents/"), changeFrequency: "weekly", priority: 0.85, lastModified: generatedAt },
     { url: url("/genai-prompts/"), changeFrequency: "weekly", priority: 0.86, lastModified: generatedAt },
