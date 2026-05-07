@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { CryptoDonationCard } from "@/components/crypto-donation-card";
+import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import { getCryptoDonationMethods } from "@/lib/crypto-donations";
 import { buildOpenGraph, buildTwitter } from "@/lib/seo";
 import { donateProviders } from "@/src/content/donate/providers";
@@ -12,6 +13,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/donate/"
   },
+  robots: buildRobotsIndexRule("/donate/"),
   openGraph: buildOpenGraph(
     "Donate | TamemJ",
     "Support ongoing enterprise IT troubleshooting content and updates.",

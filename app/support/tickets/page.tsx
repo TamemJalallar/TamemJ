@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { AdSenseSlot } from "@/components/monetization/adsense-slot";
-import { SupportSiteCard } from "@/components/monetization/support-site-card";
 import { EditorialStandardsStrip } from "@/components/shared/editorial-authority-panels";
 import { KnowledgeBaseBrowser } from "@/components/support-portal/knowledge-base-browser";
-import { getAdSenseSlot, getMonetizationRecommendations, monetizationConfig } from "@/lib/monetization";
-import { getTopKBSeoAlignments, getTopSeoKeywordOpportunities } from "@/lib/seo-content.registry";
+import { getTopSeoKeywordOpportunities } from "@/lib/seo-content.registry";
 import { getKBArticles } from "@/lib/support.kb.registry";
 import {
   buildBreadcrumbJsonLd,
@@ -21,9 +18,6 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function KBPage() {
   const articles = getKBArticles();
   const keywordIntents = getTopSeoKeywordOpportunities(18);
-  const seoAlignments = getTopKBSeoAlignments(50);
-  const supportPartnerLinks = getMonetizationRecommendations("support");
-  const displayAdSlot = getAdSenseSlot("display");
   const groupedByCategory = [...new Set(articles.map((article) => article.category))]
     .sort((a, b) => a.localeCompare(b))
     .map((category) => ({
@@ -36,17 +30,13 @@ export default function KBPage() {
   const keywordMapSchema = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: "Top IT troubleshooting pages with assigned exact-match target keywords",
-    numberOfItems: seoAlignments.length,
-    itemListElement: seoAlignments.map((entry, index) => ({
+    name: "Popular enterprise IT support search intents",
+    numberOfItems: keywordIntents.length,
+    itemListElement: keywordIntents.map((entry, index) => ({
       "@type": "ListItem",
       position: index + 1,
-      name: entry.primaryKeyword,
-      url: toAbsoluteSupportUrl(`/support/tickets/${entry.articleSlug}/`),
-      item: {
-        "@type": "TechArticle",
-        headline: entry.articleTitle
-      }
+      name: entry.keyword,
+      url: toAbsoluteSupportUrl(`/support/tickets/?q=${encodeURIComponent(entry.keyword)}`)
     }))
   };
   const breadcrumbSchema = buildBreadcrumbJsonLd([
@@ -59,26 +49,38 @@ export default function KBPage() {
       <KnowledgeBaseBrowser articles={articles} />
       <section className="section-shell pb-10 pt-2 sm:pb-14">
         <div className="page-shell space-y-5">
-          <EditorialStandardsStrip description="Support tickets are written as issue-specific reference pages. Each one is reviewed for enterprise-safe remediation, environment clarity, escalation guidance, and direct linkage to related fixes, guides, and downloads." />
+          <EditorialStandardsStrip description="Support tickets are maintained as issue-specific reference pages. Each one is reviewed for enterprise-safe remediation, tested environment clarity, escalation guidance, and direct linkage to related fixes, guides, and downloads." />
 
-          <div className="grid gap-4 xl:grid-cols-[1fr_0.45fr]">
-            <SupportSiteCard
-              title="Keep the ticket library free"
-              description="Support tickets stay open and searchable through optional partner recommendations, downloadable assets, and restrained ad placements."
-              affiliateLinks={supportPartnerLinks}
-              compact
-            />
-            <AdSenseSlot
-              client={monetizationConfig.adsenseClient}
-              slot={displayAdSlot}
-              label="Advertisement"
-            />
-          </div>
+          <section className="grid gap-4 lg:grid-cols-3">
+            <article className="surface-card-interactive p-5 sm:p-6">
+              <p className="eyebrow">Issue-First</p>
+              <h2 className="mt-3 font-display text-xl font-semibold text-fg">Built for exact troubleshooting moments</h2>
+              <p className="mt-3 text-sm leading-7 text-fg-secondary">
+                Ticket pages are written around the actual issue someone is trying to resolve, not a broad product marketing summary.
+              </p>
+            </article>
+
+            <article className="surface-card-interactive p-5 sm:p-6">
+              <p className="eyebrow">Enterprise-Safe</p>
+              <h2 className="mt-3 font-display text-xl font-semibold text-fg">Escalation is part of the fix</h2>
+              <p className="mt-3 text-sm leading-7 text-fg-secondary">
+                Each page separates user-safe steps from admin-required actions and makes security or service desk escalation explicit.
+              </p>
+            </article>
+
+            <article className="surface-card-interactive p-5 sm:p-6">
+              <p className="eyebrow">Connected Resources</p>
+              <h2 className="mt-3 font-display text-xl font-semibold text-fg">Move directly into the next resource</h2>
+              <p className="mt-3 text-sm leading-7 text-fg-secondary">
+                Related downloads, templates, pillar guides, and adjacent fixes stay attached to each article so the workflow does not reset.
+              </p>
+            </article>
+          </section>
 
           <section className="surface-card p-5 sm:p-6">
             <h2 className="font-display text-xl font-semibold text-fg">Popular Search Intents</h2>
             <p className="mt-2 text-sm text-fg-secondary">
-              Jump directly to high-intent enterprise troubleshooting topics.
+              Jump directly into high-frequency enterprise troubleshooting problems.
             </p>
             <div className="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
               {keywordIntents.map((entry) => (
@@ -98,7 +100,7 @@ export default function KBPage() {
               Full Ticket Index by Category
             </h2>
             <p className="mt-2 text-sm text-fg-secondary">
-              Crawlable index for every support article in the library.
+              Plain category navigation for every support article in the library.
             </p>
 
             <div className="mt-4 space-y-3">
@@ -124,51 +126,6 @@ export default function KBPage() {
                   </div>
                 </details>
               ))}
-            </div>
-          </section>
-
-          <section className="surface-card p-5 sm:p-6">
-            <h2 className="font-display text-xl font-semibold text-fg">
-              Top 50 SEO-Aligned Ticket Pages (Primary Keywords Assigned)
-            </h2>
-            <p className="mt-2 text-sm text-fg-secondary">
-              Each page is assigned a primary exact-match keyword with an editorial intro and optimized lead paragraph.
-            </p>
-            <div className="mt-4 overflow-x-auto">
-              <table className="data-table min-w-[44rem] border-collapse text-left text-sm">
-                <thead>
-                  <tr>
-                    <th>Primary Keyword</th>
-                    <th>Assigned Fix Guide</th>
-                    <th>Product</th>
-                    <th>Category</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {seoAlignments.map((entry) => (
-                    <tr key={`${entry.articleSlug}-${entry.primaryKeyword}`}>
-                      <td>
-                        <Link
-                          href={`/support/tickets/?q=${encodeURIComponent(entry.primaryKeyword)}`}
-                          className="font-medium text-fg hover:text-primary-600 hover:underline dark:hover:text-primary-300"
-                        >
-                          {entry.primaryKeyword}
-                        </Link>
-                      </td>
-                      <td>
-                        <Link
-                          href={`/support/tickets/${entry.articleSlug}/`}
-                          className="font-medium text-fg hover:text-primary-600 hover:underline dark:hover:text-primary-300"
-                        >
-                          {entry.articleTitle}
-                        </Link>
-                      </td>
-                      <td>{entry.articleProduct}</td>
-                      <td>{entry.articleCategory}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
             </div>
           </section>
         </div>

@@ -6,7 +6,7 @@ import { AppStoreButton } from "@/components/app-store-button";
 import { ProductProviderBadges } from "@/components/product-provider-badges";
 import { CitationGuidancePanel, EditorialTrustPanel } from "@/components/shared/editorial-authority-panels";
 import { ScreenshotCarousel } from "@/components/screenshot-carousel";
-import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
+import { buildRobotsIndexRule, noIndexRobotsRule } from "@/lib/adsense-review-mode";
 import {
   getAppBySlug,
   getAppMaintainer,
@@ -138,7 +138,7 @@ export async function generateMetadata({ params }: AppPageProps): Promise<Metada
     title: app.name,
     description: app.shortDescription,
     authors: [{ name: supportAuthorProfile.name }],
-    robots: buildRobotsIndexRule(path),
+    robots: isPublishedApp(app) ? buildRobotsIndexRule(path) : noIndexRobotsRule,
     keywords: [
       app.name,
       app.category,

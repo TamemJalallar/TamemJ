@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { AdSenseSlot } from "@/components/monetization/adsense-slot";
-import { getAdSenseSlot, monetizationConfig } from "@/lib/monetization";
+import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import {
   aiAgentPlatforms,
   getAiAgentCategories,
@@ -71,6 +70,7 @@ export async function generateMetadata({ params }: AiAgentCategoryPageProps): Pr
     alternates: {
       canonical: `/ai-agents/category/${slug}/`
     },
+    robots: buildRobotsIndexRule(`/ai-agents/category/${slug}/`),
     openGraph: buildOpenGraph(`${category} AI Agent Prompts`, description, `/ai-agents/category/${slug}/`),
     twitter: buildTwitter(`${category} AI Agent Prompts`, description)
   };
@@ -157,7 +157,7 @@ export default async function AiAgentCategoryPage({ params }: AiAgentCategoryPag
               {category} AI Agent Prompts
             </h1>
             <p className="mt-2 max-w-4xl text-sm leading-7 text-slate-600 dark:text-slate-300">
-              Search-ready prompt pages for {category.toLowerCase()} workflows. Each detail page includes a
+              Role-based prompt pages for {category.toLowerCase()} workflows. Each detail page includes a
               copy-ready system prompt with platform tuning for {aiAgentPlatforms.join(", ")}.
             </p>
 
@@ -241,12 +241,6 @@ export default async function AiAgentCategoryPage({ params }: AiAgentCategoryPag
               ))}
             </div>
           </section>
-
-          <AdSenseSlot
-            client={monetizationConfig.adsenseClient}
-            slot={getAdSenseSlot("display")}
-            label="Advertisement"
-          />
 
           <section className="surface-card p-5 sm:p-6">
             <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Use Alongside Other Hubs</h2>

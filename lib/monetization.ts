@@ -10,6 +10,13 @@ export type MonetizationContext =
 
 export type AdSenseSlotKind = "display" | "inArticle" | "multiplex";
 
+function normalizePath(path: string | null | undefined): string {
+  if (!path) return "/";
+  const clean = path.split("?")[0]?.split("#")[0] ?? "/";
+  if (clean === "/") return "/";
+  return clean.endsWith("/") ? clean : `${clean}/`;
+}
+
 function cleanEnv(value: string | undefined): string {
   return value?.trim() ?? "";
 }
@@ -60,6 +67,32 @@ export const monetizationConfig = {
 
 export function getAdSenseSlot(kind: AdSenseSlotKind): string {
   return monetizationConfig.adsenseSlots[kind];
+}
+
+export function canRenderAdSenseOnPath(path: string): boolean {
+  const normalized = normalizePath(path);
+
+  if (normalized.startsWith("/support/tickets/") && normalized !== "/support/tickets/") {
+    return true;
+  }
+
+  if (normalized.startsWith("/downloads/assets/") && normalized !== "/downloads/assets/") {
+    return true;
+  }
+
+  if (normalized.startsWith("/downloads/") && normalized !== "/downloads/") {
+    return true;
+  }
+
+  if (normalized.startsWith("/guides/") && normalized !== "/guides/") {
+    return true;
+  }
+
+  if (normalized.startsWith("/corporate-tech-fixes/") && normalized !== "/corporate-tech-fixes/") {
+    return true;
+  }
+
+  return false;
 }
 
 export function getMonetizationRecommendations(

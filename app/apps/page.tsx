@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AppsCatalogBrowser } from "@/components/apps/apps-catalog-browser";
-import { AdSenseSlot } from "@/components/monetization/adsense-slot";
-import { getAdSenseSlot, monetizationConfig } from "@/lib/monetization";
 import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import { getApps, isPublishedApp } from "@/lib/apps";
 import { appsSectionEnabled } from "@/lib/apps-visibility";
@@ -139,14 +137,7 @@ export default function AppsPage() {
           </section>
 
           {hasApps ? (
-            <>
-              <AppsCatalogBrowser apps={apps} />
-              <AdSenseSlot
-                client={monetizationConfig.adsenseClient}
-                slot={getAdSenseSlot("display")}
-                label="Advertisement"
-              />
-            </>
+            <AppsCatalogBrowser apps={apps} />
           ) : (
             <div className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
               <div className="surface-card-strong border-dashed p-6 sm:p-8">

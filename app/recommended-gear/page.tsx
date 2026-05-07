@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { CollectionPage, ItemList, WebPage, WithContext } from "schema-dts";
 import { AffiliateDisclosureBanner } from "@/components/affiliate/affiliate-disclosure-banner";
 import { AmazonProductGlyph } from "@/components/affiliate/amazon-product-glyph";
+import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import {
   getAmazonStorefrontCollections,
   getAmazonStorefrontFeaturedPicks,
@@ -52,6 +53,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: pagePath
   },
+  robots: buildRobotsIndexRule(pagePath),
   openGraph: buildOpenGraph(
     "Recommended IT Gear & Desk Setup Picks | Tamem J",
     "Curated Amazon recommendations for IT admins, home labs, support desks, and practical workstation upgrades.",

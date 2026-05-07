@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { AdSenseSlot } from "@/components/monetization/adsense-slot";
-import { getAdSenseSlot, monetizationConfig } from "@/lib/monetization";
 import { AiAgentsBrowser } from "@/components/ai-agents/ai-agents-browser";
+import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import { getAiAgentCategories, getAiAgentCategorySlug, getAiAgentsRegistry } from "@/lib/aiAgents.registry";
 import {
   buildBreadcrumbJsonLd,
@@ -71,6 +70,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/ai-agents/"
   },
+  robots: buildRobotsIndexRule("/ai-agents/"),
   openGraph: buildOpenGraph(
     "AI Agents Library | 300+ Professional System Prompts",
     "Copy-ready system prompts for 300+ specialized AI agents with platform-specific output for ChatGPT, Claude, Grok/xAI, Perplexity, and Google Gemini.",
@@ -233,19 +233,11 @@ export default function AiAgentsPage() {
 
           <AiAgentsBrowser />
 
-          <div className="section-shell pb-2 pt-0">
-            <AdSenseSlot
-              client={monetizationConfig.adsenseClient}
-              slot={getAdSenseSlot("display")}
-              label="Advertisement"
-            />
-          </div>
-
           <section className="surface-card p-5 sm:p-6">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
               <h2 className="font-display text-xl font-semibold text-fg">Browse by Category</h2>
               <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted">
-                Crawlable category pages
+                Category landing pages
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -265,7 +257,7 @@ export default function AiAgentsPage() {
           <section className="surface-card p-5 sm:p-6">
             <div className="mb-4 flex items-center justify-between gap-3">
               <h2 className="font-display text-xl font-semibold text-fg">Popular AI Agent Prompts</h2>
-              <span className="text-xs text-muted">Search-optimized detail pages</span>
+              <span className="text-xs text-muted">Frequently opened prompts</span>
             </div>
             <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {popularAgents.map((agent) => (
@@ -284,7 +276,7 @@ export default function AiAgentsPage() {
           <section className="surface-card p-5 sm:p-6">
             <h2 className="font-display text-xl font-semibold text-fg">Full AI Agent Index</h2>
             <p className="mt-2 text-sm text-fg-secondary">
-              Crawlable index of all AI agent detail pages grouped by category.
+              Structured index of all AI agent detail pages grouped by category.
             </p>
             <div className="mt-4 space-y-3">
               {groupedByCategory.map((group) => (

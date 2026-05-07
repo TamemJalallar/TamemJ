@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import {
   getGenAICategories,
   getGenAICategoryBySlug,
@@ -64,6 +65,7 @@ export async function generateMetadata({ params }: GenAIPromptCategoryPageProps)
     alternates: {
       canonical: `/genai-prompts/category/${slug}/`
     },
+    robots: buildRobotsIndexRule(`/genai-prompts/category/${slug}/`),
     openGraph: buildOpenGraph(
       `${category} AI Prompts — Copy-Ready Templates`,
       description,

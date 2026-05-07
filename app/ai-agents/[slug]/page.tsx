@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { AdSenseSlot } from "@/components/monetization/adsense-slot";
-import { getAdSenseSlot, monetizationConfig } from "@/lib/monetization";
 import { AiAgentDetail } from "@/components/ai-agents/ai-agent-detail";
+import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import {
   aiAgentPlatforms,
   getAiAgentBySlug,
@@ -61,6 +60,7 @@ export async function generateMetadata({ params }: AiAgentDetailPageProps): Prom
     description,
     keywords,
     alternates: { canonical: path },
+    robots: buildRobotsIndexRule(path),
     openGraph: buildOpenGraph(`${title} | TamemJ`, description, path, "article"),
     twitter: buildTwitter(`${title} | TamemJ`, description)
   };
@@ -247,16 +247,6 @@ export default async function AiAgentDetailPage({ params }: AiAgentDetailPagePro
           ) : null}
 
           <AiAgentDetail agent={agent} />
-
-          <div className="page-shell pb-2 pt-0">
-            <AdSenseSlot
-              client={monetizationConfig.adsenseClient}
-              slot={getAdSenseSlot("inArticle")}
-              label="Advertisement"
-              format="fluid"
-              layout="in-article"
-            />
-          </div>
 
           {relatedAgents.length > 0 ? (
             <section className="surface-card p-5 sm:p-6">

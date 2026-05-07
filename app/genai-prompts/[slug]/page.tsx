@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { GenAIPromptDetail } from "@/components/genai-prompts/genai-prompt-detail";
 import { RelatedGenAIPrompts } from "@/components/genai-prompts/related-genai-prompts";
+import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import {
   getGenAICategorySlug,
   getGenAIPromptBySlug,
@@ -52,6 +53,7 @@ export async function generateMetadata({ params }: GenAIPromptPageProps): Promis
     alternates: {
       canonical: path
     },
+    robots: buildRobotsIndexRule(path),
     openGraph: buildOpenGraph(`${title} | TamemJ`, description, path, "article"),
     twitter: buildTwitter(`${title} | TamemJ`, description)
   };

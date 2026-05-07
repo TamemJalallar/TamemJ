@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { FAQPage, ItemList, WebPage, WithContext } from "schema-dts";
 import { AffiliateDisclosureBanner } from "@/components/affiliate/affiliate-disclosure-banner";
 import { DownloadsBrowser } from "@/components/downloads/downloads-browser";
+import { EditorialStandardsStrip } from "@/components/shared/editorial-authority-panels";
 import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import { getAffiliateLinkByKey, getAffiliateLinksByKeys } from "@/lib/affiliate-links";
 import { getDownloadAssetBundles, getDownloadAssetStats } from "@/lib/download-assets.registry";
@@ -274,8 +275,6 @@ export default function DownloadsPage() {
     <>
       <section className="section-shell pt-8 sm:pt-10">
         <div className="page-shell space-y-6">
-          <AffiliateDisclosureBanner className="mb-0" />
-
           <section className="hero-surface p-6 sm:p-8">
             <div className="pointer-events-none absolute -right-20 top-0 h-56 w-56 rounded-full bg-primary-300/15 blur-3xl" />
             <div className="pointer-events-none absolute -left-12 bottom-0 h-52 w-52 rounded-full bg-accent-400/10 blur-3xl" />
@@ -336,6 +335,11 @@ export default function DownloadsPage() {
               </div>
             </div>
           </section>
+
+          <EditorialStandardsStrip
+            title="How the download library is reviewed"
+            description="Downloads are curated around support usefulness first: official store links stay preferred when available, direct binaries are only surfaced when the path is clear, and related IT assets stay attached so the page solves more than the install step."
+          />
 
           <section className="grid gap-4 lg:grid-cols-3">
             <article className="surface-card-interactive p-5 sm:p-6">
@@ -469,6 +473,7 @@ export default function DownloadsPage() {
           </section>
 
           <div id="downloads-browser">
+            <AffiliateDisclosureBanner className="mb-6 max-w-5xl" />
             <DownloadsBrowser
               entries={downloads}
               amazonAffiliateUrl={amazonAffiliate?.url}
@@ -483,10 +488,10 @@ export default function DownloadsPage() {
           <section className="surface-card p-5 sm:p-6" id="all-downloads">
             <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
               <div>
-                <p className="eyebrow">Crawlable Index</p>
+                <p className="eyebrow">Full Directory</p>
                 <h2 className="mt-3 font-display text-2xl font-semibold text-fg">Full downloads directory</h2>
                 <p className="mt-2 text-sm leading-7 text-fg-secondary">
-                  Every curated software page lives here in a plain category index. This helps both visitors and search engines move through the library without relying on filters alone.
+                  Every curated software page lives here in a plain category index so people can browse the library without relying on filters alone.
                 </p>
               </div>
               <span className="filter-chip px-3 py-1 text-xs">

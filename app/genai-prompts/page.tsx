@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { GenAIPromptsBrowser } from "@/components/genai-prompts/genai-prompts-browser";
+import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import {
   getGenAICategories,
   getGenAICategorySlug,
@@ -73,6 +74,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/genai-prompts/"
   },
+  robots: buildRobotsIndexRule("/genai-prompts/"),
   openGraph: buildOpenGraph(
     "GenAI Prompt Library — 120+ Copy-Ready AI Prompts | TamemJ",
     "Free, copy-ready prompt templates for Meta AI, Adobe Firefly, and generative AI tools. Covers Text-to-Image, Generative Fill, marketing, copywriting, and creative production.",

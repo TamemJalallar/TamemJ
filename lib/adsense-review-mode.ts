@@ -17,12 +17,23 @@ const reviewModeAcknowledgeEnv = process.env.NEXT_PUBLIC_ADSENSE_REVIEW_MODE_ACK
 export const adsenseReviewModeEnabled =
   toBool(reviewModeEnv) && reviewModeAcknowledgeEnv?.trim() === "production-noindex";
 
-const coreExactPaths = new Set(["/", "/apps/", "/privacy/", "/support/", "/contact/"]);
+const coreExactPaths = new Set([
+  "/",
+  "/contact/",
+  "/downloads/",
+  "/downloads/assets/",
+  "/editorial-standards/",
+  "/guides/",
+  "/privacy/",
+  "/support/tickets/"
+]);
+
+const corePrefixPaths = ["/downloads/", "/downloads/assets/", "/guides/", "/support/tickets/"] as const;
 
 export function isAdsenseReviewCorePath(path: string): boolean {
   const normalized = normalizePath(path);
   if (coreExactPaths.has(normalized)) return true;
-  return normalized.startsWith("/apps/") && normalized !== "/apps/";
+  return corePrefixPaths.some((prefix) => normalized.startsWith(prefix));
 }
 
 export function buildRobotsIndexRule(path: string): { index: boolean; follow: boolean } {
@@ -35,27 +46,38 @@ export function buildRobotsIndexRule(path: string): { index: boolean; follow: bo
     : { index: false, follow: false };
 }
 
-export const adsenseReviewCoreSitemapPaths = ["/", "/apps/", "/privacy/", "/support/", "/contact/"] as const;
+export const adsenseReviewCoreSitemapPaths = [
+  "/",
+  "/contact/",
+  "/downloads/",
+  "/downloads/assets/",
+  "/editorial-standards/",
+  "/guides/",
+  "/privacy/",
+  "/support/tickets/"
+] as const;
 
 export const adsenseReviewDisallowPaths = [
   "/account/",
   "/ai-agents/",
   "/corporate-tech-fixes/",
   "/donate/",
-  "/downloads/",
   "/genai-prompts/",
-  "/guides/",
-  "/pc-build-guides/",
   "/private/",
-  "/services/",
+  "/recommended-gear/",
+  "/support/",
   "/support/admin/",
   "/support/analytics/",
   "/support/catalog/",
   "/support/incident/",
+  "/pc-build-guides/",
+  "/services/",
   "/support/kb/",
   "/support/my-tickets/",
-  "/support/tickets/"
+  "/apps/"
 ] as const;
+
+export const noIndexRobotsRule = { index: false, follow: false } as const;
 
 type RobotsRule = {
   userAgent: string | string[];
@@ -67,7 +89,21 @@ type RobotsRule = {
 export function buildAdsenseReviewRobotsRule(): RobotsRule {
   return {
     userAgent: "*",
-    allow: ["/", "/apps/", "/apps/*", "/privacy/", "/support/", "/contact/", "/ads.txt"],
+    allow: [
+      "/",
+      "/contact/",
+      "/downloads/",
+      "/downloads/*",
+      "/downloads/assets/",
+      "/downloads/assets/*",
+      "/editorial-standards/",
+      "/guides/",
+      "/guides/*",
+      "/privacy/",
+      "/support/tickets/",
+      "/support/tickets/*",
+      "/ads.txt"
+    ],
     disallow: [...adsenseReviewDisallowPaths]
   };
 }

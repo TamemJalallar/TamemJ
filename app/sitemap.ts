@@ -32,27 +32,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const generatedAt = new Date();
 
   if (adsenseReviewModeEnabled) {
-    const reviewCorePaths = appsSectionEnabled
-      ? [...adsenseReviewCoreSitemapPaths]
-      : adsenseReviewCoreSitemapPaths.filter((path) => path !== "/apps/");
+    const reviewCorePaths = [...adsenseReviewCoreSitemapPaths];
 
     const coreEntries: MetadataRoute.Sitemap = reviewCorePaths.map((path) => ({
       url: url(path),
-      changeFrequency: path === "/" ? "weekly" : "monthly",
-      priority: path === "/" ? 1 : path === "/apps/" ? 0.9 : 0.7,
+      changeFrequency: path === "/" ? "weekly" : path === "/support/tickets/" ? "daily" : "monthly",
+      priority: path === "/" ? 1 : path === "/support/tickets/" ? 0.95 : 0.7,
       lastModified: generatedAt
     }));
 
-    const appEntries: MetadataRoute.Sitemap = appsSectionEnabled
-      ? getApps().map((app) => ({
-          url: url(`/apps/${app.slug}/`),
-          changeFrequency: "weekly",
-          priority: 0.85,
-          lastModified: generatedAt
-        }))
-      : [];
-
-    return [...coreEntries, ...appEntries];
+    return coreEntries;
   }
 
   const appsIndexEntry: MetadataRoute.Sitemap = [

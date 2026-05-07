@@ -15,7 +15,7 @@ type NavItem = {
   description?: string;
 };
 
-type MenuKey = "ai" | "explore" | null;
+type MenuKey = "explore" | null;
 
 type MenuConfig = {
   key: Exclude<MenuKey, null>;
@@ -25,59 +25,53 @@ type MenuConfig = {
 
 const reviewModeNavItems: NavItem[] = [
   { href: "/", label: "Home" },
-  ...(appsSectionEnabled ? [{ href: "/apps", label: "Apps" }] : []),
-  { href: "/support", label: "Support" },
-  { href: "/privacy", label: "Privacy" }
+  { href: "/support/tickets", label: "Tickets" },
+  { href: "/downloads", label: "Downloads" },
+  { href: "/guides", label: "Guides" }
 ];
 
 const desktopPrimaryNavItems: NavItem[] = [
   { href: "/", label: "Home" },
-  { href: "/corporate-tech-fixes", label: "Tech Fixes" },
   { href: "/support/tickets", label: "Tickets" },
   { href: "/downloads", label: "Downloads" },
-  ...(appsSectionEnabled ? [{ href: "/apps", label: "Apps" }] : [])
-];
-
-const desktopAiMenuItems: NavItem[] = [
-  {
-    href: "/ai-agents",
-    label: "AI Agents",
-    description: "Role-based system prompts and copy-ready specialist agents"
-  },
-  {
-    href: "/genai-prompts",
-    label: "GenAI Prompts",
-    description: "Task-level prompts for content, creative, and productivity workflows"
-  }
+  { href: "/guides", label: "Guides" },
+  { href: "/corporate-tech-fixes", label: "Tech Fixes" }
 ];
 
 const desktopExploreMenuItems: NavItem[] = [
   {
     href: "/support",
     label: "Support Portal",
-    description: "Service catalog, incident intake, analytics, and support workflows"
+    description: "Incident intake, service catalog, analytics, and support workflow surfaces"
   },
   {
-    href: "/guides",
-    label: "Pillar Guides",
-    description: "Long-form enterprise IT guide hubs and editorial content clusters"
+    href: "/apps",
+    label: "Apps",
+    description: "Product pages, privacy links, support paths, and app release previews"
+  },
+  {
+    href: "/ai-agents",
+    label: "AI Hub",
+    description: "AI agent libraries and prompt collections kept outside the core IT review path"
   },
   {
     href: "/pc-build-guides",
     label: "PC Builds",
-    description: "Interactive hardware planning and workload-based build recommendations"
+    description: "Interactive hardware planning and workload-based component recommendations"
+  },
+  {
+    href: "/recommended-gear",
+    label: "Recommended Gear",
+    description: "Curated desk, networking, power, and home lab recommendations"
   },
   {
     href: "/services/msp",
     label: "MSP Services",
     description: "Retained systems administration and ongoing support for growing teams"
   }
-];
+].filter((item) => item.href !== "/apps" || appsSectionEnabled);
 
-const desktopMenus: MenuConfig[] = [
-  { key: "ai", label: "AI Hub", items: desktopAiMenuItems },
-  { key: "explore", label: "Explore", items: desktopExploreMenuItems }
-];
+const desktopMenus: MenuConfig[] = [{ key: "explore", label: "Explore", items: desktopExploreMenuItems }];
 
 const mobileSections = adsenseReviewModeEnabled
   ? [
@@ -92,12 +86,8 @@ const mobileSections = adsenseReviewModeEnabled
         items: desktopPrimaryNavItems
       },
       {
-        title: "Support & Resources",
+        title: "Explore",
         items: desktopExploreMenuItems
-      },
-      {
-        title: "AI Hub",
-        items: desktopAiMenuItems
       }
     ];
 
@@ -318,10 +308,10 @@ export function SiteHeader() {
                       <Link
                         key={`mobile-${section.title}-${item.href}`}
                         href={item.href}
-                        className={`surface-card-interactive rounded-2xl px-4 py-3 ${
+                        className={`rounded-2xl border px-4 py-3 text-left transition ${
                           pathMatches(pathname, item.href)
                             ? "border-primary-200 bg-primary-50 text-primary-700 dark:border-primary-400/30 dark:bg-primary-500/10 dark:text-primary-300"
-                            : ""
+                            : "border-line bg-card text-fg hover:border-primary-200 hover:bg-white/80 dark:hover:bg-white/5"
                         }`}
                       >
                         <p className="text-sm font-semibold">{item.label}</p>
@@ -334,24 +324,23 @@ export function SiteHeader() {
                 </section>
               ))}
 
-              <section className="space-y-2">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted">
-                  Account & Settings
-                </p>
-                <div className="grid gap-2 sm:grid-cols-2">
-                  {!adsenseReviewModeEnabled ? (
-                    <Link href="/account" className="surface-card-interactive rounded-2xl px-4 py-3 text-sm font-semibold">
-                      <AccountNavLabel />
-                    </Link>
-                  ) : null}
-                  <Link href="/contact" className="btn-primary text-sm">
-                    Contact
+              <div className="grid gap-2 sm:grid-cols-2">
+                {!adsenseReviewModeEnabled ? (
+                  <Link
+                    href="/account"
+                    className="inline-flex items-center justify-center rounded-2xl border border-line bg-card px-4 py-3 text-sm font-medium text-fg transition hover:border-primary-200 hover:bg-white/80 dark:hover:bg-white/5"
+                  >
+                    <AccountNavLabel />
                   </Link>
-                  <div className="surface-card rounded-2xl px-4 py-3">
-                    <ThemeToggle />
-                  </div>
-                </div>
-              </section>
+                ) : null}
+                <Link href="/contact" className="btn-primary justify-center text-center">
+                  Contact
+                </Link>
+              </div>
+
+              <div className="flex justify-end">
+                <ThemeToggle />
+              </div>
             </div>
           </div>
         </div>

@@ -1,18 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { AppCard } from "@/components/app-card";
-import { AdSenseSlot } from "@/components/monetization/adsense-slot";
-import { SupportSiteCard } from "@/components/monetization/support-site-card";
+import { EditorialStandardsStrip } from "@/components/shared/editorial-authority-panels";
 import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
-import { getFeaturedApps } from "@/lib/apps";
-import { appsSectionEnabled } from "@/lib/apps-visibility";
 import { buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
 import { getPillarContentIdeas, getTopSeoKeywordOpportunities } from "@/lib/seo-content.registry";
 import { siteConfig } from "@/lib/site";
 import { getCorporateFixes } from "@/lib/corporate-fixes.registry";
 import { getDownloads } from "@/lib/downloads.registry";
 import { getKBArticleBySlug, getKBArticles } from "@/lib/support.kb.registry";
-import { getAdSenseSlot, getMonetizationRecommendations, monetizationConfig } from "@/lib/monetization";
 
 function uniqueKeywords(keywords: string[]): string[] {
   const seen = new Set<string>();
@@ -107,61 +102,58 @@ const topCategoryConfig = [
 
 const primaryWorkspaceConfig = [
   {
-    label: "Tech Fixes",
-    href: "/corporate-tech-fixes",
-    eyebrow: "Runbooks",
-    description: "Structured, enterprise-safe remediation guides for recurring corporate issues."
-  },
-  {
     label: "Tickets",
     href: "/support/tickets",
-    eyebrow: "Knowledge Base",
-    description: "Searchable troubleshooting articles built around real helpdesk and sysadmin workflows."
+    eyebrow: "Troubleshooting",
+    description: "Issue-specific fixes for Microsoft 365, Windows, identity, networking, and endpoint support."
   },
   {
     label: "Downloads",
     href: "/downloads",
     eyebrow: "Assets",
-    description: "Curated software, templates, scripts, and support-ready resources."
+    description: "Direct software links, scripts, templates, and support-ready resources for working admins."
   },
   {
-    label: "Apps",
-    href: "/apps",
-    eyebrow: "Products",
-    description: "Production apps, in-progress products, and public-facing build documentation."
+    label: "Guides",
+    href: "/guides",
+    eyebrow: "Pillar Content",
+    description: "Broader Microsoft 365, identity, network, and operations guides that connect the library together."
+  },
+  {
+    label: "Tech Fixes",
+    href: "/corporate-tech-fixes",
+    eyebrow: "Runbooks",
+    description: "Structured, enterprise-safe remediation paths for recurring corporate support issues."
   }
 ] as const;
 
 const trustPillars = [
   {
-    title: "Enterprise-safe documentation",
-    detail: "Guides are written for production environments and avoid security-bypass patterns."
+    title: "Written for real enterprise environments",
+    detail: "Guides prioritize production-safe actions, escalation points, and supportable remediation instead of shortcuts or bypasses."
   },
   {
-    title: "Search-first support experience",
-    detail: "Users can jump straight into fixes, templates, and downloads without digging through menus."
+    title: "Search-first and issue-first",
+    detail: "The strongest pages are centered on exact problems people actually search when they need a fix quickly."
   },
   {
-    title: "Practical operator tooling",
-    detail: "Downloads, scripts, and templates sit next to the articles they support."
+    title: "Resources stay attached to the problem",
+    detail: "Downloads, scripts, and supporting templates stay close to the fixes they belong with so the site remains practical."
   }
 ] as const;
 
 const quickActionLinks = [
   { label: "Search Tickets", href: "/support/tickets" },
   { label: "Browse Downloads", href: "/downloads" },
-  { label: "Recommended Gear", href: "/recommended-gear" },
+  { label: "Open Guides", href: "/guides" },
   { label: "Open Tech Fixes", href: "/corporate-tech-fixes" },
-  { label: "View Apps", href: "/apps" }
+  { label: "Contact", href: "/contact" }
 ] as const;
 
 export default function HomePage() {
   const kbArticles = getKBArticles();
   const corporateFixes = getCorporateFixes();
   const downloads = getDownloads();
-  const featuredApps = appsSectionEnabled ? getFeaturedApps().slice(0, 3) : [];
-  const homePartnerLinks = getMonetizationRecommendations("homepage");
-  const displayAdSlot = getAdSenseSlot("display");
   const pillarGuides = getPillarContentIdeas().slice(0, 4);
   const featuredDownloadGuides = [...downloads]
     .filter((entry) => entry.releaseMetadata?.publishedAt)
@@ -171,19 +163,15 @@ export default function HomePage() {
         parseDateValue(left.releaseMetadata?.publishedAt)
     )
     .slice(0, 4);
-  const keywordOpportunities = homeKeywordOpportunities.slice(0, 10);
-  const totalGuides = kbArticles.length + corporateFixes.length;
+  const keywordOpportunities = homeKeywordOpportunities.slice(0, 8);
+  const totalGuides = kbArticles.length + corporateFixes.length + getPillarContentIdeas().length;
   const totalSupportCategories = new Set(kbArticles.map((article) => article.category)).size;
-
-  const primaryWorkspaces = primaryWorkspaceConfig.filter(
-    (entry) => entry.href !== "/apps" || appsSectionEnabled
-  );
 
   const primaryWorkspaceCounts: Record<string, number> = {
     "/corporate-tech-fixes": corporateFixes.length,
     "/support/tickets": kbArticles.length,
     "/downloads": downloads.length,
-    "/apps": featuredApps.length
+    "/guides": getPillarContentIdeas().length
   };
 
   const topCategories = topCategoryConfig.map((config) => ({
@@ -233,11 +221,10 @@ export default function HomePage() {
             <div className="hero-surface p-6 sm:p-8 lg:p-12">
               <span className="eyebrow">Enterprise IT Knowledge Hub</span>
               <h1 className="mt-5 text-balance font-display text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
-                A cleaner way to find <span className="text-primary-500 dark:text-accent-300">fixes, tools, downloads, and products</span>
+                Search <span className="text-primary-500 dark:text-accent-300">enterprise IT fixes, guides, and admin-ready downloads</span>
               </h1>
               <p className="mt-4 max-w-3xl text-base text-fg-secondary sm:text-lg">
-                Search troubleshooting guides, jump into support workflows, download practical assets,
-                and explore products without bouncing between disconnected sections.
+                Microsoft 365, endpoint, identity, networking, and operations troubleshooting with practical assets that help support teams move faster.
               </p>
 
               <form action="/support/tickets/" method="get" className="mt-7">
@@ -250,7 +237,7 @@ export default function HomePage() {
                     name="q"
                     type="search"
                     defaultValue=""
-                    placeholder="Search troubleshooting guides, KBs, or error messages"
+                    placeholder={`Search ${totalGuides}+ IT troubleshooting guides, downloads, or error messages`}
                     className="form-input h-12"
                   />
                   <button type="submit" className="btn-primary h-12 shrink-0 px-6 py-0">
@@ -260,19 +247,17 @@ export default function HomePage() {
               </form>
 
               <div className="mt-5 flex flex-wrap gap-2">
-                {quickActionLinks
-                  .filter((item) => item.href !== "/apps" || appsSectionEnabled)
-                  .map((item) => (
-                    <Link key={item.href} href={item.href} className="btn-secondary !px-4 !py-2 text-xs sm:text-sm">
-                      {item.label}
-                    </Link>
-                  ))}
+                {quickActionLinks.map((item) => (
+                  <Link key={item.href} href={item.href} className="btn-secondary !px-4 !py-2 text-xs sm:text-sm">
+                    {item.label}
+                  </Link>
+                ))}
               </div>
 
               <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 <div className="surface-card p-4">
                   <p className="font-display text-2xl font-bold text-primary-600 dark:text-primary-300">{totalGuides}+</p>
-                  <p className="mt-1 text-xs font-medium uppercase tracking-wide text-muted">Guides + fixes</p>
+                  <p className="mt-1 text-xs font-medium uppercase tracking-wide text-muted">Fixes + guides</p>
                 </div>
                 <div className="surface-card p-4">
                   <p className="font-display text-2xl font-bold text-primary-600 dark:text-primary-300">{kbArticles.length}</p>
@@ -284,7 +269,7 @@ export default function HomePage() {
                 </div>
                 <div className="surface-card p-4">
                   <p className="font-display text-2xl font-bold text-primary-600 dark:text-primary-300">{totalSupportCategories}</p>
-                  <p className="mt-1 text-xs font-medium uppercase tracking-wide text-muted">Support categories</p>
+                  <p className="mt-1 text-xs font-medium uppercase tracking-wide text-muted">Support lanes</p>
                 </div>
               </div>
             </div>
@@ -293,7 +278,7 @@ export default function HomePage() {
               <div className="surface-card-strong p-5 sm:p-6">
                 <p className="eyebrow">Start Here</p>
                 <div className="mt-4 space-y-3">
-                  {primaryWorkspaces.map((workspace) => (
+                  {primaryWorkspaceConfig.map((workspace) => (
                     <Link
                       key={workspace.href}
                       href={workspace.href}
@@ -310,11 +295,10 @@ export default function HomePage() {
                       </div>
                       <div className="shrink-0 text-right">
                         <p className="font-display text-xl font-bold text-primary-600 dark:text-primary-300">
-                          {primaryWorkspaceCounts[workspace.href]}
-                          {workspace.href === "/apps" ? "" : "+"}
+                          {primaryWorkspaceCounts[workspace.href]}+
                         </p>
                         <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
-                          {workspace.href === "/apps" ? "apps" : "items"}
+                          resources
                         </p>
                       </div>
                     </Link>
@@ -323,7 +307,7 @@ export default function HomePage() {
               </div>
 
               <div className="surface-card p-5 sm:p-6">
-                <p className="eyebrow">Why This Feels Better</p>
+                <p className="eyebrow">Why Teams Use This</p>
                 <div className="mt-4 space-y-3">
                   {trustPillars.map((pillar) => (
                     <div key={pillar.title} className="rounded-2xl border border-line/80 bg-card-2/80 p-4 dark:bg-card/80">
@@ -335,6 +319,15 @@ export default function HomePage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="section-shell pt-2 sm:pt-4">
+        <div className="page-shell">
+          <EditorialStandardsStrip
+            title="How this library is maintained"
+            description="The strongest pages on the site are issue-specific support articles, broader operational guides, and practical downloads. Content is reviewed for enterprise-safe remediation, tested environments, escalation criteria, and direct linkage to related resources."
+          />
         </div>
       </section>
 
@@ -475,64 +468,24 @@ export default function HomePage() {
         </div>
       </section>
 
-      {featuredApps.length > 0 ? (
-        <section className="section-shell pt-2">
-          <div className="page-shell">
-            <div className="surface-card p-5 sm:p-6">
-              <div className="mb-5 flex items-center justify-between gap-3">
-                <div>
-                  <p className="eyebrow">Products</p>
-                  <h2 className="mt-3 font-display text-2xl font-semibold text-fg sm:text-3xl">
-                    Apps in the portfolio
-                  </h2>
-                </div>
-                <Link href="/apps" className="btn-ghost !px-4 !py-2 text-sm">
-                  Open apps
-                </Link>
-              </div>
-              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                {featuredApps.map((app) => (
-                  <AppCard key={app.slug} app={app} />
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-      ) : null}
-
-      <section className="section-shell pt-2">
-        <div className="page-shell space-y-4">
-          <SupportSiteCard
-            title="A low-friction way to keep the resource library free"
-            description="The site can earn small revenue from relevant partner links, optional donations, and quiet ad placements while keeping troubleshooting content useful first."
-            affiliateLinks={homePartnerLinks}
-          />
-          <AdSenseSlot
-            client={monetizationConfig.adsenseClient}
-            slot={displayAdSlot}
-            label="Sponsor"
-          />
-        </div>
-      </section>
-
       <section className="section-shell pt-2">
         <div className="page-shell">
           <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
             <section className="surface-card-strong p-6 sm:p-8">
-              <p className="eyebrow">Need Ongoing Help?</p>
+              <p className="eyebrow">Need Hands-On Help?</p>
               <h2 className="mt-4 text-balance font-display text-2xl font-semibold text-fg sm:text-3xl">
-                Retained systems support for teams that need more than one-off fixes
+                Retained systems support for teams that need more than a single fix
               </h2>
               <p className="mt-3 max-w-2xl text-sm text-fg-secondary sm:text-base">
-                I work across Microsoft 365, Google Workspace, macOS, Windows, Linux, identity,
-                collaboration, endpoint management, and operational cleanup for small teams and growing businesses.
+                I work across Microsoft 365, Google Workspace, macOS, Windows, Linux, identity, collaboration,
+                endpoint management, and operational cleanup for small teams and growing businesses.
               </p>
               <div className="mt-5 flex flex-col gap-3 sm:flex-row">
                 <Link href="/services/msp" className="btn-primary">
                   Explore MSP Services
                 </Link>
                 <Link href="/contact" className="btn-secondary">
-                  Request Retainer Availability
+                  Request Availability
                 </Link>
               </div>
             </section>
@@ -540,13 +493,13 @@ export default function HomePage() {
             <section className="surface-card p-5 sm:p-6">
               <div className="mb-4 flex items-center justify-between gap-3">
                 <div>
-                  <p className="eyebrow">Search Demand</p>
+                  <p className="eyebrow">Common Enterprise Issues</p>
                   <h2 className="mt-3 font-display text-2xl font-semibold text-fg sm:text-3xl">
-                    Popular IT searches
+                    Popular search-driven problems
                   </h2>
                 </div>
-                <Link href="/guides" className="btn-ghost !px-4 !py-2 text-sm">
-                  Open guides
+                <Link href="/support/tickets" className="btn-ghost !px-4 !py-2 text-sm">
+                  Search tickets
                 </Link>
               </div>
               <div className="grid gap-3 md:grid-cols-2">
@@ -557,9 +510,7 @@ export default function HomePage() {
                     className="surface-card-interactive rounded-2xl p-4"
                   >
                     <h3 className="text-sm font-semibold text-fg">{entry.keyword}</h3>
-                    <p className="mt-2 text-xs text-muted">
-                      Traffic {entry.traffic} • Monetization {entry.monetization} • Competition {entry.competition}
-                    </p>
+                    <p className="mt-2 text-xs text-muted">Open the closest matching support articles and related resources.</p>
                   </Link>
                 ))}
               </div>

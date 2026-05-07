@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
+import { canRenderAdSenseOnPath } from "@/lib/monetization";
 
 declare global {
   interface Window {
@@ -28,9 +30,24 @@ export function AdSenseSlot({
   className?: string;
 }) {
   const pushedRef = useRef(false);
+  const pathname = usePathname();
+  const canRender = canRenderAdSenseOnPath(pathname);
 
   useEffect(() => {
-    if (!client || !slot || pushedRef.current) return;
+    if (!client || !slot || !canRender || pushedRef.current) return;
+
+    const src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${client}`;
+    const existingScript = document.querySelector<HTMLScriptElement>(
+      `script[src="${src}"]`
+    );
+
+    if (!existingScript) {
+      const script = document.createElement("script");
+      script.async = true;
+      script.src = src;
+      script.crossOrigin = "anonymous";
+      document.head.appendChild(script);
+    }
 
     try {
       window.adsbygoogle = window.adsbygoogle || [];
@@ -39,9 +56,9 @@ export function AdSenseSlot({
     } catch {
       // Ad blockers or blocked scripts should never break page rendering.
     }
-  }, [client, slot]);
+  }, [canRender, client, slot]);
 
-  if (!client || !slot) {
+  if (!client || !slot || !canRender) {
     return null;
   }
 
