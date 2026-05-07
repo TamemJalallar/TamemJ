@@ -8,6 +8,7 @@ import { CitationGuidancePanel, EditorialTrustPanel } from "@/components/shared/
 import { ResourceLinkGrid } from "@/components/shared/resource-link-grid";
 import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import { getRelatedAssetsForDownload, getRelatedPillarsForTerms } from "@/lib/detail-page-related";
+import { getDownloadEditorialOverride } from "@/lib/download-editorial.registry";
 import { getDownloadBySlug, getDownloads, getRelatedDownloads } from "@/lib/downloads.registry";
 import { getAdSenseSlot, getMonetizationRecommendations, monetizationConfig } from "@/lib/monetization";
 import { editorialStandards, supportAuthorProfile } from "@/lib/site";
@@ -78,7 +79,11 @@ function getVerificationSummary(artifacts: DirectDownloadArtifact[]): string {
   return `${checksummedCount} direct download ${checksummedCount === 1 ? "artifact includes" : "artifacts include"} SHA-256 verification data on this page.`;
 }
 
-function buildBestFitHighlights(entry: DownloadEntry): string[] {
+function buildBestFitHighlights(entry: DownloadEntry, override?: { bestFitHighlights?: string[] }): string[] {
+  if (override?.bestFitHighlights?.length) {
+    return override.bestFitHighlights.slice(0, 4);
+  }
+
   const highlights = [
     `Use the ${entry.name} guide when you want an official install path for ${entry.platforms.join(", ")} without bouncing between vendor pages.`,
     `This page is strongest when you need store links, direct binaries, or release references collected in one place for ${entry.category.toLowerCase()} workflows.`
@@ -114,8 +119,9 @@ export async function generateMetadata({
   }
 
   const latestVersion = formatVersion(entry.releaseMetadata?.releaseTag ?? entry.directDownloads?.[0]?.version);
+  const editorialOverride = getDownloadEditorialOverride(entry.slug);
   const latestVersionText = latestVersion ? ` Latest tracked release: ${latestVersion}.` : "";
-  const description = `${entry.summary} Download options for ${entry.platforms.join(", ")}.${latestVersionText}`;
+  const description = `${editorialOverride?.leadParagraph ?? entry.summary} Download options for ${entry.platforms.join(", ")}.${latestVersionText}`;
   const path = `/downloads/${entry.slug}/`;
 
   return {
@@ -155,6 +161,7 @@ export default async function DownloadDetailPage({ params }: DownloadDetailPageP
   }
 
   const directDownloads = entry.directDownloads ?? [];
+  const editorialOverride = getDownloadEditorialOverride(entry.slug);
   const relatedDownloads = getRelatedDownloads(entry, 6);
   const primaryLinks = getPrimaryLinks(entry);
   const latestReleaseDate = formatDate(entry.releaseMetadata?.publishedAt);
@@ -212,7 +219,7 @@ export default async function DownloadDetailPage({ params }: DownloadDetailPageP
     "@type": "WebPage",
     name: `${entry.name} Download Guide`,
     url: toAbsoluteUrl(`/downloads/${entry.slug}/`),
-    description: entry.summary,
+    description: editorialOverride?.leadParagraph ?? entry.summary,
     inLanguage: "en-US",
     ...(isoLatestReleaseDate ? { dateModified: isoLatestReleaseDate } : {}),
     isPartOf: {
@@ -334,7 +341,7 @@ export default async function DownloadDetailPage({ params }: DownloadDetailPageP
                   {entry.name}
                 </h1>
                 <p className="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-300 sm:text-base">
-                  {entry.summary}
+                  {editorialOverride?.leadParagraph ?? entry.summary}
                 </p>
 
                 <div className="mt-4 flex flex-wrap gap-2">
@@ -406,11 +413,11 @@ export default async function DownloadDetailPage({ params }: DownloadDetailPageP
               <p className="eyebrow">Why This Page Exists</p>
               <h2 className="mt-3 font-display text-2xl font-semibold text-fg">A cleaner path to the right install source</h2>
               <p className="mt-3 text-sm leading-7 text-fg-secondary sm:text-base">
-                This page turns scattered vendor, store, and release links into a single install guide for {entry.name}.
-                The goal is simple: help someone land here, pick the right channel, and move forward without guessing which download path is current or official.
+                {editorialOverride?.pagePurpose ??
+                  `This page turns scattered vendor, store, and release links into a single install guide for ${entry.name}. The goal is simple: help someone land here, pick the right channel, and move forward without guessing which download path is current or official.`}
               </p>
               <ul className="mt-4 space-y-2 text-sm leading-7 text-fg-secondary sm:text-base">
-                {buildBestFitHighlights(entry).map((item) => (
+                {buildBestFitHighlights(entry, editorialOverride).map((item) => (
                   <li key={item} className="flex items-start gap-3">
                     <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-accent-500" />
                     <span>{item}</span>

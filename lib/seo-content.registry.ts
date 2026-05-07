@@ -1,4 +1,5 @@
 import { getDownloadAssets } from "@/lib/download-assets.registry";
+import { getSupportEditorialOverride } from "@/lib/support-editorial-overrides";
 import { getKBArticles } from "@/lib/support.kb.registry";
 import type { DownloadAsset } from "@/types/download";
 import type { KBArticle } from "@/types/support";
@@ -545,6 +546,7 @@ function buildLeadEnvironmentText(environment: KBArticle["environment"]): string
 function buildSeoAlignment(article: KBArticle, target: SeoKeywordArticleTarget): KBSeoAlignment {
   const keywordLabel = normalizeKeywordLabel(target.keyword);
   const environmentText = buildLeadEnvironmentText(article.environment);
+  const override = getSupportEditorialOverride(article.slug);
 
   return {
     articleSlug: article.slug,
@@ -552,8 +554,12 @@ function buildSeoAlignment(article: KBArticle, target: SeoKeywordArticleTarget):
     articleCategory: article.category,
     articleProduct: article.product,
     primaryKeyword: keywordLabel,
-    editorialIntro: `This troubleshooting guide is aligned to the exact query "${keywordLabel}" and focuses on enterprise-safe remediation for ${article.product}.`,
-    optimizedLeadParagraph: `If you are seeing "${keywordLabel}", use this IT support runbook to validate symptoms, isolate likely causes, apply safe resolution steps, and escalate correctly in ${environmentText}.`,
+    editorialIntro:
+      override?.editorialIntro ??
+      `This troubleshooting guide is aligned to the exact query "${keywordLabel}" and focuses on enterprise-safe remediation for ${article.product}.`,
+    optimizedLeadParagraph:
+      override?.optimizedLeadParagraph ??
+      `If you are seeing "${keywordLabel}", use this IT support runbook to validate symptoms, isolate likely causes, apply safe resolution steps, and escalate correctly in ${environmentText}.`,
     relevanceScore: target.relevanceScore
   };
 }
