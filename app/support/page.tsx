@@ -5,18 +5,25 @@ import { SupportForm } from "@/components/support-form";
 import { SupportPortalHome } from "@/components/support-portal/support-portal-home";
 import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import { getApps, isPublishedApp } from "@/lib/apps";
+import {
+  getDownloadAssetBundleBySlug,
+  getDownloadAssetBundleDownloadUrl,
+  getDownloadAssetsForBundle
+} from "@/lib/download-assets.registry";
 import { buildBreadcrumbJsonLd } from "@/lib/seo";
+import { getKBArticles } from "@/lib/support.kb.registry";
 import {
   buildSupportOpenGraph,
   buildSupportTwitter,
   toAbsoluteSupportUrl
 } from "@/lib/support-portal.seo";
 import { siteConfig } from "@/lib/site";
+import { getQuickStartGuides } from "@/src/content/editorial/quick-start-guides";
 
 export const metadata: Metadata = {
   title: "Support Portal",
   description:
-    "ServiceNow-style support portal demo with ticket articles, service catalog, incident intake, local ticketing, analytics, and app support contact paths.",
+    "ServiceNow-style support portal with ticket articles, service catalog, incident intake, local ticketing, analytics, app support, and regulated operations workflows.",
   keywords: [
     "IT support portal",
     "knowledge base",
@@ -24,7 +31,11 @@ export const metadata: Metadata = {
     "incident form",
     "ITIL demo",
     "enterprise support docs",
-    "iOS app support"
+    "iOS app support",
+    "Canix support",
+    "Metrc support",
+    "Wurk support",
+    "cannabis compliance support"
   ],
   alternates: {
     canonical: "/support/"
@@ -32,12 +43,12 @@ export const metadata: Metadata = {
   robots: buildRobotsIndexRule("/support/"),
   openGraph: buildSupportOpenGraph(
     "Support Portal | Tamem J",
-    "ServiceNow-style support portal demo with ticket articles, service requests, incident intake, analytics, and app support.",
+    "ServiceNow-style support portal with ticket articles, service requests, incident intake, analytics, app support, and regulated operations workflows.",
     "/support/"
   ),
   twitter: buildSupportTwitter(
     "Support Portal | Tamem J",
-    "ServiceNow-style support portal demo with enterprise-safe troubleshooting docs, service requests, and app support."
+    "ServiceNow-style support portal with enterprise-safe troubleshooting docs, regulated operations workflows, service requests, and app support."
   )
 };
 
@@ -63,6 +74,14 @@ export default function SupportPage() {
   const apps = getApps();
   const hasApps = apps.length > 0;
   const publishedApps = apps.filter(isPublishedApp).length;
+  const cannabisArticles = getKBArticles().filter(
+    (article) => article.category === "Cannabis Operations / Compliance"
+  );
+  const cannabisQuickStarts = getQuickStartGuides();
+  const cannabisReconciliationBundle = getDownloadAssetBundleBySlug("ny-cannabis-reconciliation-closeout-pack");
+  const cannabisReconciliationAssets = cannabisReconciliationBundle
+    ? getDownloadAssetsForBundle(cannabisReconciliationBundle.slug)
+    : [];
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -101,7 +120,7 @@ export default function SupportPage() {
                 One support entry point for tickets, requests, and app help.
               </h1>
               <p className="mt-4 max-w-3xl text-sm leading-7 text-primary-100/90 sm:text-base">
-                The support area now separates two clear paths: enterprise support workflows for IT issues,
+                The support area now separates two clear paths: enterprise and regulated-operations workflows for IT and compliance issues,
                 and app support for published products. That keeps the portal useful without making it feel split-brain.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
@@ -125,7 +144,7 @@ export default function SupportPage() {
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary-100/80">Enterprise Path</p>
                 <h2 className="mt-2 text-lg font-semibold text-white">Tickets, catalog, and incident intake</h2>
                 <p className="mt-2 text-sm text-primary-100/85">
-                  Search documented fixes, route requests, and submit incidents from one support workspace.
+                  Search documented fixes, route requests, and submit incidents across corporate IT and regulated operations workflows.
                 </p>
               </article>
               <article className="rounded-3xl border border-white/15 bg-white/10 p-4 backdrop-blur">
@@ -150,6 +169,134 @@ export default function SupportPage() {
         </section>
 
         <SupportPortalHome showHeader={false} />
+
+        <section className="surface-card p-5 sm:p-6">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+            <div>
+              <p className="eyebrow">Cannabis Operations / Compliance</p>
+              <h2 className="mt-3 font-display text-2xl font-semibold text-fg">
+                New York cannabis support is now a first-class support category
+              </h2>
+              <p className="mt-3 max-w-3xl text-sm leading-7 text-fg-secondary sm:text-base">
+                This section is built for operators working in Canix, Metrc, and Wurk under New York workflows.
+                It covers setup, daily operational checks, transfer handling, payroll bottlenecks, and the points where
+                a team needs to stop and involve compliance instead of improvising.
+              </p>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="surface-card bg-card-2/70 p-4 text-sm">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Support Tickets</p>
+                <p className="mt-2 font-display text-3xl font-semibold text-fg">{cannabisArticles.length}</p>
+                <p className="mt-1 text-fg-secondary">NY-specific compliance and operational support topics</p>
+              </div>
+              <div className="surface-card bg-card-2/70 p-4 text-sm">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Quick Starts</p>
+                <p className="mt-2 font-display text-3xl font-semibold text-fg">{cannabisQuickStarts.length}</p>
+                <p className="mt-1 text-fg-secondary">Basic setup guides for Canix, Metrc, and Wurk</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-6 grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
+            <div className="grid gap-4 md:grid-cols-3">
+              <Link
+                href="/guides/quick-start/canix-new-york-quick-start/"
+                className="surface-card-interactive rounded-2xl bg-card-2/70 p-4"
+              >
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Canix</p>
+                <h3 className="mt-2 text-base font-semibold text-fg">Inventory, package, and manifest setup</h3>
+                <p className="mt-2 text-sm leading-6 text-fg-secondary">
+                  Start here for package statuses, finished goods, tag prefixes, and Canix-to-Metrc handoffs.
+                </p>
+              </Link>
+
+              <Link
+                href="/guides/quick-start/metrc-new-york-quick-start/"
+                className="surface-card-interactive rounded-2xl bg-card-2/70 p-4"
+              >
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Metrc</p>
+                <h3 className="mt-2 text-base font-semibold text-fg">Access, transfers, and testing-state basics</h3>
+                <p className="mt-2 text-sm leading-6 text-fg-secondary">
+                  Use the setup path for credentialing, beginning inventory awareness, transfer readiness, and Retail Item IDs.
+                </p>
+              </Link>
+
+              <Link
+                href="/guides/quick-start/wurk-cannabis-operations-quick-start/"
+                className="surface-card-interactive rounded-2xl bg-card-2/70 p-4"
+              >
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Wurk</p>
+                <h3 className="mt-2 text-base font-semibold text-fg">Profiles, onboarding, and payroll-close readiness</h3>
+                <p className="mt-2 text-sm leading-6 text-fg-secondary">
+                  Start with employee profile quality, notifications, badge mapping, and timesheet approvals.
+                </p>
+              </Link>
+            </div>
+
+            <div className="surface-card bg-card-2/70 p-4 text-sm">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Fast Paths</p>
+              <div className="mt-3 space-y-2">
+                <Link href="/support/tickets/?q=Canix" className="filter-chip w-full justify-start rounded-xl px-3 py-2 text-sm">
+                  Search Canix tickets
+                </Link>
+                <Link href="/support/tickets/?q=Metrc" className="filter-chip w-full justify-start rounded-xl px-3 py-2 text-sm">
+                  Search Metrc tickets
+                </Link>
+                <Link href="/support/tickets/?q=Wurk" className="filter-chip w-full justify-start rounded-xl px-3 py-2 text-sm">
+                  Search Wurk tickets
+                </Link>
+                <Link href="/support/incident/new" className="filter-chip w-full justify-start rounded-xl px-3 py-2 text-sm">
+                  Submit a regulated-ops incident
+                </Link>
+              </div>
+              <p className="mt-4 text-sm leading-6 text-fg-secondary">
+                Use the incident path when package state, testing state, chain of custody, payroll cutoff, or employee access issues create real operational risk.
+              </p>
+            </div>
+          </div>
+
+          {cannabisReconciliationBundle ? (
+            <section className="mt-6 rounded-3xl border border-primary-200/70 bg-primary-50/70 p-5 dark:border-primary-500/25 dark:bg-primary-950/20">
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                <div className="max-w-3xl">
+                  <p className="eyebrow">Recommended Operations Pack</p>
+                  <h3 className="mt-3 font-display text-2xl font-semibold text-fg">
+                    {cannabisReconciliationBundle.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-7 text-fg-secondary sm:text-base">
+                    {cannabisReconciliationBundle.description}
+                  </p>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {cannabisReconciliationAssets.slice(0, 5).map((asset) => (
+                      <Link
+                        key={asset.slug}
+                        href={`/downloads/assets/${asset.slug}/`}
+                        className="filter-chip rounded-xl px-3 py-1.5 text-xs"
+                      >
+                        {asset.title}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex shrink-0 flex-wrap gap-3">
+                  <a
+                    href={getDownloadAssetBundleDownloadUrl(cannabisReconciliationBundle)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn-primary"
+                  >
+                    Download ZIP
+                  </a>
+                  <Link href={`/downloads/assets/#${cannabisReconciliationBundle.slug}`} className="btn-secondary">
+                    View Bundle Context
+                  </Link>
+                </div>
+              </div>
+            </section>
+          ) : null}
+        </section>
 
         <EditorialStandardsStrip description="The support experience is built around enterprise-safe troubleshooting, clearly separated app support, and reference pages that stay useful to both users and AI systems. That means detail pages are reviewed for scope, escalation, tested environments, and canonical routing." />
 

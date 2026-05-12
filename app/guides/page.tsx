@@ -14,6 +14,7 @@ import {
   buildTwitter,
   toAbsoluteUrl
 } from "@/lib/seo";
+import { getQuickStartGuides } from "@/src/content/editorial/quick-start-guides";
 
 function uniqueKeywords(keywords: string[]): string[] {
   const seen = new Set<string>();
@@ -33,7 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const topKeywords = getTopSeoKeywordOpportunities(50).map((entry) => entry.keyword);
 
   const description =
-    "Pillar guides and SEO content clusters for enterprise IT troubleshooting: Microsoft 365, endpoint management, identity security, PowerShell automation, and IT operations.";
+    "Pillar guides and quick-start setup guides for enterprise IT and regulated operations: Microsoft 365, endpoint management, identity security, PowerShell automation, IT operations, and New York cannabis workflows.";
 
   return {
     title: "IT Pillar Guides",
@@ -46,6 +47,9 @@ export async function generateMetadata(): Promise<Metadata> {
       "identity and access troubleshooting",
       "vpn network troubleshooting guide",
       "it operations runbook",
+      "canix quick start guide",
+      "metrc quick start guide",
+      "wurk quick start guide",
       ...topKeywords
     ]),
     alternates: {
@@ -59,16 +63,23 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function GuidesPage() {
   const clusters = getContentClusters();
   const pillars = getPillarContentIdeas();
+  const quickStartGuides = getQuickStartGuides();
   const topKeywords = getTopSeoKeywordOpportunities(24);
 
   const collectionSchema = buildCollectionPageJsonLd(
     "IT Pillar Guides",
-    "Enterprise IT pillar guides and supporting cluster content.",
+    "Enterprise IT pillar guides, regulated-operations quick starts, and supporting cluster content.",
     "/guides/",
-    pillars.map((pillar) => ({
-      name: pillar.title,
-      path: `/guides/${pillar.slug}/`
-    }))
+    [
+      ...pillars.map((pillar) => ({
+        name: pillar.title,
+        path: `/guides/${pillar.slug}/`
+      })),
+      ...quickStartGuides.map((guide) => ({
+        name: guide.title,
+        path: `/guides/quick-start/${guide.slug}/`
+      }))
+    ]
   );
 
   const keywordListSchema = {
@@ -93,13 +104,12 @@ export default function GuidesPage() {
       <section className="section-shell pt-10 sm:pt-14">
         <div className="page-shell space-y-6">
           <div className="hero-surface p-6 sm:p-8">
-            <p className="eyebrow">SEO Growth Architecture</p>
+            <p className="eyebrow">Guides Library</p>
             <h1 className="mt-4 font-display text-3xl font-semibold text-fg sm:text-4xl">
-              IT Pillar Guides and Content Clusters
+              IT Pillar Guides and Quick Start Setups
             </h1>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-fg-secondary sm:text-base">
-              Structured hubs for high-intent enterprise IT search demand. Each pillar links to related
-              troubleshooting tickets, download assets, and monetization-aligned keyword opportunities.
+              Structured hubs for deeper troubleshooting and short onboarding guides for faster setup. Use pillar pages for broad topic coverage and quick starts for basic operator-ready setup flows.
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
               <Link href="/support/tickets" className="btn-secondary">
@@ -110,6 +120,42 @@ export default function GuidesPage() {
               </Link>
             </div>
           </div>
+
+          <section className="space-y-3">
+            <div>
+              <p className="eyebrow">Quick Start Guides</p>
+              <h2 className="mt-3 font-display text-xl font-semibold text-fg">Basic setup paths for new platforms and workflows</h2>
+              <p className="mt-2 max-w-3xl text-sm leading-7 text-fg-secondary">
+                These shorter guides are for teams who need the first safe setup path before they move into deeper troubleshooting. They are intentionally practical, source-linked, and escalation-aware.
+              </p>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {quickStartGuides.map((guide) => (
+                <Link
+                  key={guide.slug}
+                  href={`/guides/quick-start/${guide.slug}/`}
+                  className="surface-card-strong p-5 transition hover:-translate-y-1 hover:border-primary-200 hover:shadow-card dark:hover:border-primary-400/30"
+                >
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
+                    {guide.product}
+                  </p>
+                  <h3 className="mt-2 font-display text-lg font-semibold text-fg">
+                    {guide.title}
+                  </h3>
+                  <p className="mt-2 text-sm text-fg-secondary">{guide.summary}</p>
+                  <div className="mt-3 flex flex-wrap gap-2 text-xs">
+                    <span className="filter-chip px-2.5 py-1 font-semibold">
+                      {guide.estimatedTime}
+                    </span>
+                    <span className="filter-chip px-2.5 py-1 font-semibold">
+                      {guide.relatedTicketSlugs.length} linked tickets
+                    </span>
+                  </div>
+                  <p className="mt-3 text-xs font-semibold text-primary-600 dark:text-primary-300">Open quick start →</p>
+                </Link>
+              ))}
+            </div>
+          </section>
 
           <section className="surface-card p-5 sm:p-6">
             <h2 className="font-display text-xl font-semibold text-fg">Content Clusters</h2>

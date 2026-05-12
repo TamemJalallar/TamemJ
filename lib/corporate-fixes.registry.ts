@@ -68,6 +68,7 @@ const supportProductFamilies = new Set<KBArticle["productFamily"]>([
   "Figma",
   "Okta",
   "Partnerships",
+  "Cannabis Tech",
   "Networking",
   "Browser",
   "Mobile",
@@ -235,6 +236,8 @@ function mapSupportCategoryToCorporateCategory(category: KBArticle["category"]):
   switch (category) {
     case "Microsoft 365":
       return "O365";
+    case "Cannabis Operations / Compliance":
+      return "Business";
     case "Business / Partnerships":
       return "Business";
     case "Networking / VPN":

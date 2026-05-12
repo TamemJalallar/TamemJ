@@ -6,6 +6,7 @@ import { SupportSiteCard } from "@/components/monetization/support-site-card";
 import { CitationGuidancePanel, EditorialTrustPanel } from "@/components/shared/editorial-authority-panels";
 import { ResourceLinkGrid } from "@/components/shared/resource-link-grid";
 import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
+import { getDownloadAssetEditorialOverride } from "@/lib/download-asset-editorial.registry";
 import {
   getDownloadAssetBundleDownloadUrl,
   getDownloadAssetBundles,
@@ -18,6 +19,7 @@ import { getRelatedPillarsForTerms } from "@/lib/detail-page-related";
 import { getAdSenseSlot, getMonetizationRecommendations, monetizationConfig } from "@/lib/monetization";
 import { editorialStandards, supportAuthorProfile } from "@/lib/site";
 import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
+import { getQuickStartGuideBySlug } from "@/src/content/editorial/quick-start-guides";
 
 interface DownloadAssetPageProps {
   params: Promise<{ slug: string }>;
@@ -72,7 +74,10 @@ export async function generateMetadata({ params }: DownloadAssetPageProps): Prom
   }
 
   const updatedAt = getDownloadAssetUpdatedAt(asset);
-  const description = `${asset.description} Download the ${asset.format.toUpperCase()} file directly, review bundle context, and connect it to related IT support resources.`;
+  const override = getDownloadAssetEditorialOverride(asset.slug);
+  const description =
+    override?.metadataDescription ??
+    `${asset.description} Download the ${asset.format.toUpperCase()} file directly, review bundle context, and connect it to related IT support resources.`;
 
   return {
     title: `${asset.title} Download | IT Asset Library`,
@@ -119,9 +124,10 @@ export default async function DownloadAssetDetailPage({ params }: DownloadAssetP
     .filter((candidate) => candidate.slug !== asset.slug && candidate.category === asset.category)
     .slice(0, 6);
   const updatedAt = getDownloadAssetUpdatedAt(asset);
+  const override = getDownloadAssetEditorialOverride(asset.slug);
   const supportSearchHref = `/support/tickets/?q=${encodeURIComponent(asset.title)}`;
   const directDownloadUrl = getDownloadAssetDownloadUrl(asset);
-  const citationUseCases = [
+  const citationUseCases = override?.citationUseCases ?? [
     `Use this page when the claim is about the ${asset.title} file itself, its format, or how it fits into ${asset.category.toLowerCase()} work.`,
     `Best for direct references to the downloadable ${asset.format.toUpperCase()} asset, update date, and related workflow links.`,
     "Prefer this page over the asset index when the user needs a specific template, script, checklist, or runbook."
@@ -132,6 +138,10 @@ export default async function DownloadAssetDetailPage({ params }: DownloadAssetP
   );
   const partnerLinks = getMonetizationRecommendations("download-assets");
   const inArticleAdSlot = getAdSenseSlot("inArticle");
+  const relatedQuickGuides =
+    override?.quickStartGuideSlugs
+      ?.map((guideSlug) => getQuickStartGuideBySlug(guideSlug))
+      .filter((guide): guide is NonNullable<typeof guide> => Boolean(guide)) ?? [];
   const resourceLinks = [
     {
       href: directDownloadUrl,
@@ -155,6 +165,13 @@ export default async function DownloadAssetDetailPage({ params }: DownloadAssetP
       description: "Pair this asset with the software, utilities, or apps it supports in the broader downloads catalog.",
       meta: "Downloads"
     },
+    ...relatedQuickGuides.map((guide) => ({
+      href: `/guides/quick-start/${guide.slug}/`,
+      eyebrow: "Quick Start Guide",
+      title: guide.title,
+      description: guide.summary,
+      meta: `${guide.product} • ${guide.estimatedTime}`
+    })),
     ...relatedPillars.map((pillar) => ({
       href: `/guides/${pillar.slug}/`,
       eyebrow: "Pillar Guide",
@@ -260,7 +277,9 @@ export default async function DownloadAssetDetailPage({ params }: DownloadAssetP
             </div>
 
             <h1 className="mt-4 font-display text-3xl font-semibold text-fg sm:text-4xl">{asset.title}</h1>
-            <p className="mt-3 max-w-4xl text-sm leading-7 text-fg-secondary sm:text-base">{asset.description}</p>
+            <p className="mt-3 max-w-4xl text-sm leading-7 text-fg-secondary sm:text-base">
+              {override?.heroLead ?? asset.description}
+            </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
               <a href={directDownloadUrl} target="_blank" rel="noreferrer" className="btn-primary">
@@ -287,7 +306,7 @@ export default async function DownloadAssetDetailPage({ params }: DownloadAssetP
               <p className="eyebrow">Why Use This Asset</p>
               <h2 className="mt-3 font-display text-2xl font-semibold text-fg">A direct, reusable starting point</h2>
               <ul className="mt-4 space-y-2 text-sm leading-7 text-fg-secondary sm:text-base">
-                {buildAssetHighlights(asset).map((item) => (
+                {(override?.highlights ?? buildAssetHighlights(asset)).map((item) => (
                   <li key={item} className="flex items-start gap-3">
                     <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-accent-500" />
                     <span>{item}</span>
@@ -300,8 +319,12 @@ export default async function DownloadAssetDetailPage({ params }: DownloadAssetP
               <p className="eyebrow">Use It Alongside</p>
               <h2 className="mt-3 font-display text-2xl font-semibold text-fg">Practical next steps</h2>
               <div className="mt-4 space-y-3 text-sm leading-7 text-fg-secondary sm:text-base">
-                <p>Download the file directly, review or tailor it to your environment, and then pair it with the support or guide content linked below so the asset fits into a larger workflow instead of living on its own.</p>
-                <p>That is especially useful when the file supports Microsoft 365, endpoint, identity, onboarding, or security work that needs both documentation and execution material.</p>
+                {(override?.usageParagraphs ?? [
+                  "Download the file directly, review or tailor it to your environment, and then pair it with the support or guide content linked below so the asset fits into a larger workflow instead of living on its own.",
+                  "That is especially useful when the file supports Microsoft 365, endpoint, identity, onboarding, or security work that needs both documentation and execution material."
+                ]).map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
               </div>
             </section>
           </section>

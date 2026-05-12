@@ -647,7 +647,24 @@ export function getTopKBSeoAlignments(limit = 50): KBSeoAlignment[] {
 }
 
 export function getKBSeoAlignmentBySlug(slug: string): KBSeoAlignment | undefined {
-  return getTopKBSeoAlignments(50).find((entry) => entry.articleSlug === slug);
+  const cachedMatch = cachedTopKBSeoAlignments?.find((entry) => entry.articleSlug === slug);
+
+  if (cachedMatch) {
+    return cachedMatch;
+  }
+
+  const seededMatch = getTopKBSeoAlignments(50).find((entry) => entry.articleSlug === slug);
+  if (seededMatch) {
+    return seededMatch;
+  }
+
+  const article = getKBArticles().find((entry) => entry.slug === slug);
+  if (!article) {
+    return undefined;
+  }
+
+  const bestTarget = getBestTargetForArticle(article);
+  return bestTarget ? buildSeoAlignment(article, bestTarget) : undefined;
 }
 
 export function getKeywordTargetsForKBArticle(

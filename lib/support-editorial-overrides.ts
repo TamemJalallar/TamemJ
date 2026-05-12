@@ -63,6 +63,54 @@ export const supportEditorialOverrides: Record<string, SupportEditorialOverride>
       "Conditional Access is supposed to be strict, but from the user side it often looks arbitrary when a trusted person is suddenly blocked. The fastest way to make progress is to identify exactly which signal caused the policy decision: device compliance, location, MFA requirement, app scope, or session risk.",
     optimizedLeadParagraph:
       "Use this guide when Entra Conditional Access blocks a legitimate sign-in and the user needs a clear remediation path. It helps you confirm the failing policy condition first, then choose the least disruptive enterprise-safe fix."
+  },
+  "ny-cannabis-inventory-reconciliation-variance-requires-same-day-review": {
+    editorialIntro:
+      "In New York cannabis operations, inventory variances get more serious the longer they sit. What starts as a small package mismatch can quickly affect holds, transfers, destruction decisions, or management trust in the day’s numbers if nobody captures the first facts while they are still clear.",
+    optimizedLeadParagraph:
+      "Use this guide when a package count, package state, or system record does not match the physical inventory and the team needs a same-day reconciliation path. It helps operations document the discrepancy, pause the right activity, and route the decision through compliance before anyone forces a correction."
+  },
+  "ny-cannabis-package-hold-or-release-needs-compliance-signoff": {
+    editorialIntro:
+      "Package holds are where operations urgency and compliance caution collide. Teams usually know they need a decision quickly, but the real risk comes from releasing inventory before the reason for the hold, the package state, and the approving owner are fully understood and documented.",
+    optimizedLeadParagraph:
+      "Use this guide when a New York cannabis package is on hold and the team needs a defensible release or continue-hold decision. It helps confirm why the package is blocked, what supporting evidence is still missing, and when compliance signoff must happen before movement resumes."
+  },
+  "canix-lab-result-or-coa-is-not-linked-to-the-final-package": {
+    editorialIntro:
+      "Lab-result problems are easy to underestimate because the paperwork may exist somewhere, just not where operators need it. The practical issue is whether the final package can be shown, transferred, or sold with a clean and traceable connection between the COA, the package, and the system state the team is relying on.",
+    optimizedLeadParagraph:
+      "Use this guide when a COA exists but the final Canix package does not clearly show the linked lab result, testing evidence, or expected package status. It helps the team verify whether the issue is mapping, package lineage, or a deeper workflow gap before product moves again."
+  },
+  "ny-cannabis-delivery-manifest-exception-or-transport-incident": {
+    editorialIntro:
+      "Manifest exceptions are one of those moments where continuing to move product while the team 'figures it out' usually makes the recordkeeping problem worse. The safest move is to stabilize custody, compare the physical load to the manifest, and document who is approving the next step before the route changes again.",
+    optimizedLeadParagraph:
+      "Use this guide when a New York cannabis delivery or transport event no longer matches the manifest, route plan, or receiving expectation. It helps the team preserve chain of custody, capture the incident facts early, and decide whether the shipment holds, returns, or escalates."
+  },
+  "canix-audit-trail-does-not-clearly-show-who-made-the-inventory-change": {
+    editorialIntro:
+      "When an inventory change cannot be confidently tied back to the right person or integration account, the issue is bigger than a bad note in the audit trail. It affects how much the team can trust the correction history, whether access controls are working, and how quickly a variance can be resolved without creating a second problem.",
+    optimizedLeadParagraph:
+      "Use this guide when Canix history does not clearly show who performed a package edit, receive, transfer, or adjustment. It helps operations and compliance trace the last trustworthy state, confirm whether attribution is wrong or incomplete, and decide when access-control escalation is required."
+  },
+  "ny-cannabis-recall-or-market-withdrawal-requires-package-isolation": {
+    editorialIntro:
+      "Recall and market-withdrawal work gets messy when the product list changes faster than the incident notes. The first operational win is not writing the perfect report; it is isolating the right packages, freezing movement, and keeping one clean list of what is affected before anything else happens downstream.",
+    optimizedLeadParagraph:
+      "Use this guide when a recall, market withdrawal, or internal hold requires New York cannabis packages to be isolated immediately. It helps the team lock down the package list, preserve traceability, and confirm who owns the disposition decision before product is released, returned, or destroyed."
+  },
+  "ny-cannabis-destruction-workflow-cannot-proceed-until-package-state-is-reconciled": {
+    editorialIntro:
+      "Destruction workflows feel administrative until the package state is wrong, at which point they become a traceability risk. If counts, holds, recall status, or package lineage are still unclear, destruction is the wrong next step because it removes the product before the underlying discrepancy is settled.",
+    optimizedLeadParagraph:
+      "Use this guide when a destruction action is being considered but the package state, quantity, or upstream hold history is still unresolved. It helps the team prove the inventory is reconciled first, then document why destruction is allowed and who approved it."
+  },
+  "wurk-shift-close-attestation-or-manager-review-is-incomplete": {
+    editorialIntro:
+      "Shift-close issues in Wurk rarely fail in one dramatic way. More often, a few missed approvals, unresolved punches, and labor mapping problems quietly roll into the next day until payroll or management reporting starts breaking under the weight of those small misses.",
+    optimizedLeadParagraph:
+      "Use this guide when a manager closeout, shift attestation, or Wurk review step was not fully completed before the next day begins. It helps teams confirm what is still open, which items create payroll risk, and how to leave a cleaner documented handoff for the next review."
   }
 };
 

@@ -50,6 +50,21 @@ function normalizeTag(tag: string): string {
   return tag.trim().toLowerCase();
 }
 
+function buildChecklistCommand(
+  title: string,
+  content: string,
+  requiresAdmin = false
+): KBCommand[] {
+  return [
+    {
+      title,
+      shell: "CLI",
+      content,
+      requiresAdmin
+    }
+  ];
+}
+
 function getFallbackCommands(seed: KBSeed): KBCommand[] {
   const productToken =
     seed.product.toLowerCase().includes("creative cloud")
@@ -7655,8 +7670,1044 @@ const generalSeeds: KBSeed[] = [
   }
 ];
 
+const CANNABIS_LAST_VERIFIED = "May 11, 2026";
+
+const cannabisSeeds: KBSeed[] = [
+  {
+    slug: "canix-metrc-data-sync-not-reflecting-recent-changes",
+    title: "Canix or Metrc Changes Are Not Syncing to the Other System",
+    description:
+      "Troubleshoot stale Canix-to-Metrc or Metrc-to-Canix updates in New York cannabis operations before users duplicate inventory actions or move product on stale data.",
+    category: "Cannabis Operations / Compliance",
+    productFamily: "Cannabis Tech",
+    product: "Canix",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "10-20 min",
+    tags: ["canix", "metrc", "sync", "new york", "inventory", "api", "compliance"],
+    symptoms: [
+      "A package created or edited in Canix does not appear in Metrc after the normal workflow.",
+      "A received transfer or package change made in Metrc is still missing in Canix.",
+      "Staff members start re-entering the same action because the systems appear out of sync."
+    ],
+    causes: [
+      "The normal Metrc-to-Canix sync window has not elapsed yet.",
+      "A queue, retry, or API credential issue is delaying the update.",
+      "The transaction is waiting on a separate state-system review or transfer action."
+    ],
+    remediations: [
+      "Wait through the normal sync window first, then use the supported Canix refresh action instead of re-submitting the transaction.",
+      "Compare the package or transfer history in both systems using the exact IDs and timestamps before making another inventory change.",
+      "Confirm the facility, license, and user credentials tied to the integration are correct for the operator who submitted the action.",
+      "Pause any downstream sell, transfer, or receive activity until the package state matches across systems."
+    ],
+    escalationCriteria: [
+      "Sync delay continues beyond the expected window or multiple transactions are queued.",
+      "The discrepancy affects a shipment, receive workflow, or state inventory record.",
+      "API keys, user attribution, or facility mapping appear to be wrong."
+    ],
+    commands: buildChecklistCommand(
+      "Capture cross-system sync evidence",
+      [
+        "# License / facility:",
+        "# User who submitted the change:",
+        "# Package or transfer ID:",
+        "# Action performed in Canix or Metrc:",
+        "# Timestamp of the last successful sync seen in each system:",
+        "# Screenshot package history, transfer history, and any retry/warning banner."
+      ].join("\n"),
+      true
+    ),
+    lastVerified: CANNABIS_LAST_VERIFIED,
+    testedOn: ["Canix web app", "Metrc New York workflows"]
+  },
+  {
+    slug: "canix-package-status-stuck-unverified-needs-review-or-transfer-pending",
+    title: "Canix Package Availability Status Stays Unverified, Needs Review, or Transfer Pending",
+    description:
+      "Interpret Canix availability statuses correctly in New York Metrc workflows so operators know when to wait, when to review data, and when to stop movement entirely.",
+    category: "Cannabis Operations / Compliance",
+    productFamily: "Cannabis Tech",
+    product: "Canix",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "10-25 min",
+    tags: ["canix", "package status", "unverified", "needs review", "transfer pending", "metrc", "new york"],
+    symptoms: [
+      "A package shows Unverified and cannot be trusted for downstream activity yet.",
+      "A package remains in Needs Review and staff are unsure whether it can be sold or transferred.",
+      "Transfer Pending or Transfer Accepted appears and the team does not know which system should be used next."
+    ],
+    causes: [
+      "The state system has not yet sent status back after receive or package activity.",
+      "The package was flagged for review because a required field or compliance state does not line up.",
+      "The package is tied to an outgoing or completed transfer that must be managed in Metrc."
+    ],
+    remediations: [
+      "If the package was just received or created, allow the expected sync time before assuming failure.",
+      "For Needs Review, compare package details against finished-good, testing, and transfer requirements before making any new movement.",
+      "For Transfer Pending or Transfer Accepted, complete the related transfer workflow in Metrc, then refresh Canix.",
+      "Do not sell, relabel, or re-transfer a package until its status supports the intended activity."
+    ],
+    escalationCriteria: [
+      "Needs Review or Unverified affects active retail inventory or a same-day shipment.",
+      "Multiple packages are stuck in the same status and the reason is unclear.",
+      "Package state differs between Canix and Metrc after transfer activity completes."
+    ],
+    commands: buildChecklistCommand(
+      "Capture package status details",
+      [
+        "# Package UID:",
+        "# Current Canix availability status:",
+        "# Related transfer ID, if any:",
+        "# Retail Item ID / finished-good status:",
+        "# Latest package history event in Canix:",
+        "# Matching package or transfer state in Metrc:"
+      ].join("\n"),
+      true
+    ),
+    lastVerified: CANNABIS_LAST_VERIFIED,
+    testedOn: ["Canix package availability workflows", "Metrc transfer references"]
+  },
+  {
+    slug: "canix-finished-good-toggle-or-retail-item-id-missing-in-new-york",
+    title: "Canix Finished Good Toggle or Retail Item ID Is Missing in New York",
+    description:
+      "Fix New York retail-package issues in Canix when inventory should be marked as finished goods and tied to a Retail Item ID before compliant transfer or sale.",
+    category: "Cannabis Operations / Compliance",
+    productFamily: "Cannabis Tech",
+    product: "Canix",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "15-30 min",
+    tags: ["canix", "finished goods", "retail item id", "new york", "metrc", "retail"],
+    symptoms: [
+      "A retail-ready package cannot move through the New York workflow as expected.",
+      "The package was built from bulk inventory but does not show as a finished good.",
+      "Operators cannot find or assign the expected Retail Item ID in the package workflow."
+    ],
+    causes: [
+      "The package was created without the Finished Good option enabled.",
+      "The required Retail Item ID was never created, selected, or linked.",
+      "The inventory is actually intermediate or bulk material and should not be marked as a finished retail package yet."
+    ],
+    remediations: [
+      "Review whether the package is truly intended for retail sale before changing its finished-good state.",
+      "Use the supported Canix package creation or edit flow to mark finished goods and attach the correct Retail Item ID.",
+      "Keep bulk or intermediate inventory in its non-retail state instead of forcing it into a finished-good path prematurely.",
+      "Re-check the package detail and daily task view after the change so the item is ready for the next compliant workflow step."
+    ],
+    escalationCriteria: [
+      "Retail inventory has already shipped or been staged without the correct finished-good setup.",
+      "Large SKU groups are missing Retail Item IDs.",
+      "Compliance or operations leadership must decide whether product needs to be relabeled, held, or returned upstream."
+    ],
+    commands: buildChecklistCommand(
+      "Capture finished-good package details",
+      [
+        "# Package UID:",
+        "# Current package type (bulk/intermediate/retail):",
+        "# Finished Good toggle state:",
+        "# Retail Item ID linked to the package:",
+        "# Upstream package or batch source:",
+        "# Screenshot the package detail and any review warning."
+      ].join("\n"),
+      true
+    ),
+    lastVerified: CANNABIS_LAST_VERIFIED,
+    testedOn: ["Canix New York Metrc transition workflows"]
+  },
+  {
+    slug: "canix-package-tag-prefix-is-wrong-for-new-york-license",
+    title: "Canix Suggests the Wrong Package Tag Prefix for a New York License",
+    description:
+      "Correct package-tag prefix issues in Canix so New York operators do not create inventory under the wrong package sequence after Metrc tag receipt.",
+    category: "Cannabis Operations / Compliance",
+    productFamily: "Cannabis Tech",
+    product: "Canix",
+    environment: "Both",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    estimatedTime: "10-20 min",
+    tags: ["canix", "package tags", "tag prefix", "new york", "metrc", "license"],
+    symptoms: [
+      "Canix suggests an incoming transfer tag instead of the next expected package tag.",
+      "The next package number does not match the facility’s received package-tag range.",
+      "Teams working across multiple licenses are unsure which tag range should be active."
+    ],
+    causes: [
+      "Package tags were received in Metrc but the prefix was never updated in Canix facility management.",
+      "The wrong license or facility context is selected.",
+      "Staff are mixing plant-tag and package-tag workflows."
+    ],
+    remediations: [
+      "Confirm the facility has already received the correct package tags in Metrc before changing any Canix setting.",
+      "Update the package-tag prefix in Canix using the first digits from the correct package tag for that license.",
+      "Verify the active license or facility in Canix before creating new inventory.",
+      "Re-test with a single package creation workflow before releasing the process back to the broader team."
+    ],
+    escalationCriteria: [
+      "Wrong tags were already printed or used on live inventory.",
+      "Multiple licenses share the same team and the tag assignment path is still unclear.",
+      "State traceability could be compromised by continuing package creation."
+    ],
+    commands: buildChecklistCommand(
+      "Capture package tag context",
+      [
+        "# Facility / license:",
+        "# Example tag Canix is suggesting:",
+        "# Example package tag actually received in Metrc:",
+        "# Admin > Facility Management screenshot:",
+        "# Whether any incorrect tags were already used on live packages:"
+      ].join("\n"),
+      true
+    ),
+    lastVerified: CANNABIS_LAST_VERIFIED,
+    testedOn: ["Canix package tag prefix guidance", "Metrc package tag receipt workflows"]
+  },
+  {
+    slug: "canix-transfer-created-but-manifest-or-acceptance-still-needs-metrc",
+    title: "Canix Transfer Exists but the Shipment Still Cannot Move",
+    description:
+      "Handle New York transfer workflows that start in Canix but still require manifest registration or acceptance in Metrc before product can move or be received.",
+    category: "Cannabis Operations / Compliance",
+    productFamily: "Cannabis Tech",
+    product: "Canix",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "15-30 min",
+    tags: ["canix", "transfer", "manifest", "metrc", "receive", "new york", "shipment"],
+    symptoms: [
+      "A transfer template is ready in Canix but drivers or receivers do not have a completed manifest.",
+      "The receiving facility sees an incoming transfer but cannot finish the receive workflow in Canix alone.",
+      "Package availability or ownership does not change after the transfer is staged."
+    ],
+    causes: [
+      "The outgoing transfer was prepared in Canix but never fully registered in Metrc.",
+      "The receiving facility has not accepted the transfer in Metrc yet.",
+      "Operators expected a Canix-only workflow even though key transfer actions still belong in Metrc."
+    ],
+    remediations: [
+      "Use Canix to build the transfer accurately, then register and print the manifest in Metrc before the shipment leaves.",
+      "Confirm the receiving facility completes the Metrc accept/receive step before assuming inventory should be editable downstream.",
+      "Refresh Canix only after the Metrc workflow is complete and compare package history in both systems.",
+      "Keep a signed manifest with the shipment and retain the final PDF or print copy with the transaction record."
+    ],
+    escalationCriteria: [
+      "Product is physically moving or already arrived without a completed digital transfer workflow.",
+      "The sender and receiver disagree about transfer state or package ownership.",
+      "Compliance must determine whether to hold, return, or re-stage inventory."
+    ],
+    commands: buildChecklistCommand(
+      "Capture transfer evidence",
+      [
+        "# Sending facility / receiving facility:",
+        "# Transfer ID:",
+        "# Manifest generated in Metrc? (yes/no)",
+        "# Manifest signed / retained? (yes/no)",
+        "# Receiving user and receive status in Metrc:",
+        "# Screenshot Canix transfer page and Metrc transfer status."
+      ].join("\n"),
+      true
+    ),
+    lastVerified: CANNABIS_LAST_VERIFIED,
+    testedOn: ["Canix transfer manifest workflows", "Metrc receive workflows"]
+  },
+  {
+    slug: "canix-actions-show-the-wrong-metrc-user-or-api-key-owner",
+    title: "Canix Actions Show the Wrong Metrc User or API Key Owner",
+    description:
+      "Resolve Canix-to-Metrc attribution issues so New York operators can tie inventory actions to the right employee and API key instead of an outdated admin account.",
+    category: "Cannabis Operations / Compliance",
+    productFamily: "Cannabis Tech",
+    product: "Canix",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "15-30 min",
+    tags: ["canix", "metrc", "api key", "employee mapping", "audit trail", "new york"],
+    symptoms: [
+      "Transactions submitted from Canix appear under the wrong Metrc employee.",
+      "The audit trail still points to a shared or former admin account.",
+      "Specific users can log in but their actions are not being attributed correctly in Metrc."
+    ],
+    causes: [
+      "Employees have not been added or re-linked correctly for the Metrc integration model.",
+      "The wrong API key or user credential is still active for the facility.",
+      "The team changed operational roles during the New York Metrc transition but the integration mapping stayed behind."
+    ],
+    remediations: [
+      "Review the employee roster and verify each operational user has the correct Metrc account and permissions.",
+      "Update or rotate the API keys tied to the facility and confirm Canix is using the intended credential set.",
+      "Retest with a single low-risk inventory action and verify attribution before returning to normal operations.",
+      "Document any historical transactions that may need compliance review because they were posted under the wrong user."
+    ],
+    escalationCriteria: [
+      "Regulated inventory changes are being recorded under an incorrect person.",
+      "The facility relies on shared credentials and needs a broader access-control correction.",
+      "Audit or compliance staff require a formal attribution review."
+    ],
+    commands: buildChecklistCommand(
+      "Capture user-attribution details",
+      [
+        "# Facility / license:",
+        "# Operational user expected to own the action:",
+        "# User currently shown in Metrc:",
+        "# API key owner or integration account in use:",
+        "# Example transaction or package ID showing the mismatch:",
+        "# Screenshot employee mapping or key-management page."
+      ].join("\n"),
+      true
+    ),
+    lastVerified: CANNABIS_LAST_VERIFIED,
+    testedOn: ["Canix New York Metrc transition guidance", "Metrc employee setup workflows"]
+  },
+  {
+    slug: "metrc-user-onboarding-or-credentialing-is-blocked",
+    title: "Metrc User Onboarding or Credentialing Is Blocked",
+    description:
+      "Restore New York Metrc access when employee onboarding stalls because the welcome email expired, the account details are wrong, or required permissions were never granted.",
+    category: "Cannabis Operations / Compliance",
+    productFamily: "Cannabis Tech",
+    product: "Metrc",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "15-30 min",
+    tags: ["metrc", "credentialing", "employee onboarding", "new york", "permissions", "login"],
+    symptoms: [
+      "A new user cannot finish Metrc setup from the welcome email.",
+      "The operator can sign in but cannot perform the expected inventory or transfer actions.",
+      "A facility admin believes the employee was added, but the user still has no usable access."
+    ],
+    causes: [
+      "The email address or employee profile was entered incorrectly.",
+      "The activation or onboarding step expired before the user completed it.",
+      "Required permissions, license access, or training prerequisites were not completed."
+    ],
+    remediations: [
+      "Confirm the employee is associated with the correct facility, license, and email address before reissuing access.",
+      "Resend or restart the onboarding workflow using the current Metrc admin path instead of asking the user to reuse an old link.",
+      "Validate the user’s permission scope so the first successful sign-in matches the tasks they must perform.",
+      "If the user will transact through Canix, confirm the Metrc account is also ready for any required API-linked workflow."
+    ],
+    escalationCriteria: [
+      "Multiple users cannot onboard or the facility admin cannot add employees.",
+      "A same-day transfer, receive, or compliance deadline depends on the blocked user.",
+      "The issue may reflect a broader account, licensing, or vendor-side access problem."
+    ],
+    commands: buildChecklistCommand(
+      "Capture onboarding details",
+      [
+        "# Facility / license:",
+        "# Employee name and email:",
+        "# Role or permission group expected:",
+        "# Whether the user ever successfully logged in:",
+        "# Date/time the onboarding email was last issued:",
+        "# Screenshot the employee record or onboarding error."
+      ].join("\n"),
+      true
+    ),
+    lastVerified: CANNABIS_LAST_VERIFIED,
+    testedOn: ["Metrc New York onboarding guidance", "Metrc employee administration workflows"]
+  },
+  {
+    slug: "metrc-dispensary-receive-workflow-is-held-during-beginning-inventory",
+    title: "Metrc Dispensary Receive Workflow Must Stay on Hold During Beginning Inventory",
+    description:
+      "Use the correct hold-and-reconcile approach when New York dispensary inventory onboarding is not complete and incoming transfers should not be fully received into active inventory yet.",
+    category: "Cannabis Operations / Compliance",
+    productFamily: "Cannabis Tech",
+    product: "Metrc",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "15-25 min",
+    tags: ["metrc", "dispensary", "receive", "beginning inventory", "licensed incoming transfer", "new york"],
+    symptoms: [
+      "A dispensary has product physically inbound but beginning inventory work is still incomplete.",
+      "Staff are unsure whether to receive packages immediately or keep them in a holding state.",
+      "Operations wants to move faster than the reconciliation or onboarding process allows."
+    ],
+    causes: [
+      "Existing inventory has not been fully entered or reconciled in Metrc yet.",
+      "The dispensary is still working through its initial inventory conversion period.",
+      "The team is trying to merge onboarding and active receiving workflows too early."
+    ],
+    remediations: [
+      "Verify whether beginning inventory and package UID setup are complete before receiving new inbound product into active inventory.",
+      "Keep the transfer in the appropriate holding state until the dispensary is ready to receive it compliantly.",
+      "Coordinate receiving decisions with the inventory and compliance leads instead of forcing packages into inventory early.",
+      "Document physical custody, manifest details, and the reason for the hold so the trail stays defensible."
+    ],
+    escalationCriteria: [
+      "The dispensary cannot complete beginning inventory on time.",
+      "Incoming product is urgently needed but the system state is not ready for compliant receipt.",
+      "Physical inventory and transfer records do not align."
+    ],
+    commands: buildChecklistCommand(
+      "Capture holding-state details",
+      [
+        "# Dispensary license:",
+        "# Transfer ID:",
+        "# Beginning inventory complete? (yes/no)",
+        "# Physical product on-site? (yes/no)",
+        "# Current Metrc status of the inbound transfer:",
+        "# Compliance lead notified? (yes/no)"
+      ].join("\n"),
+      true
+    ),
+    lastVerified: CANNABIS_LAST_VERIFIED,
+    testedOn: ["New York OCM Metrc implementation plan", "Metrc dispensary receiving guidance"]
+  },
+  {
+    slug: "metrc-finished-goods-cannot-transfer-because-retail-item-ids-are-missing",
+    title: "Metrc Finished Goods Cannot Transfer Because Retail Item IDs Are Missing",
+    description:
+      "Resolve New York dispensary-transfer blocks when finished goods are missing Retail Item IDs and cannot move compliantly downstream.",
+    category: "Cannabis Operations / Compliance",
+    productFamily: "Cannabis Tech",
+    product: "Metrc",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "20-35 min",
+    tags: ["metrc", "retail item id", "finished goods", "transfer", "dispensary", "new york"],
+    symptoms: [
+      "A processor or distributor cannot send finished goods to a dispensary.",
+      "The receiving team says the units need Retail Item IDs before receipt or sale.",
+      "Teams are debating whether the issue should be fixed upstream or at the dispensary."
+    ],
+    causes: [
+      "Finished goods were packaged without assigning the required Retail Item IDs.",
+      "Legacy inventory was never transitioned into the current finished-goods expectation.",
+      "The team assumed a downstream operator would add IDs later in the process."
+    ],
+    remediations: [
+      "Confirm the package is a finished retail good and not an intermediate or internal-movement package.",
+      "Work with the upstream licensed party responsible for the inventory state to create or attach the correct Retail Item IDs before the transfer.",
+      "Pause downstream movement until the package data supports compliant receipt and sale.",
+      "If old stock is involved, document the business decision on relabeling, return, or controlled sell-through with compliance leadership."
+    ],
+    escalationCriteria: [
+      "Multiple active SKUs are blocked or a planned dispensary shipment cannot leave.",
+      "Inventory may need relabeling, return, or another formal compliance decision.",
+      "The sender and receiver disagree over which party owns the correction."
+    ],
+    commands: buildChecklistCommand(
+      "Capture finished-goods transfer details",
+      [
+        "# Sending license / receiving license:",
+        "# Package ID(s):",
+        "# Finished-good status:",
+        "# Retail Item ID present? (yes/no)",
+        "# Manifest or transfer number:",
+        "# Screenshot package detail and transfer error."
+      ].join("\n"),
+      true
+    ),
+    lastVerified: CANNABIS_LAST_VERIFIED,
+    testedOn: ["Metrc New York FAQ", "New York OCM dispensary guidance"]
+  },
+  {
+    slug: "metrc-package-cannot-transfer-to-dispensary-without-testpassed-status",
+    title: "Metrc Package Cannot Transfer to a Dispensary Without the Required Testing Status",
+    description:
+      "Troubleshoot New York package-transfer blocks when finished goods are not tied to the required TestPassed or RetestPassed state before dispensary movement.",
+    category: "Cannabis Operations / Compliance",
+    productFamily: "Cannabis Tech",
+    product: "Metrc",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "15-30 min",
+    tags: ["metrc", "testpassed", "retestpassed", "coa", "dispensary", "new york", "compliance"],
+    symptoms: [
+      "A package can move through earlier workflow steps but is blocked from dispensary transfer.",
+      "The operator cannot find the expected testing status on the final package.",
+      "The team has a COA or test result but the package still does not show the right disposition."
+    ],
+    causes: [
+      "The package was never tied to the correct final-form test result.",
+      "A virtual sample, retest, or corrected lab result was not connected to the package.",
+      "The tested source material and the finished package no longer line up in the state record."
+    ],
+    remediations: [
+      "Verify the exact package ID being transferred and compare it to the package referenced by the test result or COA.",
+      "Coordinate with the upstream operator or lab workflow owner to attach the correct result before initiating dispensary transfer.",
+      "Use the approved retest or corrected-result path rather than shipping inventory under the wrong status.",
+      "Hold the package until the final package state and test status align."
+    ],
+    escalationCriteria: [
+      "The package is scheduled for same-day dispensary movement and still lacks the required status.",
+      "The COA exists but is tied to the wrong package or source record.",
+      "Potential hold, recall, or formal compliance review is needed."
+    ],
+    commands: buildChecklistCommand(
+      "Capture testing-state details",
+      [
+        "# Package UID:",
+        "# Current package status:",
+        "# Expected testing status:",
+        "# Lab / COA reference number:",
+        "# Upstream source package or batch:",
+        "# Screenshot the package detail and testing panel."
+      ].join("\n"),
+      true
+    ),
+    lastVerified: CANNABIS_LAST_VERIFIED,
+    testedOn: ["Metrc New York testing requirements", "New York OCM dispensary guidance"]
+  },
+  {
+    slug: "wurk-new-hire-welcome-email-not-received",
+    title: "Wurk New Hire Welcome Email Was Not Received",
+    description:
+      "Restore Wurk onboarding when a cannabis retail or cultivation employee never receives the expected welcome email and cannot start HR or payroll setup.",
+    category: "Cannabis Operations / Compliance",
+    productFamily: "Cannabis Tech",
+    product: "Wurk",
+    environment: "Both",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    estimatedTime: "10-20 min",
+    tags: ["wurk", "new hire", "welcome email", "onboarding", "hr", "payroll"],
+    symptoms: [
+      "A new employee never receives the first Wurk onboarding email.",
+      "The manager believes the user record exists, but the employee cannot begin setup.",
+      "Scheduling or payroll preparation is waiting on the onboarding email."
+    ],
+    causes: [
+      "The account-created notification is disabled or misconfigured.",
+      "The wrong work or personal email was used on the employee profile.",
+      "The message landed in spam or was blocked by mail filtering."
+    ],
+    remediations: [
+      "Check the employee profile and confirm the correct email address is stored in the right field for the notification flow.",
+      "Review the Wurk notification settings and make sure the account-created email is active.",
+      "Resend the onboarding email from the employee record after correcting the contact information.",
+      "Ask the user to check junk and quarantine paths before creating a second employee profile."
+    ],
+    escalationCriteria: [
+      "Multiple new hires are affected.",
+      "Shift start, orientation, or payroll setup is blocked for the day.",
+      "Notification settings appear broken at the admin level."
+    ],
+    commands: buildChecklistCommand(
+      "Capture onboarding email details",
+      [
+        "# Employee name:",
+        "# Work email on profile:",
+        "# Personal email on profile:",
+        "# Account Created notification enabled? (yes/no)",
+        "# Date/time the email was last re-sent:",
+        "# Screenshot employee profile and notification state."
+      ].join("\n"),
+      true
+    ),
+    lastVerified: CANNABIS_LAST_VERIFIED,
+    testedOn: ["Wurk HR admin onboarding workflows"]
+  },
+  {
+    slug: "wurk-cannabis-badge-or-cost-center-missing-from-employee-profile",
+    title: "Wurk Cannabis Badge or Cost Center Is Missing from the Employee Profile",
+    description:
+      "Correct missing profile details in Wurk when cannabis operators cannot clock in, route labor correctly, or keep payroll aligned to the right department or location.",
+    category: "Cannabis Operations / Compliance",
+    productFamily: "Cannabis Tech",
+    product: "Wurk",
+    environment: "Both",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    estimatedTime: "15-25 min",
+    tags: ["wurk", "cannabis badge", "cost center", "profile", "clock in", "department"],
+    symptoms: [
+      "An employee’s badge or workforce profile data is missing when they try to clock in or review their profile.",
+      "Labor is being routed to the wrong department, location, or cost center.",
+      "The employee can view profile sections but cannot edit the fields needed to fix the issue."
+    ],
+    causes: [
+      "The admin or manager has not populated the required cannabis badge or employment profile fields.",
+      "The employee was transferred between locations or departments and the profile was not updated.",
+      "The user is viewing self-service pages that intentionally do not allow them to edit the controlled fields."
+    ],
+    remediations: [
+      "Review the employee’s profile under the appropriate Wurk admin or manager view instead of relying on self-service pages alone.",
+      "Update the badge, location, department, and cost-center data before the next shift or payroll close.",
+      "If badge-based clocks are used, re-check the linked clock workflow after the profile data is corrected.",
+      "Have managers confirm the employee is scheduled and mapped to the correct labor bucket before closing the incident."
+    ],
+    escalationCriteria: [
+      "Employees cannot clock in for active shifts.",
+      "Multiple staff members in the same facility show the same missing fields.",
+      "Payroll, scheduling, or labor reporting could be misstated if the issue continues."
+    ],
+    commands: buildChecklistCommand(
+      "Capture employee profile details",
+      [
+        "# Employee name / ID:",
+        "# Facility / location:",
+        "# Department / cost center expected:",
+        "# Cannabis badge present? (yes/no)",
+        "# Clock or schedule issue observed:",
+        "# Screenshot profile fields and any clock-in error."
+      ].join("\n"),
+      true
+    ),
+    lastVerified: CANNABIS_LAST_VERIFIED,
+    testedOn: ["Wurk employee profile workflows", "Wurk time and labor management references"]
+  },
+  {
+    slug: "wurk-timesheets-pending-approval-are-blocking-payroll-close",
+    title: "Wurk Timesheets Pending Approval Are Blocking Payroll Close",
+    description:
+      "Clear Wurk approval bottlenecks before payroll close when cannabis operations teams still have open timesheets, missed punches, or unresolved manager review tasks.",
+    category: "Cannabis Operations / Compliance",
+    productFamily: "Cannabis Tech",
+    product: "Wurk",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "15-30 min",
+    tags: ["wurk", "timesheets", "approval", "payroll", "timekeeping", "manager review"],
+    symptoms: [
+      "The payroll or HR team still sees pending timesheet approvals near cutoff.",
+      "Managers can submit time changes but cannot finish the approval path.",
+      "Employees report missing punches or time changes that are not reflected in finalized hours."
+    ],
+    causes: [
+      "Pending items in the approval queue were not reviewed before payroll prep.",
+      "The approver has limited rights or is working in the wrong queue view.",
+      "Time-off, missed punch, or cost-center exceptions are still unresolved."
+    ],
+    remediations: [
+      "Review all timesheets for the affected pay period and location instead of only looking at the default manager queue.",
+      "Work through pending approvals, missed punches, and change requests in the correct order before payroll export or close.",
+      "Confirm the approver has the required access level to approve rather than only submit changes.",
+      "Reconcile location or cost-center assignments if the timecard problem is tied to bad profile data."
+    ],
+    escalationCriteria: [
+      "Payroll cutoff is imminent and multiple stores or teams are still unapproved.",
+      "Approver permissions or admin configuration prevent the queue from clearing.",
+      "Timesheet discrepancies could affect compliance-sensitive labor reporting."
+    ],
+    commands: buildChecklistCommand(
+      "Capture timekeeping approval details",
+      [
+        "# Pay period:",
+        "# Location / department:",
+        "# Number of pending timesheets:",
+        "# Number of missed punches or change requests:",
+        "# Approver name / role:",
+        "# Screenshot the queue view and any approval error."
+      ].join("\n"),
+      true
+    ),
+    lastVerified: CANNABIS_LAST_VERIFIED,
+    testedOn: ["Wurk timesheet and approval workflows"]
+  },
+  {
+    slug: "ny-cannabis-inventory-reconciliation-variance-requires-same-day-review",
+    title: "New York Inventory Reconciliation Variance Requires Same-Day Review",
+    description:
+      "Handle package-count, unit-count, or inventory-state discrepancies before teams continue normal movement, sale, or transfer activity in a New York cannabis operation.",
+    category: "Cannabis Operations / Compliance",
+    productFamily: "Cannabis Tech",
+    product: "Inventory Reconciliation",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "20-35 min",
+    tags: ["inventory reconciliation", "variance", "discrepancy", "new york", "compliance", "metrc", "canix"],
+    symptoms: [
+      "Physical inventory does not match package counts in Canix or Metrc.",
+      "A package appears consumed, transferred, or sold in one record set but not another.",
+      "End-of-day review shows a discrepancy the team cannot explain confidently."
+    ],
+    causes: [
+      "A transaction was completed in one system but not reconciled in the matching operational record.",
+      "Package edits, adjustments, or receives were posted under the wrong package or timing window.",
+      "Staff continued activity after the first discrepancy instead of isolating it immediately."
+    ],
+    remediations: [
+      "Pause additional movement, relabeling, transfer, or sale activity on the affected packages until the discrepancy is understood.",
+      "Reconcile package IDs, counts, timestamps, and last-user actions across physical inventory, Canix, Metrc, and any supporting manifest records.",
+      "Document the first confirmed point where the records diverged before making corrective entries.",
+      "Use one named owner for the discrepancy review so multiple teams do not make overlapping corrections."
+    ],
+    escalationCriteria: [
+      "The variance cannot be explained on the same day or affects multiple packages.",
+      "The discrepancy may require incident reporting, formal adjustment, or compliance review.",
+      "The affected inventory has already moved downstream or reached a retail context."
+    ],
+    commands: buildChecklistCommand(
+      "Capture reconciliation evidence",
+      [
+        "# Package UID(s):",
+        "# Physical count / unit count observed:",
+        "# Canix count / state:",
+        "# Metrc count / state:",
+        "# Last known correct timestamp:",
+        "# User(s) involved in the last successful transaction:",
+        "# Supporting manifest or sales reference, if any:"
+      ].join("\n"),
+      true
+    ),
+    lastVerified: CANNABIS_LAST_VERIFIED,
+    testedOn: ["New York OCM operational guidance", "Canix package workflows", "Metrc New York workflows"]
+  },
+  {
+    slug: "ny-cannabis-package-hold-or-release-needs-compliance-signoff",
+    title: "Package Hold or Release Decision Needs Compliance Signoff",
+    description:
+      "Use a controlled hold-and-release path when package state, testing state, transfer readiness, or reconciliation results are unclear in a New York cannabis workflow.",
+    category: "Cannabis Operations / Compliance",
+    productFamily: "Cannabis Tech",
+    product: "Inventory Hold / Release",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "15-30 min",
+    tags: ["hold", "release", "compliance review", "new york", "package state", "quarantine"],
+    symptoms: [
+      "Operations wants to keep product moving even though package state or testing state is unclear.",
+      "The team is debating whether a package can be released after a discrepancy, mismatch, or pending review.",
+      "No one is sure who has authority to release held inventory back into normal operations."
+    ],
+    causes: [
+      "The facility has no clear signoff path for package holds tied to compliance-sensitive issues.",
+      "Inventory review is being mixed with production pressure or same-day shipment pressure.",
+      "Package status, COA/test status, or manifest state still contains unresolved questions."
+    ],
+    remediations: [
+      "Keep the package on operational hold until inventory, testing, transfer, and attribution questions are answered clearly.",
+      "Record who placed the hold, why it was placed, and which package IDs are affected.",
+      "Require one compliance or operations approver to sign off before the package is returned to sale, transfer, or production use.",
+      "Review whether any downstream team already received, staged, or advertised the product while the issue was open."
+    ],
+    escalationCriteria: [
+      "A hold affects active dispensary, delivery, or transfer commitments.",
+      "There is disagreement between operations and compliance over release timing.",
+      "The underlying issue points to a broader traceability or testing-control failure."
+    ],
+    commands: buildChecklistCommand(
+      "Capture hold / release decision context",
+      [
+        "# Package UID(s):",
+        "# Reason for hold:",
+        "# Current system status in Canix / Metrc:",
+        "# Who requested release:",
+        "# Compliance approver assigned:",
+        "# Downstream impact (sale, transfer, delivery, or production):"
+      ].join("\n"),
+      true
+    ),
+    lastVerified: CANNABIS_LAST_VERIFIED,
+    testedOn: ["New York OCM compliance reminders", "Metrc and Canix package-state workflows"]
+  },
+  {
+    slug: "canix-lab-result-or-coa-is-not-linked-to-the-final-package",
+    title: "Canix Lab Result or COA Is Not Linked to the Final Package",
+    description:
+      "Resolve package-level test-result mismatches before operators move product that appears to have testing complete in documents but not in the actual inventory record.",
+    category: "Cannabis Operations / Compliance",
+    productFamily: "Cannabis Tech",
+    product: "Canix",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "15-30 min",
+    tags: ["canix", "lab result", "coa", "testing", "package mismatch", "new york", "metrc"],
+    symptoms: [
+      "A COA exists, but the final package still does not show the expected testing relationship in the operational workflow.",
+      "Users are unsure whether the lab result belongs to the bulk source, an intermediate package, or the final retail package.",
+      "A package is blocked from transfer or release because the testing state does not match expectations."
+    ],
+    causes: [
+      "The lab result or COA is tied to a different package, batch, or stage of the workflow than the package being moved.",
+      "The finished-good package was created after testing, but the final package relationship was never reviewed carefully.",
+      "Teams are relying on a document attachment without validating the package-level state in the live system."
+    ],
+    remediations: [
+      "Match the final package ID to the exact source package, batch, or lot referenced by the test result before taking any release action.",
+      "Review whether the package should be corrected upstream rather than manually overridden downstream.",
+      "Keep the package held until the final package state and testing evidence clearly align.",
+      "Record the exact COA or lab reference number used in the review so the decision trail is defensible."
+    ],
+    escalationCriteria: [
+      "Product is staged for transfer, delivery, or sale without a clean package-to-test linkage.",
+      "The facility may need a formal compliance review before release.",
+      "The mismatch affects multiple SKUs or a recurring production workflow."
+    ],
+    commands: buildChecklistCommand(
+      "Capture testing-linkage evidence",
+      [
+        "# Final package UID:",
+        "# Source package / lot / batch:",
+        "# COA or lab reference number:",
+        "# Current test status shown in system:",
+        "# Intended downstream action (sell, transfer, deliver, release):",
+        "# Screenshot package detail and testing or attachments panel."
+      ].join("\n"),
+      true
+    ),
+    lastVerified: CANNABIS_LAST_VERIFIED,
+    testedOn: ["Canix New York workflows", "Metrc testing-state expectations", "New York OCM dispensary guidance"]
+  },
+  {
+    slug: "ny-cannabis-delivery-manifest-exception-or-transport-incident",
+    title: "New York Delivery Manifest Exception or Transport Incident",
+    description:
+      "Respond safely when a New York delivery or transport workflow goes off-script because a manifest does not match the load, the route is interrupted, or a delivery exception occurs in transit.",
+    category: "Cannabis Operations / Compliance",
+    productFamily: "Cannabis Tech",
+    product: "Delivery Manifest / Transport",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "15-30 min",
+    tags: ["delivery", "manifest", "transport", "incident", "new york", "chain of custody"],
+    symptoms: [
+      "The physical load or stop sequence does not match the recorded manifest.",
+      "A driver, dispatcher, or receiver reports an exception during transport or delivery.",
+      "The team needs to decide whether to continue, hold, return, or formally report the incident."
+    ],
+    causes: [
+      "The wrong package, quantity, or destination was loaded against the manifest.",
+      "A route change, failed delivery, vehicle issue, or custody problem occurred mid-transport.",
+      "The manifest was completed, but the actual shipment state changed before or during movement."
+    ],
+    remediations: [
+      "Pause the delivery workflow and preserve chain-of-custody evidence as soon as the exception is confirmed.",
+      "Compare the physical load, manifest, transfer record, and receiving expectation before deciding whether the shipment can continue.",
+      "Document the incident time, location, involved personnel, and packages before any return or reroute action is taken.",
+      "Use the facility’s compliance and transport escalation path instead of improvising a same-day workaround."
+    ],
+    escalationCriteria: [
+      "The manifest mismatch affects custody, destination, or package integrity.",
+      "A vehicle issue, failed delivery, or route interruption could trigger formal reporting requirements.",
+      "The incident could affect more than one package, stop, or licensed party."
+    ],
+    commands: buildChecklistCommand(
+      "Capture manifest exception details",
+      [
+        "# Manifest / transfer ID:",
+        "# Vehicle / driver / dispatcher:",
+        "# Time and location of the incident:",
+        "# Package IDs affected:",
+        "# Destination / receiving party:",
+        "# Physical discrepancy or transport issue observed:",
+        "# Whether product remains secured and accounted for:"
+      ].join("\n"),
+      true
+    ),
+    lastVerified: CANNABIS_LAST_VERIFIED,
+    testedOn: ["New York OCM dispensary guidance", "New York OCM compliance reminders", "Metrc transfer workflows"]
+  },
+  {
+    slug: "canix-audit-trail-does-not-clearly-show-who-made-the-inventory-change",
+    title: "Canix Audit Trail Does Not Clearly Show Who Made the Inventory Change",
+    description:
+      "Investigate package-history and attribution gaps before teams make corrective changes without a defensible audit trail in New York cannabis operations.",
+    category: "Cannabis Operations / Compliance",
+    productFamily: "Cannabis Tech",
+    product: "Canix",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "15-30 min",
+    tags: ["canix", "audit trail", "activity history", "attribution", "new york", "inventory", "compliance"],
+    symptoms: [
+      "The package history shows a change, but the team cannot clearly identify who submitted it.",
+      "A discrepancy review depends on user attribution and Canix or Metrc history is incomplete or confusing.",
+      "Operations wants to correct inventory before audit evidence is preserved."
+    ],
+    causes: [
+      "The workflow was posted under the wrong integration user, shared account, or stale employee mapping.",
+      "The team is comparing screenshots or side notes instead of the live package history and timestamps.",
+      "Multiple people touched the same package in a short window and no one captured the first divergence."
+    ],
+    remediations: [
+      "Freeze corrective changes long enough to capture package history, timestamps, transfer references, and the expected operator path.",
+      "Compare Canix activity, related Metrc history, and any manifest or receiving records using exact package IDs and times.",
+      "Document the first confirmed bad or unclear action before anyone edits counts, states, or package relationships again.",
+      "Route shared-account or wrong-user findings through the facility admin so attribution is corrected before normal activity resumes."
+    ],
+    escalationCriteria: [
+      "The affected package already moved, sold, or transferred downstream.",
+      "The audit trail suggests shared credentials, wrong API ownership, or broader access-control failure.",
+      "Compliance or leadership needs a formal record of who reviewed and approved the correction."
+    ],
+    commands: buildChecklistCommand(
+      "Capture audit-trail evidence",
+      [
+        "# Package UID:",
+        "# Exact inventory change under review:",
+        "# Last known correct timestamp:",
+        "# User shown in Canix:",
+        "# User shown in Metrc, if different:",
+        "# Related manifest / receive / transfer reference:",
+        "# Screenshot the full package history before any correction is made."
+      ].join("\n"),
+      true
+    ),
+    lastVerified: CANNABIS_LAST_VERIFIED,
+    testedOn: ["Canix package history workflows", "Metrc user attribution review"]
+  },
+  {
+    slug: "ny-cannabis-recall-or-market-withdrawal-requires-package-isolation",
+    title: "New York Recall or Market Withdrawal Requires Package Isolation",
+    description:
+      "Use a stop-and-isolate workflow when an affected product, lot, or package may need recall, market withdrawal, or immediate internal hold in a New York cannabis operation.",
+    category: "Cannabis Operations / Compliance",
+    productFamily: "Cannabis Tech",
+    product: "Recall / Market Withdrawal",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "20-40 min",
+    tags: ["recall", "market withdrawal", "package isolation", "new york", "hold", "traceability", "compliance"],
+    symptoms: [
+      "A package, lot, or finished good may be affected by a recall, quality issue, or market-withdrawal decision.",
+      "Operations is unsure whether product should remain available while the review continues.",
+      "The team needs to identify where affected inventory currently sits across storage, transfer, or retail staging."
+    ],
+    causes: [
+      "An upstream quality, testing, labeling, or safety issue triggered a hold or recall review.",
+      "The same source material or finished goods exist in multiple packages and locations.",
+      "Teams are treating the event like a normal inventory adjustment instead of a traceability-sensitive incident."
+    ],
+    remediations: [
+      "Immediately isolate the affected package IDs, lots, and downstream finished goods from sale, transfer, or further processing.",
+      "Capture where the affected inventory exists physically and digitally before making any non-reversible adjustments.",
+      "Align the product list across Canix, Metrc, manifests, and any retail staging or fulfillment records.",
+      "Use one incident owner to coordinate the package list, internal communications, and vendor or compliance follow-up."
+    ],
+    escalationCriteria: [
+      "The affected product has already moved to another facility, delivery workflow, or retail context.",
+      "The scope of the affected inventory is not immediately clear.",
+      "Formal compliance, legal, or vendor-led recall handling is required."
+    ],
+    commands: buildChecklistCommand(
+      "Capture recall / withdrawal scope",
+      [
+        "# Affected package UID(s) / lot(s):",
+        "# Trigger for the hold or recall review:",
+        "# Physical locations where product is present:",
+        "# Canix / Metrc status of each affected package:",
+        "# Downstream transfers, sales staging, or delivery commitments:",
+        "# Assigned incident owner and compliance lead:"
+      ].join("\n"),
+      true
+    ),
+    lastVerified: CANNABIS_LAST_VERIFIED,
+    testedOn: ["New York OCM compliance reminders", "Metrc traceability workflows", "facility hold procedures"]
+  },
+  {
+    slug: "ny-cannabis-destruction-workflow-cannot-proceed-until-package-state-is-reconciled",
+    title: "New York Destruction Workflow Cannot Proceed Until Package State Is Reconciled",
+    description:
+      "Stabilize destruction or waste workflows before product is destroyed under the wrong package state, quantity, or hold condition in New York cannabis operations.",
+    category: "Cannabis Operations / Compliance",
+    productFamily: "Cannabis Tech",
+    product: "Destruction / Waste",
+    environment: "Both",
+    severity: "High",
+    accessLevel: "Admin Required",
+    estimatedTime: "20-35 min",
+    tags: ["destruction", "waste", "package state", "reconciliation", "new york", "metrc", "canix"],
+    symptoms: [
+      "The team wants to destroy or waste product, but the package status, quantity, or hold condition is still unclear.",
+      "Physical product set aside for destruction does not line up cleanly with the digital package record.",
+      "Operators are unsure whether the item should be destroyed, returned, held, or corrected first."
+    ],
+    causes: [
+      "The package is still tied to an unresolved discrepancy, hold, or transfer condition.",
+      "The quantity staged for destruction does not match the last confirmed system count.",
+      "The workflow is being rushed to clear space or close an incident before traceability is fully documented."
+    ],
+    remediations: [
+      "Pause the destruction workflow until the package count, state, and ownership path are reconciled across physical and system records.",
+      "Confirm whether the product is on hold, tied to a recall review, or still part of an open transfer or variance investigation.",
+      "Document the pre-destruction count, reason code, package lineage, and approving owner before resuming the workflow.",
+      "Resume destruction only after the package record clearly supports the intended final action."
+    ],
+    escalationCriteria: [
+      "A held or potentially recalled product is mixed into the destruction batch.",
+      "The destruction quantity does not match the reconciled system quantity.",
+      "Compliance or operations leadership must approve final disposition."
+    ],
+    commands: buildChecklistCommand(
+      "Capture destruction workflow context",
+      [
+        "# Package UID(s):",
+        "# Reason for destruction / waste:",
+        "# Physical quantity staged:",
+        "# Last confirmed Canix / Metrc quantity:",
+        "# Hold / recall / transfer status:",
+        "# Approver assigned for final disposition:"
+      ].join("\n"),
+      true
+    ),
+    lastVerified: CANNABIS_LAST_VERIFIED,
+    testedOn: ["Canix package review workflows", "Metrc traceability controls", "facility destruction review processes"]
+  },
+  {
+    slug: "wurk-shift-close-attestation-or-manager-review-is-incomplete",
+    title: "Wurk Shift-Close Attestation or Manager Review Is Incomplete",
+    description:
+      "Resolve end-of-shift Wurk gaps before labor records, punch corrections, and manager signoff drift into the next day and create payroll or compliance risk.",
+    category: "Cannabis Operations / Compliance",
+    productFamily: "Cannabis Tech",
+    product: "Wurk",
+    environment: "Both",
+    severity: "Medium",
+    accessLevel: "Admin Required",
+    estimatedTime: "10-25 min",
+    tags: ["wurk", "shift close", "manager review", "attestation", "timekeeping", "payroll", "compliance"],
+    symptoms: [
+      "The store or department cannot complete a clean end-of-shift review in Wurk.",
+      "Missed punches, schedule exceptions, or labor-bucket mismatches are rolling into the next day.",
+      "The manager believes the shift is closed, but approvals or attestations remain incomplete."
+    ],
+    causes: [
+      "The closing manager reviewed hours informally but did not complete the final Wurk queue steps.",
+      "Employee profile, badge, or location mapping issues left time entries unresolved.",
+      "Shift-close responsibilities are split across managers and no one owns the final attestation step."
+    ],
+    remediations: [
+      "Review the shift-close queue before the day rolls over and clear missed punches, time edits, and department mismatches in one pass.",
+      "Confirm the manager completing close has the right queue view and approval scope rather than only edit permissions.",
+      "Document any unresolved issue that must intentionally carry forward instead of leaving it as silent backlog.",
+      "Use a consistent closeout owner for each location so payroll and labor exceptions have a named reviewer."
+    ],
+    escalationCriteria: [
+      "Repeated shift-close gaps are affecting payroll readiness or labor reporting.",
+      "Managers cannot see or complete the required review step because of permission or configuration issues.",
+      "Multiple locations show the same closeout failure pattern."
+    ],
+    commands: buildChecklistCommand(
+      "Capture shift-close details",
+      [
+        "# Location / department:",
+        "# Shift date:",
+        "# Closing manager:",
+        "# Number of unresolved punches or edits:",
+        "# Final queue step still open:",
+        "# Screenshot the Wurk review state and any blocking message:"
+      ].join("\n"),
+      true
+    ),
+    lastVerified: CANNABIS_LAST_VERIFIED,
+    testedOn: ["Wurk timekeeping approval workflows", "manager closeout review procedures"]
+  }
+];
+
 const kbArticles = linkRelatedArticles(
-  [...microsoftSeeds, ...adobeSeeds, ...figmaSeeds, ...generalSeeds].map(buildArticle)
+  [...microsoftSeeds, ...adobeSeeds, ...figmaSeeds, ...generalSeeds, ...cannabisSeeds].map(buildArticle)
 );
 
 export function getKBArticles(): KBArticle[] {

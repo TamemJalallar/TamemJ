@@ -15,6 +15,7 @@ export type KBCategory =
   | "Android"
   | "Networking / VPN"
   | "Identity / MFA / SSO"
+  | "Cannabis Operations / Compliance"
   | "Business / Partnerships"
   | "Adobe"
   | "Figma"
@@ -34,6 +35,7 @@ export type KBProductFamily =
   | "AV"
   | "Okta"
   | "Mobile"
+  | "Cannabis Tech"
   | "Partnerships";
 
 export type SupportStepType = "info" | "command" | "warning";

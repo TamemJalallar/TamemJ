@@ -125,14 +125,14 @@ export function KnowledgeBaseBrowser({ articles, initialQuery = "" }: KnowledgeB
     <div>
       <SupportPageHeader
         title="IT Troubleshooting Tickets"
-        description="Search enterprise-safe troubleshooting runbooks for Microsoft 365, Intune, Entra ID, Adobe, Figma, Windows, macOS, networking, browsers, printing, and affiliate operations."
+        description="Search enterprise-safe troubleshooting runbooks for Microsoft 365, Intune, Entra ID, Adobe, Figma, Windows, macOS, networking, browsers, printing, and New York cannabis operations workflows in Canix, Metrc, and Wurk."
         breadcrumbs={[{ label: "Support Portal", href: "/support" }, { label: "Tickets" }]}
         search={
           <TopSearchBar
             value={query}
             onChange={setQuery}
             onSubmit={handleSearchSubmit}
-            placeholder="Search issues (e.g., Outlook search, Teams mic, Adobe sign-in, affiliate tracking)"
+            placeholder="Search issues (e.g., Outlook search, Teams mic, Metrc transfer, Wurk login)"
             buttonLabel="Search Tickets"
           />
         }

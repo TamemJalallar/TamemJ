@@ -88,6 +88,7 @@ export interface DownloadAsset {
   monetization: string;
   searchDemand: DownloadAssetSearchDemand;
   priceLabel?: string;
+  updatedAt?: string;
   tags: string[];
 }
 
@@ -99,4 +100,5 @@ export interface DownloadAssetBundle {
   access: DownloadAssetAccess;
   monetization: string;
   priceLabel?: string;
+  updatedAt?: string;
 }

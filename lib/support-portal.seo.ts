@@ -27,7 +27,9 @@ const supportPortalBaseKeywords = [
   "IT support portal",
   "ServiceNow style portal",
   "corporate IT documentation",
-  "help desk runbooks"
+  "help desk runbooks",
+  "regulated operations support",
+  "cannabis compliance troubleshooting"
 ];
 
 function uniqueKeywords(keywords: string[]): string[] {
@@ -134,8 +136,8 @@ export function buildSupportKbIndexMetadataWithArticles(articles: KBArticle[]): 
   const title = "Tickets";
   const description =
     articleCount > 0
-      ? `Browse ${articleCount} enterprise-safe troubleshooting guides for Microsoft 365, Adobe, Figma, Okta, Windows, macOS, iOS, Android, networking, browsers, printers, and support operations.`
-      : "Enterprise-safe troubleshooting guides for Microsoft 365, Adobe, Figma, Okta, Windows, macOS, iOS, Android, networking, browsers, printers, and support operations.";
+      ? `Browse ${articleCount} enterprise-safe troubleshooting guides for Microsoft 365, Adobe, Figma, Okta, Windows, macOS, iOS, Android, networking, browsers, printers, and New York cannabis operations workflows across Canix, Metrc, and Wurk.`
+      : "Enterprise-safe troubleshooting guides for Microsoft 365, Adobe, Figma, Okta, Windows, macOS, iOS, Android, networking, browsers, printers, and New York cannabis operations workflows across Canix, Metrc, and Wurk.";
 
   return {
     title,
@@ -147,6 +149,10 @@ export function buildSupportKbIndexMetadataWithArticles(articles: KBArticle[]): 
       "Adobe troubleshooting",
       "Figma troubleshooting",
       "Okta troubleshooting",
+      "Canix troubleshooting",
+      "Metrc troubleshooting",
+      "Wurk troubleshooting",
+      "New York cannabis compliance support",
       "mobile device support",
       "Windows support",
       "macOS support",

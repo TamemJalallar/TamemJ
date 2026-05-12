@@ -56,7 +56,7 @@ export default function KBPage() {
               <p className="eyebrow">Issue-First</p>
               <h2 className="mt-3 font-display text-xl font-semibold text-fg">Built for exact troubleshooting moments</h2>
               <p className="mt-3 text-sm leading-7 text-fg-secondary">
-                Ticket pages are written around the actual issue someone is trying to resolve, not a broad product marketing summary.
+                Ticket pages are written around the actual issue someone is trying to resolve, whether that is a Microsoft 365 outage or a regulated Canix, Metrc, or Wurk workflow problem.
               </p>
             </article>
 
@@ -64,7 +64,7 @@ export default function KBPage() {
               <p className="eyebrow">Enterprise-Safe</p>
               <h2 className="mt-3 font-display text-xl font-semibold text-fg">Escalation is part of the fix</h2>
               <p className="mt-3 text-sm leading-7 text-fg-secondary">
-                Each page separates user-safe steps from admin-required actions and makes security or service desk escalation explicit.
+                Each page separates user-safe steps from admin-required actions and makes security, service desk, or compliance escalation explicit.
               </p>
             </article>
 

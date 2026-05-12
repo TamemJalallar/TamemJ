@@ -14,6 +14,7 @@ import { getPCBuildGuides } from "@/lib/pc-build-guides.registry";
 import { getPillarContentIdeas } from "@/lib/seo-content.registry";
 import { siteConfig } from "@/lib/site";
 import { getKBArticles } from "@/lib/support.kb.registry";
+import { getQuickStartGuides } from "@/src/content/editorial/quick-start-guides";
 
 export const dynamic = "force-static";
 
@@ -159,6 +160,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: generatedAt
   }));
 
+  const quickStartGuideEntries: MetadataRoute.Sitemap = getQuickStartGuides().map((guide) => ({
+    url: url(`/guides/quick-start/${guide.slug}/`),
+    changeFrequency: "weekly",
+    priority: 0.84,
+    lastModified: parseDateInput(guide.lastReviewed) ?? generatedAt
+  }));
+
   return [
     ...staticEntries,
     ...appEntries,
@@ -170,6 +178,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...downloadEntries,
     ...downloadAssetEntries,
     ...guideEntries,
+    ...quickStartGuideEntries,
     ...corporateFixEntries,
     ...pcBuildGuideEntries,
     ...kbEntries

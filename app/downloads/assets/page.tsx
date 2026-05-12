@@ -5,7 +5,10 @@ import { DownloadAssetsBrowser } from "@/components/downloads/download-assets-br
 import { AdSenseSlot } from "@/components/monetization/adsense-slot";
 import { SupportSiteCard } from "@/components/monetization/support-site-card";
 import {
+  getDownloadAssetBundleBySlug,
+  getDownloadAssetBundleDownloadUrl,
   getDownloadAssetBundles,
+  getDownloadAssetsForBundle,
   getDownloadAssets,
   getDownloadAssetStats
 } from "@/lib/download-assets.registry";
@@ -68,6 +71,10 @@ export default function DownloadAssetsPage() {
   const assets = getDownloadAssets();
   const bundles = getDownloadAssetBundles();
   const stats = getDownloadAssetStats();
+  const featuredCannabisBundle = getDownloadAssetBundleBySlug("ny-cannabis-reconciliation-closeout-pack");
+  const featuredCannabisAssets = featuredCannabisBundle
+    ? getDownloadAssetsForBundle(featuredCannabisBundle.slug)
+    : [];
   const partnerLinks = getMonetizationRecommendations("download-assets");
   const displayAdSlot = getAdSenseSlot("display");
   const categories = [...new Set(assets.map((asset) => asset.category))].sort((a, b) => a.localeCompare(b));
@@ -228,6 +235,45 @@ export default function DownloadAssetsPage() {
                 Software Downloads
               </Link>
             </div>
+            {featuredCannabisBundle ? (
+              <article className="mt-5 rounded-3xl border border-primary-200/70 bg-primary-50/70 p-5 dark:border-primary-500/25 dark:bg-primary-950/20">
+                <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+                  <div className="max-w-3xl">
+                    <p className="eyebrow">Cannabis Operations Spotlight</p>
+                    <h3 className="mt-3 font-display text-xl font-semibold text-fg">
+                      {featuredCannabisBundle.title}
+                    </h3>
+                    <p className="mt-3 text-sm leading-7 text-fg-secondary">
+                      {featuredCannabisBundle.description}
+                    </p>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {featuredCannabisAssets.map((asset) => (
+                        <Link
+                          key={asset.slug}
+                          href={`/downloads/assets/${asset.slug}/`}
+                          className="filter-chip rounded-xl px-3 py-1.5 text-xs"
+                        >
+                          {asset.title}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="flex shrink-0 flex-wrap gap-3">
+                    <a
+                      href={getDownloadAssetBundleDownloadUrl(featuredCannabisBundle)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="btn-primary"
+                    >
+                      Download ZIP
+                    </a>
+                    <Link href="/support/" className="btn-secondary">
+                      Cannabis Support
+                    </Link>
+                  </div>
+                </div>
+              </article>
+            ) : null}
             <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
               {bundles.map((bundle) => (
                 <a key={bundle.slug} href={`#${bundle.slug}`} className="surface-card-interactive rounded-2xl p-4">

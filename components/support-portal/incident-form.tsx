@@ -64,6 +64,18 @@ const incidentTaxonomy = {
       "Figma SSO"
     ]
   },
+  "Cannabis Operations / Compliance": {
+    subcategories: [
+      "Canix",
+      "Metrc",
+      "Wurk",
+      "Inventory Reconciliation",
+      "Transfer Manifest",
+      "Finished Goods / Retail Item IDs",
+      "Testing Status / COA",
+      "Payroll / Timekeeping"
+    ]
+  },
   Networking: {
     subcategories: [
       "Corporate VPN",

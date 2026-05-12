@@ -13,6 +13,7 @@ interface DownloadAssetSeed {
   monetization: string;
   searchDemand: DownloadAsset["searchDemand"];
   priceLabel?: string;
+  updatedAt?: string;
   tags: string[];
 }
 
@@ -351,6 +352,97 @@ const assetsRegistry: DownloadAsset[] = [
     monetization: "AdSense on page",
     searchDemand: "High",
     tags: ["entra-id", "mfa", "reporting", "powershell", "identity-security"]
+  }),
+  createAsset({
+    slug: "canix-audit-trail-variance-sop",
+    title: "Canix Audit Trail and Variance Review SOP",
+    description:
+      "Runbook for reviewing Canix audit history, tracing package edits, and documenting same-day inventory variance investigations in New York cannabis operations.",
+    format: "docx",
+    category: "Runbooks",
+    access: "Free",
+    monetization: "Direct download",
+    searchDemand: "Medium",
+    updatedAt: "2026-05-11",
+    tags: ["canix", "audit trail", "variance", "inventory reconciliation", "new york", "compliance", "sop"]
+  }),
+  createAsset({
+    slug: "metrc-recall-destruction-checklist",
+    title: "Metrc Recall and Destruction Workflow Checklist",
+    description:
+      "Checklist for isolating affected packages, preserving traceability, and confirming recall or destruction prerequisites before product moves again in New York workflows.",
+    format: "pdf",
+    category: "Checklists",
+    access: "Free",
+    monetization: "Direct download",
+    searchDemand: "Medium",
+    updatedAt: "2026-05-11",
+    tags: ["metrc", "recall", "destruction", "hold", "package isolation", "new york", "checklist"]
+  }),
+  createAsset({
+    slug: "wurk-shift-close-compliance-checklist",
+    title: "Wurk Shift-Close Compliance Checklist",
+    description:
+      "Manager-facing closeout checklist for time approvals, missed punches, labor mapping, and payroll-readiness checks in cannabis retail and operations teams.",
+    format: "pdf",
+    category: "Checklists",
+    access: "Free",
+    monetization: "Direct download",
+    searchDemand: "Medium",
+    updatedAt: "2026-05-11",
+    tags: ["wurk", "shift close", "timekeeping", "payroll", "manager review", "cannabis operations", "checklist"]
+  }),
+  createAsset({
+    slug: "ny-cannabis-manifest-exception-sop",
+    title: "NY Cannabis Manifest Exception SOP",
+    description:
+      "Operational SOP for delivery manifest exceptions, chain-of-custody disruptions, and transport incident escalation in New York cannabis workflows.",
+    format: "docx",
+    category: "Runbooks",
+    access: "Free",
+    monetization: "Direct download",
+    searchDemand: "Medium",
+    updatedAt: "2026-05-11",
+    tags: ["manifest exception", "delivery incident", "transport", "new york", "chain of custody", "cannabis", "sop"]
+  }),
+  createAsset({
+    slug: "ny-cannabis-reconciliation-variance-log",
+    title: "NY Cannabis Reconciliation and Variance Log",
+    description:
+      "Editable daily log for package mismatches, variance investigations, same-day disposition, and compliance signoff across New York cannabis operations.",
+    format: "docx",
+    category: "Templates",
+    access: "Free",
+    monetization: "Direct download",
+    searchDemand: "Medium",
+    updatedAt: "2026-05-11",
+    tags: ["reconciliation", "variance", "inventory log", "new york", "compliance", "cannabis operations", "template"]
+  }),
+  createAsset({
+    slug: "ny-cannabis-compliance-incident-log",
+    title: "NY Cannabis Compliance Incident Log",
+    description:
+      "Structured incident log for manifest exceptions, package holds, recall events, destruction blockers, and other traceability-impacting events in New York cannabis facilities.",
+    format: "docx",
+    category: "Templates",
+    access: "Free",
+    monetization: "Direct download",
+    searchDemand: "Medium",
+    updatedAt: "2026-05-11",
+    tags: ["incident log", "manifest exception", "recall", "hold", "traceability", "new york", "template"]
+  }),
+  createAsset({
+    slug: "wurk-manager-closeout-record",
+    title: "Wurk Manager Closeout Record",
+    description:
+      "Manager-facing end-of-shift record for approvals, missed punches, carried exceptions, labor mapping issues, and payroll-risk notes in cannabis retail operations.",
+    format: "docx",
+    category: "Templates",
+    access: "Free",
+    monetization: "Direct download",
+    searchDemand: "Medium",
+    updatedAt: "2026-05-11",
+    tags: ["wurk", "manager closeout", "shift record", "timekeeping", "payroll", "cannabis retail", "template"]
   })
 ];
 
@@ -421,6 +513,37 @@ const bundleRegistry: DownloadAssetBundle[] = [
     access: "Premium",
     monetization: "Direct revenue",
     priceLabel: "$29"
+  },
+  {
+    slug: "ny-cannabis-operations-sop-pack",
+    title: "NY Cannabis Operations SOP Pack",
+    description:
+      "Canix, Metrc, and Wurk operations pack for audit-trail review, manifest exceptions, recall or destruction handling, and shift-close compliance.",
+    itemSlugs: [
+      "canix-audit-trail-variance-sop",
+      "metrc-recall-destruction-checklist",
+      "wurk-shift-close-compliance-checklist",
+      "ny-cannabis-manifest-exception-sop"
+    ],
+    access: "Free",
+    monetization: "Direct download",
+    updatedAt: "2026-05-11"
+  },
+  {
+    slug: "ny-cannabis-reconciliation-closeout-pack",
+    title: "NY Cannabis Reconciliation & Closeout Pack",
+    description:
+      "Operations-heavy pack for reconciliation tracking, incident logging, manager shift closeout, and the supporting SOPs teams need when New York cannabis workflows go off-script.",
+    itemSlugs: [
+      "canix-audit-trail-variance-sop",
+      "ny-cannabis-reconciliation-variance-log",
+      "ny-cannabis-compliance-incident-log",
+      "wurk-manager-closeout-record",
+      "wurk-shift-close-compliance-checklist"
+    ],
+    access: "Free",
+    monetization: "Direct download",
+    updatedAt: "2026-05-11"
   }
 ];
 
@@ -489,8 +612,8 @@ export function getDownloadAssetDownloadUrl(asset: DownloadAsset): string {
   return `${DOWNLOAD_ASSET_BASE_URL}/${getDownloadAssetFileName(asset)}`;
 }
 
-export function getDownloadAssetUpdatedAt(_asset: DownloadAsset): string {
-  return DEFAULT_DOWNLOAD_ASSET_UPDATED_AT;
+export function getDownloadAssetUpdatedAt(asset: DownloadAsset): string {
+  return asset.updatedAt ?? DEFAULT_DOWNLOAD_ASSET_UPDATED_AT;
 }
 
 export function getDownloadAssetBundleFileName(bundle: DownloadAssetBundle): string {
