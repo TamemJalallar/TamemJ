@@ -1,0 +1,23 @@
+name = "tamemj-fantasy-yahoo"
+main = "src/index.ts"
+compatibility_date = "2026-05-13"
+workers_dev = false
+
+routes = [
+  { pattern = "tamemj.com/api/fantasy*", zone_name = "tamemj.com" },
+  { pattern = "www.tamemj.com/api/fantasy*", zone_name = "tamemj.com" }
+]
+
+[vars]
+YAHOO_GAME_KEY = "nfl"
+YAHOO_LEAGUE_KEY = "YOUR_YAHOO_LEAGUE_KEY"
+YAHOO_REDIRECT_URI = "https://tamemj.com/api/fantasy/oauth/callback"
+CACHE_TTL_SECONDS = "300"
+
+[[kv_namespaces]]
+binding = "FANTASY_CACHE"
+id = "YOUR_PRODUCTION_KV_NAMESPACE_ID"
+preview_id = "YOUR_PREVIEW_KV_NAMESPACE_ID"
+
+[triggers]
+crons = ["*/5 * * * *"]

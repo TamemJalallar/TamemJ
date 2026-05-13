@@ -35,6 +35,7 @@ const desktopPrimaryNavItems: NavItem[] = [
   { href: "/support/tickets", label: "Tickets" },
   { href: "/downloads", label: "Downloads" },
   { href: "/guides", label: "Guides" },
+  { href: "/fantasy", label: "Fantasy" },
   { href: "/corporate-tech-fixes", label: "Tech Fixes" }
 ];
 

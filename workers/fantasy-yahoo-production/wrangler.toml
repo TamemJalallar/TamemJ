@@ -1,0 +1,30 @@
+name = "tamemj-fantasy-yahoo"
+main = "src/index.ts"
+compatibility_date = "2026-05-13"
+workers_dev = false
+
+routes = [
+  { pattern = "tamemj.com/api/fantasy*", zone_name = "tamemj.com" },
+  { pattern = "www.tamemj.com/api/fantasy*", zone_name = "tamemj.com" }
+]
+
+[vars]
+YAHOO_GAME_KEY = "nfl"
+YAHOO_LEAGUE_KEY = "470.l.21309"
+YAHOO_REDIRECT_URI = "https://tamemj.com/api/fantasy/oauth/callback"
+CACHE_TTL_SECONDS = "300"
+
+[[kv_namespaces]]
+binding = "FANTASY_CACHE"
+id = "6b8dd31c516446b7aab671fb175cce52"
+preview_id = "a5418cab4ef74538a5f917171994aec5"
+
+[triggers]
+crons = ["*/5 * * * *"]
+
+# Required secrets:
+#   wrangler secret put YAHOO_CLIENT_ID
+#   wrangler secret put YAHOO_CLIENT_SECRET
+#   wrangler secret put YAHOO_REFRESH_TOKEN_SEED
+# Optional secret for private admin endpoints:
+#   wrangler secret put ADMIN_API_TOKEN
