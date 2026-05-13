@@ -79,6 +79,8 @@ export interface FantasyPlayer {
 export interface FantasyStanding {
   teamId: string;
   rank: number;
+  displayName?: string;
+  shortName?: string;
   wins: number;
   losses: number;
   ties: number;
@@ -105,6 +107,8 @@ export interface FantasyDraftPick {
   pickInRound: number;
   overallPick: number;
   teamId: string;
+  teamDisplayName?: string;
+  teamShortName?: string;
   playerId: string;
   isKeeper: boolean;
   keeperCostRound?: number;
@@ -113,10 +117,15 @@ export interface FantasyDraftPick {
 
 export interface FantasySeasonSummary {
   championTeamId: string;
+  championDisplayName?: string;
   runnerUpTeamId: string;
+  runnerUpDisplayName?: string;
   regularSeasonWinnerTeamId: string;
+  regularSeasonWinnerDisplayName?: string;
   highestScoringTeamId: string;
+  highestScoringTeamDisplayName?: string;
   worstRecordTeamId: string;
+  worstRecordTeamDisplayName?: string;
 }
 
 export interface FantasySeason {

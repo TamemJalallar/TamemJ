@@ -82,6 +82,22 @@ function formatPoints(value: number): string {
   return value.toFixed(1);
 }
 
+function getStandingDisplayName(standing: FantasyStanding, team?: FantasyTeamIdentity): string {
+  return standing.displayName ?? team?.teamName ?? "League team";
+}
+
+function getStandingShortName(standing: FantasyStanding, team?: FantasyTeamIdentity): string {
+  return standing.shortName ?? team?.shortName ?? standing.displayName ?? team?.teamName ?? "League team";
+}
+
+function getDraftPickTeamName(pick: FantasyDraftPick, team?: FantasyTeamIdentity): string {
+  return pick.teamDisplayName ?? team?.teamName ?? "League team";
+}
+
+function getDraftPickTeamShortName(pick: FantasyDraftPick, team?: FantasyTeamIdentity): string {
+  return pick.teamShortName ?? team?.shortName ?? pick.teamDisplayName ?? team?.teamName ?? "League team";
+}
+
 function getCountdownLabel(value: string): string {
   const now = Date.now();
   const target = new Date(value).getTime();
@@ -260,6 +276,10 @@ export function FantasyLeagueHub({ data }: { data: FantasyLeagueDataset }) {
       : liveLeagueError
         ? "Curated history • live sync pending"
         : "Curated league hub";
+  const overviewDescription =
+    currentSeason.status === "completed"
+      ? `Live Yahoo sync is active above. Until the ${displaySeasonYear} season starts returning standings and matchups, the dashboard below leans on the ${currentSeason.year} archive snapshot for context.`
+      : "A modern snapshot of standings, matchup context, and the storylines league members check first every week.";
 
   const filteredDraftPicks = [...draftSeason.draftPicks]
     .filter((pick) => {
@@ -541,14 +561,16 @@ export function FantasyLeagueHub({ data }: { data: FantasyLeagueDataset }) {
           <SectionHeading
             eyebrow="League Dashboard"
             title="Current season dashboard"
-            description="A modern snapshot of standings, matchup context, and the storylines league members check first every week. All values are mock-safe today and can be replaced with live provider data later."
+            description={overviewDescription}
           />
 
           <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
             <div className="surface-card-strong p-5 sm:p-6">
               <div className="flex items-center justify-between gap-3">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Current standings</p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
+                    {currentSeason.status === "completed" ? "Latest archived standings" : "Current standings"}
+                  </p>
                   <h3 className="mt-2 font-display text-2xl font-semibold text-fg">{currentSeason.label}</h3>
                 </div>
                 <span className="rounded-full border border-line/70 bg-card px-3 py-1 text-xs font-semibold text-fg-secondary">{currentSeason.weekLabel}</span>
@@ -570,7 +592,7 @@ export function FantasyLeagueHub({ data }: { data: FantasyLeagueDataset }) {
                       <div key={standing.teamId} className="grid grid-cols-[auto_1fr_auto_auto_auto] gap-3 px-4 py-3 text-sm">
                         <span className="font-display text-lg font-semibold text-fg">{standing.rank}</span>
                         <div className="min-w-0">
-                          <p className="truncate font-semibold text-fg">{team?.teamName}</p>
+                          <p className="truncate font-semibold text-fg">{getStandingDisplayName(standing, team)}</p>
                           <p className="truncate text-xs text-muted">{member?.managerName} • {standing.streak}</p>
                         </div>
                         <span className="font-medium text-fg">{formatStandingRecord(standing)}</span>
@@ -586,31 +608,37 @@ export function FantasyLeagueHub({ data }: { data: FantasyLeagueDataset }) {
             <div className="space-y-4">
               <div className="surface-card p-5">
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Current matchups</p>
-                <div className="mt-4 space-y-3">
-                  {currentSeason.matchups.map((matchup) => {
-                    const homeTeam = teamsById.get(matchup.homeTeamId);
-                    const awayTeam = teamsById.get(matchup.awayTeamId);
-                    return (
-                      <div key={matchup.id} className="rounded-2xl border border-line/70 bg-card-2/70 p-3">
-                        <div className="flex items-center justify-between gap-3 text-xs font-semibold uppercase tracking-[0.14em] text-muted">
-                          <span>Week {matchup.week}</span>
-                          <span>{matchup.status}</span>
-                        </div>
-                        <div className="mt-3 grid gap-2 text-sm">
-                          <div className="flex items-center justify-between gap-3">
-                            <span className="font-medium text-fg">{homeTeam?.shortName}</span>
-                            <span className="font-semibold text-fg">{formatPoints(matchup.homeScore)}</span>
+                {currentSeason.matchups.length > 0 ? (
+                  <div className="mt-4 space-y-3">
+                    {currentSeason.matchups.map((matchup) => {
+                      const homeTeam = teamsById.get(matchup.homeTeamId);
+                      const awayTeam = teamsById.get(matchup.awayTeamId);
+                      return (
+                        <div key={matchup.id} className="rounded-2xl border border-line/70 bg-card-2/70 p-3">
+                          <div className="flex items-center justify-between gap-3 text-xs font-semibold uppercase tracking-[0.14em] text-muted">
+                            <span>Week {matchup.week}</span>
+                            <span>{matchup.status}</span>
                           </div>
-                          <div className="flex items-center justify-between gap-3">
-                            <span className="font-medium text-fg">{awayTeam?.shortName}</span>
-                            <span className="font-semibold text-fg">{formatPoints(matchup.awayScore)}</span>
+                          <div className="mt-3 grid gap-2 text-sm">
+                            <div className="flex items-center justify-between gap-3">
+                              <span className="font-medium text-fg">{homeTeam?.shortName}</span>
+                              <span className="font-semibold text-fg">{formatPoints(matchup.homeScore)}</span>
+                            </div>
+                            <div className="flex items-center justify-between gap-3">
+                              <span className="font-medium text-fg">{awayTeam?.shortName}</span>
+                              <span className="font-semibold text-fg">{formatPoints(matchup.awayScore)}</span>
+                            </div>
                           </div>
+                          {matchup.note ? <p className="mt-2 text-xs text-fg-secondary">{matchup.note}</p> : null}
                         </div>
-                        {matchup.note ? <p className="mt-2 text-xs text-fg-secondary">{matchup.note}</p> : null}
-                      </div>
-                    );
-                  })}
-                </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="mt-4 rounded-2xl border border-dashed border-line/70 bg-card-2/45 p-5 text-sm text-fg-secondary">
+                    Live matchup cards will appear here once the Yahoo season publishes head-to-head results. Until then, the page is using the archive and draft history below.
+                  </div>
+                )}
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2">
@@ -697,7 +725,9 @@ export function FantasyLeagueHub({ data }: { data: FantasyLeagueDataset }) {
                 <select value={draftTeamFilter} onChange={(event) => setDraftTeamFilter(event.target.value)} className="min-w-[12rem] px-4 py-3 text-sm">
                   <option value="all">All teams</option>
                   {draftSeason.teamOrder.map((teamId) => (
-                    <option key={teamId} value={teamId}>{teamsById.get(teamId)?.teamName ?? teamId}</option>
+                    <option key={teamId} value={teamId}>
+                      {draftSeason.standings.find((standing) => standing.teamId === teamId)?.displayName ?? teamsById.get(teamId)?.teamName ?? teamId}
+                    </option>
                   ))}
                 </select>
               </label>
@@ -765,7 +795,9 @@ export function FantasyLeagueHub({ data }: { data: FantasyLeagueDataset }) {
                           const player = pick ? playersById.get(pick.playerId) : undefined;
                           return (
                             <div key={`${round}-${teamId}`} className="rounded-2xl border border-line/70 bg-card/80 p-3">
-                              <p className="truncate text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">{team?.shortName}</p>
+                              <p className="truncate text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
+                                {pick ? getDraftPickTeamShortName(pick, team) : draftSeason.standings.find((standing) => standing.teamId === teamId)?.shortName ?? team?.shortName}
+                              </p>
                               {pick && player ? (
                                 <>
                                   <p className="mt-3 font-semibold text-fg">{player.name}</p>
@@ -831,7 +863,7 @@ export function FantasyLeagueHub({ data }: { data: FantasyLeagueDataset }) {
                         <tr key={pick.id} className="border-t border-line/70 bg-card/90 transition hover:bg-card-2/80">
                           <td className="px-4 py-3 font-semibold text-fg">#{pick.overallPick}</td>
                           <td className="px-4 py-3 text-fg-secondary">R{pick.round}.{pick.pickInRound}</td>
-                          <td className="px-4 py-3 text-fg">{team.teamName}</td>
+                          <td className="px-4 py-3 text-fg">{getDraftPickTeamName(pick, team)}</td>
                           <td className="px-4 py-3">
                             <div>
                               <p className="font-semibold text-fg">{player.name}</p>
@@ -864,13 +896,14 @@ export function FantasyLeagueHub({ data }: { data: FantasyLeagueDataset }) {
                   const team = teamsById.get(teamId);
                   const teamPicks = filteredDraftPicks.filter((pick) => pick.teamId === teamId).sort((left, right) => left.overallPick - right.overallPick);
                   if (!team || teamPicks.length === 0) return null;
+                  const teamLabel = teamPicks[0] ? getDraftPickTeamName(teamPicks[0], team) : team.teamName;
 
                   return (
                     <article key={teamId} className="surface-card-strong p-5">
                       <div className="flex items-start justify-between gap-3">
                         <div>
                           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Team draft recap</p>
-                          <h3 className="mt-2 font-display text-xl font-semibold text-fg">{team.teamName}</h3>
+                          <h3 className="mt-2 font-display text-xl font-semibold text-fg">{teamLabel}</h3>
                         </div>
                         <span className="rounded-full border border-line/70 bg-card px-3 py-1 text-xs font-semibold text-fg-secondary">{teamPicks.length} picks</span>
                       </div>
@@ -1084,11 +1117,11 @@ export function FantasyLeagueHub({ data }: { data: FantasyLeagueDataset }) {
                     {seasonsNewestFirst.map((season) => (
                       <tr key={season.id} className="border-t border-line/70 bg-card/90 transition hover:bg-card-2/70">
                         <td className="px-4 py-3 font-semibold text-fg">{season.year}</td>
-                        <td className="px-4 py-3 text-fg">{teamsById.get(season.summary.championTeamId)?.teamName}</td>
-                        <td className="px-4 py-3 text-fg-secondary">{teamsById.get(season.summary.runnerUpTeamId)?.teamName}</td>
-                        <td className="px-4 py-3 text-fg-secondary">{teamsById.get(season.summary.regularSeasonWinnerTeamId)?.shortName}</td>
-                        <td className="px-4 py-3 text-fg-secondary">{teamsById.get(season.summary.highestScoringTeamId)?.shortName}</td>
-                        <td className="px-4 py-3 text-fg-secondary">{teamsById.get(season.summary.worstRecordTeamId)?.shortName}</td>
+                        <td className="px-4 py-3 text-fg">{season.summary.championDisplayName ?? teamsById.get(season.summary.championTeamId)?.teamName}</td>
+                        <td className="px-4 py-3 text-fg-secondary">{season.summary.runnerUpDisplayName ?? teamsById.get(season.summary.runnerUpTeamId)?.teamName}</td>
+                        <td className="px-4 py-3 text-fg-secondary">{season.summary.regularSeasonWinnerDisplayName ?? teamsById.get(season.summary.regularSeasonWinnerTeamId)?.shortName}</td>
+                        <td className="px-4 py-3 text-fg-secondary">{season.summary.highestScoringTeamDisplayName ?? teamsById.get(season.summary.highestScoringTeamId)?.shortName}</td>
+                        <td className="px-4 py-3 text-fg-secondary">{season.summary.worstRecordTeamDisplayName ?? teamsById.get(season.summary.worstRecordTeamId)?.shortName}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -1191,7 +1224,7 @@ export function FantasyLeagueHub({ data }: { data: FantasyLeagueDataset }) {
                       <div className="min-w-0">
                         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{member?.managerName}</p>
                         <h3 className="mt-1 font-display text-2xl font-semibold text-fg">{team.teamName}</h3>
-                        <p className="mt-1 text-sm text-fg-secondary">{member?.favoriteTeam} fan • {standing ? `${formatStandingRecord(standing)} this year` : "Archive-only team profile"}</p>
+                        <p className="mt-1 text-sm text-fg-secondary">{member?.favoriteTeam ? `${member.favoriteTeam} • ` : ""}{standing ? `${formatStandingRecord(standing)} in the latest archive season` : "Archive-backed team profile"}</p>
                       </div>
                     </div>
 
