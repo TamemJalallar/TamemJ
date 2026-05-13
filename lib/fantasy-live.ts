@@ -1,6 +1,7 @@
 import type { FantasyLiveLeagueEnvelope } from "@/types/fantasy-live";
 
 export const FANTASY_PUBLIC_LEAGUE_PATH = "/api/fantasy/league";
+const DEFAULT_FANTASY_API_BASE_URL = "https://tamemj-fantasy-yahoo.ns9gctrd2t.workers.dev";
 
 function trimTrailingSlash(value: string): string {
   return value.endsWith("/") ? value.slice(0, -1) : value;
@@ -18,7 +19,7 @@ export function resolveFantasyLiveLeagueUrl(): string | null {
 
   const { hostname, origin } = window.location;
   if (hostname === "tamemj.com" || hostname === "www.tamemj.com") {
-    return `${origin}${FANTASY_PUBLIC_LEAGUE_PATH}`;
+    return `${DEFAULT_FANTASY_API_BASE_URL}${FANTASY_PUBLIC_LEAGUE_PATH}`;
   }
 
   return null;

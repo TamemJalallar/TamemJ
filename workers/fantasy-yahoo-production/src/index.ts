@@ -138,7 +138,8 @@ export default {
         return new Response(null, {
           status: 204,
           headers: {
-            Allow: "GET,POST,OPTIONS"
+            Allow: "GET,POST,OPTIONS",
+            ...corsHeaders()
           }
         });
       }
@@ -159,7 +160,8 @@ export default {
         return new Response(renderCallbackInfoPage(), {
           status: 200,
           headers: {
-            "Content-Type": "text/html; charset=utf-8"
+            "Content-Type": "text/html; charset=utf-8",
+            ...corsHeaders()
           }
         });
       }
@@ -876,9 +878,18 @@ function json(data: Record<string, unknown>, status = 200): Response {
     status,
     headers: {
       "Content-Type": "application/json; charset=utf-8",
-      "Cache-Control": "no-store"
+      "Cache-Control": "no-store",
+      ...corsHeaders()
     }
   });
+}
+
+function corsHeaders(): Record<string, string> {
+  return {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+    "Access-Control-Allow-Headers": "Authorization, Content-Type"
+  };
 }
 
 function renderCallbackInfoPage(): string {

@@ -1,7 +1,7 @@
 name = "tamemj-fantasy-yahoo"
 main = "src/index.ts"
 compatibility_date = "2026-05-13"
-workers_dev = false
+workers_dev = true
 
 routes = [
   { pattern = "tamemj.com/api/fantasy*", zone_name = "tamemj.com" },

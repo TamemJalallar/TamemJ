@@ -301,13 +301,13 @@ const teams: FantasyTeamIdentity[] = [
 ];
 
 const league: FantasyLeagueIdentity = {
-  name: "Sunday Night Legacy League",
-  slug: "sunday-night-legacy-league",
-  tagline: "An original fantasy football league hub built for rivalries, records, draft receipts, and keeper strategy.",
-  seasonYear: 2025,
+  name: "New Uzbek Mafia",
+  slug: "new-uzbek-mafia",
+  tagline: "A fantasy football league hub for current Yahoo sync, rivalry history, draft receipts, and keeper planning.",
+  seasonYear: 2026,
   establishedYear: 2019,
-  logoText: "SNL",
-  currentWeekLabel: "Week 7",
+  logoText: "NUM",
+  currentWeekLabel: "Week 1",
   location: "New York / New Jersey",
   nextDraftDate: toIsoDate("2026-08-23T19:30:00-04:00"),
   platformReadiness: ["Yahoo", "Sleeper", "ESPN", "Manual"],

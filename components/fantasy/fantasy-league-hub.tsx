@@ -248,6 +248,18 @@ export function FantasyLeagueHub({ data }: { data: FantasyLeagueDataset }) {
 
   const draftSeason = draftSeasons.find((season) => season.year === draftSeasonYear) ?? draftSeasons[0] ?? currentSeason;
   const normalizedDraftQuery = deferredDraftSearch.trim().toLowerCase();
+  const liveLeagueIdentity = liveLeague?.data.league;
+  const displayLeagueName = liveLeagueIdentity?.name ?? data.league.name;
+  const displaySeasonYear = liveLeagueIdentity?.season ?? data.league.seasonYear;
+  const displayWeekLabel =
+    typeof liveLeagueIdentity?.currentWeek === "number" ? `Week ${liveLeagueIdentity.currentWeek}` : data.league.currentWeekLabel;
+  const heroStatusLabel = liveLeague
+    ? "Live Yahoo sync • curated history below"
+    : liveLeagueLoading
+      ? "Checking Yahoo sync"
+      : liveLeagueError
+        ? "Curated history • live sync pending"
+        : "Curated league hub";
 
   const filteredDraftPicks = [...draftSeason.draftPicks]
     .filter((pick) => {
@@ -445,16 +457,16 @@ export function FantasyLeagueHub({ data }: { data: FantasyLeagueDataset }) {
               <div className="flex flex-wrap items-center gap-3">
                 <span className="eyebrow">Fantasy League Hub</span>
                 <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-white/80 backdrop-blur-sm">
-                  Mock data • integration ready
+                  {heroStatusLabel}
                 </span>
               </div>
 
               <div className="mt-5 flex flex-col gap-5 sm:flex-row sm:items-start">
                 <LeagueMark label={data.league.logoText} logoUrl={data.league.logoUrl} />
                 <div>
-                  <p className="text-sm font-semibold uppercase tracking-[0.16em] text-white/60">{data.league.seasonYear} Season Hub</p>
+                  <p className="text-sm font-semibold uppercase tracking-[0.16em] text-white/60">{displaySeasonYear} Season Hub</p>
                   <h1 className="mt-3 text-balance font-display text-4xl font-semibold leading-tight text-white sm:text-5xl">
-                    {data.league.name}
+                    {displayLeagueName}
                   </h1>
                   <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-200/90 sm:text-base">
                     {data.league.tagline}
@@ -475,7 +487,7 @@ export function FantasyLeagueHub({ data }: { data: FantasyLeagueDataset }) {
               </div>
 
               <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                <StatCard label="Current season" value={String(data.league.seasonYear)} hint={data.league.currentWeekLabel} />
+                <StatCard label="Current season" value={String(displaySeasonYear)} hint={displayWeekLabel} />
                 <StatCard label="League size" value={`${data.league.leagueSize} teams`} hint={data.league.location} />
                 <StatCard label="Years active" value={`${yearsActive}`} hint={`Since ${data.league.establishedYear}`} />
                 <StatCard label="Defending champion" value={defendingChampion?.shortName ?? "TBD"} hint={defendingChampionMember?.managerName} />
