@@ -1,4 +1,6 @@
 import fantasyLeagueArchive from "@/data/fantasy-league.archive.json";
+import fantasyProsPprSnapshot from "@/data/fantasypros-ppr-cheatsheet.json";
+import fantasyLeagueTrades from "@/data/fantasy-league.trades.json";
 import type {
   FantasyDraftPick,
   FantasyKeeperCandidate,
@@ -7,14 +9,19 @@ import type {
   FantasyLeagueAward,
   FantasyLeagueDataset,
   FantasyLeagueIdentity,
+  FantasyManagerProfile,
+  FantasyManagerSeasonRoster,
+  FantasyManagerSeasonSnapshot,
   FantasyLeagueRecord,
   FantasyMatchup,
   FantasyMember,
   FantasyPlayer,
   FantasyPlayerPosition,
   FantasySeason,
+  FantasySeasonDraftTendency,
   FantasyStanding,
-  FantasyTeamIdentity
+  FantasyTeamIdentity,
+  FantasyTrade
 } from "@/types/fantasy";
 
 type ArchiveMember = {
@@ -151,12 +158,40 @@ type ArchiveData = {
   };
 };
 
+type FantasyProsPprSnapshot = {
+  sourceUrl: string;
+  sourceLabel: string;
+  seasonYear: number;
+  scoring: string;
+  fetchedAt: string;
+  updatedDisplay?: string;
+  accessed?: string;
+  playerCount: number;
+  players: Array<{
+    key: string;
+    playerId: number;
+    name: string;
+    nflTeam: string;
+    position: string;
+    ecrRank: number;
+    adp?: number;
+    pageUrl?: string;
+  }>;
+};
+
 const archive = fantasyLeagueArchive as ArchiveData;
+const fantasyProsSnapshot = fantasyProsPprSnapshot as FantasyProsPprSnapshot;
+const archivedTrades = fantasyLeagueTrades as FantasyTrade[];
 const archiveMembers = archive.members;
 const archiveSeasons = [...archive.seasons].sort((left, right) => left.year - right.year);
 const latestCompletedSeason = archiveSeasons[archiveSeasons.length - 1];
 const latestSeasonYear = latestCompletedSeason.year;
 const nextSeasonYear = latestSeasonYear + 1;
+const KEEPERS_START_AFTER_ROUND = 9;
+const FUTURE_ADP_RULE_START_SEASON = 2027;
+const FUTURE_ADP_ROUND_PENALTY = 2;
+const PICKS_PER_ROUND = archive.league.memberCount;
+const currentKeeperPickPenalty = FUTURE_ADP_ROUND_PENALTY * PICKS_PER_ROUND;
 
 function createPlayerId(name: string): string {
   return name
@@ -164,6 +199,10 @@ function createPlayerId(name: string): string {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
 }
+
+const fantasyProsPlayersById = new Map(
+  fantasyProsSnapshot.players.map((player) => [player.key, player] as const)
+);
 
 function teamIdForMember(memberId: string): string {
   return `member-${memberId}`;
@@ -236,6 +275,14 @@ function normalizePosition(position: string): FantasyPlayerPosition {
   return "WR";
 }
 
+function roundToOverallPick(round: number, pickInRound = 1): number {
+  return (round - 1) * PICKS_PER_ROUND + pickInRound;
+}
+
+function overallPickToRound(overallPick: number): number {
+  return Math.max(1, Math.ceil(overallPick / PICKS_PER_ROUND));
+}
+
 function mixHex(hex: string, targetHex: string, ratio: number): string {
   const source = hex.replace("#", "");
   const target = targetHex.replace("#", "");
@@ -276,21 +323,27 @@ for (const member of archiveMembers) {
 const playersRegistry = new Map<string, FantasyPlayer>();
 for (const result of archive.draftResults) {
   const playerId = createPlayerId(result.player.name);
+  const fantasyProsPlayer = fantasyProsPlayersById.get(playerId);
   if (!playersRegistry.has(playerId)) {
     playersRegistry.set(playerId, {
       id: playerId,
       name: result.player.name,
       position: normalizePosition(result.player.position),
       nflTeam: result.player.nflTeam,
-      adp: undefined
+      adp: fantasyProsPlayer?.adp
     });
   }
 }
 const players = [...playersRegistry.values()].sort((left, right) => left.name.localeCompare(right.name));
 
 function roundCost(previousDraftRound?: number): number | undefined {
-  if (!previousDraftRound || previousDraftRound < 4) return undefined;
-  return Math.max(previousDraftRound - 1, 4);
+  if (!previousDraftRound || previousDraftRound <= KEEPERS_START_AFTER_ROUND) return undefined;
+  return previousDraftRound;
+}
+
+function futureAdpKeeperCostOverallPick(adp?: number): number | undefined {
+  if (typeof adp !== "number" || !Number.isFinite(adp)) return undefined;
+  return Math.max(1, Math.round(adp + FUTURE_ADP_ROUND_PENALTY * PICKS_PER_ROUND));
 }
 
 function buildProfileTag(memberId: string, championships: number, playoffAppearances: number): string {
@@ -298,13 +351,13 @@ function buildProfileTag(memberId: string, championships: number, playoffAppeara
   if (member?.isCommissioner) return "Commissioner";
   if (championships > 0) return `${championships} title${championships === 1 ? "" : "s"}`;
   if (playoffAppearances > 0) return `${playoffAppearances} playoff trips`;
-  return "Archive member";
+  return "Room regular";
 }
 
 function buildRivalryNote(memberId: string): string {
   const entries = Object.entries(archive.h2h[memberId] ?? {});
   if (entries.length === 0) {
-    return "LeagueLegacy archive loaded, but this rivalry slate still needs matchup expansion.";
+    return "Still waiting for the rivalry board to pick a favorite enemy.";
   }
 
   const best = entries
@@ -318,36 +371,142 @@ function buildRivalryNote(memberId: string): string {
     .sort((left, right) => right.total - left.total || left.margin - right.margin)[0];
 
   const rivalName = latestSeasonTeamsByMemberId.get(best.opponentId)?.teamName ?? membersById.get(best.opponentId)?.displayName ?? "league rival";
-  return `Most tracked head-to-head is against ${rivalName} at ${best.record} across ${best.total} archived meetings.`;
+  return `Most tracked head-to-head is against ${rivalName} at ${best.record} across ${best.total} meetings.`;
 }
 
-function buildDraftTendency(memberId: string): string {
-  const latestSeason = archiveSeasons[archiveSeasons.length - 1];
-  const latestPicks = archive.draftResults
-    .filter((result) => result.seasonId === latestSeason.id && result.memberId === memberId)
-    .sort((left, right) => left.overallPick - right.overallPick);
+function formatOrdinal(value: number): string {
+  const mod10 = value % 10;
+  const mod100 = value % 100;
+  if (mod10 === 1 && mod100 !== 11) return `${value}st`;
+  if (mod10 === 2 && mod100 !== 12) return `${value}nd`;
+  if (mod10 === 3 && mod100 !== 13) return `${value}rd`;
+  return `${value}th`;
+}
 
-  if (latestPicks.length === 0) {
-    return "Draft ledger is connected, but this member does not have enough rounds logged for a profile read yet.";
+function buildStrategyLabel(openingPositions: FantasyPlayerPosition[], qbRound?: number, teRound?: number): string {
+  const rbCount = openingPositions.filter((position) => position === "RB").length;
+  const wrCount = openingPositions.filter((position) => position === "WR").length;
+
+  if (rbCount >= 3) return "RB pressure start";
+  if (wrCount >= 3) return "WR pressure start";
+  if (qbRound && qbRound <= 4) return "Early-QB swing";
+  if (teRound && teRound <= 4) return "Premium TE build";
+  if (openingPositions[0] === "RB" && rbCount === 1) return "Hero-RB lean";
+  if (openingPositions[0] === "WR" && wrCount === 1) return "Hero-WR lean";
+  return "Balanced board read";
+}
+
+function buildDraftSummary({
+  seasonYear,
+  openingPositions,
+  qbRound,
+  teRound,
+  draftGrade
+}: {
+  seasonYear: number;
+  openingPositions: FantasyPlayerPosition[];
+  qbRound?: number;
+  teRound?: number;
+  draftGrade?: string | null;
+}): string {
+  const openingText = openingPositions.join(" / ");
+  const qbText = qbRound
+    ? qbRound <= 4
+      ? `grabbed QB in Round ${qbRound}`
+      : `waited until Round ${qbRound} for a QB`
+    : "never bothered to draft a QB on the board we have";
+  const teText = teRound
+    ? teRound <= 4
+      ? `paid up for TE in Round ${teRound}`
+      : `held TE until Round ${teRound}`
+    : "left TE off the board entirely";
+  const gradeText = draftGrade ? ` Draft grade ${draftGrade}.` : "";
+  return `${seasonYear}: opened ${openingText}, ${qbText}, and ${teText}.${gradeText}`;
+}
+
+function buildDraftTendenciesForMember(memberId: string): FantasySeasonDraftTendency[] {
+  return [...archiveSeasons]
+    .sort((left, right) => right.year - left.year)
+    .flatMap((season) => {
+      const seasonTeam = season.teams.find((team) => team.memberId === memberId);
+      const seasonPicks = archive.draftResults
+        .filter((result) => result.seasonId === season.id && result.memberId === memberId)
+        .sort((left, right) => left.overallPick - right.overallPick);
+
+      if (!seasonTeam || seasonPicks.length === 0) {
+        return [];
+      }
+
+      const openingPicks = seasonPicks.slice(0, 4).map((pick) => ({
+        playerId: createPlayerId(pick.player.name),
+        playerName: pick.player.name,
+        position: normalizePosition(pick.player.position),
+        nflTeam: pick.player.nflTeam,
+        round: pick.round,
+        overallPick: pick.overallPick
+      }));
+      const openingPositions = openingPicks.map((pick) => pick.position);
+      const firstPositionRounds = seasonPicks.reduce<Partial<Record<FantasyPlayerPosition, number>>>((positions, pick) => {
+        const normalized = normalizePosition(pick.player.position);
+        if (!(normalized in positions)) {
+          positions[normalized] = pick.round;
+        }
+        return positions;
+      }, {});
+      const qbRound = seasonPicks.find((pick) => normalizePosition(pick.player.position) === "QB")?.round;
+      const teRound = seasonPicks.find((pick) => normalizePosition(pick.player.position) === "TE")?.round;
+      const keeperCount = seasonPicks.filter((pick) => pick.isKeeper).length;
+
+      return [
+        {
+          seasonId: season.id,
+          seasonYear: season.year,
+          teamId: teamIdForMember(memberId),
+          teamName: seasonTeam.teamName,
+          strategyLabel: buildStrategyLabel(openingPositions, qbRound, teRound),
+          summary: buildDraftSummary({
+            seasonYear: season.year,
+            openingPositions,
+            qbRound,
+            teRound,
+            draftGrade: seasonTeam.draftGrade
+          }),
+          openingPositions,
+          openingPicks,
+          firstPositionRounds,
+          qbRound,
+          teRound,
+          keeperCount,
+          totalPicks: seasonPicks.length,
+          draftGrade: seasonTeam.draftGrade,
+          draftRank: seasonTeam.draftRank,
+          coachRank: seasonTeam.coachRank
+        }
+      ];
+    });
+}
+
+function buildDraftTendency(memberId: string, tendencies: FantasySeasonDraftTendency[]): string {
+  const latestTendency = tendencies[0];
+  if (!latestTendency) {
+    return "Still waiting on enough picks to build a proper draft personality profile.";
   }
 
-  const openingPicks = latestPicks.slice(0, 4);
-  const openingPositions = openingPicks.map((pick) => normalizePosition(pick.player.position));
-  const positionCounts = openingPositions.reduce<Record<string, number>>((counts, position) => {
-    counts[position] = (counts[position] ?? 0) + 1;
-    return counts;
-  }, {});
-  const dominantPosition = Object.entries(positionCounts).sort((left, right) => right[1] - left[1])[0]?.[0] ?? openingPositions[0];
-  return `Opened ${latestSeason.year} with ${openingPositions.join(" / ")} and usually leans on ${dominantPosition} volume early before the board flattens out.`;
+  const highlightPlayer = latestTendency.openingPicks[0];
+  const highlightText = highlightPlayer
+    ? `Started ${latestTendency.seasonYear} with ${highlightPlayer.playerName} in the ${formatOrdinal(highlightPlayer.overallPick)} slot.`
+    : `Started ${latestTendency.seasonYear} with ${latestTendency.openingPositions.join(" / ")}.`;
+
+  return `${highlightText} ${latestTendency.strategyLabel}; ${latestTendency.summary.replace(`${latestTendency.seasonYear}: `, "")}`;
 }
 
 function buildTeamNote(memberId: string, championships: number): string {
   const latestTeam = latestSeasonTeamsByMemberId.get(memberId);
   if (!latestTeam) {
-    return "Archive-backed member profile pending a fresh season snapshot.";
+    return "Fresh season receipts still loading.";
   }
 
-  const titleNote = championships > 0 ? `${championships} championship${championships === 1 ? "" : "s"} in the archive.` : "Still chasing the first title.";
+  const titleNote = championships > 0 ? `${championships} championship${championships === 1 ? "" : "s"} already on the shelf.` : "Still chasing the first banner.";
   const grade = latestTeam.draftGrade ? ` Draft grade ${latestTeam.draftGrade}.` : "";
   return `${latestCompletedSeason.year} finished ${formatRecord(latestTeam.wins, latestTeam.losses, latestTeam.ties)} with ${formatNumber(latestTeam.pointsFor)} points scored.${grade} ${titleNote}`.trim();
 }
@@ -384,17 +543,25 @@ const teams: FantasyTeamIdentity[] = archiveMembers.map((member) => {
 });
 
 const teamsById = new Map(teams.map((team) => [team.id, team]));
+const draftTendenciesByMemberId = new Map<string, FantasySeasonDraftTendency[]>();
+
+for (const member of archiveMembers) {
+  draftTendenciesByMemberId.set(member.id, buildDraftTendenciesForMember(member.id));
+}
 
 const members: FantasyMember[] = archiveMembers.map((member) => {
   const team = teams.find((entry) => entry.memberId === member.id);
+  const draftTendencies = draftTendenciesByMemberId.get(member.id) ?? [];
   return {
     id: member.id,
+    slug: member.slug,
     managerName: member.displayName,
     avatarUrl: member.avatarUrl ?? undefined,
     favoriteTeam: buildProfileTag(member.id, team?.championships ?? 0, team?.playoffAppearances ?? 0),
     rivalryNote: buildRivalryNote(member.id),
-    draftTendency: buildDraftTendency(member.id),
-    bio: `${member.displayName} has ${team?.playoffAppearances ?? 0} playoff appearances and ${team?.championships ?? 0} titles in the archive.`
+    draftTendency: buildDraftTendency(member.id, draftTendencies),
+    draftTendenciesBySeason: draftTendencies,
+    bio: `${member.displayName} has ${team?.playoffAppearances ?? 0} playoff appearances and ${team?.championships ?? 0} titles on the board.`
   };
 });
 
@@ -450,7 +617,11 @@ function buildStandings(season: ArchiveSeason): FantasyStanding[] {
       ties: team.ties,
       pointsFor: team.pointsFor,
       pointsAgainst: team.pointsAgainst,
-      streak: team.playoffSeed ? `Seed ${team.playoffSeed}` : "Missed playoffs"
+      streak: team.playoffSeed ? `Seed ${team.playoffSeed}` : "Missed playoffs",
+      playoffSeed: team.playoffSeed,
+      playoffWins: team.playoffWins,
+      playoffLosses: team.playoffLosses,
+      finishRank: team.rank
     }));
 }
 
@@ -502,6 +673,8 @@ const seasons: FantasySeason[] = archiveSeasons.map((season) => {
     draftPicks,
     draftDate: parseArchiveDate(season.draftAt ?? `${season.year}-08-20 00:00:00`),
     draftRounds: Math.max(...draftPicks.map((pick) => pick.round), 0),
+    numPlayoffTeams: season.numPlayoffTeams,
+    playoffStartWeek: season.playoffStartWeek ?? null,
     keeperSelections: draftPicks
       .filter((pick) => pick.isKeeper)
       .map((pick) => ({
@@ -538,33 +711,47 @@ const league: FantasyLeagueIdentity = {
 };
 
 const keeperRules: FantasyKeeperRules = {
-  maxKeepers: 2,
+  maxKeepers: 1,
   sourceSeasonYear: latestSeasonYear,
   targetSeasonYear: nextSeasonYear,
   deadline: keeperDeadline,
-  costRule: "Keepers move up one round from the prior draft cost, with Round 4 as the earliest eligible keeper slot.",
-  roundPenaltyRule: "Rounds 1-3 stay ineligible, and any archived keeper tag without a valid draft round must be reviewed manually.",
+  costRule: `Only players drafted after Round ${KEEPERS_START_AFTER_ROUND} qualify. Current cost uses FantasyPros PPR overall rank plus ${currentKeeperPickPenalty} picks, then converts that slot back to a round.`,
+  roundPenaltyRule: `Example: a FantasyPros overall slot of 65 becomes Pick 85 in a ${PICKS_PER_ROUND}-team league, which lands in Round ${overallPickToRound(85)}.`,
   defaultWaiverCost: "Waiver pickups default to a Round 8 keeper cost unless the commissioner records a different value.",
-  ineligiblePlayersRule: "Players drafted in Rounds 1-3 or missing a verified prior round remain ineligible until the league overrides the rule.",
+  ineligiblePlayersRule: `Anyone drafted in Round ${KEEPERS_START_AFTER_ROUND} or earlier stays ineligible. Costs stay editable only when a FantasyPros ranking is missing.`,
   notes: [
-    "The keeper lab is powered locally and can be updated without touching the UI.",
-    "This archive does not currently include historical keeper logs, so years-kept starts at zero until you add that data.",
-    "Swap these rules once the league votes or the commissioner publishes the final offseason sheet."
+    `Eligibility is locked to players drafted in Round ${KEEPERS_START_AFTER_ROUND + 1} or later.`,
+    `FantasyPros source: ${fantasyProsSnapshot.sourceLabel} (${fantasyProsSnapshot.updatedDisplay ?? "latest update"}) with ${fantasyProsSnapshot.playerCount} players synced from ${fantasyProsSnapshot.sourceUrl}.`,
+    `Keeper cost = FantasyPros overall slot plus ${currentKeeperPickPenalty} picks, then rounded back to the closest draft round.`
   ]
 };
 
 const sourceSeason = seasons.find((season) => season.year === latestSeasonYear)!;
-const keeperCandidates: FantasyKeeperCandidate[] = sourceSeason.draftPicks.map((pick) => ({
-  id: `${pick.teamId}-${pick.playerId}`,
-  seasonYear: latestSeasonYear,
-  teamId: pick.teamId,
-  playerId: pick.playerId,
-  previousDraftRound: pick.round,
-  keeperCostRound: roundCost(pick.round),
-  yearsKept: 0,
-  eligible: pick.round >= 4,
-  notes: pick.round < 4 ? "Ineligible because this player was drafted inside the first three rounds." : pick.notes
-}));
+const keeperCandidates: FantasyKeeperCandidate[] = sourceSeason.draftPicks.map((pick) => {
+  const player = playersRegistry.get(pick.playerId);
+  const legacyRoundCost = roundCost(pick.round);
+  const fantasyProsOverallSlot = player?.adp;
+  const futureOverallPick = futureAdpKeeperCostOverallPick(fantasyProsOverallSlot);
+  const currentRuleRoundCost = futureOverallPick ? overallPickToRound(futureOverallPick) : undefined;
+  const eligible = pick.round > KEEPERS_START_AFTER_ROUND;
+
+  return {
+    id: `${pick.teamId}-${pick.playerId}`,
+    seasonYear: latestSeasonYear,
+    teamId: pick.teamId,
+    playerId: pick.playerId,
+    previousDraftRound: pick.round,
+    keeperCostRound: currentRuleRoundCost,
+    keeperCostOverallPick: futureOverallPick,
+    yearsKept: 0,
+    eligible,
+    notes: !eligible
+      ? `Ineligible because this player was drafted in Round ${pick.round}. Only Round ${KEEPERS_START_AFTER_ROUND + 1}+ players qualify.`
+      : futureOverallPick && fantasyProsOverallSlot
+        ? `Drafted in Round ${legacyRoundCost}. FantasyPros PPR slot ${fantasyProsOverallSlot} pulls the keeper cost to Pick ${futureOverallPick} (Round ${currentRuleRoundCost}).`
+        : `Drafted in Round ${legacyRoundCost}. Add a FantasyPros PPR slot to lock the keeper cost.`
+  };
+});
 
 function recordFromHighlight(
   highlightKey: string,
@@ -766,6 +953,18 @@ const awards: FantasyLeagueAward[] = [
   }
 ];
 
+const trades: FantasyTrade[] = archivedTrades.map((trade) => ({
+  ...trade,
+  trader: {
+    ...trade.trader,
+    teamName: trade.trader.teamName ?? memberDisplayNamesById.get(trade.trader.memberId ?? "")
+  },
+  tradee: {
+    ...trade.tradee,
+    teamName: trade.tradee.teamName ?? memberDisplayNamesById.get(trade.tradee.memberId ?? "")
+  }
+}));
+
 export const fantasyLeagueData: FantasyLeagueDataset = {
   league,
   keeperRules,
@@ -775,9 +974,115 @@ export const fantasyLeagueData: FantasyLeagueDataset = {
   seasons,
   keeperCandidates,
   records,
-  awards
+  awards,
+  trades
 };
 
 export function getFantasyLeague(): FantasyLeagueDataset {
   return fantasyLeagueData;
+}
+
+export function getFantasyManagerProfileSlugs(): string[] {
+  return fantasyLeagueData.members.map((member) => member.slug);
+}
+
+export function getFantasyManagerProfileBySlug(slug: string): FantasyManagerProfile | undefined {
+  const member = fantasyLeagueData.members.find((entry) => entry.slug === slug);
+  if (!member) {
+    return undefined;
+  }
+
+  const team = fantasyLeagueData.teams.find((entry) => entry.memberId === member.id);
+  if (!team) {
+    return undefined;
+  }
+
+  const seasonHistory: FantasyManagerSeasonSnapshot[] = [...archiveSeasons]
+    .sort((left, right) => right.year - left.year)
+    .flatMap((season) => {
+      const seasonTeam = season.teams.find((entry) => entry.memberId === member.id);
+      if (!seasonTeam) {
+        return [];
+      }
+
+      return [
+        {
+          seasonId: season.id,
+          seasonYear: season.year,
+          teamId: teamIdForMember(member.id),
+          teamName: seasonTeam.teamName,
+          numPlayoffTeams: season.numPlayoffTeams,
+          wins: seasonTeam.wins,
+          losses: seasonTeam.losses,
+          ties: seasonTeam.ties,
+          pointsFor: seasonTeam.pointsFor,
+          pointsAgainst: seasonTeam.pointsAgainst,
+          regularSeasonRank: seasonTeam.regularSeasonRank,
+          finishRank: seasonTeam.rank,
+          playoffSeed: seasonTeam.playoffSeed,
+          playoffWins: seasonTeam.playoffWins,
+          playoffLosses: seasonTeam.playoffLosses,
+          draftGrade: seasonTeam.draftGrade,
+          draftRank: seasonTeam.draftRank,
+          coachRank: seasonTeam.coachRank,
+          numMoves: seasonTeam.numMoves,
+          numTrades: seasonTeam.numTrades,
+          avgPoints: seasonTeam.avgPoints
+        }
+      ];
+    });
+
+  const seasonRosters: FantasyManagerSeasonRoster[] = [...archiveSeasons]
+    .sort((left, right) => right.year - left.year)
+    .flatMap((season) => {
+      const seasonTeam = season.teams.find((entry) => entry.memberId === member.id);
+      if (!seasonTeam) {
+        return [];
+      }
+
+      const players = archive.draftResults
+        .filter((result) => result.seasonId === season.id && result.memberId === member.id)
+        .sort((left, right) => left.overallPick - right.overallPick)
+        .map((result) => ({
+          playerId: createPlayerId(result.player.name),
+          playerName: result.player.name,
+          position: normalizePosition(result.player.position),
+          nflTeam: result.player.nflTeam,
+          round: result.round,
+          overallPick: result.overallPick,
+          potentialKeeper: result.round > KEEPERS_START_AFTER_ROUND
+        }));
+
+      return [
+        {
+          seasonId: season.id,
+          seasonYear: season.year,
+          teamId: teamIdForMember(member.id),
+          teamName: seasonTeam.teamName,
+          players
+        }
+      ];
+    });
+
+  const championshipYears = seasonHistory
+    .filter((season) => season.finishRank === 1)
+    .map((season) => season.seasonYear);
+
+  const trades = fantasyLeagueData.trades
+    .filter((trade) => trade.trader.memberId === member.id || trade.tradee.memberId === member.id)
+    .sort((left, right) => {
+      const leftTime = left.postedAt ? Date.parse(left.postedAt) : 0;
+      const rightTime = right.postedAt ? Date.parse(right.postedAt) : 0;
+      return rightTime - leftTime || right.seasonYear - left.seasonYear;
+    });
+
+  return {
+    member,
+    team,
+    seasonHistory,
+    seasonRosters,
+    draftTendencies: member.draftTendenciesBySeason,
+    trades,
+    championshipYears
+  };
 }

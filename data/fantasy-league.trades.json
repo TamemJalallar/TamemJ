@@ -1,0 +1,4260 @@
+[
+  {
+    "id": "273",
+    "transactionKey": "461.l.213295.tr.273",
+    "seasonId": "43822",
+    "seasonYear": 2025,
+    "postedAt": "2025-11-20T21:37:33.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "vetoed",
+    "trader": {
+      "seasonTeamId": "516955",
+      "memberId": "38860",
+      "teamKey": "461.l.213295.t.1",
+      "teamName": "Tommy's Toughest Road"
+    },
+    "tradee": {
+      "seasonTeamId": "516964",
+      "memberId": "38867",
+      "teamKey": "461.l.213295.t.10",
+      "teamName": "Uzi"
+    },
+    "traderSent": [
+      {
+        "playerId": "31905",
+        "playerName": "David Montgomery",
+        "position": "RB",
+        "nflTeam": "Hou",
+        "sourceTeamKey": "461.l.213295.t.1",
+        "sourceTeamName": "Tommy's Toughest Road",
+        "destinationTeamKey": "461.l.213295.t.10",
+        "destinationTeamName": "Uzi"
+      },
+      {
+        "playerId": "33514",
+        "playerName": "Chuba Hubbard",
+        "position": "RB",
+        "nflTeam": "Car",
+        "sourceTeamKey": "461.l.213295.t.1",
+        "sourceTeamName": "Tommy's Toughest Road",
+        "destinationTeamKey": "461.l.213295.t.10",
+        "destinationTeamName": "Uzi"
+      },
+      {
+        "playerId": "40881",
+        "playerName": "Drake Maye",
+        "position": "QB",
+        "nflTeam": "NE",
+        "sourceTeamKey": "461.l.213295.t.1",
+        "sourceTeamName": "Tommy's Toughest Road",
+        "destinationTeamKey": "461.l.213295.t.10",
+        "destinationTeamName": "Uzi"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "40074",
+        "playerName": "Luke Musgrave",
+        "position": "TE",
+        "nflTeam": "GB",
+        "sourceTeamKey": "461.l.213295.t.10",
+        "sourceTeamName": "Uzi",
+        "destinationTeamKey": "461.l.213295.t.1",
+        "destinationTeamName": "Tommy's Toughest Road"
+      },
+      {
+        "playerId": "40899",
+        "playerName": "Malik Nabers",
+        "position": "WR",
+        "nflTeam": "NYG",
+        "sourceTeamKey": "461.l.213295.t.10",
+        "sourceTeamName": "Uzi",
+        "destinationTeamKey": "461.l.213295.t.1",
+        "destinationTeamName": "Tommy's Toughest Road"
+      },
+      {
+        "playerId": "29325",
+        "playerName": "Jacoby Brissett",
+        "position": "QB",
+        "nflTeam": "Ari",
+        "sourceTeamKey": "461.l.213295.t.10",
+        "sourceTeamName": "Uzi",
+        "destinationTeamKey": "461.l.213295.t.1",
+        "destinationTeamName": "Tommy's Toughest Road"
+      }
+    ]
+  },
+  {
+    "id": "251",
+    "transactionKey": "461.l.213295.tr.251",
+    "seasonId": "43822",
+    "seasonYear": 2025,
+    "postedAt": "2025-11-15T21:06:54.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "516962",
+      "memberId": "38866",
+      "teamKey": "461.l.213295.t.8",
+      "teamName": "The OTC 👑"
+    },
+    "tradee": {
+      "seasonTeamId": "516964",
+      "memberId": "38867",
+      "teamKey": "461.l.213295.t.10",
+      "teamName": "Uzi"
+    },
+    "traderSent": [
+      {
+        "playerId": "32705",
+        "playerName": "D'Andre Swift",
+        "position": "RB",
+        "nflTeam": "Chi",
+        "sourceTeamKey": "461.l.213295.t.8",
+        "sourceTeamName": "The OTC 👑",
+        "destinationTeamKey": "461.l.213295.t.10",
+        "destinationTeamName": "Uzi"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "33398",
+        "playerName": "DeVonta Smith",
+        "position": "WR",
+        "nflTeam": "Phi",
+        "sourceTeamKey": "461.l.213295.t.10",
+        "sourceTeamName": "Uzi",
+        "destinationTeamKey": "461.l.213295.t.8",
+        "destinationTeamName": "The OTC 👑"
+      }
+    ]
+  },
+  {
+    "id": "242",
+    "transactionKey": "461.l.213295.tr.242",
+    "seasonId": "43822",
+    "seasonYear": 2025,
+    "postedAt": "2025-11-12T22:57:08.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "516963",
+      "memberId": "38861",
+      "teamKey": "461.l.213295.t.9",
+      "teamName": "BEVO"
+    },
+    "tradee": {
+      "seasonTeamId": "516955",
+      "memberId": "38860",
+      "teamKey": "461.l.213295.t.1",
+      "teamName": "Tommy's Toughest Road"
+    },
+    "traderSent": [
+      {
+        "playerId": "31905",
+        "playerName": "David Montgomery",
+        "position": "RB",
+        "nflTeam": "Hou",
+        "sourceTeamKey": "461.l.213295.t.9",
+        "sourceTeamName": "BEVO",
+        "destinationTeamKey": "461.l.213295.t.1",
+        "destinationTeamName": "Tommy's Toughest Road"
+      },
+      {
+        "playerId": "40958",
+        "playerName": "Trey Benson",
+        "position": "RB",
+        "nflTeam": "Ari",
+        "sourceTeamKey": "461.l.213295.t.9",
+        "sourceTeamName": "BEVO",
+        "destinationTeamKey": "461.l.213295.t.1",
+        "destinationTeamName": "Tommy's Toughest Road"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "31960",
+        "playerName": "Tony Pollard",
+        "position": "RB",
+        "nflTeam": "Ten",
+        "sourceTeamKey": "461.l.213295.t.1",
+        "sourceTeamName": "Tommy's Toughest Road",
+        "destinationTeamKey": "461.l.213295.t.9",
+        "destinationTeamName": "BEVO"
+      },
+      {
+        "playerId": "32676",
+        "playerName": "Justin Herbert",
+        "position": "QB",
+        "nflTeam": "LAC",
+        "sourceTeamKey": "461.l.213295.t.1",
+        "sourceTeamName": "Tommy's Toughest Road",
+        "destinationTeamKey": "461.l.213295.t.9",
+        "destinationTeamName": "BEVO"
+      }
+    ]
+  },
+  {
+    "id": "238",
+    "transactionKey": "461.l.213295.tr.238",
+    "seasonId": "43822",
+    "seasonYear": 2025,
+    "postedAt": "2025-11-12T01:26:58.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "516959",
+      "memberId": "38862",
+      "teamKey": "461.l.213295.t.5",
+      "teamName": "GET BACK GANG"
+    },
+    "tradee": {
+      "seasonTeamId": "516963",
+      "memberId": "38861",
+      "teamKey": "461.l.213295.t.9",
+      "teamName": "BEVO"
+    },
+    "traderSent": [
+      {
+        "playerId": "41795",
+        "playerName": "Colston Loveland",
+        "position": "TE",
+        "nflTeam": "Chi",
+        "sourceTeamKey": "461.l.213295.t.5",
+        "sourceTeamName": "GET BACK GANG",
+        "destinationTeamKey": "461.l.213295.t.9",
+        "destinationTeamName": "BEVO"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "33989",
+        "playerName": "Christian Watson",
+        "position": "WR",
+        "nflTeam": "GB",
+        "sourceTeamKey": "461.l.213295.t.9",
+        "sourceTeamName": "BEVO",
+        "destinationTeamKey": "461.l.213295.t.5",
+        "destinationTeamName": "GET BACK GANG"
+      }
+    ]
+  },
+  {
+    "id": "237",
+    "transactionKey": "461.l.213295.tr.237",
+    "seasonId": "43822",
+    "seasonYear": 2025,
+    "postedAt": "2025-11-11T23:20:23.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "516961",
+      "memberId": "38865",
+      "teamKey": "461.l.213295.t.7",
+      "teamName": "Mediocre Mooses"
+    },
+    "tradee": {
+      "seasonTeamId": "516959",
+      "memberId": "38862",
+      "teamKey": "461.l.213295.t.5",
+      "teamName": "GET BACK GANG"
+    },
+    "traderSent": [
+      {
+        "playerId": "34207",
+        "playerName": "Isiah Pacheco",
+        "position": "RB",
+        "nflTeam": "Det",
+        "sourceTeamKey": "461.l.213295.t.7",
+        "sourceTeamName": "Mediocre Mooses",
+        "destinationTeamKey": "461.l.213295.t.5",
+        "destinationTeamName": "GET BACK GANG"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "29792",
+        "playerName": "Ka'imi Fairbairn",
+        "position": "K",
+        "nflTeam": "Hou",
+        "sourceTeamKey": "461.l.213295.t.5",
+        "sourceTeamName": "GET BACK GANG",
+        "destinationTeamKey": "461.l.213295.t.7",
+        "destinationTeamName": "Mediocre Mooses"
+      }
+    ]
+  },
+  {
+    "id": "235",
+    "transactionKey": "461.l.213295.tr.235",
+    "seasonId": "43822",
+    "seasonYear": 2025,
+    "postedAt": "2025-11-10T03:31:20.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "516957",
+      "memberId": "38869",
+      "teamKey": "461.l.213295.t.3",
+      "teamName": "Floyd"
+    },
+    "tradee": {
+      "seasonTeamId": "516955",
+      "memberId": "38860",
+      "teamKey": "461.l.213295.t.1",
+      "teamName": "Tommy's Toughest Road"
+    },
+    "traderSent": [
+      {
+        "playerId": "31960",
+        "playerName": "Tony Pollard",
+        "position": "RB",
+        "nflTeam": "Ten",
+        "sourceTeamKey": "461.l.213295.t.3",
+        "sourceTeamName": "Floyd",
+        "destinationTeamKey": "461.l.213295.t.1",
+        "destinationTeamName": "Tommy's Toughest Road"
+      },
+      {
+        "playerId": "33514",
+        "playerName": "Chuba Hubbard",
+        "position": "RB",
+        "nflTeam": "Car",
+        "sourceTeamKey": "461.l.213295.t.3",
+        "sourceTeamName": "Floyd",
+        "destinationTeamKey": "461.l.213295.t.1",
+        "destinationTeamName": "Tommy's Toughest Road"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "42025",
+        "playerName": "Kyle Monangai",
+        "position": "RB",
+        "nflTeam": "Chi",
+        "sourceTeamKey": "461.l.213295.t.1",
+        "sourceTeamName": "Tommy's Toughest Road",
+        "destinationTeamKey": "461.l.213295.t.3",
+        "destinationTeamName": "Floyd"
+      }
+    ]
+  },
+  {
+    "id": "233",
+    "transactionKey": "461.l.213295.tr.233",
+    "seasonId": "43822",
+    "seasonYear": 2025,
+    "postedAt": "2025-11-09T23:51:47.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "516961",
+      "memberId": "38865",
+      "teamKey": "461.l.213295.t.7",
+      "teamName": "Mediocre Mooses"
+    },
+    "tradee": {
+      "seasonTeamId": "516956",
+      "memberId": "38868",
+      "teamKey": "461.l.213295.t.2",
+      "teamName": "Aman's A-Team"
+    },
+    "traderSent": [
+      {
+        "playerId": "27120",
+        "playerName": "Brandon McManus",
+        "position": "K",
+        "nflTeam": "GB",
+        "sourceTeamKey": "461.l.213295.t.7",
+        "sourceTeamName": "Mediocre Mooses",
+        "destinationTeamKey": "461.l.213295.t.2",
+        "destinationTeamName": "Aman's A-Team"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "34207",
+        "playerName": "Isiah Pacheco",
+        "position": "RB",
+        "nflTeam": "Det",
+        "sourceTeamKey": "461.l.213295.t.2",
+        "sourceTeamName": "Aman's A-Team",
+        "destinationTeamKey": "461.l.213295.t.7",
+        "destinationTeamName": "Mediocre Mooses"
+      }
+    ]
+  },
+  {
+    "id": "223",
+    "transactionKey": "461.l.213295.tr.223",
+    "seasonId": "43822",
+    "seasonYear": 2025,
+    "postedAt": "2025-11-06T02:47:48.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "516957",
+      "memberId": "38869",
+      "teamKey": "461.l.213295.t.3",
+      "teamName": "Floyd"
+    },
+    "tradee": {
+      "seasonTeamId": "516961",
+      "memberId": "38865",
+      "teamKey": "461.l.213295.t.7",
+      "teamName": "Mediocre Mooses"
+    },
+    "traderSent": [
+      {
+        "playerId": "30180",
+        "playerName": "Alvin Kamara",
+        "position": "RB",
+        "nflTeam": "NO",
+        "sourceTeamKey": "461.l.213295.t.3",
+        "sourceTeamName": "Floyd",
+        "destinationTeamKey": "461.l.213295.t.7",
+        "destinationTeamName": "Mediocre Mooses"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "30994",
+        "playerName": "DJ Moore",
+        "position": "WR",
+        "nflTeam": "Buf",
+        "sourceTeamKey": "461.l.213295.t.7",
+        "sourceTeamName": "Mediocre Mooses",
+        "destinationTeamKey": "461.l.213295.t.3",
+        "destinationTeamName": "Floyd"
+      }
+    ]
+  },
+  {
+    "id": "222",
+    "transactionKey": "461.l.213295.tr.222",
+    "seasonId": "43822",
+    "seasonYear": 2025,
+    "postedAt": "2025-11-06T00:45:14.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "516961",
+      "memberId": "38865",
+      "teamKey": "461.l.213295.t.7",
+      "teamName": "Mediocre Mooses"
+    },
+    "tradee": {
+      "seasonTeamId": "516955",
+      "memberId": "38860",
+      "teamKey": "461.l.213295.t.1",
+      "teamName": "Tommy's Toughest Road"
+    },
+    "traderSent": [
+      {
+        "playerId": "40877",
+        "playerName": "Xavier Worthy",
+        "position": "WR",
+        "nflTeam": "KC",
+        "sourceTeamKey": "461.l.213295.t.7",
+        "sourceTeamName": "Mediocre Mooses",
+        "destinationTeamKey": "461.l.213295.t.1",
+        "destinationTeamName": "Tommy's Toughest Road"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "41902",
+        "playerName": "Woody Marks",
+        "position": "RB",
+        "nflTeam": "Hou",
+        "sourceTeamKey": "461.l.213295.t.1",
+        "sourceTeamName": "Tommy's Toughest Road",
+        "destinationTeamKey": "461.l.213295.t.7",
+        "destinationTeamName": "Mediocre Mooses"
+      },
+      {
+        "playerId": "30994",
+        "playerName": "DJ Moore",
+        "position": "WR",
+        "nflTeam": "Buf",
+        "sourceTeamKey": "461.l.213295.t.1",
+        "sourceTeamName": "Tommy's Toughest Road",
+        "destinationTeamKey": "461.l.213295.t.7",
+        "destinationTeamName": "Mediocre Mooses"
+      }
+    ]
+  },
+  {
+    "id": "220",
+    "transactionKey": "461.l.213295.tr.220",
+    "seasonId": "43822",
+    "seasonYear": 2025,
+    "postedAt": "2025-11-05T21:50:44.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "516955",
+      "memberId": "38860",
+      "teamKey": "461.l.213295.t.1",
+      "teamName": "Tommy's Toughest Road"
+    },
+    "tradee": {
+      "seasonTeamId": "516963",
+      "memberId": "38861",
+      "teamKey": "461.l.213295.t.9",
+      "teamName": "BEVO"
+    },
+    "traderSent": [
+      {
+        "playerId": "33100",
+        "playerName": "Rico Dowdle",
+        "position": "RB",
+        "nflTeam": "Pit",
+        "sourceTeamKey": "461.l.213295.t.1",
+        "sourceTeamName": "Tommy's Toughest Road",
+        "destinationTeamKey": "461.l.213295.t.9",
+        "destinationTeamName": "BEVO"
+      },
+      {
+        "playerId": "33989",
+        "playerName": "Christian Watson",
+        "position": "WR",
+        "nflTeam": "GB",
+        "sourceTeamKey": "461.l.213295.t.1",
+        "sourceTeamName": "Tommy's Toughest Road",
+        "destinationTeamKey": "461.l.213295.t.9",
+        "destinationTeamName": "BEVO"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "40883",
+        "playerName": "Brian Thomas Jr.",
+        "position": "WR",
+        "nflTeam": "Jax",
+        "sourceTeamKey": "461.l.213295.t.9",
+        "sourceTeamName": "BEVO",
+        "destinationTeamKey": "461.l.213295.t.1",
+        "destinationTeamName": "Tommy's Toughest Road"
+      },
+      {
+        "playerId": "41902",
+        "playerName": "Woody Marks",
+        "position": "RB",
+        "nflTeam": "Hou",
+        "sourceTeamKey": "461.l.213295.t.9",
+        "sourceTeamName": "BEVO",
+        "destinationTeamKey": "461.l.213295.t.1",
+        "destinationTeamName": "Tommy's Toughest Road"
+      }
+    ]
+  },
+  {
+    "id": "209",
+    "transactionKey": "461.l.213295.tr.209",
+    "seasonId": "43822",
+    "seasonYear": 2025,
+    "postedAt": "2025-11-04T15:07:59.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "516961",
+      "memberId": "38865",
+      "teamKey": "461.l.213295.t.7",
+      "teamName": "Mediocre Mooses"
+    },
+    "tradee": {
+      "seasonTeamId": "516963",
+      "memberId": "38861",
+      "teamKey": "461.l.213295.t.9",
+      "teamName": "BEVO"
+    },
+    "traderSent": [
+      {
+        "playerId": "31905",
+        "playerName": "David Montgomery",
+        "position": "RB",
+        "nflTeam": "Hou",
+        "sourceTeamKey": "461.l.213295.t.7",
+        "sourceTeamName": "Mediocre Mooses",
+        "destinationTeamKey": "461.l.213295.t.9",
+        "destinationTeamName": "BEVO"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "40064",
+        "playerName": "Sam LaPorta",
+        "position": "TE",
+        "nflTeam": "Det",
+        "sourceTeamKey": "461.l.213295.t.9",
+        "sourceTeamName": "BEVO",
+        "destinationTeamKey": "461.l.213295.t.7",
+        "destinationTeamName": "Mediocre Mooses"
+      }
+    ]
+  },
+  {
+    "id": "197",
+    "transactionKey": "461.l.213295.tr.197",
+    "seasonId": "43822",
+    "seasonYear": 2025,
+    "postedAt": "2025-10-31T02:01:29.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "516955",
+      "memberId": "38860",
+      "teamKey": "461.l.213295.t.1",
+      "teamName": "Tommy's Toughest Road"
+    },
+    "tradee": {
+      "seasonTeamId": "516963",
+      "memberId": "38861",
+      "teamKey": "461.l.213295.t.9",
+      "teamName": "BEVO"
+    },
+    "traderSent": [
+      {
+        "playerId": "40958",
+        "playerName": "Trey Benson",
+        "position": "RB",
+        "nflTeam": "Ari",
+        "sourceTeamKey": "461.l.213295.t.1",
+        "sourceTeamName": "Tommy's Toughest Road",
+        "destinationTeamKey": "461.l.213295.t.9",
+        "destinationTeamName": "BEVO"
+      },
+      {
+        "playerId": "40892",
+        "playerName": "Ricky Pearsall",
+        "position": "WR",
+        "nflTeam": "SF",
+        "sourceTeamKey": "461.l.213295.t.1",
+        "sourceTeamName": "Tommy's Toughest Road",
+        "destinationTeamKey": "461.l.213295.t.9",
+        "destinationTeamName": "BEVO"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "30994",
+        "playerName": "DJ Moore",
+        "position": "WR",
+        "nflTeam": "Buf",
+        "sourceTeamKey": "461.l.213295.t.9",
+        "sourceTeamName": "BEVO",
+        "destinationTeamKey": "461.l.213295.t.1",
+        "destinationTeamName": "Tommy's Toughest Road"
+      },
+      {
+        "playerId": "33100",
+        "playerName": "Rico Dowdle",
+        "position": "RB",
+        "nflTeam": "Pit",
+        "sourceTeamKey": "461.l.213295.t.9",
+        "sourceTeamName": "BEVO",
+        "destinationTeamKey": "461.l.213295.t.1",
+        "destinationTeamName": "Tommy's Toughest Road"
+      }
+    ]
+  },
+  {
+    "id": "192",
+    "transactionKey": "461.l.213295.tr.192",
+    "seasonId": "43822",
+    "seasonYear": 2025,
+    "postedAt": "2025-10-30T14:50:39.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "516963",
+      "memberId": "38861",
+      "teamKey": "461.l.213295.t.9",
+      "teamName": "BEVO"
+    },
+    "tradee": {
+      "seasonTeamId": "516964",
+      "memberId": "38867",
+      "teamKey": "461.l.213295.t.10",
+      "teamName": "Uzi"
+    },
+    "traderSent": [
+      {
+        "playerId": "40051",
+        "playerName": "Quentin Johnston",
+        "position": "WR",
+        "nflTeam": "LAC",
+        "sourceTeamKey": "461.l.213295.t.9",
+        "sourceTeamName": "BEVO",
+        "destinationTeamKey": "461.l.213295.t.10",
+        "destinationTeamName": "Uzi"
+      },
+      {
+        "playerId": "40896",
+        "playerName": "Jayden Daniels",
+        "position": "QB",
+        "nflTeam": "Was",
+        "sourceTeamKey": "461.l.213295.t.9",
+        "sourceTeamName": "BEVO",
+        "destinationTeamKey": "461.l.213295.t.10",
+        "destinationTeamName": "Uzi"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "32704",
+        "playerName": "Michael Pittman Jr.",
+        "position": "WR",
+        "nflTeam": "Pit",
+        "sourceTeamKey": "461.l.213295.t.10",
+        "sourceTeamName": "Uzi",
+        "destinationTeamKey": "461.l.213295.t.9",
+        "destinationTeamName": "BEVO"
+      }
+    ]
+  },
+  {
+    "id": "182",
+    "transactionKey": "461.l.213295.tr.182",
+    "seasonId": "43822",
+    "seasonYear": 2025,
+    "postedAt": "2025-10-28T14:51:06.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "516957",
+      "memberId": "38869",
+      "teamKey": "461.l.213295.t.3",
+      "teamName": "Floyd"
+    },
+    "tradee": {
+      "seasonTeamId": "516964",
+      "memberId": "38867",
+      "teamKey": "461.l.213295.t.10",
+      "teamName": "Uzi"
+    },
+    "traderSent": [
+      {
+        "playerId": "32725",
+        "playerName": "J.K. Dobbins",
+        "position": "RB",
+        "nflTeam": "Den",
+        "sourceTeamKey": "461.l.213295.t.3",
+        "sourceTeamName": "Floyd",
+        "destinationTeamKey": "461.l.213295.t.10",
+        "destinationTeamName": "Uzi"
+      },
+      {
+        "playerId": "32704",
+        "playerName": "Michael Pittman Jr.",
+        "position": "WR",
+        "nflTeam": "Pit",
+        "sourceTeamKey": "461.l.213295.t.3",
+        "sourceTeamName": "Floyd",
+        "destinationTeamKey": "461.l.213295.t.10",
+        "destinationTeamName": "Uzi"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "33966",
+        "playerName": "Chris Olave",
+        "position": "WR",
+        "nflTeam": "NO",
+        "sourceTeamKey": "461.l.213295.t.10",
+        "sourceTeamName": "Uzi",
+        "destinationTeamKey": "461.l.213295.t.3",
+        "destinationTeamName": "Floyd"
+      },
+      {
+        "playerId": "41823",
+        "playerName": "TreVeyon Henderson",
+        "position": "RB",
+        "nflTeam": "NE",
+        "sourceTeamKey": "461.l.213295.t.10",
+        "sourceTeamName": "Uzi",
+        "destinationTeamKey": "461.l.213295.t.3",
+        "destinationTeamName": "Floyd"
+      },
+      {
+        "playerId": "30180",
+        "playerName": "Alvin Kamara",
+        "position": "RB",
+        "nflTeam": "NO",
+        "sourceTeamKey": "461.l.213295.t.10",
+        "sourceTeamName": "Uzi",
+        "destinationTeamKey": "461.l.213295.t.3",
+        "destinationTeamName": "Floyd"
+      }
+    ]
+  },
+  {
+    "id": "150",
+    "transactionKey": "461.l.213295.tr.150",
+    "seasonId": "43822",
+    "seasonYear": 2025,
+    "postedAt": "2025-10-16T00:08:40.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "516963",
+      "memberId": "38861",
+      "teamKey": "461.l.213295.t.9",
+      "teamName": "BEVO"
+    },
+    "tradee": {
+      "seasonTeamId": "516955",
+      "memberId": "38860",
+      "teamKey": "461.l.213295.t.1",
+      "teamName": "Tommy's Toughest Road"
+    },
+    "traderSent": [
+      {
+        "playerId": "41791",
+        "playerName": "Ashton Jeanty",
+        "position": "RB",
+        "nflTeam": "LV",
+        "sourceTeamKey": "461.l.213295.t.9",
+        "sourceTeamName": "BEVO",
+        "destinationTeamKey": "461.l.213295.t.1",
+        "destinationTeamName": "Tommy's Toughest Road"
+      },
+      {
+        "playerId": "40892",
+        "playerName": "Ricky Pearsall",
+        "position": "WR",
+        "nflTeam": "SF",
+        "sourceTeamKey": "461.l.213295.t.9",
+        "sourceTeamName": "BEVO",
+        "destinationTeamKey": "461.l.213295.t.1",
+        "destinationTeamName": "Tommy's Toughest Road"
+      },
+      {
+        "playerId": "32676",
+        "playerName": "Justin Herbert",
+        "position": "QB",
+        "nflTeam": "LAC",
+        "sourceTeamKey": "461.l.213295.t.9",
+        "sourceTeamName": "BEVO",
+        "destinationTeamKey": "461.l.213295.t.1",
+        "destinationTeamName": "Tommy's Toughest Road"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "34007",
+        "playerName": "George Pickens",
+        "position": "WR",
+        "nflTeam": "Dal",
+        "sourceTeamKey": "461.l.213295.t.1",
+        "sourceTeamName": "Tommy's Toughest Road",
+        "destinationTeamKey": "461.l.213295.t.9",
+        "destinationTeamName": "BEVO"
+      },
+      {
+        "playerId": "33100",
+        "playerName": "Rico Dowdle",
+        "position": "RB",
+        "nflTeam": "Pit",
+        "sourceTeamKey": "461.l.213295.t.1",
+        "sourceTeamName": "Tommy's Toughest Road",
+        "destinationTeamKey": "461.l.213295.t.9",
+        "destinationTeamName": "BEVO"
+      },
+      {
+        "playerId": "40896",
+        "playerName": "Jayden Daniels",
+        "position": "QB",
+        "nflTeam": "Was",
+        "sourceTeamKey": "461.l.213295.t.1",
+        "sourceTeamName": "Tommy's Toughest Road",
+        "destinationTeamKey": "461.l.213295.t.9",
+        "destinationTeamName": "BEVO"
+      }
+    ]
+  },
+  {
+    "id": "119",
+    "transactionKey": "461.l.213295.tr.119",
+    "seasonId": "43822",
+    "seasonYear": 2025,
+    "postedAt": "2025-10-07T17:23:57.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "516963",
+      "memberId": "38861",
+      "teamKey": "461.l.213295.t.9",
+      "teamName": "BEVO"
+    },
+    "tradee": {
+      "seasonTeamId": "516964",
+      "memberId": "38867",
+      "teamKey": "461.l.213295.t.10",
+      "teamName": "Uzi"
+    },
+    "traderSent": [
+      {
+        "playerId": "30180",
+        "playerName": "Alvin Kamara",
+        "position": "RB",
+        "nflTeam": "NO",
+        "sourceTeamKey": "461.l.213295.t.9",
+        "sourceTeamName": "BEVO",
+        "destinationTeamKey": "461.l.213295.t.10",
+        "destinationTeamName": "Uzi"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "40051",
+        "playerName": "Quentin Johnston",
+        "position": "WR",
+        "nflTeam": "LAC",
+        "sourceTeamKey": "461.l.213295.t.10",
+        "sourceTeamName": "Uzi",
+        "destinationTeamKey": "461.l.213295.t.9",
+        "destinationTeamName": "BEVO"
+      }
+    ]
+  },
+  {
+    "id": "78",
+    "transactionKey": "461.l.213295.tr.78",
+    "seasonId": "43822",
+    "seasonYear": 2025,
+    "postedAt": "2025-09-23T22:14:58.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "516961",
+      "memberId": "38865",
+      "teamKey": "461.l.213295.t.7",
+      "teamName": "Mediocre Mooses"
+    },
+    "tradee": {
+      "seasonTeamId": "516964",
+      "memberId": "38867",
+      "teamKey": "461.l.213295.t.10",
+      "teamName": "Uzi"
+    },
+    "traderSent": [
+      {
+        "playerId": "40051",
+        "playerName": "Quentin Johnston",
+        "position": "WR",
+        "nflTeam": "LAC",
+        "sourceTeamKey": "461.l.213295.t.7",
+        "sourceTeamName": "Mediocre Mooses",
+        "destinationTeamKey": "461.l.213295.t.10",
+        "destinationTeamName": "Uzi"
+      },
+      {
+        "playerId": "41823",
+        "playerName": "TreVeyon Henderson",
+        "position": "RB",
+        "nflTeam": "NE",
+        "sourceTeamKey": "461.l.213295.t.7",
+        "sourceTeamName": "Mediocre Mooses",
+        "destinationTeamKey": "461.l.213295.t.10",
+        "destinationTeamName": "Uzi"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "31905",
+        "playerName": "David Montgomery",
+        "position": "RB",
+        "nflTeam": "Hou",
+        "sourceTeamKey": "461.l.213295.t.10",
+        "sourceTeamName": "Uzi",
+        "destinationTeamKey": "461.l.213295.t.7",
+        "destinationTeamName": "Mediocre Mooses"
+      },
+      {
+        "playerId": "41808",
+        "playerName": "Matthew Golden",
+        "position": "WR",
+        "nflTeam": "GB",
+        "sourceTeamKey": "461.l.213295.t.10",
+        "sourceTeamName": "Uzi",
+        "destinationTeamKey": "461.l.213295.t.7",
+        "destinationTeamName": "Mediocre Mooses"
+      }
+    ]
+  },
+  {
+    "id": "77",
+    "transactionKey": "461.l.213295.tr.77",
+    "seasonId": "43822",
+    "seasonYear": 2025,
+    "postedAt": "2025-09-23T16:38:31.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "516959",
+      "memberId": "38862",
+      "teamKey": "461.l.213295.t.5",
+      "teamName": "GET BACK GANG"
+    },
+    "tradee": {
+      "seasonTeamId": "516957",
+      "memberId": "38869",
+      "teamKey": "461.l.213295.t.3",
+      "teamName": "Floyd"
+    },
+    "traderSent": [
+      {
+        "playerId": "31960",
+        "playerName": "Tony Pollard",
+        "position": "RB",
+        "nflTeam": "Ten",
+        "sourceTeamKey": "461.l.213295.t.5",
+        "sourceTeamName": "GET BACK GANG",
+        "destinationTeamKey": "461.l.213295.t.3",
+        "destinationTeamName": "Floyd"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "41922",
+        "playerName": "Cam Skattebo",
+        "position": "RB",
+        "nflTeam": "NYG",
+        "sourceTeamKey": "461.l.213295.t.3",
+        "sourceTeamName": "Floyd",
+        "destinationTeamKey": "461.l.213295.t.5",
+        "destinationTeamName": "GET BACK GANG"
+      }
+    ]
+  },
+  {
+    "id": "66",
+    "transactionKey": "461.l.213295.tr.66",
+    "seasonId": "43822",
+    "seasonYear": 2025,
+    "postedAt": "2025-09-17T17:41:48.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "516961",
+      "memberId": "38865",
+      "teamKey": "461.l.213295.t.7",
+      "teamName": "Mediocre Mooses"
+    },
+    "tradee": {
+      "seasonTeamId": "516955",
+      "memberId": "38860",
+      "teamKey": "461.l.213295.t.1",
+      "teamName": "Tommy's Toughest Road"
+    },
+    "traderSent": [
+      {
+        "playerId": "31883",
+        "playerName": "A.J. Brown",
+        "position": "WR",
+        "nflTeam": "Phi",
+        "sourceTeamKey": "461.l.213295.t.7",
+        "sourceTeamName": "Mediocre Mooses",
+        "destinationTeamKey": "461.l.213295.t.1",
+        "destinationTeamName": "Tommy's Toughest Road"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "40908",
+        "playerName": "Ladd McConkey",
+        "position": "WR",
+        "nflTeam": "LAC",
+        "sourceTeamKey": "461.l.213295.t.1",
+        "sourceTeamName": "Tommy's Toughest Road",
+        "destinationTeamKey": "461.l.213295.t.7",
+        "destinationTeamName": "Mediocre Mooses"
+      }
+    ]
+  },
+  {
+    "id": "29",
+    "transactionKey": "461.l.213295.tr.29",
+    "seasonId": "43822",
+    "seasonYear": 2025,
+    "postedAt": "2025-08-25T20:35:15.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "516964",
+      "memberId": "38867",
+      "teamKey": "461.l.213295.t.10",
+      "teamName": "Uzi"
+    },
+    "tradee": {
+      "seasonTeamId": "516955",
+      "memberId": "38860",
+      "teamKey": "461.l.213295.t.1",
+      "teamName": "Tommy's Toughest Road"
+    },
+    "traderSent": [
+      {
+        "playerId": "41845",
+        "playerName": "RJ Harvey",
+        "position": "RB",
+        "nflTeam": "Den",
+        "sourceTeamKey": "461.l.213295.t.10",
+        "sourceTeamName": "Uzi",
+        "destinationTeamKey": "461.l.213295.t.1",
+        "destinationTeamName": "Tommy's Toughest Road"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "33398",
+        "playerName": "DeVonta Smith",
+        "position": "WR",
+        "nflTeam": "Phi",
+        "sourceTeamKey": "461.l.213295.t.1",
+        "sourceTeamName": "Tommy's Toughest Road",
+        "destinationTeamKey": "461.l.213295.t.10",
+        "destinationTeamName": "Uzi"
+      }
+    ]
+  },
+  {
+    "id": "26",
+    "transactionKey": "461.l.213295.tr.26",
+    "seasonId": "43822",
+    "seasonYear": 2025,
+    "postedAt": "2025-08-23T15:33:57.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "516964",
+      "memberId": "38867",
+      "teamKey": "461.l.213295.t.10",
+      "teamName": "Uzi"
+    },
+    "tradee": {
+      "seasonTeamId": "516955",
+      "memberId": "38860",
+      "teamKey": "461.l.213295.t.1",
+      "teamName": "Tommy's Toughest Road"
+    },
+    "traderSent": [
+      {
+        "playerId": "40055",
+        "playerName": "Bijan Robinson",
+        "position": "RB",
+        "nflTeam": "Atl",
+        "sourceTeamKey": "461.l.213295.t.10",
+        "sourceTeamName": "Uzi",
+        "destinationTeamKey": "461.l.213295.t.1",
+        "destinationTeamName": "Tommy's Toughest Road"
+      },
+      {
+        "playerId": "40958",
+        "playerName": "Trey Benson",
+        "position": "RB",
+        "nflTeam": "Ari",
+        "sourceTeamKey": "461.l.213295.t.10",
+        "sourceTeamName": "Uzi",
+        "destinationTeamKey": "461.l.213295.t.1",
+        "destinationTeamName": "Tommy's Toughest Road"
+      },
+      {
+        "playerId": "33963",
+        "playerName": "Drake London",
+        "position": "WR",
+        "nflTeam": "Atl",
+        "sourceTeamKey": "461.l.213295.t.10",
+        "sourceTeamName": "Uzi",
+        "destinationTeamKey": "461.l.213295.t.1",
+        "destinationTeamName": "Tommy's Toughest Road"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "32711",
+        "playerName": "Jonathan Taylor",
+        "position": "RB",
+        "nflTeam": "Ind",
+        "sourceTeamKey": "461.l.213295.t.1",
+        "sourceTeamName": "Tommy's Toughest Road",
+        "destinationTeamKey": "461.l.213295.t.10",
+        "destinationTeamName": "Uzi"
+      },
+      {
+        "playerId": "33966",
+        "playerName": "Chris Olave",
+        "position": "WR",
+        "nflTeam": "NO",
+        "sourceTeamKey": "461.l.213295.t.1",
+        "sourceTeamName": "Tommy's Toughest Road",
+        "destinationTeamKey": "461.l.213295.t.10",
+        "destinationTeamName": "Uzi"
+      },
+      {
+        "playerId": "40059",
+        "playerName": "Jahmyr Gibbs",
+        "position": "RB",
+        "nflTeam": "Det",
+        "sourceTeamKey": "461.l.213295.t.1",
+        "sourceTeamName": "Tommy's Toughest Road",
+        "destinationTeamKey": "461.l.213295.t.10",
+        "destinationTeamName": "Uzi"
+      }
+    ]
+  },
+  {
+    "id": "191",
+    "transactionKey": "449.l.525825.tr.191",
+    "seasonId": "11760",
+    "seasonYear": 2024,
+    "postedAt": "2024-11-03T20:13:16.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129675",
+      "memberId": "38860",
+      "teamKey": "449.l.525825.t.1",
+      "teamName": "To Infinity and Bijan"
+    },
+    "tradee": {
+      "seasonTeamId": "129678",
+      "memberId": "38863",
+      "teamKey": "449.l.525825.t.4",
+      "teamName": "GET GOOD SOON GANG iA"
+    },
+    "traderSent": [
+      {
+        "playerId": "32231",
+        "playerName": "Jakobi Meyers",
+        "position": "WR",
+        "nflTeam": "Jax",
+        "sourceTeamKey": "449.l.525825.t.1",
+        "sourceTeamName": "To Infinity and Bijan",
+        "destinationTeamKey": "449.l.525825.t.4",
+        "destinationTeamName": "GET GOOD SOON GANG iA"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "33413",
+        "playerName": "Travis Etienne Jr.",
+        "position": "RB",
+        "nflTeam": "NO",
+        "sourceTeamKey": "449.l.525825.t.4",
+        "sourceTeamName": "GET GOOD SOON GANG iA",
+        "destinationTeamKey": "449.l.525825.t.1",
+        "destinationTeamName": "To Infinity and Bijan"
+      }
+    ]
+  },
+  {
+    "id": "177",
+    "transactionKey": "449.l.525825.tr.177",
+    "seasonId": "11760",
+    "seasonYear": 2024,
+    "postedAt": "2024-10-29T22:50:50.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129675",
+      "memberId": "38860",
+      "teamKey": "449.l.525825.t.1",
+      "teamName": "To Infinity and Bijan"
+    },
+    "tradee": {
+      "seasonTeamId": "129677",
+      "memberId": "38862",
+      "teamKey": "449.l.525825.t.3",
+      "teamName": "HARRIS WICKS 2024"
+    },
+    "traderSent": [
+      {
+        "playerId": "32705",
+        "playerName": "D'Andre Swift",
+        "position": "RB",
+        "nflTeam": "Chi",
+        "sourceTeamKey": "449.l.525825.t.1",
+        "sourceTeamName": "To Infinity and Bijan",
+        "destinationTeamKey": "449.l.525825.t.3",
+        "destinationTeamName": "HARRIS WICKS 2024"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "33394",
+        "playerName": "Jaylen Waddle",
+        "position": "WR",
+        "nflTeam": "Den",
+        "sourceTeamKey": "449.l.525825.t.3",
+        "sourceTeamName": "HARRIS WICKS 2024",
+        "destinationTeamKey": "449.l.525825.t.1",
+        "destinationTeamName": "To Infinity and Bijan"
+      }
+    ]
+  },
+  {
+    "id": "176",
+    "transactionKey": "449.l.525825.tr.176",
+    "seasonId": "11760",
+    "seasonYear": 2024,
+    "postedAt": "2024-10-29T17:22:31.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129682",
+      "memberId": "38867",
+      "teamKey": "449.l.525825.t.8",
+      "teamName": "THE REAL FT"
+    },
+    "tradee": {
+      "seasonTeamId": "129680",
+      "memberId": "38865",
+      "teamKey": "449.l.525825.t.6",
+      "teamName": "Mediocre Mooses"
+    },
+    "traderSent": [
+      {
+        "playerId": "33423",
+        "playerName": "Javonte Williams",
+        "position": "RB",
+        "nflTeam": "Dal",
+        "sourceTeamKey": "449.l.525825.t.8",
+        "sourceTeamName": "THE REAL FT",
+        "destinationTeamKey": "449.l.525825.t.6",
+        "destinationTeamName": "Mediocre Mooses"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "32843",
+        "playerName": "Darnell Mooney",
+        "position": "WR",
+        "nflTeam": "NYG",
+        "sourceTeamKey": "449.l.525825.t.6",
+        "sourceTeamName": "Mediocre Mooses",
+        "destinationTeamKey": "449.l.525825.t.8",
+        "destinationTeamName": "THE REAL FT"
+      }
+    ]
+  },
+  {
+    "id": "174",
+    "transactionKey": "449.l.525825.tr.174",
+    "seasonId": "11760",
+    "seasonYear": 2024,
+    "postedAt": "2024-10-29T15:19:20.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129680",
+      "memberId": "38865",
+      "teamKey": "449.l.525825.t.6",
+      "teamName": "Mediocre Mooses"
+    },
+    "tradee": {
+      "seasonTeamId": "129676",
+      "memberId": "38861",
+      "teamKey": "449.l.525825.t.2",
+      "teamName": "The Pollard Express"
+    },
+    "traderSent": [
+      {
+        "playerId": "40095",
+        "playerName": "Tank Bigsby",
+        "position": "RB",
+        "nflTeam": "Phi",
+        "sourceTeamKey": "449.l.525825.t.6",
+        "sourceTeamName": "Mediocre Mooses",
+        "destinationTeamKey": "449.l.525825.t.2",
+        "destinationTeamName": "The Pollard Express"
+      },
+      {
+        "playerId": "40877",
+        "playerName": "Xavier Worthy",
+        "position": "WR",
+        "nflTeam": "KC",
+        "sourceTeamKey": "449.l.525825.t.6",
+        "sourceTeamName": "Mediocre Mooses",
+        "destinationTeamKey": "449.l.525825.t.2",
+        "destinationTeamName": "The Pollard Express"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "40075",
+        "playerName": "Zach Charbonnet",
+        "position": "RB",
+        "nflTeam": "Sea",
+        "sourceTeamKey": "449.l.525825.t.2",
+        "sourceTeamName": "The Pollard Express",
+        "destinationTeamKey": "449.l.525825.t.6",
+        "destinationTeamName": "Mediocre Mooses"
+      },
+      {
+        "playerId": "28392",
+        "playerName": "Amari Cooper",
+        "position": "WR",
+        "nflTeam": "Buf",
+        "sourceTeamKey": "449.l.525825.t.2",
+        "sourceTeamName": "The Pollard Express",
+        "destinationTeamKey": "449.l.525825.t.6",
+        "destinationTeamName": "Mediocre Mooses"
+      }
+    ]
+  },
+  {
+    "id": "165",
+    "transactionKey": "449.l.525825.tr.165",
+    "seasonId": "11760",
+    "seasonYear": 2024,
+    "postedAt": "2024-10-23T20:04:52.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129675",
+      "memberId": "38860",
+      "teamKey": "449.l.525825.t.1",
+      "teamName": "To Infinity and Bijan"
+    },
+    "tradee": {
+      "seasonTeamId": "129680",
+      "memberId": "38865",
+      "teamKey": "449.l.525825.t.6",
+      "teamName": "Mediocre Mooses"
+    },
+    "traderSent": [
+      {
+        "playerId": "40095",
+        "playerName": "Tank Bigsby",
+        "position": "RB",
+        "nflTeam": "Phi",
+        "sourceTeamKey": "449.l.525825.t.1",
+        "sourceTeamName": "To Infinity and Bijan",
+        "destinationTeamKey": "449.l.525825.t.6",
+        "destinationTeamName": "Mediocre Mooses"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "40926",
+        "playerName": "Jonathon Brooks",
+        "position": "RB",
+        "nflTeam": "Car",
+        "sourceTeamKey": "449.l.525825.t.6",
+        "sourceTeamName": "Mediocre Mooses",
+        "destinationTeamKey": "449.l.525825.t.1",
+        "destinationTeamName": "To Infinity and Bijan"
+      }
+    ]
+  },
+  {
+    "id": "164",
+    "transactionKey": "449.l.525825.tr.164",
+    "seasonId": "11760",
+    "seasonYear": 2024,
+    "postedAt": "2024-10-23T19:51:45.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129680",
+      "memberId": "38865",
+      "teamKey": "449.l.525825.t.6",
+      "teamName": "Mediocre Mooses"
+    },
+    "tradee": {
+      "seasonTeamId": "129684",
+      "memberId": "38869",
+      "teamKey": "449.l.525825.t.10",
+      "teamName": "Bugatti"
+    },
+    "traderSent": [
+      {
+        "playerId": "32887",
+        "playerName": "Jauan Jennings",
+        "position": "WR",
+        "nflTeam": "Min",
+        "sourceTeamKey": "449.l.525825.t.6",
+        "sourceTeamName": "Mediocre Mooses",
+        "destinationTeamKey": "449.l.525825.t.10",
+        "destinationTeamName": "Bugatti"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "40926",
+        "playerName": "Jonathon Brooks",
+        "position": "RB",
+        "nflTeam": "Car",
+        "sourceTeamKey": "449.l.525825.t.10",
+        "sourceTeamName": "Bugatti",
+        "destinationTeamKey": "449.l.525825.t.6",
+        "destinationTeamName": "Mediocre Mooses"
+      }
+    ]
+  },
+  {
+    "id": "139",
+    "transactionKey": "449.l.525825.tr.139",
+    "seasonId": "11760",
+    "seasonYear": 2024,
+    "postedAt": "2024-10-15T19:23:04.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129675",
+      "memberId": "38860",
+      "teamKey": "449.l.525825.t.1",
+      "teamName": "To Infinity and Bijan"
+    },
+    "tradee": {
+      "seasonTeamId": "129682",
+      "memberId": "38867",
+      "teamKey": "449.l.525825.t.8",
+      "teamName": "THE REAL FT"
+    },
+    "traderSent": [
+      {
+        "playerId": "27581",
+        "playerName": "Davante Adams",
+        "position": "WR",
+        "nflTeam": "LAR",
+        "sourceTeamKey": "449.l.525825.t.1",
+        "sourceTeamName": "To Infinity and Bijan",
+        "destinationTeamKey": "449.l.525825.t.8",
+        "destinationTeamName": "THE REAL FT"
+      },
+      {
+        "playerId": "31906",
+        "playerName": "Devin Singletary",
+        "position": "RB",
+        "nflTeam": "NYG",
+        "sourceTeamKey": "449.l.525825.t.1",
+        "sourceTeamName": "To Infinity and Bijan",
+        "destinationTeamKey": "449.l.525825.t.8",
+        "destinationTeamName": "THE REAL FT"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "40893",
+        "playerName": "Marvin Harrison Jr.",
+        "position": "WR",
+        "nflTeam": "Ari",
+        "sourceTeamKey": "449.l.525825.t.8",
+        "sourceTeamName": "THE REAL FT",
+        "destinationTeamKey": "449.l.525825.t.1",
+        "destinationTeamName": "To Infinity and Bijan"
+      },
+      {
+        "playerId": "31005",
+        "playerName": "Nick Chubb",
+        "position": "RB",
+        "nflTeam": "Hou",
+        "sourceTeamKey": "449.l.525825.t.8",
+        "sourceTeamName": "THE REAL FT",
+        "destinationTeamKey": "449.l.525825.t.1",
+        "destinationTeamName": "To Infinity and Bijan"
+      }
+    ]
+  },
+  {
+    "id": "128",
+    "transactionKey": "449.l.525825.tr.128",
+    "seasonId": "11760",
+    "seasonYear": 2024,
+    "postedAt": "2024-10-11T02:01:53.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129680",
+      "memberId": "38865",
+      "teamKey": "449.l.525825.t.6",
+      "teamName": "Mediocre Mooses"
+    },
+    "tradee": {
+      "seasonTeamId": "129682",
+      "memberId": "38867",
+      "teamKey": "449.l.525825.t.8",
+      "teamName": "THE REAL FT"
+    },
+    "traderSent": [
+      {
+        "playerId": "34112",
+        "playerName": "Jerome Ford",
+        "position": "RB",
+        "nflTeam": "Was",
+        "sourceTeamKey": "449.l.525825.t.6",
+        "sourceTeamName": "Mediocre Mooses",
+        "destinationTeamKey": "449.l.525825.t.8",
+        "destinationTeamName": "THE REAL FT"
+      },
+      {
+        "playerId": "31840",
+        "playerName": "T.J. Hockenson",
+        "position": "TE",
+        "nflTeam": "Min",
+        "sourceTeamKey": "449.l.525825.t.6",
+        "sourceTeamName": "Mediocre Mooses",
+        "destinationTeamKey": "449.l.525825.t.8",
+        "destinationTeamName": "THE REAL FT"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "40040",
+        "playerName": "Anthony Richardson Sr.",
+        "position": "QB",
+        "nflTeam": "Ind",
+        "sourceTeamKey": "449.l.525825.t.8",
+        "sourceTeamName": "THE REAL FT",
+        "destinationTeamKey": "449.l.525825.t.6",
+        "destinationTeamName": "Mediocre Mooses"
+      }
+    ]
+  },
+  {
+    "id": "123",
+    "transactionKey": "449.l.525825.tr.123",
+    "seasonId": "11760",
+    "seasonYear": 2024,
+    "postedAt": "2024-10-09T15:54:55.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129676",
+      "memberId": "38861",
+      "teamKey": "449.l.525825.t.2",
+      "teamName": "The Pollard Express"
+    },
+    "tradee": {
+      "seasonTeamId": "129682",
+      "memberId": "38867",
+      "teamKey": "449.l.525825.t.8",
+      "teamName": "THE REAL FT"
+    },
+    "traderSent": [
+      {
+        "playerId": "32417",
+        "playerName": "Chase McLaughlin",
+        "position": "K",
+        "nflTeam": "TB",
+        "sourceTeamKey": "449.l.525825.t.2",
+        "sourceTeamName": "The Pollard Express",
+        "destinationTeamKey": "449.l.525825.t.8",
+        "destinationTeamName": "THE REAL FT"
+      },
+      {
+        "playerId": "33399",
+        "playerName": "Justin Fields",
+        "position": "QB",
+        "nflTeam": "KC",
+        "sourceTeamKey": "449.l.525825.t.2",
+        "sourceTeamName": "The Pollard Express",
+        "destinationTeamKey": "449.l.525825.t.8",
+        "destinationTeamName": "THE REAL FT"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "28392",
+        "playerName": "Amari Cooper",
+        "position": "WR",
+        "nflTeam": "Buf",
+        "sourceTeamKey": "449.l.525825.t.8",
+        "sourceTeamName": "THE REAL FT",
+        "destinationTeamKey": "449.l.525825.t.2",
+        "destinationTeamName": "The Pollard Express"
+      }
+    ]
+  },
+  {
+    "id": "113",
+    "transactionKey": "449.l.525825.tr.113",
+    "seasonId": "11760",
+    "seasonYear": 2024,
+    "postedAt": "2024-10-08T18:45:01.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129682",
+      "memberId": "38867",
+      "teamKey": "449.l.525825.t.8",
+      "teamName": "THE REAL FT"
+    },
+    "tradee": {
+      "seasonTeamId": "129677",
+      "memberId": "38862",
+      "teamKey": "449.l.525825.t.3",
+      "teamName": "HARRIS WICKS 2024"
+    },
+    "traderSent": [
+      {
+        "playerId": "40201",
+        "playerName": "Dontayvion Wicks",
+        "position": "WR",
+        "nflTeam": "Phi",
+        "sourceTeamKey": "449.l.525825.t.8",
+        "sourceTeamName": "THE REAL FT",
+        "destinationTeamKey": "449.l.525825.t.3",
+        "destinationTeamName": "HARRIS WICKS 2024"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "30136",
+        "playerName": "Evan Engram",
+        "position": "TE",
+        "nflTeam": "Den",
+        "sourceTeamKey": "449.l.525825.t.3",
+        "sourceTeamName": "HARRIS WICKS 2024",
+        "destinationTeamKey": "449.l.525825.t.8",
+        "destinationTeamName": "THE REAL FT"
+      }
+    ]
+  },
+  {
+    "id": "102",
+    "transactionKey": "449.l.525825.tr.102",
+    "seasonId": "11760",
+    "seasonYear": 2024,
+    "postedAt": "2024-10-04T01:35:10.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129677",
+      "memberId": "38862",
+      "teamKey": "449.l.525825.t.3",
+      "teamName": "HARRIS WICKS 2024"
+    },
+    "tradee": {
+      "seasonTeamId": "129675",
+      "memberId": "38860",
+      "teamKey": "449.l.525825.t.1",
+      "teamName": "To Infinity and Bijan"
+    },
+    "traderSent": [
+      {
+        "playerId": "27581",
+        "playerName": "Davante Adams",
+        "position": "WR",
+        "nflTeam": "LAR",
+        "sourceTeamKey": "449.l.525825.t.3",
+        "sourceTeamName": "HARRIS WICKS 2024",
+        "destinationTeamKey": "449.l.525825.t.1",
+        "destinationTeamName": "To Infinity and Bijan"
+      },
+      {
+        "playerId": "34659",
+        "playerName": "Rashid Shaheed",
+        "position": "WR",
+        "nflTeam": "Sea",
+        "sourceTeamKey": "449.l.525825.t.3",
+        "sourceTeamName": "HARRIS WICKS 2024",
+        "destinationTeamKey": "449.l.525825.t.1",
+        "destinationTeamName": "To Infinity and Bijan"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "40883",
+        "playerName": "Brian Thomas Jr.",
+        "position": "WR",
+        "nflTeam": "Jax",
+        "sourceTeamKey": "449.l.525825.t.1",
+        "sourceTeamName": "To Infinity and Bijan",
+        "destinationTeamKey": "449.l.525825.t.3",
+        "destinationTeamName": "HARRIS WICKS 2024"
+      },
+      {
+        "playerId": "32703",
+        "playerName": "Tee Higgins",
+        "position": "WR",
+        "nflTeam": "Cin",
+        "sourceTeamKey": "449.l.525825.t.1",
+        "sourceTeamName": "To Infinity and Bijan",
+        "destinationTeamKey": "449.l.525825.t.3",
+        "destinationTeamName": "HARRIS WICKS 2024"
+      }
+    ]
+  },
+  {
+    "id": "98",
+    "transactionKey": "449.l.525825.tr.98",
+    "seasonId": "11760",
+    "seasonYear": 2024,
+    "postedAt": "2024-10-02T12:35:01.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129677",
+      "memberId": "38862",
+      "teamKey": "449.l.525825.t.3",
+      "teamName": "HARRIS WICKS 2024"
+    },
+    "tradee": {
+      "seasonTeamId": "129680",
+      "memberId": "38865",
+      "teamKey": "449.l.525825.t.6",
+      "teamName": "Mediocre Mooses"
+    },
+    "traderSent": [
+      {
+        "playerId": "34112",
+        "playerName": "Jerome Ford",
+        "position": "RB",
+        "nflTeam": "Was",
+        "sourceTeamKey": "449.l.525825.t.3",
+        "sourceTeamName": "HARRIS WICKS 2024",
+        "destinationTeamKey": "449.l.525825.t.6",
+        "destinationTeamName": "Mediocre Mooses"
+      },
+      {
+        "playerId": "40064",
+        "playerName": "Sam LaPorta",
+        "position": "TE",
+        "nflTeam": "Det",
+        "sourceTeamKey": "449.l.525825.t.3",
+        "sourceTeamName": "HARRIS WICKS 2024",
+        "destinationTeamKey": "449.l.525825.t.6",
+        "destinationTeamName": "Mediocre Mooses"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "30136",
+        "playerName": "Evan Engram",
+        "position": "TE",
+        "nflTeam": "Den",
+        "sourceTeamKey": "449.l.525825.t.6",
+        "sourceTeamName": "Mediocre Mooses",
+        "destinationTeamKey": "449.l.525825.t.3",
+        "destinationTeamName": "HARRIS WICKS 2024"
+      },
+      {
+        "playerId": "30295",
+        "playerName": "Aaron Jones Sr.",
+        "position": "RB",
+        "nflTeam": "Min",
+        "sourceTeamKey": "449.l.525825.t.6",
+        "sourceTeamName": "Mediocre Mooses",
+        "destinationTeamKey": "449.l.525825.t.3",
+        "destinationTeamName": "HARRIS WICKS 2024"
+      }
+    ]
+  },
+  {
+    "id": "92",
+    "transactionKey": "449.l.525825.tr.92",
+    "seasonId": "11760",
+    "seasonYear": 2024,
+    "postedAt": "2024-10-01T18:54:09.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129677",
+      "memberId": "38862",
+      "teamKey": "449.l.525825.t.3",
+      "teamName": "HARRIS WICKS 2024"
+    },
+    "tradee": {
+      "seasonTeamId": "129676",
+      "memberId": "38861",
+      "teamKey": "449.l.525825.t.2",
+      "teamName": "The Pollard Express"
+    },
+    "traderSent": [
+      {
+        "playerId": "40075",
+        "playerName": "Zach Charbonnet",
+        "position": "RB",
+        "nflTeam": "Sea",
+        "sourceTeamKey": "449.l.525825.t.3",
+        "sourceTeamName": "HARRIS WICKS 2024",
+        "destinationTeamKey": "449.l.525825.t.2",
+        "destinationTeamName": "The Pollard Express"
+      },
+      {
+        "playerId": "34047",
+        "playerName": "Rachaad White",
+        "position": "RB",
+        "nflTeam": "Was",
+        "sourceTeamKey": "449.l.525825.t.3",
+        "sourceTeamName": "HARRIS WICKS 2024",
+        "destinationTeamKey": "449.l.525825.t.2",
+        "destinationTeamName": "The Pollard Express"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "33394",
+        "playerName": "Jaylen Waddle",
+        "position": "WR",
+        "nflTeam": "Den",
+        "sourceTeamKey": "449.l.525825.t.2",
+        "sourceTeamName": "The Pollard Express",
+        "destinationTeamKey": "449.l.525825.t.3",
+        "destinationTeamName": "HARRIS WICKS 2024"
+      }
+    ]
+  },
+  {
+    "id": "91",
+    "transactionKey": "449.l.525825.tr.91",
+    "seasonId": "11760",
+    "seasonYear": 2024,
+    "postedAt": "2024-10-01T18:54:05.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129684",
+      "memberId": "38869",
+      "teamKey": "449.l.525825.t.10",
+      "teamName": "Bugatti"
+    },
+    "tradee": {
+      "seasonTeamId": "129682",
+      "memberId": "38867",
+      "teamKey": "449.l.525825.t.8",
+      "teamName": "THE REAL FT"
+    },
+    "traderSent": [
+      {
+        "playerId": "33398",
+        "playerName": "DeVonta Smith",
+        "position": "WR",
+        "nflTeam": "Phi",
+        "sourceTeamKey": "449.l.525825.t.10",
+        "sourceTeamName": "Bugatti",
+        "destinationTeamKey": "449.l.525825.t.8",
+        "destinationTeamName": "THE REAL FT"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "32695",
+        "playerName": "Brandon Aiyuk",
+        "position": "WR",
+        "nflTeam": "SF",
+        "sourceTeamKey": "449.l.525825.t.8",
+        "sourceTeamName": "THE REAL FT",
+        "destinationTeamKey": "449.l.525825.t.10",
+        "destinationTeamName": "Bugatti"
+      }
+    ]
+  },
+  {
+    "id": "72",
+    "transactionKey": "449.l.525825.tr.72",
+    "seasonId": "11760",
+    "seasonYear": 2024,
+    "postedAt": "2024-09-25T01:56:56.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129676",
+      "memberId": "38861",
+      "teamKey": "449.l.525825.t.2",
+      "teamName": "The Pollard Express"
+    },
+    "tradee": {
+      "seasonTeamId": "129682",
+      "memberId": "38867",
+      "teamKey": "449.l.525825.t.8",
+      "teamName": "THE REAL FT"
+    },
+    "traderSent": [
+      {
+        "playerId": "30142",
+        "playerName": "David Njoku",
+        "position": "TE",
+        "nflTeam": "LAC",
+        "sourceTeamKey": "449.l.525825.t.2",
+        "sourceTeamName": "The Pollard Express",
+        "destinationTeamKey": "449.l.525825.t.8",
+        "destinationTeamName": "THE REAL FT"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "40981",
+        "playerName": "Braelon Allen",
+        "position": "RB",
+        "nflTeam": "NYJ",
+        "sourceTeamKey": "449.l.525825.t.8",
+        "sourceTeamName": "THE REAL FT",
+        "destinationTeamKey": "449.l.525825.t.2",
+        "destinationTeamName": "The Pollard Express"
+      }
+    ]
+  },
+  {
+    "id": "57",
+    "transactionKey": "449.l.525825.tr.57",
+    "seasonId": "11760",
+    "seasonYear": 2024,
+    "postedAt": "2024-09-18T18:19:59.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129682",
+      "memberId": "38867",
+      "teamKey": "449.l.525825.t.8",
+      "teamName": "THE REAL FT"
+    },
+    "tradee": {
+      "seasonTeamId": "129684",
+      "memberId": "38869",
+      "teamKey": "449.l.525825.t.10",
+      "teamName": "Bugatti"
+    },
+    "traderSent": [
+      {
+        "playerId": "32725",
+        "playerName": "J.K. Dobbins",
+        "position": "RB",
+        "nflTeam": "Den",
+        "sourceTeamKey": "449.l.525825.t.8",
+        "sourceTeamName": "THE REAL FT",
+        "destinationTeamKey": "449.l.525825.t.10",
+        "destinationTeamName": "Bugatti"
+      },
+      {
+        "playerId": "33965",
+        "playerName": "Garrett Wilson",
+        "position": "WR",
+        "nflTeam": "NYJ",
+        "sourceTeamKey": "449.l.525825.t.8",
+        "sourceTeamName": "THE REAL FT",
+        "destinationTeamKey": "449.l.525825.t.10",
+        "destinationTeamName": "Bugatti"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "40059",
+        "playerName": "Jahmyr Gibbs",
+        "position": "RB",
+        "nflTeam": "Det",
+        "sourceTeamKey": "449.l.525825.t.10",
+        "sourceTeamName": "Bugatti",
+        "destinationTeamKey": "449.l.525825.t.8",
+        "destinationTeamName": "THE REAL FT"
+      },
+      {
+        "playerId": "28392",
+        "playerName": "Amari Cooper",
+        "position": "WR",
+        "nflTeam": "Buf",
+        "sourceTeamKey": "449.l.525825.t.10",
+        "sourceTeamName": "Bugatti",
+        "destinationTeamKey": "449.l.525825.t.8",
+        "destinationTeamName": "THE REAL FT"
+      }
+    ]
+  },
+  {
+    "id": "50",
+    "transactionKey": "449.l.525825.tr.50",
+    "seasonId": "11760",
+    "seasonYear": 2024,
+    "postedAt": "2024-09-17T17:07:48.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129675",
+      "memberId": "38860",
+      "teamKey": "449.l.525825.t.1",
+      "teamName": "To Infinity and Bijan"
+    },
+    "tradee": {
+      "seasonTeamId": "129676",
+      "memberId": "38861",
+      "teamKey": "449.l.525825.t.2",
+      "teamName": "The Pollard Express"
+    },
+    "traderSent": [
+      {
+        "playerId": "31960",
+        "playerName": "Tony Pollard",
+        "position": "RB",
+        "nflTeam": "Ten",
+        "sourceTeamKey": "449.l.525825.t.1",
+        "sourceTeamName": "To Infinity and Bijan",
+        "destinationTeamKey": "449.l.525825.t.2",
+        "destinationTeamName": "The Pollard Express"
+      },
+      {
+        "playerId": "40908",
+        "playerName": "Ladd McConkey",
+        "position": "WR",
+        "nflTeam": "LAC",
+        "sourceTeamKey": "449.l.525825.t.1",
+        "sourceTeamName": "To Infinity and Bijan",
+        "destinationTeamKey": "449.l.525825.t.2",
+        "destinationTeamName": "The Pollard Express"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "32705",
+        "playerName": "D'Andre Swift",
+        "position": "RB",
+        "nflTeam": "Chi",
+        "sourceTeamKey": "449.l.525825.t.2",
+        "sourceTeamName": "The Pollard Express",
+        "destinationTeamKey": "449.l.525825.t.1",
+        "destinationTeamName": "To Infinity and Bijan"
+      },
+      {
+        "playerId": "40883",
+        "playerName": "Brian Thomas Jr.",
+        "position": "WR",
+        "nflTeam": "Jax",
+        "sourceTeamKey": "449.l.525825.t.2",
+        "sourceTeamName": "The Pollard Express",
+        "destinationTeamKey": "449.l.525825.t.1",
+        "destinationTeamName": "To Infinity and Bijan"
+      }
+    ]
+  },
+  {
+    "id": "44",
+    "transactionKey": "449.l.525825.tr.44",
+    "seasonId": "11760",
+    "seasonYear": 2024,
+    "postedAt": "2024-09-11T18:47:25.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129676",
+      "memberId": "38861",
+      "teamKey": "449.l.525825.t.2",
+      "teamName": "The Pollard Express"
+    },
+    "tradee": {
+      "seasonTeamId": "129682",
+      "memberId": "38867",
+      "teamKey": "449.l.525825.t.8",
+      "teamName": "THE REAL FT"
+    },
+    "traderSent": [
+      {
+        "playerId": "33423",
+        "playerName": "Javonte Williams",
+        "position": "RB",
+        "nflTeam": "Dal",
+        "sourceTeamKey": "449.l.525825.t.2",
+        "sourceTeamName": "The Pollard Express",
+        "destinationTeamKey": "449.l.525825.t.8",
+        "destinationTeamName": "THE REAL FT"
+      },
+      {
+        "playerId": "31107",
+        "playerName": "Dalton Schultz",
+        "position": "TE",
+        "nflTeam": "Hou",
+        "sourceTeamKey": "449.l.525825.t.2",
+        "sourceTeamName": "The Pollard Express",
+        "destinationTeamKey": "449.l.525825.t.8",
+        "destinationTeamName": "THE REAL FT"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "34085",
+        "playerName": "Jake Ferguson",
+        "position": "TE",
+        "nflTeam": "Dal",
+        "sourceTeamKey": "449.l.525825.t.8",
+        "sourceTeamName": "THE REAL FT",
+        "destinationTeamKey": "449.l.525825.t.2",
+        "destinationTeamName": "The Pollard Express"
+      }
+    ]
+  },
+  {
+    "id": "31",
+    "transactionKey": "449.l.525825.tr.31",
+    "seasonId": "11760",
+    "seasonYear": 2024,
+    "postedAt": "2024-09-01T00:01:46.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129682",
+      "memberId": "38867",
+      "teamKey": "449.l.525825.t.8",
+      "teamName": "THE REAL FT"
+    },
+    "tradee": {
+      "seasonTeamId": "129675",
+      "memberId": "38860",
+      "teamKey": "449.l.525825.t.1",
+      "teamName": "To Infinity and Bijan"
+    },
+    "traderSent": [
+      {
+        "playerId": "32703",
+        "playerName": "Tee Higgins",
+        "position": "WR",
+        "nflTeam": "Cin",
+        "sourceTeamKey": "449.l.525825.t.8",
+        "sourceTeamName": "THE REAL FT",
+        "destinationTeamKey": "449.l.525825.t.1",
+        "destinationTeamName": "To Infinity and Bijan"
+      },
+      {
+        "playerId": "30180",
+        "playerName": "Alvin Kamara",
+        "position": "RB",
+        "nflTeam": "NO",
+        "sourceTeamKey": "449.l.525825.t.8",
+        "sourceTeamName": "THE REAL FT",
+        "destinationTeamKey": "449.l.525825.t.1",
+        "destinationTeamName": "To Infinity and Bijan"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "40893",
+        "playerName": "Marvin Harrison Jr.",
+        "position": "WR",
+        "nflTeam": "Ari",
+        "sourceTeamKey": "449.l.525825.t.1",
+        "sourceTeamName": "To Infinity and Bijan",
+        "destinationTeamKey": "449.l.525825.t.8",
+        "destinationTeamName": "THE REAL FT"
+      }
+    ]
+  },
+  {
+    "id": "30",
+    "transactionKey": "449.l.525825.tr.30",
+    "seasonId": "11760",
+    "seasonYear": 2024,
+    "postedAt": "2024-08-26T16:41:10.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129680",
+      "memberId": "38865",
+      "teamKey": "449.l.525825.t.6",
+      "teamName": "Mediocre Mooses"
+    },
+    "tradee": {
+      "seasonTeamId": "129675",
+      "memberId": "38860",
+      "teamKey": "449.l.525825.t.1",
+      "teamName": "To Infinity and Bijan"
+    },
+    "traderSent": [
+      {
+        "playerId": "31906",
+        "playerName": "Devin Singletary",
+        "position": "RB",
+        "nflTeam": "NYG",
+        "sourceTeamKey": "449.l.525825.t.6",
+        "sourceTeamName": "Mediocre Mooses",
+        "destinationTeamKey": "449.l.525825.t.1",
+        "destinationTeamName": "To Infinity and Bijan"
+      },
+      {
+        "playerId": "26699",
+        "playerName": "Keenan Allen",
+        "position": "WR",
+        "nflTeam": "LAC",
+        "sourceTeamKey": "449.l.525825.t.6",
+        "sourceTeamName": "Mediocre Mooses",
+        "destinationTeamKey": "449.l.525825.t.1",
+        "destinationTeamName": "To Infinity and Bijan"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "29238",
+        "playerName": "Ezekiel Elliott",
+        "position": "RB",
+        "nflTeam": "Dal",
+        "sourceTeamKey": "449.l.525825.t.1",
+        "sourceTeamName": "To Infinity and Bijan",
+        "destinationTeamKey": "449.l.525825.t.6",
+        "destinationTeamName": "Mediocre Mooses"
+      },
+      {
+        "playerId": "31896",
+        "playerName": "DK Metcalf",
+        "position": "WR",
+        "nflTeam": "Pit",
+        "sourceTeamKey": "449.l.525825.t.1",
+        "sourceTeamName": "To Infinity and Bijan",
+        "destinationTeamKey": "449.l.525825.t.6",
+        "destinationTeamName": "Mediocre Mooses"
+      }
+    ]
+  },
+  {
+    "id": "209",
+    "transactionKey": "423.l.27829.tr.209",
+    "seasonId": "11761",
+    "seasonYear": 2023,
+    "postedAt": "2023-11-09T17:27:28.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129687",
+      "memberId": "38862",
+      "teamKey": "423.l.27829.t.3",
+      "teamName": "Get Back Gang"
+    },
+    "tradee": {
+      "seasonTeamId": "129692",
+      "memberId": "38867",
+      "teamKey": "423.l.27829.t.8",
+      "teamName": "Ye is right gas them Jews"
+    },
+    "traderSent": [
+      {
+        "playerId": "33514",
+        "playerName": "Chuba Hubbard",
+        "position": "RB",
+        "nflTeam": "Car",
+        "sourceTeamKey": "423.l.27829.t.3",
+        "sourceTeamName": "Get Back Gang",
+        "destinationTeamKey": "423.l.27829.t.8",
+        "destinationTeamName": "Ye is right gas them Jews"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "40819",
+        "playerName": "Brandon Aubrey",
+        "position": "K",
+        "nflTeam": "Dal",
+        "sourceTeamKey": "423.l.27829.t.8",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "423.l.27829.t.3",
+        "destinationTeamName": "Get Back Gang"
+      }
+    ]
+  },
+  {
+    "id": "195",
+    "transactionKey": "423.l.27829.tr.195",
+    "seasonId": "11761",
+    "seasonYear": 2023,
+    "postedAt": "2023-11-08T01:25:10.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129690",
+      "memberId": "38865",
+      "teamKey": "423.l.27829.t.6",
+      "teamName": "Mediocre Moosemans"
+    },
+    "tradee": {
+      "seasonTeamId": "129685",
+      "memberId": "38860",
+      "teamKey": "423.l.27829.t.1",
+      "teamName": "Tommy'sToughestRoad"
+    },
+    "traderSent": [
+      {
+        "playerId": "33392",
+        "playerName": "Kyle Pitts Sr.",
+        "position": "TE",
+        "nflTeam": "Atl",
+        "sourceTeamKey": "423.l.27829.t.6",
+        "sourceTeamName": "Mediocre Moosemans",
+        "destinationTeamKey": "423.l.27829.t.1",
+        "destinationTeamName": "Tommy'sToughestRoad"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "28457",
+        "playerName": "Tyler Lockett",
+        "position": "WR",
+        "nflTeam": "LV",
+        "sourceTeamKey": "423.l.27829.t.1",
+        "sourceTeamName": "Tommy'sToughestRoad",
+        "destinationTeamKey": "423.l.27829.t.6",
+        "destinationTeamName": "Mediocre Moosemans"
+      }
+    ]
+  },
+  {
+    "id": "173",
+    "transactionKey": "423.l.27829.tr.173",
+    "seasonId": "11761",
+    "seasonYear": 2023,
+    "postedAt": "2023-10-31T10:14:50.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129685",
+      "memberId": "38860",
+      "teamKey": "423.l.27829.t.1",
+      "teamName": "Tommy'sToughestRoad"
+    },
+    "tradee": {
+      "seasonTeamId": "129692",
+      "memberId": "38867",
+      "teamKey": "423.l.27829.t.8",
+      "teamName": "Ye is right gas them Jews"
+    },
+    "traderSent": [
+      {
+        "playerId": "33423",
+        "playerName": "Javonte Williams",
+        "position": "RB",
+        "nflTeam": "Dal",
+        "sourceTeamKey": "423.l.27829.t.1",
+        "sourceTeamName": "Tommy'sToughestRoad",
+        "destinationTeamKey": "423.l.27829.t.8",
+        "destinationTeamName": "Ye is right gas them Jews"
+      },
+      {
+        "playerId": "26650",
+        "playerName": "DeAndre Hopkins",
+        "position": "WR",
+        "nflTeam": "Bal",
+        "sourceTeamKey": "423.l.27829.t.1",
+        "sourceTeamName": "Tommy'sToughestRoad",
+        "destinationTeamKey": "423.l.27829.t.8",
+        "destinationTeamName": "Ye is right gas them Jews"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "33966",
+        "playerName": "Chris Olave",
+        "position": "WR",
+        "nflTeam": "NO",
+        "sourceTeamKey": "423.l.27829.t.8",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "423.l.27829.t.1",
+        "destinationTeamName": "Tommy'sToughestRoad"
+      },
+      {
+        "playerId": "34054",
+        "playerName": "Brian Robinson Jr.",
+        "position": "RB",
+        "nflTeam": "Atl",
+        "sourceTeamKey": "423.l.27829.t.8",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "423.l.27829.t.1",
+        "destinationTeamName": "Tommy'sToughestRoad"
+      }
+    ]
+  },
+  {
+    "id": "133",
+    "transactionKey": "423.l.27829.tr.133",
+    "seasonId": "11761",
+    "seasonYear": 2023,
+    "postedAt": "2023-10-17T15:59:00.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129685",
+      "memberId": "38860",
+      "teamKey": "423.l.27829.t.1",
+      "teamName": "Tommy'sToughestRoad"
+    },
+    "tradee": {
+      "seasonTeamId": "129694",
+      "memberId": "38869",
+      "teamKey": "423.l.27829.t.10",
+      "teamName": "Coolist nits"
+    },
+    "traderSent": [
+      {
+        "playerId": "31908",
+        "playerName": "Terry McLaurin",
+        "position": "WR",
+        "nflTeam": "Was",
+        "sourceTeamKey": "423.l.27829.t.1",
+        "sourceTeamName": "Tommy'sToughestRoad",
+        "destinationTeamKey": "423.l.27829.t.10",
+        "destinationTeamName": "Coolist nits"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "33412",
+        "playerName": "Najee Harris",
+        "position": "RB",
+        "nflTeam": "LAC",
+        "sourceTeamKey": "423.l.27829.t.10",
+        "sourceTeamName": "Coolist nits",
+        "destinationTeamKey": "423.l.27829.t.1",
+        "destinationTeamName": "Tommy'sToughestRoad"
+      }
+    ]
+  },
+  {
+    "id": "124",
+    "transactionKey": "423.l.27829.tr.124",
+    "seasonId": "11761",
+    "seasonYear": 2023,
+    "postedAt": "2023-10-13T21:15:24.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129692",
+      "memberId": "38867",
+      "teamKey": "423.l.27829.t.8",
+      "teamName": "Ye is right gas them Jews"
+    },
+    "tradee": {
+      "seasonTeamId": "129686",
+      "memberId": "38861",
+      "teamKey": "423.l.27829.t.2",
+      "teamName": "Pollard Express"
+    },
+    "traderSent": [
+      {
+        "playerId": "34019",
+        "playerName": "James Cook III",
+        "position": "RB",
+        "nflTeam": "Buf",
+        "sourceTeamKey": "423.l.27829.t.8",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "423.l.27829.t.2",
+        "destinationTeamName": "Pollard Express"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "32231",
+        "playerName": "Jakobi Meyers",
+        "position": "WR",
+        "nflTeam": "Jax",
+        "sourceTeamKey": "423.l.27829.t.2",
+        "sourceTeamName": "Pollard Express",
+        "destinationTeamKey": "423.l.27829.t.8",
+        "destinationTeamName": "Ye is right gas them Jews"
+      },
+      {
+        "playerId": "33422",
+        "playerName": "Elijah Moore",
+        "position": "WR",
+        "nflTeam": "Phi",
+        "sourceTeamKey": "423.l.27829.t.2",
+        "sourceTeamName": "Pollard Express",
+        "destinationTeamKey": "423.l.27829.t.8",
+        "destinationTeamName": "Ye is right gas them Jews"
+      }
+    ]
+  },
+  {
+    "id": "94",
+    "transactionKey": "423.l.27829.tr.94",
+    "seasonId": "11761",
+    "seasonYear": 2023,
+    "postedAt": "2023-10-04T21:24:07.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129686",
+      "memberId": "38861",
+      "teamKey": "423.l.27829.t.2",
+      "teamName": "Pollard Express"
+    },
+    "tradee": {
+      "seasonTeamId": "129694",
+      "memberId": "38869",
+      "teamKey": "423.l.27829.t.10",
+      "teamName": "Coolist nits"
+    },
+    "traderSent": [
+      {
+        "playerId": "31056",
+        "playerName": "Mark Andrews",
+        "position": "TE",
+        "nflTeam": "Bal",
+        "sourceTeamKey": "423.l.27829.t.2",
+        "sourceTeamName": "Pollard Express",
+        "destinationTeamKey": "423.l.27829.t.10",
+        "destinationTeamName": "Coolist nits"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "32704",
+        "playerName": "Michael Pittman Jr.",
+        "position": "WR",
+        "nflTeam": "Pit",
+        "sourceTeamKey": "423.l.27829.t.10",
+        "sourceTeamName": "Coolist nits",
+        "destinationTeamKey": "423.l.27829.t.2",
+        "destinationTeamName": "Pollard Express"
+      },
+      {
+        "playerId": "32231",
+        "playerName": "Jakobi Meyers",
+        "position": "WR",
+        "nflTeam": "Jax",
+        "sourceTeamKey": "423.l.27829.t.10",
+        "sourceTeamName": "Coolist nits",
+        "destinationTeamKey": "423.l.27829.t.2",
+        "destinationTeamName": "Pollard Express"
+      }
+    ]
+  },
+  {
+    "id": "93",
+    "transactionKey": "423.l.27829.tr.93",
+    "seasonId": "11761",
+    "seasonYear": 2023,
+    "postedAt": "2023-10-04T21:23:23.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129692",
+      "memberId": "38867",
+      "teamKey": "423.l.27829.t.8",
+      "teamName": "Ye is right gas them Jews"
+    },
+    "tradee": {
+      "seasonTeamId": "129691",
+      "memberId": "38866",
+      "teamKey": "423.l.27829.t.7",
+      "teamName": "Osama Bin Nasty🤮"
+    },
+    "traderSent": [
+      {
+        "playerId": "34047",
+        "playerName": "Rachaad White",
+        "position": "RB",
+        "nflTeam": "Was",
+        "sourceTeamKey": "423.l.27829.t.8",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "423.l.27829.t.7",
+        "destinationTeamName": "Osama Bin Nasty🤮"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "27277",
+        "playerName": "Adam Thielen",
+        "position": "WR",
+        "nflTeam": "Pit",
+        "sourceTeamKey": "423.l.27829.t.7",
+        "sourceTeamName": "Osama Bin Nasty🤮",
+        "destinationTeamKey": "423.l.27829.t.8",
+        "destinationTeamName": "Ye is right gas them Jews"
+      }
+    ]
+  },
+  {
+    "id": "80",
+    "transactionKey": "423.l.27829.tr.80",
+    "seasonId": "11761",
+    "seasonYear": 2023,
+    "postedAt": "2023-09-27T20:59:38.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129692",
+      "memberId": "38867",
+      "teamKey": "423.l.27829.t.8",
+      "teamName": "Ye is right gas them Jews"
+    },
+    "tradee": {
+      "seasonTeamId": "129688",
+      "memberId": "38863",
+      "teamKey": "423.l.27829.t.4",
+      "teamName": "GET GOOD SOON GANG iA"
+    },
+    "traderSent": [
+      {
+        "playerId": "31857",
+        "playerName": "Hollywood Brown",
+        "position": "WR",
+        "nflTeam": "Phi",
+        "sourceTeamKey": "423.l.27829.t.8",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "423.l.27829.t.4",
+        "destinationTeamName": "GET GOOD SOON GANG iA"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "34047",
+        "playerName": "Rachaad White",
+        "position": "RB",
+        "nflTeam": "Was",
+        "sourceTeamKey": "423.l.27829.t.4",
+        "sourceTeamName": "GET GOOD SOON GANG iA",
+        "destinationTeamKey": "423.l.27829.t.8",
+        "destinationTeamName": "Ye is right gas them Jews"
+      }
+    ]
+  },
+  {
+    "id": "71",
+    "transactionKey": "423.l.27829.tr.71",
+    "seasonId": "11761",
+    "seasonYear": 2023,
+    "postedAt": "2023-09-26T20:05:20.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129687",
+      "memberId": "38862",
+      "teamKey": "423.l.27829.t.3",
+      "teamName": "Get Back Gang"
+    },
+    "tradee": {
+      "seasonTeamId": "129686",
+      "memberId": "38861",
+      "teamKey": "423.l.27829.t.2",
+      "teamName": "Pollard Express"
+    },
+    "traderSent": [
+      {
+        "playerId": "33422",
+        "playerName": "Elijah Moore",
+        "position": "WR",
+        "nflTeam": "Phi",
+        "sourceTeamKey": "423.l.27829.t.3",
+        "sourceTeamName": "Get Back Gang",
+        "destinationTeamKey": "423.l.27829.t.2",
+        "destinationTeamName": "Pollard Express"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "40041",
+        "playerName": "Jaxon Smith-Njigba",
+        "position": "WR",
+        "nflTeam": "Sea",
+        "sourceTeamKey": "423.l.27829.t.2",
+        "sourceTeamName": "Pollard Express",
+        "destinationTeamKey": "423.l.27829.t.3",
+        "destinationTeamName": "Get Back Gang"
+      }
+    ]
+  },
+  {
+    "id": "44",
+    "transactionKey": "423.l.27829.tr.44",
+    "seasonId": "11761",
+    "seasonYear": 2023,
+    "postedAt": "2023-09-19T14:42:18.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129692",
+      "memberId": "38867",
+      "teamKey": "423.l.27829.t.8",
+      "teamName": "Ye is right gas them Jews"
+    },
+    "tradee": {
+      "seasonTeamId": "129685",
+      "memberId": "38860",
+      "teamKey": "423.l.27829.t.1",
+      "teamName": "Tommy'sToughestRoad"
+    },
+    "traderSent": [
+      {
+        "playerId": "28457",
+        "playerName": "Tyler Lockett",
+        "position": "WR",
+        "nflTeam": "LV",
+        "sourceTeamKey": "423.l.27829.t.8",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "423.l.27829.t.1",
+        "destinationTeamName": "Tommy'sToughestRoad"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "34120",
+        "playerName": "Kyren Williams",
+        "position": "RB",
+        "nflTeam": "LAR",
+        "sourceTeamKey": "423.l.27829.t.1",
+        "sourceTeamName": "Tommy'sToughestRoad",
+        "destinationTeamKey": "423.l.27829.t.8",
+        "destinationTeamName": "Ye is right gas them Jews"
+      }
+    ]
+  },
+  {
+    "id": "42",
+    "transactionKey": "423.l.27829.tr.42",
+    "seasonId": "11761",
+    "seasonYear": 2023,
+    "postedAt": "2023-09-19T14:38:41.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129694",
+      "memberId": "38869",
+      "teamKey": "423.l.27829.t.10",
+      "teamName": "Coolist nits"
+    },
+    "tradee": {
+      "seasonTeamId": "129692",
+      "memberId": "38867",
+      "teamKey": "423.l.27829.t.8",
+      "teamName": "Ye is right gas them Jews"
+    },
+    "traderSent": [
+      {
+        "playerId": "31857",
+        "playerName": "Hollywood Brown",
+        "position": "WR",
+        "nflTeam": "Phi",
+        "sourceTeamKey": "423.l.27829.t.10",
+        "sourceTeamName": "Coolist nits",
+        "destinationTeamKey": "423.l.27829.t.8",
+        "destinationTeamName": "Ye is right gas them Jews"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "34063",
+        "playerName": "Dameon Pierce",
+        "position": "RB",
+        "nflTeam": "Phi",
+        "sourceTeamKey": "423.l.27829.t.8",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "423.l.27829.t.10",
+        "destinationTeamName": "Coolist nits"
+      },
+      {
+        "playerId": "33605",
+        "playerName": "Khalil Herbert",
+        "position": "RB",
+        "nflTeam": "NYJ",
+        "sourceTeamKey": "423.l.27829.t.8",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "423.l.27829.t.10",
+        "destinationTeamName": "Coolist nits"
+      }
+    ]
+  },
+  {
+    "id": "41",
+    "transactionKey": "423.l.27829.tr.41",
+    "seasonId": "11761",
+    "seasonYear": 2023,
+    "postedAt": "2023-09-17T18:12:45.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129690",
+      "memberId": "38865",
+      "teamKey": "423.l.27829.t.6",
+      "teamName": "Mediocre Moosemans"
+    },
+    "tradee": {
+      "seasonTeamId": "129692",
+      "memberId": "38867",
+      "teamKey": "423.l.27829.t.8",
+      "teamName": "Ye is right gas them Jews"
+    },
+    "traderSent": [
+      {
+        "playerId": "31945",
+        "playerName": "Justice Hill",
+        "position": "RB",
+        "nflTeam": "Bal",
+        "sourceTeamKey": "423.l.27829.t.6",
+        "sourceTeamName": "Mediocre Moosemans",
+        "destinationTeamKey": "423.l.27829.t.8",
+        "destinationTeamName": "Ye is right gas them Jews"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "33582",
+        "playerName": "Elijah Mitchell",
+        "position": "RB",
+        "nflTeam": "KC",
+        "sourceTeamKey": "423.l.27829.t.8",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "423.l.27829.t.6",
+        "destinationTeamName": "Mediocre Moosemans"
+      }
+    ]
+  },
+  {
+    "id": "215",
+    "transactionKey": "414.l.51824.tr.215",
+    "seasonId": "11762",
+    "seasonYear": 2022,
+    "postedAt": "2022-11-19T04:33:30.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129697",
+      "memberId": "38861",
+      "teamKey": "414.l.51824.t.3",
+      "teamName": "America’s Fantasy Team"
+    },
+    "tradee": {
+      "seasonTeamId": "129698",
+      "memberId": "38867",
+      "teamKey": "414.l.51824.t.4",
+      "teamName": "Ye is right gas them Jews"
+    },
+    "traderSent": [
+      {
+        "playerId": "31017",
+        "playerName": "Christian Kirk",
+        "position": "WR",
+        "nflTeam": "SF",
+        "sourceTeamKey": "414.l.51824.t.3",
+        "sourceTeamName": "America’s Fantasy Team",
+        "destinationTeamKey": "414.l.51824.t.4",
+        "destinationTeamName": "Ye is right gas them Jews"
+      },
+      {
+        "playerId": "34036",
+        "playerName": "Greg Dulcich",
+        "position": "TE",
+        "nflTeam": "Mia",
+        "sourceTeamKey": "414.l.51824.t.3",
+        "sourceTeamName": "America’s Fantasy Team",
+        "destinationTeamKey": "414.l.51824.t.4",
+        "destinationTeamName": "Ye is right gas them Jews"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "31107",
+        "playerName": "Dalton Schultz",
+        "position": "TE",
+        "nflTeam": "Hou",
+        "sourceTeamKey": "414.l.51824.t.4",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "414.l.51824.t.3",
+        "destinationTeamName": "America’s Fantasy Team"
+      }
+    ]
+  },
+  {
+    "id": "214",
+    "transactionKey": "414.l.51824.tr.214",
+    "seasonId": "11762",
+    "seasonYear": 2022,
+    "postedAt": "2022-11-18T21:30:45.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129700",
+      "memberId": "38865",
+      "teamKey": "414.l.51824.t.6",
+      "teamName": "Mediocre Moosemans"
+    },
+    "tradee": {
+      "seasonTeamId": "129702",
+      "memberId": "38862",
+      "teamKey": "414.l.51824.t.8",
+      "teamName": "Get Back Gang"
+    },
+    "traderSent": [
+      {
+        "playerId": "32685",
+        "playerName": "Jerry Jeudy",
+        "position": "WR",
+        "nflTeam": "Cle",
+        "sourceTeamKey": "414.l.51824.t.6",
+        "sourceTeamName": "Mediocre Moosemans",
+        "destinationTeamKey": "414.l.51824.t.8",
+        "destinationTeamName": "Get Back Gang"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "29288",
+        "playerName": "Tyler Boyd",
+        "position": "WR",
+        "nflTeam": "Ten",
+        "sourceTeamKey": "414.l.51824.t.8",
+        "sourceTeamName": "Get Back Gang",
+        "destinationTeamKey": "414.l.51824.t.6",
+        "destinationTeamName": "Mediocre Moosemans"
+      }
+    ]
+  },
+  {
+    "id": "197",
+    "transactionKey": "414.l.51824.tr.197",
+    "seasonId": "11762",
+    "seasonYear": 2022,
+    "postedAt": "2022-11-15T00:56:18.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129702",
+      "memberId": "38862",
+      "teamKey": "414.l.51824.t.8",
+      "teamName": "Get Back Gang"
+    },
+    "tradee": {
+      "seasonTeamId": "129698",
+      "memberId": "38867",
+      "teamKey": "414.l.51824.t.4",
+      "teamName": "Ye is right gas them Jews"
+    },
+    "traderSent": [
+      {
+        "playerId": "32736",
+        "playerName": "Antonio Gibson",
+        "position": "RB",
+        "nflTeam": "NE",
+        "sourceTeamKey": "414.l.51824.t.8",
+        "sourceTeamName": "Get Back Gang",
+        "destinationTeamKey": "414.l.51824.t.4",
+        "destinationTeamName": "Ye is right gas them Jews"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "29288",
+        "playerName": "Tyler Boyd",
+        "position": "WR",
+        "nflTeam": "Ten",
+        "sourceTeamKey": "414.l.51824.t.4",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "414.l.51824.t.8",
+        "destinationTeamName": "Get Back Gang"
+      }
+    ]
+  },
+  {
+    "id": "188",
+    "transactionKey": "414.l.51824.tr.188",
+    "seasonId": "11762",
+    "seasonYear": 2022,
+    "postedAt": "2022-11-10T18:54:01.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129698",
+      "memberId": "38867",
+      "teamKey": "414.l.51824.t.4",
+      "teamName": "Ye is right gas them Jews"
+    },
+    "tradee": {
+      "seasonTeamId": "129695",
+      "memberId": "38860",
+      "teamKey": "414.l.51824.t.1",
+      "teamName": "Current&Future Former Champion"
+    },
+    "traderSent": [
+      {
+        "playerId": "31394",
+        "playerName": "Jeff Wilson Jr.",
+        "position": "RB",
+        "nflTeam": "Mia",
+        "sourceTeamKey": "414.l.51824.t.4",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "414.l.51824.t.1",
+        "destinationTeamName": "Current&Future Former Champion"
+      },
+      {
+        "playerId": "30117",
+        "playerName": "Leonard Fournette",
+        "position": "RB",
+        "nflTeam": "Buf",
+        "sourceTeamKey": "414.l.51824.t.4",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "414.l.51824.t.1",
+        "destinationTeamName": "Current&Future Former Champion"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "30161",
+        "playerName": "Joe Mixon",
+        "position": "RB",
+        "nflTeam": "Hou",
+        "sourceTeamKey": "414.l.51824.t.1",
+        "sourceTeamName": "Current&Future Former Champion",
+        "destinationTeamKey": "414.l.51824.t.4",
+        "destinationTeamName": "Ye is right gas them Jews"
+      }
+    ]
+  },
+  {
+    "id": "174",
+    "transactionKey": "414.l.51824.tr.174",
+    "seasonId": "11762",
+    "seasonYear": 2022,
+    "postedAt": "2022-11-07T03:45:37.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129695",
+      "memberId": "38860",
+      "teamKey": "414.l.51824.t.1",
+      "teamName": "Current&Future Former Champion"
+    },
+    "tradee": {
+      "seasonTeamId": "129696",
+      "memberId": "38863",
+      "teamKey": "414.l.51824.t.2",
+      "teamName": "GET WELL SOON GANG"
+    },
+    "traderSent": [
+      {
+        "playerId": "32675",
+        "playerName": "Tua Tagovailoa",
+        "position": "QB",
+        "nflTeam": "Atl",
+        "sourceTeamKey": "414.l.51824.t.1",
+        "sourceTeamName": "Current&Future Former Champion",
+        "destinationTeamKey": "414.l.51824.t.2",
+        "destinationTeamName": "GET WELL SOON GANG"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "32695",
+        "playerName": "Brandon Aiyuk",
+        "position": "WR",
+        "nflTeam": "SF",
+        "sourceTeamKey": "414.l.51824.t.2",
+        "sourceTeamName": "GET WELL SOON GANG",
+        "destinationTeamKey": "414.l.51824.t.1",
+        "destinationTeamName": "Current&Future Former Champion"
+      }
+    ]
+  },
+  {
+    "id": "173",
+    "transactionKey": "414.l.51824.tr.173",
+    "seasonId": "11762",
+    "seasonYear": 2022,
+    "postedAt": "2022-11-07T01:05:12.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129695",
+      "memberId": "38860",
+      "teamKey": "414.l.51824.t.1",
+      "teamName": "Current&Future Former Champion"
+    },
+    "tradee": {
+      "seasonTeamId": "129702",
+      "memberId": "38862",
+      "teamKey": "414.l.51824.t.8",
+      "teamName": "Get Back Gang"
+    },
+    "traderSent": [
+      {
+        "playerId": "30218",
+        "playerName": "James Conner",
+        "position": "RB",
+        "nflTeam": "Ari",
+        "sourceTeamKey": "414.l.51824.t.1",
+        "sourceTeamName": "Current&Future Former Champion",
+        "destinationTeamKey": "414.l.51824.t.8",
+        "destinationTeamName": "Get Back Gang"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "32675",
+        "playerName": "Tua Tagovailoa",
+        "position": "QB",
+        "nflTeam": "Atl",
+        "sourceTeamKey": "414.l.51824.t.8",
+        "sourceTeamName": "Get Back Gang",
+        "destinationTeamKey": "414.l.51824.t.1",
+        "destinationTeamName": "Current&Future Former Champion"
+      }
+    ]
+  },
+  {
+    "id": "172",
+    "transactionKey": "414.l.51824.tr.172",
+    "seasonId": "11762",
+    "seasonYear": 2022,
+    "postedAt": "2022-11-06T23:16:10.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129695",
+      "memberId": "38860",
+      "teamKey": "414.l.51824.t.1",
+      "teamName": "Current&Future Former Champion"
+    },
+    "tradee": {
+      "seasonTeamId": "129696",
+      "memberId": "38863",
+      "teamKey": "414.l.51824.t.2",
+      "teamName": "GET WELL SOON GANG"
+    },
+    "traderSent": [
+      {
+        "playerId": "32695",
+        "playerName": "Brandon Aiyuk",
+        "position": "WR",
+        "nflTeam": "SF",
+        "sourceTeamKey": "414.l.51824.t.1",
+        "sourceTeamName": "Current&Future Former Champion",
+        "destinationTeamKey": "414.l.51824.t.2",
+        "destinationTeamName": "GET WELL SOON GANG"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "32798",
+        "playerName": "Gabe Davis",
+        "position": "WR",
+        "nflTeam": "Buf",
+        "sourceTeamKey": "414.l.51824.t.2",
+        "sourceTeamName": "GET WELL SOON GANG",
+        "destinationTeamKey": "414.l.51824.t.1",
+        "destinationTeamName": "Current&Future Former Champion"
+      }
+    ]
+  },
+  {
+    "id": "166",
+    "transactionKey": "414.l.51824.tr.166",
+    "seasonId": "11762",
+    "seasonYear": 2022,
+    "postedAt": "2022-11-04T23:17:28.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129698",
+      "memberId": "38867",
+      "teamKey": "414.l.51824.t.4",
+      "teamName": "Ye is right gas them Jews"
+    },
+    "tradee": {
+      "seasonTeamId": "129701",
+      "memberId": "38866",
+      "teamKey": "414.l.51824.t.7",
+      "teamName": "Montville Mustangs"
+    },
+    "traderSent": [
+      {
+        "playerId": "28654",
+        "playerName": "Raheem Mostert",
+        "position": "RB",
+        "nflTeam": "LV",
+        "sourceTeamKey": "414.l.51824.t.4",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "414.l.51824.t.7",
+        "destinationTeamName": "Montville Mustangs"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "33798",
+        "playerName": "Deon Jackson",
+        "position": "RB",
+        "nflTeam": "Det",
+        "sourceTeamKey": "414.l.51824.t.7",
+        "sourceTeamName": "Montville Mustangs",
+        "destinationTeamKey": "414.l.51824.t.4",
+        "destinationTeamName": "Ye is right gas them Jews"
+      },
+      {
+        "playerId": "29288",
+        "playerName": "Tyler Boyd",
+        "position": "WR",
+        "nflTeam": "Ten",
+        "sourceTeamKey": "414.l.51824.t.7",
+        "sourceTeamName": "Montville Mustangs",
+        "destinationTeamKey": "414.l.51824.t.4",
+        "destinationTeamName": "Ye is right gas them Jews"
+      }
+    ]
+  },
+  {
+    "id": "145",
+    "transactionKey": "414.l.51824.tr.145",
+    "seasonId": "11762",
+    "seasonYear": 2022,
+    "postedAt": "2022-11-01T19:20:18.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "vetoed",
+    "trader": {
+      "seasonTeamId": "129698",
+      "memberId": "38867",
+      "teamKey": "414.l.51824.t.4",
+      "teamName": "Ye is right gas them Jews"
+    },
+    "tradee": {
+      "seasonTeamId": "129695",
+      "memberId": "38860",
+      "teamKey": "414.l.51824.t.1",
+      "teamName": "Current&Future Former Champion"
+    },
+    "traderSent": [
+      {
+        "playerId": "28654",
+        "playerName": "Raheem Mostert",
+        "position": "RB",
+        "nflTeam": "LV",
+        "sourceTeamKey": "414.l.51824.t.4",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "414.l.51824.t.1",
+        "destinationTeamName": "Current&Future Former Champion"
+      },
+      {
+        "playerId": "27535",
+        "playerName": "Mike Evans",
+        "position": "WR",
+        "nflTeam": "SF",
+        "sourceTeamKey": "414.l.51824.t.4",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "414.l.51824.t.1",
+        "destinationTeamName": "Current&Future Former Champion"
+      },
+      {
+        "playerId": "31856",
+        "playerName": "Josh Jacobs",
+        "position": "RB",
+        "nflTeam": "GB",
+        "sourceTeamKey": "414.l.51824.t.4",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "414.l.51824.t.1",
+        "destinationTeamName": "Current&Future Former Champion"
+      },
+      {
+        "playerId": "31002",
+        "playerName": "Lamar Jackson",
+        "position": "QB",
+        "nflTeam": "Bal",
+        "sourceTeamKey": "414.l.51824.t.4",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "414.l.51824.t.1",
+        "destinationTeamName": "Current&Future Former Champion"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "31906",
+        "playerName": "Devin Singletary",
+        "position": "RB",
+        "nflTeam": "NYG",
+        "sourceTeamKey": "414.l.51824.t.1",
+        "sourceTeamName": "Current&Future Former Champion",
+        "destinationTeamKey": "414.l.51824.t.4",
+        "destinationTeamName": "Ye is right gas them Jews"
+      },
+      {
+        "playerId": "30977",
+        "playerName": "Josh Allen",
+        "position": "QB",
+        "nflTeam": "Buf",
+        "sourceTeamKey": "414.l.51824.t.1",
+        "sourceTeamName": "Current&Future Former Champion",
+        "destinationTeamKey": "414.l.51824.t.4",
+        "destinationTeamName": "Ye is right gas them Jews"
+      }
+    ]
+  },
+  {
+    "id": "134",
+    "transactionKey": "414.l.51824.tr.134",
+    "seasonId": "11762",
+    "seasonYear": 2022,
+    "postedAt": "2022-11-01T19:07:27.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "vetoed",
+    "trader": {
+      "seasonTeamId": "129698",
+      "memberId": "38867",
+      "teamKey": "414.l.51824.t.4",
+      "teamName": "Ye is right gas them Jews"
+    },
+    "tradee": {
+      "seasonTeamId": "129695",
+      "memberId": "38860",
+      "teamKey": "414.l.51824.t.1",
+      "teamName": "Current&Future Former Champion"
+    },
+    "traderSent": [
+      {
+        "playerId": "31856",
+        "playerName": "Josh Jacobs",
+        "position": "RB",
+        "nflTeam": "GB",
+        "sourceTeamKey": "414.l.51824.t.4",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "414.l.51824.t.1",
+        "destinationTeamName": "Current&Future Former Champion"
+      },
+      {
+        "playerId": "27535",
+        "playerName": "Mike Evans",
+        "position": "WR",
+        "nflTeam": "SF",
+        "sourceTeamKey": "414.l.51824.t.4",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "414.l.51824.t.1",
+        "destinationTeamName": "Current&Future Former Champion"
+      },
+      {
+        "playerId": "31002",
+        "playerName": "Lamar Jackson",
+        "position": "QB",
+        "nflTeam": "Bal",
+        "sourceTeamKey": "414.l.51824.t.4",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "414.l.51824.t.1",
+        "destinationTeamName": "Current&Future Former Champion"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "31906",
+        "playerName": "Devin Singletary",
+        "position": "RB",
+        "nflTeam": "NYG",
+        "sourceTeamKey": "414.l.51824.t.1",
+        "sourceTeamName": "Current&Future Former Champion",
+        "destinationTeamKey": "414.l.51824.t.4",
+        "destinationTeamName": "Ye is right gas them Jews"
+      },
+      {
+        "playerId": "30977",
+        "playerName": "Josh Allen",
+        "position": "QB",
+        "nflTeam": "Buf",
+        "sourceTeamKey": "414.l.51824.t.1",
+        "sourceTeamName": "Current&Future Former Champion",
+        "destinationTeamKey": "414.l.51824.t.4",
+        "destinationTeamName": "Ye is right gas them Jews"
+      }
+    ]
+  },
+  {
+    "id": "133",
+    "transactionKey": "414.l.51824.tr.133",
+    "seasonId": "11762",
+    "seasonYear": 2022,
+    "postedAt": "2022-11-01T19:07:22.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "vetoed",
+    "trader": {
+      "seasonTeamId": "129696",
+      "memberId": "38863",
+      "teamKey": "414.l.51824.t.2",
+      "teamName": "GET WELL SOON GANG"
+    },
+    "tradee": {
+      "seasonTeamId": "129698",
+      "memberId": "38867",
+      "teamKey": "414.l.51824.t.4",
+      "teamName": "Ye is right gas them Jews"
+    },
+    "traderSent": [
+      {
+        "playerId": "31898",
+        "playerName": "Diontae Johnson",
+        "position": "WR",
+        "nflTeam": "Cle",
+        "sourceTeamKey": "414.l.51824.t.2",
+        "sourceTeamName": "GET WELL SOON GANG",
+        "destinationTeamKey": "414.l.51824.t.4",
+        "destinationTeamName": "Ye is right gas them Jews"
+      },
+      {
+        "playerId": "32858",
+        "playerName": "Tyler Bass",
+        "position": "K",
+        "nflTeam": "Buf",
+        "sourceTeamKey": "414.l.51824.t.2",
+        "sourceTeamName": "GET WELL SOON GANG",
+        "destinationTeamKey": "414.l.51824.t.4",
+        "destinationTeamName": "Ye is right gas them Jews"
+      },
+      {
+        "playerId": "32798",
+        "playerName": "Gabe Davis",
+        "position": "WR",
+        "nflTeam": "Buf",
+        "sourceTeamKey": "414.l.51824.t.2",
+        "sourceTeamName": "GET WELL SOON GANG",
+        "destinationTeamKey": "414.l.51824.t.4",
+        "destinationTeamName": "Ye is right gas them Jews"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "9526",
+        "playerName": "Graham Gano",
+        "position": "K",
+        "nflTeam": "NYG",
+        "sourceTeamKey": "414.l.51824.t.4",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "414.l.51824.t.2",
+        "destinationTeamName": "GET WELL SOON GANG"
+      },
+      {
+        "playerId": "30117",
+        "playerName": "Leonard Fournette",
+        "position": "RB",
+        "nflTeam": "Buf",
+        "sourceTeamKey": "414.l.51824.t.4",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "414.l.51824.t.2",
+        "destinationTeamName": "GET WELL SOON GANG"
+      }
+    ]
+  },
+  {
+    "id": "130",
+    "transactionKey": "414.l.51824.tr.130",
+    "seasonId": "11762",
+    "seasonYear": 2022,
+    "postedAt": "2022-10-28T01:01:34.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129702",
+      "memberId": "38862",
+      "teamKey": "414.l.51824.t.8",
+      "teamName": "Get Back Gang"
+    },
+    "tradee": {
+      "seasonTeamId": "129695",
+      "memberId": "38860",
+      "teamKey": "414.l.51824.t.1",
+      "teamName": "Current&Future Former Champion"
+    },
+    "traderSent": [
+      {
+        "playerId": "30218",
+        "playerName": "James Conner",
+        "position": "RB",
+        "nflTeam": "Ari",
+        "sourceTeamKey": "414.l.51824.t.8",
+        "sourceTeamName": "Get Back Gang",
+        "destinationTeamKey": "414.l.51824.t.1",
+        "destinationTeamName": "Current&Future Former Champion"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "33408",
+        "playerName": "Kadarius Toney",
+        "position": "WR",
+        "nflTeam": "Cle",
+        "sourceTeamKey": "414.l.51824.t.1",
+        "sourceTeamName": "Current&Future Former Champion",
+        "destinationTeamKey": "414.l.51824.t.8",
+        "destinationTeamName": "Get Back Gang"
+      }
+    ]
+  },
+  {
+    "id": "59",
+    "transactionKey": "414.l.51824.tr.59",
+    "seasonId": "11762",
+    "seasonYear": 2022,
+    "postedAt": "2022-09-29T19:58:17.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129700",
+      "memberId": "38865",
+      "teamKey": "414.l.51824.t.6",
+      "teamName": "Mediocre Moosemans"
+    },
+    "tradee": {
+      "seasonTeamId": "129698",
+      "memberId": "38867",
+      "teamKey": "414.l.51824.t.4",
+      "teamName": "Ye is right gas them Jews"
+    },
+    "traderSent": [
+      {
+        "playerId": "27535",
+        "playerName": "Mike Evans",
+        "position": "WR",
+        "nflTeam": "SF",
+        "sourceTeamKey": "414.l.51824.t.6",
+        "sourceTeamName": "Mediocre Moosemans",
+        "destinationTeamKey": "414.l.51824.t.4",
+        "destinationTeamName": "Ye is right gas them Jews"
+      },
+      {
+        "playerId": "33423",
+        "playerName": "Javonte Williams",
+        "position": "RB",
+        "nflTeam": "Dal",
+        "sourceTeamKey": "414.l.51824.t.6",
+        "sourceTeamName": "Mediocre Moosemans",
+        "destinationTeamKey": "414.l.51824.t.4",
+        "destinationTeamName": "Ye is right gas them Jews"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "33412",
+        "playerName": "Najee Harris",
+        "position": "RB",
+        "nflTeam": "LAC",
+        "sourceTeamKey": "414.l.51824.t.4",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "414.l.51824.t.6",
+        "destinationTeamName": "Mediocre Moosemans"
+      },
+      {
+        "playerId": "26650",
+        "playerName": "DeAndre Hopkins",
+        "position": "WR",
+        "nflTeam": "Bal",
+        "sourceTeamKey": "414.l.51824.t.4",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "414.l.51824.t.6",
+        "destinationTeamName": "Mediocre Moosemans"
+      }
+    ]
+  },
+  {
+    "id": "58",
+    "transactionKey": "414.l.51824.tr.58",
+    "seasonId": "11762",
+    "seasonYear": 2022,
+    "postedAt": "2022-09-28T23:41:36.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129698",
+      "memberId": "38867",
+      "teamKey": "414.l.51824.t.4",
+      "teamName": "Ye is right gas them Jews"
+    },
+    "tradee": {
+      "seasonTeamId": "129701",
+      "memberId": "38866",
+      "teamKey": "414.l.51824.t.7",
+      "teamName": "Montville Mustangs"
+    },
+    "traderSent": [
+      {
+        "playerId": "30154",
+        "playerName": "Dalvin Cook",
+        "position": "RB",
+        "nflTeam": "Dal",
+        "sourceTeamKey": "414.l.51824.t.4",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "414.l.51824.t.7",
+        "destinationTeamName": "Montville Mustangs"
+      },
+      {
+        "playerId": "32703",
+        "playerName": "Tee Higgins",
+        "position": "WR",
+        "nflTeam": "Cin",
+        "sourceTeamKey": "414.l.51824.t.4",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "414.l.51824.t.7",
+        "destinationTeamName": "Montville Mustangs"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "31010",
+        "playerName": "Courtland Sutton",
+        "position": "WR",
+        "nflTeam": "Den",
+        "sourceTeamKey": "414.l.51824.t.7",
+        "sourceTeamName": "Montville Mustangs",
+        "destinationTeamKey": "414.l.51824.t.4",
+        "destinationTeamName": "Ye is right gas them Jews"
+      },
+      {
+        "playerId": "33412",
+        "playerName": "Najee Harris",
+        "position": "RB",
+        "nflTeam": "LAC",
+        "sourceTeamKey": "414.l.51824.t.7",
+        "sourceTeamName": "Montville Mustangs",
+        "destinationTeamKey": "414.l.51824.t.4",
+        "destinationTeamName": "Ye is right gas them Jews"
+      }
+    ]
+  },
+  {
+    "id": "46",
+    "transactionKey": "414.l.51824.tr.46",
+    "seasonId": "11762",
+    "seasonYear": 2022,
+    "postedAt": "2022-09-28T01:56:49.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129696",
+      "memberId": "38863",
+      "teamKey": "414.l.51824.t.2",
+      "teamName": "GET WELL SOON GANG"
+    },
+    "tradee": {
+      "seasonTeamId": "129697",
+      "memberId": "38861",
+      "teamKey": "414.l.51824.t.3",
+      "teamName": "America’s Fantasy Team"
+    },
+    "traderSent": [
+      {
+        "playerId": "31005",
+        "playerName": "Nick Chubb",
+        "position": "RB",
+        "nflTeam": "Hou",
+        "sourceTeamKey": "414.l.51824.t.2",
+        "sourceTeamName": "GET WELL SOON GANG",
+        "destinationTeamKey": "414.l.51824.t.3",
+        "destinationTeamName": "America’s Fantasy Team"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "33394",
+        "playerName": "Jaylen Waddle",
+        "position": "WR",
+        "nflTeam": "Den",
+        "sourceTeamKey": "414.l.51824.t.3",
+        "sourceTeamName": "America’s Fantasy Team",
+        "destinationTeamKey": "414.l.51824.t.2",
+        "destinationTeamName": "GET WELL SOON GANG"
+      }
+    ]
+  },
+  {
+    "id": "38",
+    "transactionKey": "414.l.51824.tr.38",
+    "seasonId": "11762",
+    "seasonYear": 2022,
+    "postedAt": "2022-09-21T20:53:56.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "vetoed",
+    "trader": {
+      "seasonTeamId": "129700",
+      "memberId": "38865",
+      "teamKey": "414.l.51824.t.6",
+      "teamName": "Mediocre Moosemans"
+    },
+    "tradee": {
+      "seasonTeamId": "129698",
+      "memberId": "38867",
+      "teamKey": "414.l.51824.t.4",
+      "teamName": "Ye is right gas them Jews"
+    },
+    "traderSent": [
+      {
+        "playerId": "33423",
+        "playerName": "Javonte Williams",
+        "position": "RB",
+        "nflTeam": "Dal",
+        "sourceTeamKey": "414.l.51824.t.6",
+        "sourceTeamName": "Mediocre Moosemans",
+        "destinationTeamKey": "414.l.51824.t.4",
+        "destinationTeamName": "Ye is right gas them Jews"
+      },
+      {
+        "playerId": "32695",
+        "playerName": "Brandon Aiyuk",
+        "position": "WR",
+        "nflTeam": "SF",
+        "sourceTeamKey": "414.l.51824.t.6",
+        "sourceTeamName": "Mediocre Moosemans",
+        "destinationTeamKey": "414.l.51824.t.4",
+        "destinationTeamName": "Ye is right gas them Jews"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "30154",
+        "playerName": "Dalvin Cook",
+        "position": "RB",
+        "nflTeam": "Dal",
+        "sourceTeamKey": "414.l.51824.t.4",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "414.l.51824.t.6",
+        "destinationTeamName": "Mediocre Moosemans"
+      },
+      {
+        "playerId": "31856",
+        "playerName": "Josh Jacobs",
+        "position": "RB",
+        "nflTeam": "GB",
+        "sourceTeamKey": "414.l.51824.t.4",
+        "sourceTeamName": "Ye is right gas them Jews",
+        "destinationTeamKey": "414.l.51824.t.6",
+        "destinationTeamName": "Mediocre Moosemans"
+      }
+    ]
+  },
+  {
+    "id": "27",
+    "transactionKey": "414.l.51824.tr.27",
+    "seasonId": "11762",
+    "seasonYear": 2022,
+    "postedAt": "2022-09-16T02:34:00.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "vetoed",
+    "trader": {
+      "seasonTeamId": "129695",
+      "memberId": "38860",
+      "teamKey": "414.l.51824.t.1",
+      "teamName": "Current&Future Former Champion"
+    },
+    "tradee": {
+      "seasonTeamId": "129696",
+      "memberId": "38863",
+      "teamKey": "414.l.51824.t.2",
+      "teamName": "GET WELL SOON GANG"
+    },
+    "traderSent": [
+      {
+        "playerId": "32702",
+        "playerName": "Clyde Edwards-Helaire",
+        "position": "RB",
+        "nflTeam": "KC",
+        "sourceTeamKey": "414.l.51824.t.1",
+        "sourceTeamName": "Current&Future Former Champion",
+        "destinationTeamKey": "414.l.51824.t.2",
+        "destinationTeamName": "GET WELL SOON GANG"
+      },
+      {
+        "playerId": "30175",
+        "playerName": "JuJu Smith-Schuster",
+        "position": "WR",
+        "nflTeam": "KC",
+        "sourceTeamKey": "414.l.51824.t.1",
+        "sourceTeamName": "Current&Future Former Champion",
+        "destinationTeamKey": "414.l.51824.t.2",
+        "destinationTeamName": "GET WELL SOON GANG"
+      },
+      {
+        "playerId": "30182",
+        "playerName": "Cooper Kupp",
+        "position": "WR",
+        "nflTeam": "Sea",
+        "sourceTeamKey": "414.l.51824.t.1",
+        "sourceTeamName": "Current&Future Former Champion",
+        "destinationTeamKey": "414.l.51824.t.2",
+        "destinationTeamName": "GET WELL SOON GANG"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "30423",
+        "playerName": "Austin Ekeler",
+        "position": "RB",
+        "nflTeam": "Was",
+        "sourceTeamKey": "414.l.51824.t.2",
+        "sourceTeamName": "GET WELL SOON GANG",
+        "destinationTeamKey": "414.l.51824.t.1",
+        "destinationTeamName": "Current&Future Former Champion"
+      },
+      {
+        "playerId": "24793",
+        "playerName": "Julio Jones",
+        "position": "WR",
+        "nflTeam": "Phi",
+        "sourceTeamKey": "414.l.51824.t.2",
+        "sourceTeamName": "GET WELL SOON GANG",
+        "destinationTeamKey": "414.l.51824.t.1",
+        "destinationTeamName": "Current&Future Former Champion"
+      },
+      {
+        "playerId": "32704",
+        "playerName": "Michael Pittman Jr.",
+        "position": "WR",
+        "nflTeam": "Pit",
+        "sourceTeamKey": "414.l.51824.t.2",
+        "sourceTeamName": "GET WELL SOON GANG",
+        "destinationTeamKey": "414.l.51824.t.1",
+        "destinationTeamName": "Current&Future Former Champion"
+      }
+    ]
+  },
+  {
+    "id": "195",
+    "transactionKey": "406.l.1109923.tr.195",
+    "seasonId": "11764",
+    "seasonYear": 2021,
+    "postedAt": "2021-11-18T22:09:22.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129719",
+      "memberId": "38864",
+      "teamKey": "406.l.1109923.t.5",
+      "teamName": "jawad's Legendary Team"
+    },
+    "tradee": {
+      "seasonTeamId": "129715",
+      "memberId": "38860",
+      "teamKey": "406.l.1109923.t.1",
+      "teamName": "Mr. Future Former Champion"
+    },
+    "traderSent": [
+      {
+        "playerId": "30362",
+        "playerName": "Chris Carson",
+        "position": "RB",
+        "nflTeam": "Sea",
+        "sourceTeamKey": "406.l.1109923.t.5",
+        "sourceTeamName": "jawad's Legendary Team",
+        "destinationTeamKey": "406.l.1109923.t.1",
+        "destinationTeamName": "Mr. Future Former Champion"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "26658",
+        "playerName": "Zach Ertz",
+        "position": "TE",
+        "nflTeam": "Was",
+        "sourceTeamKey": "406.l.1109923.t.1",
+        "sourceTeamName": "Mr. Future Former Champion",
+        "destinationTeamKey": "406.l.1109923.t.5",
+        "destinationTeamName": "jawad's Legendary Team"
+      }
+    ]
+  },
+  {
+    "id": "191",
+    "transactionKey": "406.l.1109923.tr.191",
+    "seasonId": "11764",
+    "seasonYear": 2021,
+    "postedAt": "2021-11-17T23:34:44.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129717",
+      "memberId": "38862",
+      "teamKey": "406.l.1109923.t.3",
+      "teamName": "The People’s Champ"
+    },
+    "tradee": {
+      "seasonTeamId": "129718",
+      "memberId": "38867",
+      "teamKey": "406.l.1109923.t.4",
+      "teamName": "farooz's Astonishing Team"
+    },
+    "traderSent": [
+      {
+        "playerId": "31908",
+        "playerName": "Terry McLaurin",
+        "position": "WR",
+        "nflTeam": "Was",
+        "sourceTeamKey": "406.l.1109923.t.3",
+        "sourceTeamName": "The People’s Champ",
+        "destinationTeamKey": "406.l.1109923.t.4",
+        "destinationTeamName": "farooz's Astonishing Team"
+      },
+      {
+        "playerId": "28392",
+        "playerName": "Amari Cooper",
+        "position": "WR",
+        "nflTeam": "Buf",
+        "sourceTeamKey": "406.l.1109923.t.3",
+        "sourceTeamName": "The People’s Champ",
+        "destinationTeamKey": "406.l.1109923.t.4",
+        "destinationTeamName": "farooz's Astonishing Team"
+      },
+      {
+        "playerId": "26686",
+        "playerName": "Travis Kelce",
+        "position": "TE",
+        "nflTeam": "KC",
+        "sourceTeamKey": "406.l.1109923.t.3",
+        "sourceTeamName": "The People’s Champ",
+        "destinationTeamKey": "406.l.1109923.t.4",
+        "destinationTeamName": "farooz's Astonishing Team"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "27581",
+        "playerName": "Davante Adams",
+        "position": "WR",
+        "nflTeam": "LAR",
+        "sourceTeamKey": "406.l.1109923.t.4",
+        "sourceTeamName": "farooz's Astonishing Team",
+        "destinationTeamKey": "406.l.1109923.t.3",
+        "destinationTeamName": "The People’s Champ"
+      },
+      {
+        "playerId": "28592",
+        "playerName": "Darren Waller",
+        "position": "TE",
+        "nflTeam": "Mia",
+        "sourceTeamKey": "406.l.1109923.t.4",
+        "sourceTeamName": "farooz's Astonishing Team",
+        "destinationTeamKey": "406.l.1109923.t.3",
+        "destinationTeamName": "The People’s Champ"
+      }
+    ]
+  },
+  {
+    "id": "179",
+    "transactionKey": "406.l.1109923.tr.179",
+    "seasonId": "11764",
+    "seasonYear": 2021,
+    "postedAt": "2021-11-14T17:02:19.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129715",
+      "memberId": "38860",
+      "teamKey": "406.l.1109923.t.1",
+      "teamName": "Mr. Future Former Champion"
+    },
+    "tradee": {
+      "seasonTeamId": "129721",
+      "memberId": "38866",
+      "teamKey": "406.l.1109923.t.7",
+      "teamName": "Montville Mustangs"
+    },
+    "traderSent": [
+      {
+        "playerId": "32676",
+        "playerName": "Justin Herbert",
+        "position": "QB",
+        "nflTeam": "LAC",
+        "sourceTeamKey": "406.l.1109923.t.1",
+        "sourceTeamName": "Mr. Future Former Champion",
+        "destinationTeamKey": "406.l.1109923.t.7",
+        "destinationTeamName": "Montville Mustangs"
+      },
+      {
+        "playerId": "30120",
+        "playerName": "Mike Williams",
+        "position": "WR",
+        "nflTeam": "Pit",
+        "sourceTeamKey": "406.l.1109923.t.1",
+        "sourceTeamName": "Mr. Future Former Champion",
+        "destinationTeamKey": "406.l.1109923.t.7",
+        "destinationTeamName": "Montville Mustangs"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "32687",
+        "playerName": "CeeDee Lamb",
+        "position": "WR",
+        "nflTeam": "Dal",
+        "sourceTeamKey": "406.l.1109923.t.7",
+        "sourceTeamName": "Montville Mustangs",
+        "destinationTeamKey": "406.l.1109923.t.1",
+        "destinationTeamName": "Mr. Future Former Champion"
+      }
+    ]
+  },
+  {
+    "id": "137",
+    "transactionKey": "406.l.1109923.tr.137",
+    "seasonId": "11764",
+    "seasonYear": 2021,
+    "postedAt": "2021-10-29T19:17:19.000Z",
+    "week": null,
+    "weekLabel": null,
+    "value": 0,
+    "status": "successful",
+    "trader": {
+      "seasonTeamId": "129716",
+      "memberId": "38865",
+      "teamKey": "406.l.1109923.t.2",
+      "teamName": "Mediocre Moosemans"
+    },
+    "tradee": {
+      "seasonTeamId": "129720",
+      "memberId": "38861",
+      "teamKey": "406.l.1109923.t.6",
+      "teamName": "America’s Fantasy Team"
+    },
+    "traderSent": [
+      {
+        "playerId": "31840",
+        "playerName": "T.J. Hockenson",
+        "position": "TE",
+        "nflTeam": "Min",
+        "sourceTeamKey": "406.l.1109923.t.2",
+        "sourceTeamName": "Mediocre Moosemans",
+        "destinationTeamKey": "406.l.1109923.t.6",
+        "destinationTeamName": "America’s Fantasy Team"
+      },
+      {
+        "playerId": "25812",
+        "playerName": "Kirk Cousins",
+        "position": "QB",
+        "nflTeam": "LV",
+        "sourceTeamKey": "406.l.1109923.t.2",
+        "sourceTeamName": "Mediocre Moosemans",
+        "destinationTeamKey": "406.l.1109923.t.6",
+        "destinationTeamName": "America’s Fantasy Team"
+      }
+    ],
+    "tradeeSent": [
+      {
+        "playerId": "30259",
+        "playerName": "George Kittle",
+        "position": "TE",
+        "nflTeam": "SF",
+        "sourceTeamKey": "406.l.1109923.t.6",
+        "sourceTeamName": "America’s Fantasy Team",
+        "destinationTeamKey": "406.l.1109923.t.2",
+        "destinationTeamName": "Mediocre Moosemans"
+      }
+    ]
+  }
+]

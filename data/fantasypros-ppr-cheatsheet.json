@@ -1,0 +1,4216 @@
+{
+  "sourceUrl": "https://www.fantasypros.com/nfl/rankings/ppr-cheatsheets.php",
+  "sourceLabel": "FantasyPros 2026 PPR Cheat Sheet",
+  "seasonYear": 2026,
+  "scoring": "PPR",
+  "fetchedAt": "2026-05-14T19:59:49.827Z",
+  "updatedDisplay": "5/14",
+  "accessed": "2026-05-14 19:58:26",
+  "playerCount": 427,
+  "players": [
+    {
+      "key": "jahmyr-gibbs",
+      "playerId": 22968,
+      "name": "Jahmyr Gibbs",
+      "nflTeam": "DET",
+      "position": "RB",
+      "ecrRank": 5,
+      "adp": 1,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jahmyr-gibbs.php"
+    },
+    {
+      "key": "bijan-robinson",
+      "playerId": 23133,
+      "name": "Bijan Robinson",
+      "nflTeam": "ATL",
+      "position": "RB",
+      "ecrRank": 2,
+      "adp": 2,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/bijan-robinson.php"
+    },
+    {
+      "key": "ja-marr-chase",
+      "playerId": 19788,
+      "name": "Ja'Marr Chase",
+      "nflTeam": "CIN",
+      "position": "WR",
+      "ecrRank": 1,
+      "adp": 3,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jamarr-chase.php"
+    },
+    {
+      "key": "puka-nacua",
+      "playerId": 23180,
+      "name": "Puka Nacua",
+      "nflTeam": "LAR",
+      "position": "WR",
+      "ecrRank": 3,
+      "adp": 4,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/puka-nacua.php"
+    },
+    {
+      "key": "jaxon-smith-njigba",
+      "playerId": 23070,
+      "name": "Jaxon Smith-Njigba",
+      "nflTeam": "SEA",
+      "position": "WR",
+      "ecrRank": 4,
+      "adp": 5,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jaxon-smith-njigba.php"
+    },
+    {
+      "key": "christian-mccaffrey",
+      "playerId": 16393,
+      "name": "Christian McCaffrey",
+      "nflTeam": "SF",
+      "position": "RB",
+      "ecrRank": 8,
+      "adp": 6,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/christian-mccaffrey.php"
+    },
+    {
+      "key": "jonathan-taylor",
+      "playerId": 19217,
+      "name": "Jonathan Taylor",
+      "nflTeam": "IND",
+      "position": "RB",
+      "ecrRank": 10,
+      "adp": 7,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jonathan-taylor.php"
+    },
+    {
+      "key": "amon-ra-st-brown",
+      "playerId": 19799,
+      "name": "Amon-Ra St. Brown",
+      "nflTeam": "DET",
+      "position": "WR",
+      "ecrRank": 6,
+      "adp": 8,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/amonra-stbrown.php"
+    },
+    {
+      "key": "james-cook-iii",
+      "playerId": 22958,
+      "name": "James Cook III",
+      "nflTeam": "BUF",
+      "position": "RB",
+      "ecrRank": 19,
+      "adp": 9,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/james-cook.php"
+    },
+    {
+      "key": "justin-jefferson",
+      "playerId": 19236,
+      "name": "Justin Jefferson",
+      "nflTeam": "MIN",
+      "position": "WR",
+      "ecrRank": 9,
+      "adp": 10,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/justin-jefferson.php"
+    },
+    {
+      "key": "ceedee-lamb",
+      "playerId": 19202,
+      "name": "CeeDee Lamb",
+      "nflTeam": "DAL",
+      "position": "WR",
+      "ecrRank": 7,
+      "adp": 11,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/ceedee-lamb.php"
+    },
+    {
+      "key": "ashton-jeanty",
+      "playerId": 25989,
+      "name": "Ashton Jeanty",
+      "nflTeam": "LV",
+      "position": "RB",
+      "ecrRank": 18,
+      "adp": 12,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/ashton-jeanty.php"
+    },
+    {
+      "key": "de-von-achane",
+      "playerId": 23136,
+      "name": "De'Von Achane",
+      "nflTeam": "MIA",
+      "position": "RB",
+      "ecrRank": 15,
+      "adp": 13,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/devon-achane.php"
+    },
+    {
+      "key": "kenneth-walker-iii",
+      "playerId": 23021,
+      "name": "Kenneth Walker III",
+      "nflTeam": "KC",
+      "position": "RB",
+      "ecrRank": 30,
+      "adp": 14,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/kenneth-walker-rb.php"
+    },
+    {
+      "key": "chase-brown",
+      "playerId": 25324,
+      "name": "Chase Brown",
+      "nflTeam": "CIN",
+      "position": "RB",
+      "ecrRank": 22,
+      "adp": 15,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/chase-brown.php"
+    },
+    {
+      "key": "omarion-hampton",
+      "playerId": 25395,
+      "name": "Omarion Hampton",
+      "nflTeam": "LAC",
+      "position": "RB",
+      "ecrRank": 25,
+      "adp": 16,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/omarion-hampton.php"
+    },
+    {
+      "key": "saquon-barkley",
+      "playerId": 17240,
+      "name": "Saquon Barkley",
+      "nflTeam": "PHI",
+      "position": "RB",
+      "ecrRank": 27,
+      "adp": 17,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/saquon-barkley.php"
+    },
+    {
+      "key": "trey-mcbride",
+      "playerId": 22936,
+      "name": "Trey McBride",
+      "nflTeam": "ARI",
+      "position": "TE",
+      "ecrRank": 16,
+      "adp": 18,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/trey-mcbride.php"
+    },
+    {
+      "key": "drake-london",
+      "playerId": 23163,
+      "name": "Drake London",
+      "nflTeam": "ATL",
+      "position": "WR",
+      "ecrRank": 11,
+      "adp": 19,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/drake-london.php"
+    },
+    {
+      "key": "rashee-rice",
+      "playerId": 23113,
+      "name": "Rashee Rice",
+      "nflTeam": "KC",
+      "position": "WR",
+      "ecrRank": 14,
+      "adp": 20,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/rashee-rice.php"
+    },
+    {
+      "key": "jeremiyah-love",
+      "playerId": 25403,
+      "name": "Jeremiyah Love",
+      "nflTeam": "ARI",
+      "position": "RB",
+      "ecrRank": 34,
+      "adp": 21,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jeremiyah-love.php"
+    },
+    {
+      "key": "brock-bowers",
+      "playerId": 22955,
+      "name": "Brock Bowers",
+      "nflTeam": "LV",
+      "position": "TE",
+      "ecrRank": 21,
+      "adp": 22,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/brock-bowers.php"
+    },
+    {
+      "key": "derrick-henry",
+      "playerId": 15514,
+      "name": "Derrick Henry",
+      "nflTeam": "BAL",
+      "position": "RB",
+      "ecrRank": 41,
+      "adp": 23,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/derrick-henry.php"
+    },
+    {
+      "key": "malik-nabers",
+      "playerId": 25409,
+      "name": "Malik Nabers",
+      "nflTeam": "NYG",
+      "position": "WR",
+      "ecrRank": 12,
+      "adp": 24,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/malik-nabers.php"
+    },
+    {
+      "key": "nico-collins",
+      "playerId": 20130,
+      "name": "Nico Collins",
+      "nflTeam": "HOU",
+      "position": "WR",
+      "ecrRank": 13,
+      "adp": 25,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/nico-collins.php"
+    },
+    {
+      "key": "george-pickens",
+      "playerId": 22963,
+      "name": "George Pickens",
+      "nflTeam": "DAL",
+      "position": "WR",
+      "ecrRank": 17,
+      "adp": 26,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/george-pickens.php"
+    },
+    {
+      "key": "josh-allen",
+      "playerId": 17298,
+      "name": "Josh Allen",
+      "nflTeam": "BUF",
+      "position": "QB",
+      "ecrRank": 24,
+      "adp": 27,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/josh-allen-qb.php"
+    },
+    {
+      "key": "josh-jacobs",
+      "playerId": 18269,
+      "name": "Josh Jacobs",
+      "nflTeam": "GB",
+      "position": "RB",
+      "ecrRank": 35,
+      "adp": 28,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/josh-jacobs.php"
+    },
+    {
+      "key": "a-j-brown",
+      "playerId": 18218,
+      "name": "A.J. Brown",
+      "nflTeam": "PHI",
+      "position": "WR",
+      "ecrRank": 23,
+      "adp": 29,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/aj-brown.php"
+    },
+    {
+      "key": "chris-olave",
+      "playerId": 20111,
+      "name": "Chris Olave",
+      "nflTeam": "NO",
+      "position": "WR",
+      "ecrRank": 20,
+      "adp": 30,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/chris-olave.php"
+    },
+    {
+      "key": "kyren-williams",
+      "playerId": 23059,
+      "name": "Kyren Williams",
+      "nflTeam": "LAR",
+      "position": "RB",
+      "ecrRank": 48,
+      "adp": 31,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/kyren-williams.php"
+    },
+    {
+      "key": "travis-etienne-jr",
+      "playerId": 19231,
+      "name": "Travis Etienne Jr.",
+      "nflTeam": "NO",
+      "position": "RB",
+      "ecrRank": 46,
+      "adp": 32,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/travis-etienne.php"
+    },
+    {
+      "key": "breece-hall",
+      "playerId": 22982,
+      "name": "Breece Hall",
+      "nflTeam": "NYJ",
+      "position": "RB",
+      "ecrRank": 42,
+      "adp": 33,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/breece-hall.php"
+    },
+    {
+      "key": "javonte-williams",
+      "playerId": 22739,
+      "name": "Javonte Williams",
+      "nflTeam": "DAL",
+      "position": "RB",
+      "ecrRank": 49,
+      "adp": 34,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/javonte-williams.php"
+    },
+    {
+      "key": "garrett-wilson",
+      "playerId": 23072,
+      "name": "Garrett Wilson",
+      "nflTeam": "NYJ",
+      "position": "WR",
+      "ecrRank": 29,
+      "adp": 35,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/garrett-wilson.php"
+    },
+    {
+      "key": "tetairoa-mcmillan",
+      "playerId": 25417,
+      "name": "Tetairoa McMillan",
+      "nflTeam": "CAR",
+      "position": "WR",
+      "ecrRank": 26,
+      "adp": 36,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/tetairoa-mcmillan.php"
+    },
+    {
+      "key": "devonta-smith",
+      "playerId": 19222,
+      "name": "DeVonta Smith",
+      "nflTeam": "PHI",
+      "position": "WR",
+      "ecrRank": 32,
+      "adp": 37,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/devonta-smith.php"
+    },
+    {
+      "key": "tee-higgins",
+      "playerId": 19211,
+      "name": "Tee Higgins",
+      "nflTeam": "CIN",
+      "position": "WR",
+      "ecrRank": 31,
+      "adp": 38,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/tee-higgins.php"
+    },
+    {
+      "key": "zay-flowers",
+      "playerId": 22916,
+      "name": "Zay Flowers",
+      "nflTeam": "BAL",
+      "position": "WR",
+      "ecrRank": 38,
+      "adp": 39,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/zay-flowers.php"
+    },
+    {
+      "key": "bucky-irving",
+      "playerId": 25981,
+      "name": "Bucky Irving",
+      "nflTeam": "TB",
+      "position": "RB",
+      "ecrRank": 51,
+      "adp": 40,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/bucky-irving.php"
+    },
+    {
+      "key": "ladd-mcconkey",
+      "playerId": 26122,
+      "name": "Ladd McConkey",
+      "nflTeam": "LAC",
+      "position": "WR",
+      "ecrRank": 36,
+      "adp": 41,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/ladd-mcconkey.php"
+    },
+    {
+      "key": "luther-burden-iii",
+      "playerId": 27016,
+      "name": "Luther Burden III",
+      "nflTeam": "CHI",
+      "position": "WR",
+      "ecrRank": 39,
+      "adp": 42,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/luther-burden-iii.php"
+    },
+    {
+      "key": "colston-loveland",
+      "playerId": 26006,
+      "name": "Colston Loveland",
+      "nflTeam": "CHI",
+      "position": "TE",
+      "ecrRank": 37,
+      "adp": 43,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/colston-loveland.php"
+    },
+    {
+      "key": "emeka-egbuka",
+      "playerId": 23062,
+      "name": "Emeka Egbuka",
+      "nflTeam": "TB",
+      "position": "WR",
+      "ecrRank": 47,
+      "adp": 44,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/emeka-egbuka.php"
+    },
+    {
+      "key": "lamar-jackson",
+      "playerId": 17233,
+      "name": "Lamar Jackson",
+      "nflTeam": "BAL",
+      "position": "QB",
+      "ecrRank": 28,
+      "adp": 45,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/lamar-jackson.php"
+    },
+    {
+      "key": "cam-skattebo",
+      "playerId": 27166,
+      "name": "Cam Skattebo",
+      "nflTeam": "NYG",
+      "position": "RB",
+      "ecrRank": 56,
+      "adp": 46,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/cam-skattebo.php"
+    },
+    {
+      "key": "treveyon-henderson",
+      "playerId": 23065,
+      "name": "TreVeyon Henderson",
+      "nflTeam": "NE",
+      "position": "RB",
+      "ecrRank": 59,
+      "adp": 47,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/treveyon-henderson.php"
+    },
+    {
+      "key": "davante-adams",
+      "playerId": 12123,
+      "name": "Davante Adams",
+      "nflTeam": "LAR",
+      "position": "WR",
+      "ecrRank": 44,
+      "adp": 48,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/davante-adams.php"
+    },
+    {
+      "key": "david-montgomery",
+      "playerId": 18239,
+      "name": "David Montgomery",
+      "nflTeam": "HOU",
+      "position": "RB",
+      "ecrRank": 61,
+      "adp": 49,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/david-montgomery.php"
+    },
+    {
+      "key": "jameson-williams",
+      "playerId": 23677,
+      "name": "Jameson Williams",
+      "nflTeam": "DET",
+      "position": "WR",
+      "ecrRank": 52,
+      "adp": 50,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jameson-williams.php"
+    },
+    {
+      "key": "terry-mclaurin",
+      "playerId": 18466,
+      "name": "Terry McLaurin",
+      "nflTeam": "WAS",
+      "position": "WR",
+      "ecrRank": 45,
+      "adp": 51,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/terry-mclaurin.php"
+    },
+    {
+      "key": "jaylen-waddle",
+      "playerId": 19790,
+      "name": "Jaylen Waddle",
+      "nflTeam": "DEN",
+      "position": "WR",
+      "ecrRank": 40,
+      "adp": 52,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jaylen-waddle.php"
+    },
+    {
+      "key": "d-andre-swift",
+      "playerId": 19210,
+      "name": "D'Andre Swift",
+      "nflTeam": "CHI",
+      "position": "RB",
+      "ecrRank": 63,
+      "adp": 53,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/dandre-swift.php"
+    },
+    {
+      "key": "joe-burrow",
+      "playerId": 19196,
+      "name": "Joe Burrow",
+      "nflTeam": "CIN",
+      "position": "QB",
+      "ecrRank": 43,
+      "adp": 54,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/joe-burrow.php"
+    },
+    {
+      "key": "dj-moore",
+      "playerId": 17265,
+      "name": "DJ Moore",
+      "nflTeam": "BUF",
+      "position": "WR",
+      "ecrRank": 58,
+      "adp": 55,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/dj-moore-wr.php"
+    },
+    {
+      "key": "quinshon-judkins",
+      "playerId": 25391,
+      "name": "Quinshon Judkins",
+      "nflTeam": "CLE",
+      "position": "RB",
+      "ecrRank": 62,
+      "adp": 56,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/quinshon-judkins.php"
+    },
+    {
+      "key": "drake-maye",
+      "playerId": 23046,
+      "name": "Drake Maye",
+      "nflTeam": "NE",
+      "position": "QB",
+      "ecrRank": 33,
+      "adp": 57,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/drake-maye.php"
+    },
+    {
+      "key": "mike-evans",
+      "playerId": 12119,
+      "name": "Mike Evans",
+      "nflTeam": "SF",
+      "position": "WR",
+      "ecrRank": 50,
+      "adp": 58,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/mike-evans.php"
+    },
+    {
+      "key": "rome-odunze",
+      "playerId": 25411,
+      "name": "Rome Odunze",
+      "nflTeam": "CHI",
+      "position": "WR",
+      "ecrRank": 60,
+      "adp": 59,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/rome-odunze.php"
+    },
+    {
+      "key": "christian-watson",
+      "playerId": 23886,
+      "name": "Christian Watson",
+      "nflTeam": "GB",
+      "position": "WR",
+      "ecrRank": 57,
+      "adp": 60,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/christian-watson.php"
+    },
+    {
+      "key": "chuba-hubbard",
+      "playerId": 19792,
+      "name": "Chuba Hubbard",
+      "nflTeam": "CAR",
+      "position": "RB",
+      "ecrRank": 78,
+      "adp": 61,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/chuba-hubbard.php"
+    },
+    {
+      "key": "jayden-daniels",
+      "playerId": 22902,
+      "name": "Jayden Daniels",
+      "nflTeam": "WAS",
+      "position": "QB",
+      "ecrRank": 53,
+      "adp": 62,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jayden-daniels.php"
+    },
+    {
+      "key": "bhayshul-tuten",
+      "playerId": 27297,
+      "name": "Bhayshul Tuten",
+      "nflTeam": "JAC",
+      "position": "RB",
+      "ecrRank": 76,
+      "adp": 63,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/bhayshul-tuten.php"
+    },
+    {
+      "key": "carnell-tate",
+      "playerId": 26009,
+      "name": "Carnell Tate",
+      "nflTeam": "TEN",
+      "position": "WR",
+      "ecrRank": 72,
+      "adp": 64,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/carnell-tate.php"
+    },
+    {
+      "key": "tyler-warren",
+      "playerId": 26434,
+      "name": "Tyler Warren",
+      "nflTeam": "IND",
+      "position": "TE",
+      "ecrRank": 54,
+      "adp": 65,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/tyler-warren.php"
+    },
+    {
+      "key": "jadarian-price",
+      "playerId": 27329,
+      "name": "Jadarian Price",
+      "nflTeam": "SEA",
+      "position": "RB",
+      "ecrRank": 81,
+      "adp": 66,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jadarian-price.php"
+    },
+    {
+      "key": "caleb-williams",
+      "playerId": 23084,
+      "name": "Caleb Williams",
+      "nflTeam": "CHI",
+      "position": "QB",
+      "ecrRank": 75,
+      "adp": 67,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/caleb-williams.php"
+    },
+    {
+      "key": "jalen-hurts",
+      "playerId": 19275,
+      "name": "Jalen Hurts",
+      "nflTeam": "PHI",
+      "position": "QB",
+      "ecrRank": 55,
+      "adp": 68,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jalen-hurts.php"
+    },
+    {
+      "key": "marvin-harrison-jr",
+      "playerId": 23064,
+      "name": "Marvin Harrison Jr.",
+      "nflTeam": "ARI",
+      "position": "WR",
+      "ecrRank": 66,
+      "adp": 69,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/marvin-harrison-jr.php"
+    },
+    {
+      "key": "jordyn-tyson",
+      "playerId": 26035,
+      "name": "Jordyn Tyson",
+      "nflTeam": "NO",
+      "position": "WR",
+      "ecrRank": 88,
+      "adp": 70,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jordyn-tyson.php"
+    },
+    {
+      "key": "dk-metcalf",
+      "playerId": 18219,
+      "name": "DK Metcalf",
+      "nflTeam": "PIT",
+      "position": "WR",
+      "ecrRank": 70,
+      "adp": 71,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/dk-metcalf.php"
+    },
+    {
+      "key": "rj-harvey",
+      "playerId": 27142,
+      "name": "RJ Harvey",
+      "nflTeam": "DEN",
+      "position": "RB",
+      "ecrRank": 73,
+      "adp": 72,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/rj-harvey.php"
+    },
+    {
+      "key": "jaylen-warren",
+      "playerId": 24209,
+      "name": "Jaylen Warren",
+      "nflTeam": "PIT",
+      "position": "RB",
+      "ecrRank": 71,
+      "adp": 73,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jaylen-warren.php"
+    },
+    {
+      "key": "brian-thomas-jr",
+      "playerId": 23000,
+      "name": "Brian Thomas Jr.",
+      "nflTeam": "JAC",
+      "position": "WR",
+      "ecrRank": 87,
+      "adp": 74,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/brian-thomas-jr.php"
+    },
+    {
+      "key": "trevor-lawrence",
+      "playerId": 19780,
+      "name": "Trevor Lawrence",
+      "nflTeam": "JAC",
+      "position": "QB",
+      "ecrRank": 80,
+      "adp": 75,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/trevor-lawrence.php"
+    },
+    {
+      "key": "justin-herbert",
+      "playerId": 18635,
+      "name": "Justin Herbert",
+      "nflTeam": "LAC",
+      "position": "QB",
+      "ecrRank": 67,
+      "adp": 76,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/justin-herbert.php"
+    },
+    {
+      "key": "alec-pierce",
+      "playerId": 23791,
+      "name": "Alec Pierce",
+      "nflTeam": "IND",
+      "position": "WR",
+      "ecrRank": 83,
+      "adp": 77,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/alec-pierce.php"
+    },
+    {
+      "key": "jaxson-dart",
+      "playerId": 23160,
+      "name": "Jaxson Dart",
+      "nflTeam": "NYG",
+      "position": "QB",
+      "ecrRank": 69,
+      "adp": 78,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jaxson-dart.php"
+    },
+    {
+      "key": "parker-washington",
+      "playerId": 23106,
+      "name": "Parker Washington",
+      "nflTeam": "JAC",
+      "position": "WR",
+      "ecrRank": 97,
+      "adp": 79,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/parker-washington.php"
+    },
+    {
+      "key": "courtland-sutton",
+      "playerId": 17253,
+      "name": "Courtland Sutton",
+      "nflTeam": "DEN",
+      "position": "WR",
+      "ecrRank": 65,
+      "adp": 80,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/courtland-sutton.php"
+    },
+    {
+      "key": "rhamondre-stevenson",
+      "playerId": 22726,
+      "name": "Rhamondre Stevenson",
+      "nflTeam": "NE",
+      "position": "RB",
+      "ecrRank": 90,
+      "adp": 81,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/rhamondre-stevenson.php"
+    },
+    {
+      "key": "dak-prescott",
+      "playerId": 15600,
+      "name": "Dak Prescott",
+      "nflTeam": "DAL",
+      "position": "QB",
+      "ecrRank": 86,
+      "adp": 82,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/dak-prescott.php"
+    },
+    {
+      "key": "harold-fannin-jr",
+      "playerId": 27050,
+      "name": "Harold Fannin Jr.",
+      "nflTeam": "CLE",
+      "position": "TE",
+      "ecrRank": 74,
+      "adp": 83,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/harold-fannin-jr.php"
+    },
+    {
+      "key": "tucker-kraft",
+      "playerId": 25298,
+      "name": "Tucker Kraft",
+      "nflTeam": "GB",
+      "position": "TE",
+      "ecrRank": 64,
+      "adp": 84,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/tucker-kraft.php"
+    },
+    {
+      "key": "tony-pollard",
+      "playerId": 18705,
+      "name": "Tony Pollard",
+      "nflTeam": "TEN",
+      "position": "RB",
+      "ecrRank": 91,
+      "adp": 85,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/tony-pollard.php"
+    },
+    {
+      "key": "michael-wilson",
+      "playerId": 25333,
+      "name": "Michael Wilson",
+      "nflTeam": "ARI",
+      "position": "WR",
+      "ecrRank": 77,
+      "adp": 86,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/michael-wilson.php"
+    },
+    {
+      "key": "makai-lemon",
+      "playerId": 25420,
+      "name": "Makai Lemon",
+      "nflTeam": "PHI",
+      "position": "WR",
+      "ecrRank": 93,
+      "adp": 87,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/makai-lemon.php"
+    },
+    {
+      "key": "rico-dowdle",
+      "playerId": 19647,
+      "name": "Rico Dowdle",
+      "nflTeam": "PIT",
+      "position": "RB",
+      "ecrRank": 85,
+      "adp": 88,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/rico-dowdle.php"
+    },
+    {
+      "key": "matthew-stafford",
+      "playerId": 9451,
+      "name": "Matthew Stafford",
+      "nflTeam": "LAR",
+      "position": "QB",
+      "ecrRank": 100,
+      "adp": 89,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/matthew-stafford.php"
+    },
+    {
+      "key": "brock-purdy",
+      "playerId": 19797,
+      "name": "Brock Purdy",
+      "nflTeam": "SF",
+      "position": "QB",
+      "ecrRank": 95,
+      "adp": 90,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/brock-purdy.php"
+    },
+    {
+      "key": "kyle-monangai",
+      "playerId": 27131,
+      "name": "Kyle Monangai",
+      "nflTeam": "CHI",
+      "position": "RB",
+      "ecrRank": 94,
+      "adp": 91,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/kyle-monangai.php"
+    },
+    {
+      "key": "jakobi-meyers",
+      "playerId": 18598,
+      "name": "Jakobi Meyers",
+      "nflTeam": "JAC",
+      "position": "WR",
+      "ecrRank": 79,
+      "adp": 92,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jakobi-meyers.php"
+    },
+    {
+      "key": "patrick-mahomes-ii",
+      "playerId": 16413,
+      "name": "Patrick Mahomes II",
+      "nflTeam": "KC",
+      "position": "QB",
+      "ecrRank": 98,
+      "adp": 93,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/patrick-mahomes.php"
+    },
+    {
+      "key": "chris-godwin-jr",
+      "playerId": 16406,
+      "name": "Chris Godwin Jr.",
+      "nflTeam": "TB",
+      "position": "WR",
+      "ecrRank": 68,
+      "adp": 94,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/chris-godwin.php"
+    },
+    {
+      "key": "kyle-pitts-sr",
+      "playerId": 20164,
+      "name": "Kyle Pitts Sr.",
+      "nflTeam": "ATL",
+      "position": "TE",
+      "ecrRank": 82,
+      "adp": 95,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/kyle-pitts.php"
+    },
+    {
+      "key": "jared-goff",
+      "playerId": 15501,
+      "name": "Jared Goff",
+      "nflTeam": "DET",
+      "position": "QB",
+      "ecrRank": 112,
+      "adp": 96,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jared-goff.php"
+    },
+    {
+      "key": "bo-nix",
+      "playerId": 22910,
+      "name": "Bo Nix",
+      "nflTeam": "DEN",
+      "position": "QB",
+      "ecrRank": 102,
+      "adp": 97,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/bo-nix.php"
+    },
+    {
+      "key": "ricky-pearsall",
+      "playerId": 26214,
+      "name": "Ricky Pearsall",
+      "nflTeam": "SF",
+      "position": "WR",
+      "ecrRank": 96,
+      "adp": 98,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/ricky-pearsall.php"
+    },
+    {
+      "key": "sam-laporta",
+      "playerId": 22978,
+      "name": "Sam LaPorta",
+      "nflTeam": "DET",
+      "position": "TE",
+      "ecrRank": 84,
+      "adp": 99,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/sam-laporta.php"
+    },
+    {
+      "key": "jordan-addison",
+      "playerId": 23107,
+      "name": "Jordan Addison",
+      "nflTeam": "MIN",
+      "position": "WR",
+      "ecrRank": 99,
+      "adp": 100,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jordan-addison.php"
+    },
+    {
+      "key": "jayden-reed",
+      "playerId": 23020,
+      "name": "Jayden Reed",
+      "nflTeam": "GB",
+      "position": "WR",
+      "ecrRank": 107,
+      "adp": 101,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jayden-reed.php"
+    },
+    {
+      "key": "michael-pittman-jr",
+      "playerId": 19278,
+      "name": "Michael Pittman Jr.",
+      "nflTeam": "PIT",
+      "position": "WR",
+      "ecrRank": 89,
+      "adp": 102,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/michael-pittman.php"
+    },
+    {
+      "key": "quentin-johnston",
+      "playerId": 23123,
+      "name": "Quentin Johnston",
+      "nflTeam": "LAC",
+      "position": "WR",
+      "ecrRank": 116,
+      "adp": 103,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/quentin-johnston.php"
+    },
+    {
+      "key": "j-k-dobbins",
+      "playerId": 19245,
+      "name": "J.K. Dobbins",
+      "nflTeam": "DEN",
+      "position": "RB",
+      "ecrRank": 110,
+      "adp": 104,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jk-dobbins.php"
+    },
+    {
+      "key": "tyler-shough",
+      "playerId": 23096,
+      "name": "Tyler Shough",
+      "nflTeam": "NO",
+      "position": "QB",
+      "ecrRank": 120,
+      "adp": 105,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/tyler-shough.php"
+    },
+    {
+      "key": "blake-corum",
+      "playerId": 23013,
+      "name": "Blake Corum",
+      "nflTeam": "LAR",
+      "position": "RB",
+      "ecrRank": 108,
+      "adp": 106,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/blake-corum.php"
+    },
+    {
+      "key": "wan-dale-robinson",
+      "playerId": 22985,
+      "name": "Wan'Dale Robinson",
+      "nflTeam": "TEN",
+      "position": "WR",
+      "ecrRank": 92,
+      "adp": 107,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/wandale-robinson.php"
+    },
+    {
+      "key": "kyler-murray",
+      "playerId": 18600,
+      "name": "Kyler Murray",
+      "nflTeam": "MIN",
+      "position": "QB",
+      "ecrRank": 114,
+      "adp": 108,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/kyler-murray.php"
+    },
+    {
+      "key": "kenneth-gainwell",
+      "playerId": 23310,
+      "name": "Kenneth Gainwell",
+      "nflTeam": "TB",
+      "position": "RB",
+      "ecrRank": 106,
+      "adp": 109,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/kenneth-gainwell.php"
+    },
+    {
+      "key": "jordan-love",
+      "playerId": 19246,
+      "name": "Jordan Love",
+      "nflTeam": "GB",
+      "position": "QB",
+      "ecrRank": 115,
+      "adp": 110,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jordan-love.php"
+    },
+    {
+      "key": "baker-mayfield",
+      "playerId": 17237,
+      "name": "Baker Mayfield",
+      "nflTeam": "TB",
+      "position": "QB",
+      "ecrRank": 121,
+      "adp": 111,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/baker-mayfield.php"
+    },
+    {
+      "key": "josh-downs",
+      "playerId": 24706,
+      "name": "Josh Downs",
+      "nflTeam": "IND",
+      "position": "WR",
+      "ecrRank": 103,
+      "adp": 112,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/josh-downs.php"
+    },
+    {
+      "key": "romeo-doubs",
+      "playerId": 23794,
+      "name": "Romeo Doubs",
+      "nflTeam": "NE",
+      "position": "WR",
+      "ecrRank": 125,
+      "adp": 113,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/romeo-doubs.php"
+    },
+    {
+      "key": "khalil-shakir",
+      "playerId": 23748,
+      "name": "Khalil Shakir",
+      "nflTeam": "BUF",
+      "position": "WR",
+      "ecrRank": 111,
+      "adp": 114,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/khalil-shakir.php"
+    },
+    {
+      "key": "george-kittle",
+      "playerId": 16499,
+      "name": "George Kittle",
+      "nflTeam": "SF",
+      "position": "TE",
+      "ecrRank": 124,
+      "adp": 115,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/george-kittle.php"
+    },
+    {
+      "key": "malik-willis",
+      "playerId": 23499,
+      "name": "Malik Willis",
+      "nflTeam": "MIA",
+      "position": "QB",
+      "ecrRank": 119,
+      "adp": 116,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/malik-willis.php"
+    },
+    {
+      "key": "oronde-gadsden-ii",
+      "playerId": 25997,
+      "name": "Oronde Gadsden II",
+      "nflTeam": "LAC",
+      "position": "TE",
+      "ecrRank": 113,
+      "adp": 117,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/oronde-gadsden-ii.php"
+    },
+    {
+      "key": "matthew-golden",
+      "playerId": 26024,
+      "name": "Matthew Golden",
+      "nflTeam": "GB",
+      "position": "WR",
+      "ecrRank": 139,
+      "adp": 118,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/matthew-golden.php"
+    },
+    {
+      "key": "jacory-croskey-merritt",
+      "playerId": 27316,
+      "name": "Jacory Croskey-Merritt",
+      "nflTeam": "WAS",
+      "position": "RB",
+      "ecrRank": 123,
+      "adp": 119,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jacory-croskeymerritt.php"
+    },
+    {
+      "key": "jordan-mason",
+      "playerId": 22969,
+      "name": "Jordan Mason",
+      "nflTeam": "MIN",
+      "position": "RB",
+      "ecrRank": 132,
+      "adp": 120,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jordan-mason.php"
+    },
+    {
+      "key": "jake-ferguson",
+      "playerId": 22718,
+      "name": "Jake Ferguson",
+      "nflTeam": "DAL",
+      "position": "TE",
+      "ecrRank": 104,
+      "adp": 121,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jake-ferguson.php"
+    },
+    {
+      "key": "kc-concepcion",
+      "playerId": 27331,
+      "name": "KC Concepcion",
+      "nflTeam": "CLE",
+      "position": "WR",
+      "ecrRank": 136,
+      "adp": 122,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/kevin-concepcion.php"
+    },
+    {
+      "key": "rachaad-white",
+      "playerId": 23891,
+      "name": "Rachaad White",
+      "nflTeam": "WAS",
+      "position": "RB",
+      "ecrRank": 118,
+      "adp": 123,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/rachaad-white.php"
+    },
+    {
+      "key": "xavier-worthy",
+      "playerId": 23019,
+      "name": "Xavier Worthy",
+      "nflTeam": "KC",
+      "position": "WR",
+      "ecrRank": 126,
+      "adp": 124,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/xavier-worthy.php"
+    },
+    {
+      "key": "jalen-coker",
+      "playerId": 26403,
+      "name": "Jalen Coker",
+      "nflTeam": "CAR",
+      "position": "WR",
+      "ecrRank": 129,
+      "adp": 125,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jalen-coker.php"
+    },
+    {
+      "key": "travis-kelce",
+      "playerId": 11594,
+      "name": "Travis Kelce",
+      "nflTeam": "KC",
+      "position": "TE",
+      "ecrRank": 109,
+      "adp": 126,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/travis-kelce.php"
+    },
+    {
+      "key": "jayden-higgins",
+      "playerId": 27077,
+      "name": "Jayden Higgins",
+      "nflTeam": "HOU",
+      "position": "WR",
+      "ecrRank": 122,
+      "adp": 127,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jayden-higgins.php"
+    },
+    {
+      "key": "aaron-jones-sr",
+      "playerId": 16673,
+      "name": "Aaron Jones Sr.",
+      "nflTeam": "MIN",
+      "position": "RB",
+      "ecrRank": 101,
+      "adp": 128,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/aaron-jones.php"
+    },
+    {
+      "key": "chris-rodriguez-jr",
+      "playerId": 22986,
+      "name": "Chris Rodriguez Jr.",
+      "nflTeam": "JAC",
+      "position": "RB",
+      "ecrRank": 150,
+      "adp": 129,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/chris-rodriguez-jr.php"
+    },
+    {
+      "key": "isaiah-likely",
+      "playerId": 23781,
+      "name": "Isaiah Likely",
+      "nflTeam": "NYG",
+      "position": "TE",
+      "ecrRank": 117,
+      "adp": 130,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/isaiah-likely.php"
+    },
+    {
+      "key": "c-j-stroud",
+      "playerId": 23071,
+      "name": "C.J. Stroud",
+      "nflTeam": "HOU",
+      "position": "QB",
+      "ecrRank": 133,
+      "adp": 131,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/cj-stroud.php"
+    },
+    {
+      "key": "dallas-goedert",
+      "playerId": 17270,
+      "name": "Dallas Goedert",
+      "nflTeam": "PHI",
+      "position": "TE",
+      "ecrRank": 127,
+      "adp": 132,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/dallas-goedert.php"
+    },
+    {
+      "key": "sam-darnold",
+      "playerId": 17236,
+      "name": "Sam Darnold",
+      "nflTeam": "SEA",
+      "position": "QB",
+      "ecrRank": 137,
+      "adp": 133,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/sam-darnold.php"
+    },
+    {
+      "key": "dalton-kincaid",
+      "playerId": 25247,
+      "name": "Dalton Kincaid",
+      "nflTeam": "BUF",
+      "position": "TE",
+      "ecrRank": 105,
+      "adp": 134,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/dalton-kincaid.php"
+    },
+    {
+      "key": "tyrone-tracy-jr",
+      "playerId": 22980,
+      "name": "Tyrone Tracy Jr.",
+      "nflTeam": "NYG",
+      "position": "RB",
+      "ecrRank": 135,
+      "adp": 135,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/tyrone-tracy-jr.php"
+    },
+    {
+      "key": "cam-ward",
+      "playerId": 24755,
+      "name": "Cam Ward",
+      "nflTeam": "TEN",
+      "position": "QB",
+      "ecrRank": 146,
+      "adp": 136,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/cam-ward.php"
+    },
+    {
+      "key": "jonathon-brooks",
+      "playerId": 26148,
+      "name": "Jonathon Brooks",
+      "nflTeam": "CAR",
+      "position": "RB",
+      "ecrRank": 153,
+      "adp": 137,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jonathon-brooks.php"
+    },
+    {
+      "key": "daniel-jones",
+      "playerId": 18232,
+      "name": "Daniel Jones",
+      "nflTeam": "IND",
+      "position": "QB",
+      "ecrRank": 160,
+      "adp": 138,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/daniel-jones.php"
+    },
+    {
+      "key": "tyler-allgeier",
+      "playerId": 24172,
+      "name": "Tyler Allgeier",
+      "nflTeam": "ARI",
+      "position": "RB",
+      "ecrRank": 131,
+      "adp": 139,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/tyler-allgeier.php"
+    },
+    {
+      "key": "bryce-young",
+      "playerId": 22900,
+      "name": "Bryce Young",
+      "nflTeam": "CAR",
+      "position": "QB",
+      "ecrRank": 143,
+      "adp": 140,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/bryce-young.php"
+    },
+    {
+      "key": "mark-andrews",
+      "playerId": 17269,
+      "name": "Mark Andrews",
+      "nflTeam": "BAL",
+      "position": "TE",
+      "ecrRank": 144,
+      "adp": 141,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/mark-andrews.php"
+    },
+    {
+      "key": "juwan-johnson",
+      "playerId": 19562,
+      "name": "Juwan Johnson",
+      "nflTeam": "NO",
+      "position": "TE",
+      "ecrRank": 130,
+      "adp": 142,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/juwan-johnson.php"
+    },
+    {
+      "key": "woody-marks",
+      "playerId": 27520,
+      "name": "Woody Marks",
+      "nflTeam": "HOU",
+      "position": "RB",
+      "ecrRank": 128,
+      "adp": 143,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/woody-marks.php"
+    },
+    {
+      "key": "jauan-jennings",
+      "playerId": 19590,
+      "name": "Jauan Jennings",
+      "nflTeam": "MIN",
+      "position": "WR",
+      "ecrRank": 163,
+      "adp": 144,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jauan-jennings.php"
+    },
+    {
+      "key": "kenyon-sadiq",
+      "playerId": 26055,
+      "name": "Kenyon Sadiq",
+      "nflTeam": "NYJ",
+      "position": "TE",
+      "ecrRank": 203,
+      "adp": 145,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/kenyon-sadiq.php"
+    },
+    {
+      "key": "jalen-mcmillan",
+      "playerId": 23179,
+      "name": "Jalen McMillan",
+      "nflTeam": "TB",
+      "position": "WR",
+      "ecrRank": 173,
+      "adp": 146,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jalen-mcmillan.php"
+    },
+    {
+      "key": "stefon-diggs",
+      "playerId": 13981,
+      "name": "Stefon Diggs",
+      "nflTeam": "FA",
+      "position": "WR",
+      "ecrRank": 156,
+      "adp": 147,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/stefon-diggs.php"
+    },
+    {
+      "key": "rashid-shaheed",
+      "playerId": 24687,
+      "name": "Rashid Shaheed",
+      "nflTeam": "SEA",
+      "position": "WR",
+      "ecrRank": 145,
+      "adp": 148,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/rashid-shaheed.php"
+    },
+    {
+      "key": "brenton-strange",
+      "playerId": 25345,
+      "name": "Brenton Strange",
+      "nflTeam": "JAC",
+      "position": "TE",
+      "ecrRank": 141,
+      "adp": 149,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/brenton-strange.php"
+    },
+    {
+      "key": "omar-cooper-jr",
+      "playerId": 28127,
+      "name": "Omar Cooper Jr.",
+      "nflTeam": "NYJ",
+      "position": "WR",
+      "ecrRank": 164,
+      "adp": 150,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/omar-cooper-jr.php"
+    },
+    {
+      "key": "hunter-henry",
+      "playerId": 15561,
+      "name": "Hunter Henry",
+      "nflTeam": "NE",
+      "position": "TE",
+      "ecrRank": 151,
+      "adp": 151,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/hunter-henry.php"
+    },
+    {
+      "key": "jonah-coleman",
+      "playerId": 27320,
+      "name": "Jonah Coleman",
+      "nflTeam": "DEN",
+      "position": "RB",
+      "ecrRank": 155,
+      "adp": 152,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jonah-coleman.php"
+    },
+    {
+      "key": "dylan-sampson",
+      "playerId": 27102,
+      "name": "Dylan Sampson",
+      "nflTeam": "CLE",
+      "position": "RB",
+      "ecrRank": 140,
+      "adp": 153,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/dylan-sampson.php"
+    },
+    {
+      "key": "isiah-pacheco",
+      "playerId": 24333,
+      "name": "Isiah Pacheco",
+      "nflTeam": "DET",
+      "position": "RB",
+      "ecrRank": 148,
+      "adp": 154,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/isiah-pacheco.php"
+    },
+    {
+      "key": "tre-tucker",
+      "playerId": 25337,
+      "name": "Tre Tucker",
+      "nflTeam": "LV",
+      "position": "WR",
+      "ecrRank": 193,
+      "adp": 155,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/tre-tucker.php"
+    },
+    {
+      "key": "keaton-mitchell",
+      "playerId": 25360,
+      "name": "Keaton Mitchell",
+      "nflTeam": "LAC",
+      "position": "RB",
+      "ecrRank": 161,
+      "adp": 156,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/keaton-mitchell.php"
+    },
+    {
+      "key": "tyjae-spears",
+      "playerId": 25323,
+      "name": "Tyjae Spears",
+      "nflTeam": "TEN",
+      "position": "RB",
+      "ecrRank": 138,
+      "adp": 157,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/tyjae-spears.php"
+    },
+    {
+      "key": "jacoby-brissett",
+      "playerId": 15642,
+      "name": "Jacoby Brissett",
+      "nflTeam": "ARI",
+      "position": "QB",
+      "ecrRank": 171,
+      "adp": 158,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jacoby-brissett.php"
+    },
+    {
+      "key": "deebo-samuel-sr",
+      "playerId": 18244,
+      "name": "Deebo Samuel Sr.",
+      "nflTeam": "FA",
+      "position": "WR",
+      "ecrRank": 152,
+      "adp": 159,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/deebo-samuel.php"
+    },
+    {
+      "key": "chig-okonkwo",
+      "playerId": 23982,
+      "name": "Chig Okonkwo",
+      "nflTeam": "WAS",
+      "position": "TE",
+      "ecrRank": 172,
+      "adp": 160,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/chigoziem-okonkwo.php"
+    },
+    {
+      "key": "denzel-boston",
+      "playerId": 27339,
+      "name": "Denzel Boston",
+      "nflTeam": "CLE",
+      "position": "WR",
+      "ecrRank": 158,
+      "adp": 161,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/denzel-boston.php"
+    },
+    {
+      "key": "zach-charbonnet",
+      "playerId": 23152,
+      "name": "Zach Charbonnet",
+      "nflTeam": "SEA",
+      "position": "RB",
+      "ecrRank": 134,
+      "adp": 162,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/zach-charbonnet.php"
+    },
+    {
+      "key": "t-j-hockenson",
+      "playerId": 18290,
+      "name": "T.J. Hockenson",
+      "nflTeam": "MIN",
+      "position": "TE",
+      "ecrRank": 178,
+      "adp": 163,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/tj-hockenson.php"
+    },
+    {
+      "key": "fernando-mendoza",
+      "playerId": 28013,
+      "name": "Fernando Mendoza",
+      "nflTeam": "LV",
+      "position": "QB",
+      "ecrRank": 211,
+      "adp": 164,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/fernando-mendoza.php"
+    },
+    {
+      "key": "jalen-nailor",
+      "playerId": 24177,
+      "name": "Jalen Nailor",
+      "nflTeam": "LV",
+      "position": "WR",
+      "ecrRank": 239,
+      "adp": 165,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jalen-nailor.php"
+    },
+    {
+      "key": "geno-smith",
+      "playerId": 11687,
+      "name": "Geno Smith",
+      "nflTeam": "NYJ",
+      "position": "QB",
+      "ecrRank": 235,
+      "adp": 166,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/geno-smith.php"
+    },
+    {
+      "key": "brandon-aiyuk",
+      "playerId": 19252,
+      "name": "Brandon Aiyuk",
+      "nflTeam": "SF",
+      "position": "WR",
+      "ecrRank": 169,
+      "adp": 167,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/brandon-aiyuk.php"
+    },
+    {
+      "key": "emanuel-wilson",
+      "playerId": 25885,
+      "name": "Emanuel Wilson",
+      "nflTeam": "SEA",
+      "position": "RB",
+      "ecrRank": 167,
+      "adp": 168,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/emanuel-wilson.php"
+    },
+    {
+      "key": "dalton-schultz",
+      "playerId": 17349,
+      "name": "Dalton Schultz",
+      "nflTeam": "HOU",
+      "position": "TE",
+      "ecrRank": 162,
+      "adp": 169,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/dalton-schultz.php"
+    },
+    {
+      "key": "emmett-johnson",
+      "playerId": 28107,
+      "name": "Emmett Johnson",
+      "nflTeam": "KC",
+      "position": "RB",
+      "ecrRank": 183,
+      "adp": 170,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/emmett-johnson.php"
+    },
+    {
+      "key": "brian-robinson-jr",
+      "playerId": 20094,
+      "name": "Brian Robinson Jr.",
+      "nflTeam": "ATL",
+      "position": "RB",
+      "ecrRank": 166,
+      "adp": 171,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/brian-robinson-jr.php"
+    },
+    {
+      "key": "isaac-teslaa",
+      "playerId": 27446,
+      "name": "Isaac TeSlaa",
+      "nflTeam": "DET",
+      "position": "WR",
+      "ecrRank": 216,
+      "adp": 172,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/isaac-teslaa.php"
+    },
+    {
+      "key": "aj-barner",
+      "playerId": 26335,
+      "name": "AJ Barner",
+      "nflTeam": "SEA",
+      "position": "TE",
+      "ecrRank": 198,
+      "adp": 173,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/aj-barner.php"
+    },
+    {
+      "key": "jerry-jeudy",
+      "playerId": 19201,
+      "name": "Jerry Jeudy",
+      "nflTeam": "CLE",
+      "position": "WR",
+      "ecrRank": 149,
+      "adp": 174,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jerry-jeudy.php"
+    },
+    {
+      "key": "alvin-kamara",
+      "playerId": 16421,
+      "name": "Alvin Kamara",
+      "nflTeam": "NO",
+      "position": "RB",
+      "ecrRank": 142,
+      "adp": 175,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/alvin-kamara.php"
+    },
+    {
+      "key": "tre-harris",
+      "playerId": 26215,
+      "name": "Tre' Harris",
+      "nflTeam": "LAC",
+      "position": "WR",
+      "ecrRank": 180,
+      "adp": 176,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/tre-harris.php"
+    },
+    {
+      "key": "mike-washington-jr",
+      "playerId": 28108,
+      "name": "Mike Washington Jr.",
+      "nflTeam": "LV",
+      "position": "RB",
+      "ecrRank": 179,
+      "adp": 177,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/mike-washington-jr.php"
+    },
+    {
+      "key": "travis-hunter",
+      "playerId": 26034,
+      "name": "Travis Hunter",
+      "nflTeam": "JAC",
+      "position": "WR",
+      "ecrRank": 157,
+      "adp": 178,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/travis-hunter.php"
+    },
+    {
+      "key": "tank-bigsby",
+      "playerId": 22908,
+      "name": "Tank Bigsby",
+      "nflTeam": "PHI",
+      "position": "RB",
+      "ecrRank": 174,
+      "adp": 179,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/tank-bigsby.php"
+    },
+    {
+      "key": "aaron-rodgers",
+      "playerId": 9001,
+      "name": "Aaron Rodgers",
+      "nflTeam": "FA",
+      "position": "QB",
+      "ecrRank": 277,
+      "adp": 180,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/aaron-rodgers.php"
+    },
+    {
+      "key": "antonio-williams",
+      "playerId": 25418,
+      "name": "Antonio Williams",
+      "nflTeam": "WAS",
+      "position": "WR",
+      "ecrRank": 190,
+      "adp": 181,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/antonio-williams-wr.php"
+    },
+    {
+      "key": "nick-singleton",
+      "playerId": 24343,
+      "name": "Nick Singleton",
+      "nflTeam": "TEN",
+      "position": "RB",
+      "ecrRank": 191,
+      "adp": 182,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/nick-singleton.php"
+    },
+    {
+      "key": "gunnar-helm",
+      "playerId": 27109,
+      "name": "Gunnar Helm",
+      "nflTeam": "TEN",
+      "position": "TE",
+      "ecrRank": 221,
+      "adp": 183,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/gunnar-helm.php"
+    },
+    {
+      "key": "tyreek-hill",
+      "playerId": 15802,
+      "name": "Tyreek Hill",
+      "nflTeam": "FA",
+      "position": "WR",
+      "ecrRank": 182,
+      "adp": 184,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/tyreek-hill.php"
+    },
+    {
+      "key": "kaytron-allen",
+      "playerId": 24362,
+      "name": "Kaytron Allen",
+      "nflTeam": "WAS",
+      "position": "RB",
+      "ecrRank": 201,
+      "adp": 185,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/kaytron-allen.php"
+    },
+    {
+      "key": "kimani-vidal",
+      "playerId": 26355,
+      "name": "Kimani Vidal",
+      "nflTeam": "LAC",
+      "position": "RB",
+      "ecrRank": 185,
+      "adp": 186,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/kimani-vidal.php"
+    },
+    {
+      "key": "ryan-flournoy",
+      "playerId": 26398,
+      "name": "Ryan Flournoy",
+      "nflTeam": "DAL",
+      "position": "WR",
+      "ecrRank": 210,
+      "adp": 187,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/ryan-flournoy.php"
+    },
+    {
+      "key": "james-conner",
+      "playerId": 16447,
+      "name": "James Conner",
+      "nflTeam": "ARI",
+      "position": "RB",
+      "ecrRank": 147,
+      "adp": 188,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/james-conner.php"
+    },
+    {
+      "key": "malik-washington",
+      "playerId": 26314,
+      "name": "Malik Washington",
+      "nflTeam": "MIA",
+      "position": "WR",
+      "ecrRank": 253,
+      "adp": 189,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/malik-washington.php"
+    },
+    {
+      "key": "cade-otton",
+      "playerId": 23181,
+      "name": "Cade Otton",
+      "nflTeam": "TB",
+      "position": "TE",
+      "ecrRank": 240,
+      "adp": 190,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/cade-otton.php"
+    },
+    {
+      "key": "kayshon-boutte",
+      "playerId": 22989,
+      "name": "Kayshon Boutte",
+      "nflTeam": "NE",
+      "position": "WR",
+      "ecrRank": 175,
+      "adp": 191,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/kayshon-boutte.php"
+    },
+    {
+      "key": "tua-tagovailoa",
+      "playerId": 19198,
+      "name": "Tua Tagovailoa",
+      "nflTeam": "ATL",
+      "position": "QB",
+      "ecrRank": 282,
+      "adp": 192,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/tua-tagovailoa.php"
+    },
+    {
+      "key": "braelon-allen",
+      "playerId": 24346,
+      "name": "Braelon Allen",
+      "nflTeam": "NYJ",
+      "position": "RB",
+      "ecrRank": 154,
+      "adp": 193,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/braelon-allen.php"
+    },
+    {
+      "key": "pat-freiermuth",
+      "playerId": 20163,
+      "name": "Pat Freiermuth",
+      "nflTeam": "PIT",
+      "position": "TE",
+      "ecrRank": 254,
+      "adp": 194,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/pat-freiermuth.php"
+    },
+    {
+      "key": "calvin-ridley",
+      "playerId": 17258,
+      "name": "Calvin Ridley",
+      "nflTeam": "TEN",
+      "position": "WR",
+      "ecrRank": 205,
+      "adp": 195,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/calvin-ridley.php"
+    },
+    {
+      "key": "troy-franklin",
+      "playerId": 23092,
+      "name": "Troy Franklin",
+      "nflTeam": "DEN",
+      "position": "WR",
+      "ecrRank": 181,
+      "adp": 196,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/troy-franklin.php"
+    },
+    {
+      "key": "colby-parkinson",
+      "playerId": 19372,
+      "name": "Colby Parkinson",
+      "nflTeam": "LAR",
+      "position": "TE",
+      "ecrRank": 259,
+      "adp": 197,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/colby-parkinson.php"
+    },
+    {
+      "key": "ray-davis",
+      "playerId": 26191,
+      "name": "Ray Davis",
+      "nflTeam": "BUF",
+      "position": "RB",
+      "ecrRank": 200,
+      "adp": 198,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/ray-davis.php"
+    },
+    {
+      "key": "david-njoku",
+      "playerId": 16399,
+      "name": "David Njoku",
+      "nflTeam": "LAC",
+      "position": "TE",
+      "ecrRank": 227,
+      "adp": 199,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/david-njoku.php"
+    },
+    {
+      "key": "houston-texans",
+      "playerId": 8120,
+      "name": "Houston Texans",
+      "nflTeam": "HOU",
+      "position": "DST",
+      "ecrRank": 159,
+      "adp": 200,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/houston-defense.php"
+    },
+    {
+      "key": "eli-stowers",
+      "playerId": 23144,
+      "name": "Eli Stowers",
+      "nflTeam": "PHI",
+      "position": "TE",
+      "ecrRank": 261,
+      "adp": 201,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/eli-stowers.php"
+    },
+    {
+      "key": "tank-dell",
+      "playerId": 25361,
+      "name": "Tank Dell",
+      "nflTeam": "HOU",
+      "position": "WR",
+      "ecrRank": 242,
+      "adp": 202,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/nathaniel-dell.php"
+    },
+    {
+      "key": "sean-tucker",
+      "playerId": 23679,
+      "name": "Sean Tucker",
+      "nflTeam": "TB",
+      "position": "RB",
+      "ecrRank": 215,
+      "adp": 203,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/sean-tucker.php"
+    },
+    {
+      "key": "seattle-seahawks",
+      "playerId": 8260,
+      "name": "Seattle Seahawks",
+      "nflTeam": "SEA",
+      "position": "DST",
+      "ecrRank": 170,
+      "adp": 204,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/seattle-defense.php"
+    },
+    {
+      "key": "cooper-kupp",
+      "playerId": 16433,
+      "name": "Cooper Kupp",
+      "nflTeam": "SEA",
+      "position": "WR",
+      "ecrRank": 262,
+      "adp": 205,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/cooper-kupp.php"
+    },
+    {
+      "key": "jake-tonges",
+      "playerId": 24778,
+      "name": "Jake Tonges",
+      "nflTeam": "SF",
+      "position": "TE",
+      "ecrRank": 285,
+      "adp": 206,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jake-tonges.php"
+    },
+    {
+      "key": "christian-kirk",
+      "playerId": 17268,
+      "name": "Christian Kirk",
+      "nflTeam": "SF",
+      "position": "WR",
+      "ecrRank": 270,
+      "adp": 207,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/christian-kirk.php"
+    },
+    {
+      "key": "denver-broncos",
+      "playerId": 8090,
+      "name": "Denver Broncos",
+      "nflTeam": "DEN",
+      "position": "DST",
+      "ecrRank": 168,
+      "adp": 208,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/denver-defense.php"
+    },
+    {
+      "key": "de-zhaun-stribling",
+      "playerId": 28138,
+      "name": "De'Zhaun Stribling",
+      "nflTeam": "SF",
+      "position": "WR",
+      "ecrRank": 241,
+      "adp": 209,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/dezhaun-stribling.php"
+    },
+    {
+      "key": "germie-bernard",
+      "playerId": 26039,
+      "name": "Germie Bernard",
+      "nflTeam": "PIT",
+      "position": "WR",
+      "ecrRank": 226,
+      "adp": 210,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/germie-bernard.php"
+    },
+    {
+      "key": "terrance-ferguson",
+      "playerId": 23091,
+      "name": "Terrance Ferguson",
+      "nflTeam": "LAR",
+      "position": "TE",
+      "ecrRank": 228,
+      "adp": 211,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/terrance-ferguson.php"
+    },
+    {
+      "key": "dontayvion-wicks",
+      "playerId": 24354,
+      "name": "Dontayvion Wicks",
+      "nflTeam": "PHI",
+      "position": "WR",
+      "ecrRank": 217,
+      "adp": 212,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/dontayvion-wicks.php"
+    },
+    {
+      "key": "adonai-mitchell",
+      "playerId": 24357,
+      "name": "Adonai Mitchell",
+      "nflTeam": "NYJ",
+      "position": "WR",
+      "ecrRank": 165,
+      "adp": 213,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/adonai-mitchell.php"
+    },
+    {
+      "key": "los-angeles-rams",
+      "playerId": 8280,
+      "name": "Los Angeles Rams",
+      "nflTeam": "LAR",
+      "position": "DST",
+      "ecrRank": 177,
+      "adp": 214,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/los-angeles-rams-defense.php"
+    },
+    {
+      "key": "chris-bell",
+      "playerId": 26038,
+      "name": "Chris Bell",
+      "nflTeam": "MIA",
+      "position": "WR",
+      "ecrRank": 220,
+      "adp": 215,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/chris-bell.php"
+    },
+    {
+      "key": "demond-claiborne",
+      "playerId": 28084,
+      "name": "Demond Claiborne",
+      "nflTeam": "MIN",
+      "position": "RB",
+      "ecrRank": 237,
+      "adp": 216,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/demond-claiborne.php"
+    },
+    {
+      "key": "zachariah-branch",
+      "playerId": 25419,
+      "name": "Zachariah Branch",
+      "nflTeam": "ATL",
+      "position": "WR",
+      "ecrRank": 243,
+      "adp": 217,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/zachariah-branch.php"
+    },
+    {
+      "key": "shedeur-sanders",
+      "playerId": 25968,
+      "name": "Shedeur Sanders",
+      "nflTeam": "CLE",
+      "position": "QB",
+      "ecrRank": 268,
+      "adp": 218,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/shedeur-sanders.php"
+    },
+    {
+      "key": "darnell-mooney",
+      "playerId": 19810,
+      "name": "Darnell Mooney",
+      "nflTeam": "NYG",
+      "position": "WR",
+      "ecrRank": 208,
+      "adp": 219,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/darnell-mooney.php"
+    },
+    {
+      "key": "kirk-cousins",
+      "playerId": 11177,
+      "name": "Kirk Cousins",
+      "nflTeam": "LV",
+      "position": "QB",
+      "ecrRank": 311,
+      "adp": 220,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/kirk-cousins.php"
+    },
+    {
+      "key": "cleveland-browns",
+      "playerId": 8070,
+      "name": "Cleveland Browns",
+      "nflTeam": "CLE",
+      "position": "DST",
+      "ecrRank": 195,
+      "adp": 221,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/cleveland-defense.php"
+    },
+    {
+      "key": "deshaun-watson",
+      "playerId": 16398,
+      "name": "Deshaun Watson",
+      "nflTeam": "CLE",
+      "position": "QB",
+      "ecrRank": 307,
+      "adp": 222,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/deshaun-watson.php"
+    },
+    {
+      "key": "michael-penix-jr",
+      "playerId": 22973,
+      "name": "Michael Penix Jr.",
+      "nflTeam": "ATL",
+      "position": "QB",
+      "ecrRank": 246,
+      "adp": 223,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/michael-penix-jr.php"
+    },
+    {
+      "key": "minnesota-vikings",
+      "playerId": 8170,
+      "name": "Minnesota Vikings",
+      "nflTeam": "MIN",
+      "position": "DST",
+      "ecrRank": 186,
+      "adp": 224,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/minnesota-defense.php"
+    },
+    {
+      "key": "new-england-patriots",
+      "playerId": 8180,
+      "name": "New England Patriots",
+      "nflTeam": "NE",
+      "position": "DST",
+      "ecrRank": 184,
+      "adp": 225,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/new-england-defense.php"
+    },
+    {
+      "key": "kaelon-black",
+      "playerId": 28401,
+      "name": "Kaelon Black",
+      "nflTeam": "SF",
+      "position": "RB",
+      "ecrRank": 335,
+      "adp": 226,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/kaelon-black.php"
+    },
+    {
+      "key": "philadelphia-eagles",
+      "playerId": 8230,
+      "name": "Philadelphia Eagles",
+      "nflTeam": "PHI",
+      "position": "DST",
+      "ecrRank": 176,
+      "adp": 227,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/philadelphia-defense.php"
+    },
+    {
+      "key": "malachi-fields",
+      "playerId": 27994,
+      "name": "Malachi Fields",
+      "nflTeam": "NYG",
+      "position": "WR",
+      "ecrRank": 251,
+      "adp": 228,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/malachi-fields.php"
+    },
+    {
+      "key": "greg-dulcich",
+      "playerId": 23153,
+      "name": "Greg Dulcich",
+      "nflTeam": "MIA",
+      "position": "TE",
+      "ecrRank": 316,
+      "adp": 229,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/greg-dulcich.php"
+    },
+    {
+      "key": "jacksonville-jaguars",
+      "playerId": 8140,
+      "name": "Jacksonville Jaguars",
+      "nflTeam": "JAC",
+      "position": "DST",
+      "ecrRank": 188,
+      "adp": 230,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jacksonville-defense.php"
+    },
+    {
+      "key": "pittsburgh-steelers",
+      "playerId": 8240,
+      "name": "Pittsburgh Steelers",
+      "nflTeam": "PIT",
+      "position": "DST",
+      "ecrRank": 189,
+      "adp": 231,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/pittsburgh-defense.php"
+    },
+    {
+      "key": "tory-horton",
+      "playerId": 26022,
+      "name": "Tory Horton",
+      "nflTeam": "SEA",
+      "position": "WR",
+      "ecrRank": 266,
+      "adp": 232,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/tory-horton.php"
+    },
+    {
+      "key": "jordan-james",
+      "playerId": 27310,
+      "name": "Jordan James",
+      "nflTeam": "SF",
+      "position": "RB",
+      "ecrRank": 298,
+      "adp": 233,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jordan-james.php"
+    },
+    {
+      "key": "los-angeles-chargers",
+      "playerId": 8250,
+      "name": "Los Angeles Chargers",
+      "nflTeam": "LAC",
+      "position": "DST",
+      "ecrRank": 199,
+      "adp": 234,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/los-angeles-chargers-defense.php"
+    },
+    {
+      "key": "jaydon-blue",
+      "playerId": 24344,
+      "name": "Jaydon Blue",
+      "nflTeam": "DAL",
+      "position": "RB",
+      "ecrRank": 286,
+      "adp": 235,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jaydon-blue.php"
+    },
+    {
+      "key": "baltimore-ravens",
+      "playerId": 8020,
+      "name": "Baltimore Ravens",
+      "nflTeam": "BAL",
+      "position": "DST",
+      "ecrRank": 219,
+      "adp": 236,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/baltimore-defense.php"
+    },
+    {
+      "key": "chimere-dike",
+      "playerId": 27315,
+      "name": "Chimere Dike",
+      "nflTeam": "TEN",
+      "position": "WR",
+      "ecrRank": 207,
+      "adp": 237,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/chimere-dike.php"
+    },
+    {
+      "key": "chicago-bears",
+      "playerId": 8050,
+      "name": "Chicago Bears",
+      "nflTeam": "CHI",
+      "position": "DST",
+      "ecrRank": 337,
+      "adp": 238,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/chicago-defense.php"
+    },
+    {
+      "key": "justice-hill",
+      "playerId": 18256,
+      "name": "Justice Hill",
+      "nflTeam": "BAL",
+      "position": "RB",
+      "ecrRank": 291,
+      "adp": 239,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/justice-hill.php"
+    },
+    {
+      "key": "green-bay-packers",
+      "playerId": 8110,
+      "name": "Green Bay Packers",
+      "nflTeam": "GB",
+      "position": "DST",
+      "ecrRank": 206,
+      "adp": 240,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/green-bay-defense.php"
+    },
+    {
+      "key": "keon-coleman",
+      "playerId": 26019,
+      "name": "Keon Coleman",
+      "nflTeam": "BUF",
+      "position": "WR",
+      "ecrRank": 265,
+      "adp": 241,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/keon-coleman.php"
+    },
+    {
+      "key": "atlanta-falcons",
+      "playerId": 8010,
+      "name": "Atlanta Falcons",
+      "nflTeam": "ATL",
+      "position": "DST",
+      "ecrRank": 273,
+      "adp": 242,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/atlanta-defense.php"
+    },
+    {
+      "key": "buffalo-bills",
+      "playerId": 8030,
+      "name": "Buffalo Bills",
+      "nflTeam": "BUF",
+      "position": "DST",
+      "ecrRank": 233,
+      "adp": 243,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/buffalo-defense.php"
+    },
+    {
+      "key": "jaylen-wright",
+      "playerId": 25987,
+      "name": "Jaylen Wright",
+      "nflTeam": "MIA",
+      "position": "RB",
+      "ecrRank": 212,
+      "adp": 244,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jaylen-wright.php"
+    },
+    {
+      "key": "new-york-giants",
+      "playerId": 8200,
+      "name": "New York Giants",
+      "nflTeam": "NYG",
+      "position": "DST",
+      "ecrRank": 351,
+      "adp": 245,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/new-york-giants-defense.php"
+    },
+    {
+      "key": "new-orleans-saints",
+      "playerId": 8190,
+      "name": "New Orleans Saints",
+      "nflTeam": "NO",
+      "position": "DST",
+      "ecrRank": 334,
+      "adp": 246,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/new-orleans-defense.php"
+    },
+    {
+      "key": "detroit-lions",
+      "playerId": 8100,
+      "name": "Detroit Lions",
+      "nflTeam": "DET",
+      "position": "DST",
+      "ecrRank": 232,
+      "adp": 247,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/detroit-defense.php"
+    },
+    {
+      "key": "mike-gesicki",
+      "playerId": 17272,
+      "name": "Mike Gesicki",
+      "nflTeam": "CIN",
+      "position": "TE",
+      "ecrRank": 304,
+      "adp": 248,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/mike-gesicki.php"
+    },
+    {
+      "key": "kansas-city-chiefs",
+      "playerId": 8150,
+      "name": "Kansas City Chiefs",
+      "nflTeam": "KC",
+      "position": "DST",
+      "ecrRank": 213,
+      "adp": 249,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/kansas-city-defense.php"
+    },
+    {
+      "key": "samaje-perine",
+      "playerId": 16423,
+      "name": "Samaje Perine",
+      "nflTeam": "CIN",
+      "position": "RB",
+      "ecrRank": 303,
+      "adp": 250,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/samaje-perine.php"
+    },
+    {
+      "key": "pat-bryant",
+      "playerId": 27211,
+      "name": "Pat Bryant",
+      "nflTeam": "DEN",
+      "position": "WR",
+      "ecrRank": 202,
+      "adp": 251,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/pat-bryant.php"
+    },
+    {
+      "key": "indianapolis-colts",
+      "playerId": 8130,
+      "name": "Indianapolis Colts",
+      "nflTeam": "IND",
+      "position": "DST",
+      "ecrRank": 293,
+      "adp": 252,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/indianapolis-defense.php"
+    },
+    {
+      "key": "dj-giddens",
+      "playerId": 27097,
+      "name": "DJ Giddens",
+      "nflTeam": "IND",
+      "position": "RB",
+      "ecrRank": 294,
+      "adp": 253,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/dj-giddens.php"
+    },
+    {
+      "key": "chris-brazzell-ii",
+      "playerId": 28047,
+      "name": "Chris Brazzell II",
+      "nflTeam": "CAR",
+      "position": "WR",
+      "ecrRank": 247,
+      "adp": 254,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/chris-brazzell-ii.php"
+    },
+    {
+      "key": "eli-heidenreich",
+      "playerId": 28297,
+      "name": "Eli Heidenreich",
+      "nflTeam": "PIT",
+      "position": "RB",
+      "ecrRank": 353,
+      "adp": 255,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/eli-heidenreich.php"
+    },
+    {
+      "key": "malik-benson",
+      "playerId": 26012,
+      "name": "Malik Benson",
+      "nflTeam": "LV",
+      "position": "WR",
+      "ecrRank": 401,
+      "adp": 256,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/malik-benson.php"
+    },
+    {
+      "key": "zavion-thomas",
+      "playerId": 28132,
+      "name": "Zavion Thomas",
+      "nflTeam": "CHI",
+      "position": "WR",
+      "ecrRank": 414,
+      "adp": 257,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/zavion-thomas.php"
+    },
+    {
+      "key": "carolina-panthers",
+      "playerId": 8040,
+      "name": "Carolina Panthers",
+      "nflTeam": "CAR",
+      "position": "DST",
+      "ecrRank": 331,
+      "adp": 258,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/carolina-defense.php"
+    },
+    {
+      "key": "darius-slayton",
+      "playerId": 18706,
+      "name": "Darius Slayton",
+      "nflTeam": "NYG",
+      "position": "WR",
+      "ecrRank": 280,
+      "adp": 259,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/darius-slayton.php"
+    },
+    {
+      "key": "malik-davis",
+      "playerId": 24205,
+      "name": "Malik Davis",
+      "nflTeam": "DAL",
+      "position": "RB",
+      "ecrRank": 308,
+      "adp": 260,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/malik-davis.php"
+    },
+    {
+      "key": "tampa-bay-buccaneers",
+      "playerId": 8290,
+      "name": "Tampa Bay Buccaneers",
+      "nflTeam": "TB",
+      "position": "DST",
+      "ecrRank": 374,
+      "adp": 261,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/tampa-bay-defense.php"
+    },
+    {
+      "key": "ted-hurst",
+      "playerId": 28130,
+      "name": "Ted Hurst",
+      "nflTeam": "TB",
+      "position": "WR",
+      "ecrRank": 272,
+      "adp": 262,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/ted-hurst.php"
+    },
+    {
+      "key": "san-francisco-49ers",
+      "playerId": 8270,
+      "name": "San Francisco 49ers",
+      "nflTeam": "SF",
+      "position": "DST",
+      "ecrRank": 287,
+      "adp": 263,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/san-francisco-defense.php"
+    },
+    {
+      "key": "j-j-mccarthy",
+      "playerId": 23018,
+      "name": "J.J. McCarthy",
+      "nflTeam": "MIN",
+      "position": "QB",
+      "ecrRank": 320,
+      "adp": 264,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jj-mccarthy.php"
+    },
+    {
+      "key": "justin-fields",
+      "playerId": 19781,
+      "name": "Justin Fields",
+      "nflTeam": "KC",
+      "position": "QB",
+      "ecrRank": 352,
+      "adp": 265,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/justin-fields.php"
+    },
+    {
+      "key": "dallas-cowboys",
+      "playerId": 8080,
+      "name": "Dallas Cowboys",
+      "nflTeam": "DAL",
+      "position": "DST",
+      "ecrRank": 343,
+      "adp": 266,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/dallas-defense.php"
+    },
+    {
+      "key": "evan-engram",
+      "playerId": 16411,
+      "name": "Evan Engram",
+      "nflTeam": "DEN",
+      "position": "TE",
+      "ecrRank": 257,
+      "adp": 267,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/evan-engram.php"
+    },
+    {
+      "key": "brenen-thompson",
+      "playerId": 28133,
+      "name": "Brenen Thompson",
+      "nflTeam": "LAC",
+      "position": "WR",
+      "ecrRank": 362,
+      "adp": 268,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/brenen-thompson.php"
+    },
+    {
+      "key": "jaylin-noel",
+      "playerId": 27122,
+      "name": "Jaylin Noel",
+      "nflTeam": "HOU",
+      "position": "WR",
+      "ecrRank": 194,
+      "adp": 269,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jaylin-noel.php"
+    },
+    {
+      "key": "tennessee-titans",
+      "playerId": 8300,
+      "name": "Tennessee Titans",
+      "nflTeam": "TEN",
+      "position": "DST",
+      "ecrRank": 373,
+      "adp": 270,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/tennessee-defense.php"
+    },
+    {
+      "key": "skyler-bell",
+      "playerId": 28126,
+      "name": "Skyler Bell",
+      "nflTeam": "BUF",
+      "position": "WR",
+      "ecrRank": 263,
+      "adp": 271,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/skyler-bell.php"
+    },
+    {
+      "key": "george-holani",
+      "playerId": 22915,
+      "name": "George Holani",
+      "nflTeam": "SEA",
+      "position": "RB",
+      "ecrRank": 289,
+      "adp": 272,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/george-holani.php"
+    },
+    {
+      "key": "elic-ayomanor",
+      "playerId": 27059,
+      "name": "Elic Ayomanor",
+      "nflTeam": "TEN",
+      "position": "WR",
+      "ecrRank": 224,
+      "adp": 274,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/elic-ayomanor.php"
+    },
+    {
+      "key": "ja-kobi-lane",
+      "playerId": 27337,
+      "name": "Ja'Kobi Lane",
+      "nflTeam": "BAL",
+      "position": "WR",
+      "ecrRank": 250,
+      "adp": 275,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jakobi-lane.php"
+    },
+    {
+      "key": "tyquan-thornton",
+      "playerId": 22913,
+      "name": "Tyquan Thornton",
+      "nflTeam": "KC",
+      "position": "WR",
+      "ecrRank": 305,
+      "adp": 276,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/tyquan-thornton.php"
+    },
+    {
+      "key": "darren-waller",
+      "playerId": 14104,
+      "name": "Darren Waller",
+      "nflTeam": "FA",
+      "position": "TE",
+      "ecrRank": 376,
+      "adp": 277,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/darren-waller.php"
+    },
+    {
+      "key": "mason-taylor",
+      "playerId": 26005,
+      "name": "Mason Taylor",
+      "nflTeam": "NYJ",
+      "position": "TE",
+      "ecrRank": 238,
+      "adp": 278,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/mason-taylor.php"
+    },
+    {
+      "key": "eli-raridon",
+      "playerId": 28154,
+      "name": "Eli Raridon",
+      "nflTeam": "NE",
+      "position": "TE",
+      "ecrRank": 418,
+      "adp": 279,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/eli-raridon.php"
+    },
+    {
+      "key": "ollie-gordon-ii",
+      "playerId": 25984,
+      "name": "Ollie Gordon II",
+      "nflTeam": "MIA",
+      "position": "RB",
+      "ecrRank": 248,
+      "adp": 280,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/ollie-gordon.php"
+    },
+    {
+      "key": "rashod-bateman",
+      "playerId": 19794,
+      "name": "Rashod Bateman",
+      "nflTeam": "BAL",
+      "position": "WR",
+      "ecrRank": 245,
+      "adp": 281,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/rashod-bateman.php"
+    },
+    {
+      "key": "ty-johnson",
+      "playerId": 18406,
+      "name": "Ty Johnson",
+      "nflTeam": "BUF",
+      "position": "RB",
+      "ecrRank": 284,
+      "adp": 283,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/ty-johnson.php"
+    },
+    {
+      "key": "joe-mixon",
+      "playerId": 16420,
+      "name": "Joe Mixon",
+      "nflTeam": "FA",
+      "position": "RB",
+      "ecrRank": 300,
+      "adp": 284,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/joe-mixon.php"
+    },
+    {
+      "key": "adam-randall",
+      "playerId": 24367,
+      "name": "Adam Randall",
+      "nflTeam": "BAL",
+      "position": "RB",
+      "ecrRank": 264,
+      "adp": 285,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/adam-randall.php"
+    },
+    {
+      "key": "jack-bech",
+      "playerId": 27224,
+      "name": "Jack Bech",
+      "nflTeam": "LV",
+      "position": "WR",
+      "ecrRank": 271,
+      "adp": 286,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jack-bech.php"
+    },
+    {
+      "key": "darnell-washington",
+      "playerId": 22967,
+      "name": "Darnell Washington",
+      "nflTeam": "PIT",
+      "position": "TE",
+      "ecrRank": 341,
+      "adp": 287,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/darnell-washington.php"
+    },
+    {
+      "key": "najee-harris",
+      "playerId": 19302,
+      "name": "Najee Harris",
+      "nflTeam": "LAC",
+      "position": "RB",
+      "ecrRank": 267,
+      "adp": 288,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/najee-harris-rb.php"
+    },
+    {
+      "key": "demario-douglas",
+      "playerId": 25304,
+      "name": "DeMario Douglas",
+      "nflTeam": "NE",
+      "position": "WR",
+      "ecrRank": 356,
+      "adp": 289,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/demario-douglas.php"
+    },
+    {
+      "key": "keenan-allen",
+      "playerId": 11616,
+      "name": "Keenan Allen",
+      "nflTeam": "LAC",
+      "position": "WR",
+      "ecrRank": 279,
+      "adp": 290,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/keenan-allen.php"
+    },
+    {
+      "key": "miami-dolphins",
+      "playerId": 8160,
+      "name": "Miami Dolphins",
+      "nflTeam": "MIA",
+      "position": "DST",
+      "ecrRank": 363,
+      "adp": 291,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/miami-defense.php"
+    },
+    {
+      "key": "caleb-douglas",
+      "playerId": 28135,
+      "name": "Caleb Douglas",
+      "nflTeam": "MIA",
+      "position": "WR",
+      "ecrRank": 357,
+      "adp": 292,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/caleb-douglas.php"
+    },
+    {
+      "key": "trey-benson",
+      "playerId": 25388,
+      "name": "Trey Benson",
+      "nflTeam": "ARI",
+      "position": "RB",
+      "ecrRank": 231,
+      "adp": 293,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/trey-benson.php"
+    },
+    {
+      "key": "bryce-lance",
+      "playerId": 28129,
+      "name": "Bryce Lance",
+      "nflTeam": "NO",
+      "position": "WR",
+      "ecrRank": 349,
+      "adp": 294,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/bryce-lance.php"
+    },
+    {
+      "key": "oscar-delp",
+      "playerId": 25430,
+      "name": "Oscar Delp",
+      "nflTeam": "NO",
+      "position": "TE",
+      "ecrRank": 325,
+      "adp": 295,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/oscar-delp.php"
+    },
+    {
+      "key": "hollywood-brown",
+      "playerId": 18226,
+      "name": "Hollywood Brown",
+      "nflTeam": "PHI",
+      "position": "WR",
+      "ecrRank": 302,
+      "adp": 296,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/marquise-brown.php"
+    },
+    {
+      "key": "elijah-sarratt",
+      "playerId": 27463,
+      "name": "Elijah Sarratt",
+      "nflTeam": "BAL",
+      "position": "WR",
+      "ecrRank": 249,
+      "adp": 297,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/elijah-sarratt.php"
+    },
+    {
+      "key": "devaughn-vele",
+      "playerId": 26409,
+      "name": "Devaughn Vele",
+      "nflTeam": "NO",
+      "position": "WR",
+      "ecrRank": 288,
+      "adp": 298,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/devaughn-vele.php"
+    },
+    {
+      "key": "emari-demercado",
+      "playerId": 25654,
+      "name": "Emari Demercado",
+      "nflTeam": "KC",
+      "position": "RB",
+      "ecrRank": 309,
+      "adp": 299,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/emari-demercado.php"
+    },
+    {
+      "key": "kendrick-bourne",
+      "playerId": 17066,
+      "name": "Kendrick Bourne",
+      "nflTeam": "ARI",
+      "position": "WR",
+      "ecrRank": 391,
+      "adp": 300,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/kendrick-bourne.php"
+    },
+    {
+      "key": "ja-tavion-sanders",
+      "playerId": 24334,
+      "name": "Ja'Tavion Sanders",
+      "nflTeam": "CAR",
+      "position": "TE",
+      "ecrRank": 369,
+      "adp": 301,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jatavion-sanders.php"
+    },
+    {
+      "key": "chris-brooks",
+      "playerId": 25823,
+      "name": "Chris Brooks",
+      "nflTeam": "GB",
+      "position": "RB",
+      "ecrRank": 295,
+      "adp": 302,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/christopher-brooks.php"
+    },
+    {
+      "key": "dont-e-thornton-jr",
+      "playerId": 27288,
+      "name": "Dont'e Thornton Jr.",
+      "nflTeam": "LV",
+      "position": "WR",
+      "ecrRank": 346,
+      "adp": 304,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/donte-thornton-jr.php"
+    },
+    {
+      "key": "kyle-williams",
+      "playerId": 27487,
+      "name": "Kyle Williams",
+      "nflTeam": "NE",
+      "position": "WR",
+      "ecrRank": 260,
+      "adp": 305,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/kyle-williams-wr-2025.php"
+    },
+    {
+      "key": "mack-hollins",
+      "playerId": 16489,
+      "name": "Mack Hollins",
+      "nflTeam": "NE",
+      "position": "WR",
+      "ecrRank": 274,
+      "adp": 307,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/mack-hollins.php"
+    },
+    {
+      "key": "carson-beck",
+      "playerId": 22953,
+      "name": "Carson Beck",
+      "nflTeam": "ARI",
+      "position": "QB",
+      "ecrRank": 365,
+      "adp": 309,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/carson-beck.php"
+    },
+    {
+      "key": "jalen-tolbert",
+      "playerId": 23770,
+      "name": "Jalen Tolbert",
+      "nflTeam": "MIA",
+      "position": "WR",
+      "ecrRank": 347,
+      "adp": 310,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jalen-tolbert.php"
+    },
+    {
+      "key": "nick-westbrook-ikhine",
+      "playerId": 19747,
+      "name": "Nick Westbrook-Ikhine",
+      "nflTeam": "IND",
+      "position": "WR",
+      "ecrRank": 400,
+      "adp": 312,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/nick-westbrook.php"
+    },
+    {
+      "key": "zach-ertz",
+      "playerId": 11689,
+      "name": "Zach Ertz",
+      "nflTeam": "FA",
+      "position": "TE",
+      "ecrRank": 410,
+      "adp": 313,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/zach-ertz.php"
+    },
+    {
+      "key": "andrei-iosivas",
+      "playerId": 25335,
+      "name": "Andrei Iosivas",
+      "nflTeam": "CIN",
+      "position": "WR",
+      "ecrRank": 319,
+      "adp": 314,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/andrei-iosivas.php"
+    },
+    {
+      "key": "savion-williams",
+      "playerId": 27144,
+      "name": "Savion Williams",
+      "nflTeam": "GB",
+      "position": "WR",
+      "ecrRank": 368,
+      "adp": 315,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/savion-williams.php"
+    },
+    {
+      "key": "joshua-palmer",
+      "playerId": 22845,
+      "name": "Joshua Palmer",
+      "nflTeam": "BUF",
+      "position": "WR",
+      "ecrRank": 350,
+      "adp": 316,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/josh-palmer.php"
+    },
+    {
+      "key": "austin-ekeler",
+      "playerId": 16483,
+      "name": "Austin Ekeler",
+      "nflTeam": "FA",
+      "position": "RB",
+      "ecrRank": 339,
+      "adp": 317,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/austin-ekeler.php"
+    },
+    {
+      "key": "michael-mayer",
+      "playerId": 23056,
+      "name": "Michael Mayer",
+      "nflTeam": "LV",
+      "position": "TE",
+      "ecrRank": 381,
+      "adp": 318,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/michael-mayer.php"
+    },
+    {
+      "key": "theo-johnson",
+      "playerId": 23104,
+      "name": "Theo Johnson",
+      "nflTeam": "NYG",
+      "position": "TE",
+      "ecrRank": 256,
+      "adp": 320,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/theo-johnson.php"
+    },
+    {
+      "key": "calvin-austin-iii",
+      "playerId": 23739,
+      "name": "Calvin Austin III",
+      "nflTeam": "NYG",
+      "position": "WR",
+      "ecrRank": 327,
+      "adp": 321,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/calvin-austin.php"
+    },
+    {
+      "key": "elijah-arroyo",
+      "playerId": 23004,
+      "name": "Elijah Arroyo",
+      "nflTeam": "SEA",
+      "position": "TE",
+      "ecrRank": 358,
+      "adp": 322,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/elijah-arroyo.php"
+    },
+    {
+      "key": "jawhar-jordan",
+      "playerId": 26329,
+      "name": "Jawhar Jordan",
+      "nflTeam": "HOU",
+      "position": "RB",
+      "ecrRank": 386,
+      "adp": 323,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jawhar-jordan.php"
+    },
+    {
+      "key": "dawson-knox",
+      "playerId": 18631,
+      "name": "Dawson Knox",
+      "nflTeam": "BUF",
+      "position": "TE",
+      "ecrRank": 413,
+      "adp": 324,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/dawson-knox.php"
+    },
+    {
+      "key": "jahan-dotson",
+      "playerId": 23101,
+      "name": "Jahan Dotson",
+      "nflTeam": "ATL",
+      "position": "WR",
+      "ecrRank": 336,
+      "adp": 326,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jahan-dotson.php"
+    },
+    {
+      "key": "marshawn-lloyd",
+      "playerId": 23118,
+      "name": "MarShawn Lloyd",
+      "nflTeam": "GB",
+      "position": "RB",
+      "ecrRank": 306,
+      "adp": 328,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/marshawn-lloyd.php"
+    },
+    {
+      "key": "kalif-raymond",
+      "playerId": 16081,
+      "name": "Kalif Raymond",
+      "nflTeam": "CHI",
+      "position": "WR",
+      "ecrRank": 397,
+      "adp": 329,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/kalif-raymond.php"
+    },
+    {
+      "key": "mac-jones",
+      "playerId": 20156,
+      "name": "Mac Jones",
+      "nflTeam": "SF",
+      "position": "QB",
+      "ecrRank": 333,
+      "adp": 330,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/mac-jones.php"
+    },
+    {
+      "key": "lequint-allen-jr",
+      "playerId": 27285,
+      "name": "LeQuint Allen Jr.",
+      "nflTeam": "JAC",
+      "position": "RB",
+      "ecrRank": 281,
+      "adp": 332,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/lequint-allen-jr.php"
+    },
+    {
+      "key": "marvin-mims-jr",
+      "playerId": 23080,
+      "name": "Marvin Mims Jr.",
+      "nflTeam": "DEN",
+      "position": "WR",
+      "ecrRank": 258,
+      "adp": 334,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/marvin-mims.php"
+    },
+    {
+      "key": "jarquez-hunter",
+      "playerId": 24335,
+      "name": "Jarquez Hunter",
+      "nflTeam": "LAR",
+      "position": "RB",
+      "ecrRank": 318,
+      "adp": 335,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jarquez-hunter.php"
+    },
+    {
+      "key": "washington-commanders",
+      "playerId": 8310,
+      "name": "Washington Commanders",
+      "nflTeam": "WAS",
+      "position": "DST",
+      "ecrRank": 354,
+      "adp": 336,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/washington-defense.php"
+    },
+    {
+      "key": "deion-burks",
+      "playerId": 27093,
+      "name": "Deion Burks",
+      "nflTeam": "IND",
+      "position": "WR",
+      "ecrRank": 416,
+      "adp": 338,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/deion-burks.php"
+    },
+    {
+      "key": "cj-daniels",
+      "playerId": 28125,
+      "name": "CJ Daniels",
+      "nflTeam": "LAR",
+      "position": "WR",
+      "ecrRank": 408,
+      "adp": 339,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/cj-daniels.php"
+    },
+    {
+      "key": "kevin-coleman-jr",
+      "playerId": 28067,
+      "name": "Kevin Coleman Jr.",
+      "nflTeam": "MIA",
+      "position": "WR",
+      "ecrRank": 384,
+      "adp": 340,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/kevin-coleman-jr.php"
+    },
+    {
+      "key": "justin-joly",
+      "playerId": 28079,
+      "name": "Justin Joly",
+      "nflTeam": "DEN",
+      "position": "TE",
+      "ecrRank": 377,
+      "adp": 341,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/justin-joly.php"
+    },
+    {
+      "key": "cincinnati-bengals",
+      "playerId": 8060,
+      "name": "Cincinnati Bengals",
+      "nflTeam": "CIN",
+      "position": "DST",
+      "ecrRank": 409,
+      "adp": 342,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/cincinnati-defense.php"
+    },
+    {
+      "key": "kareem-hunt",
+      "playerId": 16425,
+      "name": "Kareem Hunt",
+      "nflTeam": "FA",
+      "position": "RB",
+      "ecrRank": 326,
+      "adp": 343,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/kareem-hunt.php"
+    },
+    {
+      "key": "michael-carter",
+      "playerId": 22728,
+      "name": "Michael Carter",
+      "nflTeam": "TEN",
+      "position": "RB",
+      "ecrRank": 340,
+      "adp": 345,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/michael-carter-rb.php"
+    },
+    {
+      "key": "devontez-walker",
+      "playerId": 26011,
+      "name": "Devontez Walker",
+      "nflTeam": "BAL",
+      "position": "WR",
+      "ecrRank": 426,
+      "adp": 347,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/devontez-walker.php"
+    },
+    {
+      "key": "damien-martinez",
+      "playerId": 25976,
+      "name": "Damien Martinez",
+      "nflTeam": "GB",
+      "position": "RB",
+      "ecrRank": 412,
+      "adp": 348,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/damien-martinez.php"
+    },
+    {
+      "key": "luke-mccaffrey",
+      "playerId": 26328,
+      "name": "Luke McCaffrey",
+      "nflTeam": "WAS",
+      "position": "WR",
+      "ecrRank": 328,
+      "adp": 351,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/luke-mccaffrey.php"
+    },
+    {
+      "key": "cedric-tillman",
+      "playerId": 25287,
+      "name": "Cedric Tillman",
+      "nflTeam": "CLE",
+      "position": "WR",
+      "ecrRank": 322,
+      "adp": 352,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/cedric-tillman.php"
+    },
+    {
+      "key": "anthony-richardson-sr",
+      "playerId": 24347,
+      "name": "Anthony Richardson Sr.",
+      "nflTeam": "IND",
+      "position": "QB",
+      "ecrRank": 359,
+      "adp": 353,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/anthony-richardson.php"
+    },
+    {
+      "key": "devin-singletary",
+      "playerId": 18280,
+      "name": "Devin Singletary",
+      "nflTeam": "NYG",
+      "position": "RB",
+      "ecrRank": 296,
+      "adp": 355,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/devin-singletary.php"
+    },
+    {
+      "key": "tutu-atwell",
+      "playerId": 20126,
+      "name": "Tutu Atwell",
+      "nflTeam": "MIA",
+      "position": "WR",
+      "ecrRank": 385,
+      "adp": 357,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/tutu-atwell.php"
+    },
+    {
+      "key": "marcus-mariota",
+      "playerId": 13890,
+      "name": "Marcus Mariota",
+      "nflTeam": "WAS",
+      "position": "QB",
+      "ecrRank": 387,
+      "adp": 358,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/marcus-mariota.php"
+    },
+    {
+      "key": "tahj-brooks",
+      "playerId": 26212,
+      "name": "Tahj Brooks",
+      "nflTeam": "CIN",
+      "position": "RB",
+      "ecrRank": 315,
+      "adp": 360,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/tahj-brooks.php"
+    },
+    {
+      "key": "trevor-etienne",
+      "playerId": 25393,
+      "name": "Trevor Etienne",
+      "nflTeam": "CAR",
+      "position": "RB",
+      "ecrRank": 317,
+      "adp": 361,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/trevor-etienne.php"
+    },
+    {
+      "key": "isaiah-bond",
+      "playerId": 24371,
+      "name": "Isaiah Bond",
+      "nflTeam": "CLE",
+      "position": "WR",
+      "ecrRank": 313,
+      "adp": 362,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/isaiah-bond.php"
+    },
+    {
+      "key": "jerome-ford",
+      "playerId": 22921,
+      "name": "Jerome Ford",
+      "nflTeam": "WAS",
+      "position": "RB",
+      "ecrRank": 290,
+      "adp": 364,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jerome-ford.php"
+    },
+    {
+      "key": "tyler-higbee",
+      "playerId": 15623,
+      "name": "Tyler Higbee",
+      "nflTeam": "LAR",
+      "position": "TE",
+      "ecrRank": 344,
+      "adp": 366,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/tyler-higbee.php"
+    },
+    {
+      "key": "brashard-smith",
+      "playerId": 27259,
+      "name": "Brashard Smith",
+      "nflTeam": "KC",
+      "position": "RB",
+      "ecrRank": 275,
+      "adp": 367,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/brashard-smith.php"
+    },
+    {
+      "key": "ty-simpson",
+      "playerId": 25368,
+      "name": "Ty Simpson",
+      "nflTeam": "LAR",
+      "position": "QB",
+      "ecrRank": 312,
+      "adp": 368,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/ty-simpson.php"
+    },
+    {
+      "key": "max-klare",
+      "playerId": 27993,
+      "name": "Max Klare",
+      "nflTeam": "LAR",
+      "position": "TE",
+      "ecrRank": 310,
+      "adp": 369,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/max-klare.php"
+    },
+    {
+      "key": "seth-mcgowan",
+      "playerId": 23079,
+      "name": "Seth McGowan",
+      "nflTeam": "IND",
+      "position": "RB",
+      "ecrRank": 299,
+      "adp": 370,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/seth-mcgowan.php"
+    },
+    {
+      "key": "jameis-winston",
+      "playerId": 13891,
+      "name": "Jameis Winston",
+      "nflTeam": "NYG",
+      "position": "QB",
+      "ecrRank": 395,
+      "adp": 371,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jameis-winston.php"
+    },
+    {
+      "key": "olamide-zaccheaus",
+      "playerId": 18864,
+      "name": "Olamide Zaccheaus",
+      "nflTeam": "ATL",
+      "position": "WR",
+      "ecrRank": 345,
+      "adp": 372,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/olamide-zaccheaus.php"
+    },
+    {
+      "key": "kaleb-johnson",
+      "playerId": 27165,
+      "name": "Kaleb Johnson",
+      "nflTeam": "PIT",
+      "position": "RB",
+      "ecrRank": 236,
+      "adp": 373,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/kaleb-johnson-rb.php"
+    },
+    {
+      "key": "devin-neal",
+      "playerId": 23682,
+      "name": "Devin Neal",
+      "nflTeam": "NO",
+      "position": "RB",
+      "ecrRank": 229,
+      "adp": 374,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/devin-neal.php"
+    },
+    {
+      "key": "isaac-guerendo",
+      "playerId": 26392,
+      "name": "Isaac Guerendo",
+      "nflTeam": "SF",
+      "position": "RB",
+      "ecrRank": 301,
+      "adp": 375,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/isaac-guerendo.php"
+    },
+    {
+      "key": "isaiah-davis",
+      "playerId": 25977,
+      "name": "Isaiah Davis",
+      "nflTeam": "NYJ",
+      "position": "RB",
+      "ecrRank": 269,
+      "adp": 376,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/isaiah-davis.php"
+    },
+    {
+      "key": "jonnu-smith",
+      "playerId": 16460,
+      "name": "Jonnu Smith",
+      "nflTeam": "FA",
+      "position": "TE",
+      "ecrRank": 417,
+      "adp": 377,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jonnu-smith.php"
+    },
+    {
+      "key": "noah-gray",
+      "playerId": 19539,
+      "name": "Noah Gray",
+      "nflTeam": "KC",
+      "position": "TE",
+      "ecrRank": 342,
+      "adp": 378,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/noah-gray.php"
+    },
+    {
+      "key": "cole-kmet",
+      "playerId": 19229,
+      "name": "Cole Kmet",
+      "nflTeam": "CHI",
+      "position": "TE",
+      "ecrRank": 393,
+      "adp": 379,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/cole-kmet.php"
+    },
+    {
+      "key": "joe-flacco",
+      "playerId": 9300,
+      "name": "Joe Flacco",
+      "nflTeam": "CIN",
+      "position": "QB",
+      "ecrRank": 389,
+      "adp": 380,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/joe-flacco.php"
+    },
+    {
+      "key": "tez-johnson",
+      "playerId": 27147,
+      "name": "Tez Johnson",
+      "nflTeam": "TB",
+      "position": "WR",
+      "ecrRank": 329,
+      "adp": 381,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/tez-johnson.php"
+    },
+    {
+      "key": "xavier-legette",
+      "playerId": 26136,
+      "name": "Xavier Legette",
+      "nflTeam": "CAR",
+      "position": "WR",
+      "ecrRank": 278,
+      "adp": 382,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/xavier-legette.php"
+    },
+    {
+      "key": "andy-borregales",
+      "playerId": 27291,
+      "name": "Andy Borregales",
+      "nflTeam": "NE",
+      "position": "K",
+      "ecrRank": 225,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/andres-borregales.php"
+    },
+    {
+      "key": "antonio-gibson",
+      "playerId": 19624,
+      "name": "Antonio Gibson",
+      "nflTeam": "FA",
+      "position": "RB",
+      "ecrRank": 399,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/antonio-gibson.php"
+    },
+    {
+      "key": "audric-estime",
+      "playerId": 23054,
+      "name": "Audric Estime",
+      "nflTeam": "NO",
+      "position": "RB",
+      "ecrRank": 321,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/audric-estime.php"
+    },
+    {
+      "key": "bam-knight",
+      "playerId": 24901,
+      "name": "Bam Knight",
+      "nflTeam": "ARI",
+      "position": "RB",
+      "ecrRank": 323,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/zonovan-bam-knight.php"
+    },
+    {
+      "key": "ben-sauls",
+      "playerId": 27798,
+      "name": "Ben Sauls",
+      "nflTeam": "NYG",
+      "position": "K",
+      "ecrRank": 375,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/ben-sauls.php"
+    },
+    {
+      "key": "ben-sinnott",
+      "playerId": 26310,
+      "name": "Ben Sinnott",
+      "nflTeam": "WAS",
+      "position": "TE",
+      "ecrRank": 383,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/ben-sinnott.php"
+    },
+    {
+      "key": "blake-grupe",
+      "playerId": 25533,
+      "name": "Blake Grupe",
+      "nflTeam": "IND",
+      "position": "K",
+      "ecrRank": 367,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/blake-grupe.php"
+    },
+    {
+      "key": "brandon-aubrey",
+      "playerId": 26068,
+      "name": "Brandon Aubrey",
+      "nflTeam": "DAL",
+      "position": "K",
+      "ecrRank": 187,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/brandon-aubrey.php"
+    },
+    {
+      "key": "brandon-mcmanus",
+      "playerId": 13274,
+      "name": "Brandon McManus",
+      "nflTeam": "FA",
+      "position": "K",
+      "ecrRank": 404,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/brandon-mcmanus.php"
+    },
+    {
+      "key": "cairo-santos",
+      "playerId": 13731,
+      "name": "Cairo Santos",
+      "nflTeam": "CHI",
+      "position": "K",
+      "ecrRank": 223,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/cairo-santos.php"
+    },
+    {
+      "key": "cam-little",
+      "playerId": 26475,
+      "name": "Cam Little",
+      "nflTeam": "JAC",
+      "position": "K",
+      "ecrRank": 196,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/cam-little.php"
+    },
+    {
+      "key": "cameron-dicker",
+      "playerId": 23901,
+      "name": "Cameron Dicker",
+      "nflTeam": "LAC",
+      "position": "K",
+      "ecrRank": 197,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/cameron-dicker.php"
+    },
+    {
+      "key": "chad-ryland",
+      "playerId": 25354,
+      "name": "Chad Ryland",
+      "nflTeam": "ARI",
+      "position": "K",
+      "ecrRank": 382,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/chad-ryland.php"
+    },
+    {
+      "key": "charlie-smyth",
+      "playerId": 26444,
+      "name": "Charlie Smyth",
+      "nflTeam": "NO",
+      "position": "K",
+      "ecrRank": 292,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/charlie-smyth.php"
+    },
+    {
+      "key": "chase-mclaughlin",
+      "playerId": 19058,
+      "name": "Chase McLaughlin",
+      "nflTeam": "TB",
+      "position": "K",
+      "ecrRank": 222,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/chase-mclaughlin.php"
+    },
+    {
+      "key": "chris-boswell",
+      "playerId": 13029,
+      "name": "Chris Boswell",
+      "nflTeam": "PIT",
+      "position": "K",
+      "ecrRank": 244,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/chris-boswell.php"
+    },
+    {
+      "key": "cyrus-allen",
+      "playerId": 28424,
+      "name": "Cyrus Allen",
+      "nflTeam": "KC",
+      "position": "WR",
+      "ecrRank": 394,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/cyrus-allen.php"
+    },
+    {
+      "key": "dameon-pierce",
+      "playerId": 22947,
+      "name": "Dameon Pierce",
+      "nflTeam": "PHI",
+      "position": "RB",
+      "ecrRank": 403,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/dameon-pierce.php"
+    },
+    {
+      "key": "daniel-bellinger",
+      "playerId": 24238,
+      "name": "Daniel Bellinger",
+      "nflTeam": "TEN",
+      "position": "TE",
+      "ecrRank": 415,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/daniel-bellinger.php"
+    },
+    {
+      "key": "demarcus-robinson",
+      "playerId": 15665,
+      "name": "Demarcus Robinson",
+      "nflTeam": "SF",
+      "position": "WR",
+      "ecrRank": 422,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/demarcus-robinson.php"
+    },
+    {
+      "key": "eddy-pineiro",
+      "playerId": 17575,
+      "name": "Eddy Pineiro",
+      "nflTeam": "SF",
+      "position": "K",
+      "ecrRank": 209,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/eddy-pineiro.php"
+    },
+    {
+      "key": "elijah-higgins",
+      "playerId": 23119,
+      "name": "Elijah Higgins",
+      "nflTeam": "ARI",
+      "position": "TE",
+      "ecrRank": 420,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/elijah-higgins.php"
+    },
+    {
+      "key": "erick-all-jr",
+      "playerId": 23837,
+      "name": "Erick All Jr.",
+      "nflTeam": "CIN",
+      "position": "TE",
+      "ecrRank": 427,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/erick-all.php"
+    },
+    {
+      "key": "evan-mcpherson",
+      "playerId": 23297,
+      "name": "Evan McPherson",
+      "nflTeam": "CIN",
+      "position": "K",
+      "ecrRank": 214,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/evan-mcpherson.php"
+    },
+    {
+      "key": "gardner-minshew-ii",
+      "playerId": 18562,
+      "name": "Gardner Minshew II",
+      "nflTeam": "ARI",
+      "position": "QB",
+      "ecrRank": 390,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/gardner-minshew.php"
+    },
+    {
+      "key": "harrison-butker",
+      "playerId": 16712,
+      "name": "Harrison Butker",
+      "nflTeam": "KC",
+      "position": "K",
+      "ecrRank": 234,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/harrison-butker.php"
+    },
+    {
+      "key": "harrison-mevis",
+      "playerId": 26638,
+      "name": "Harrison Mevis",
+      "nflTeam": "LAR",
+      "position": "K",
+      "ecrRank": 252,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/harrison-mevis.php"
+    },
+    {
+      "key": "j-mari-taylor",
+      "playerId": 28109,
+      "name": "J'Mari Taylor",
+      "nflTeam": "JAC",
+      "position": "RB",
+      "ecrRank": 314,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jmari-taylor.php"
+    },
+    {
+      "key": "jake-bates",
+      "playerId": 26075,
+      "name": "Jake Bates",
+      "nflTeam": "DET",
+      "position": "K",
+      "ecrRank": 230,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jake-bates.php"
+    },
+    {
+      "key": "jake-elliott",
+      "playerId": 16540,
+      "name": "Jake Elliott",
+      "nflTeam": "PHI",
+      "position": "K",
+      "ecrRank": 370,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jake-elliott.php"
+    },
+    {
+      "key": "jaleel-mclaughlin",
+      "playerId": 25876,
+      "name": "Jaleel McLaughlin",
+      "nflTeam": "DEN",
+      "position": "RB",
+      "ecrRank": 297,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jaleel-mclaughlin.php"
+    },
+    {
+      "key": "jalen-royals",
+      "playerId": 27076,
+      "name": "Jalen Royals",
+      "nflTeam": "KC",
+      "position": "WR",
+      "ecrRank": 330,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jalen-royals.php"
+    },
+    {
+      "key": "jam-miller",
+      "playerId": 27326,
+      "name": "Jam Miller",
+      "nflTeam": "NE",
+      "position": "RB",
+      "ecrRank": 419,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jam-miller.php"
+    },
+    {
+      "key": "jason-myers",
+      "playerId": 14003,
+      "name": "Jason Myers",
+      "nflTeam": "SEA",
+      "position": "K",
+      "ecrRank": 204,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jason-myers.php"
+    },
+    {
+      "key": "jaylin-lane",
+      "playerId": 27454,
+      "name": "Jaylin Lane",
+      "nflTeam": "WAS",
+      "position": "WR",
+      "ecrRank": 366,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/jaylin-lane.php"
+    },
+    {
+      "key": "joe-milton-iii",
+      "playerId": 25967,
+      "name": "Joe Milton III",
+      "nflTeam": "DAL",
+      "position": "QB",
+      "ecrRank": 398,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/joe-milton.php"
+    },
+    {
+      "key": "joey-slye",
+      "playerId": 19028,
+      "name": "Joey Slye",
+      "nflTeam": "TEN",
+      "position": "K",
+      "ecrRank": 360,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/joey-slye.php"
+    },
+    {
+      "key": "john-bates",
+      "playerId": 22833,
+      "name": "John Bates",
+      "nflTeam": "WAS",
+      "position": "TE",
+      "ecrRank": 378,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/john-bates.php"
+    },
+    {
+      "key": "john-metchie-iii",
+      "playerId": 22895,
+      "name": "John Metchie III",
+      "nflTeam": "CAR",
+      "position": "WR",
+      "ecrRank": 355,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/john-metchie.php"
+    },
+    {
+      "key": "ka-imi-fairbairn",
+      "playerId": 15756,
+      "name": "Ka'imi Fairbairn",
+      "nflTeam": "HOU",
+      "position": "K",
+      "ecrRank": 192,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/kaimi-fairbairn.php"
+    },
+    {
+      "key": "kavontae-turpin",
+      "playerId": 18520,
+      "name": "KaVontae Turpin",
+      "nflTeam": "DAL",
+      "position": "WR",
+      "ecrRank": 388,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/kavontae-turpin.php"
+    },
+    {
+      "key": "kendre-miller",
+      "playerId": 24360,
+      "name": "Kendre Miller",
+      "nflTeam": "NO",
+      "position": "RB",
+      "ecrRank": 255,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/kendre-miller.php"
+    },
+    {
+      "key": "konata-mumpfield",
+      "playerId": 27449,
+      "name": "Konata Mumpfield",
+      "nflTeam": "LAR",
+      "position": "WR",
+      "ecrRank": 324,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/konata-mumpfield.php"
+    },
+    {
+      "key": "luke-musgrave",
+      "playerId": 25282,
+      "name": "Luke Musgrave",
+      "nflTeam": "GB",
+      "position": "TE",
+      "ecrRank": 407,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/luke-musgrave.php"
+    },
+    {
+      "key": "marlin-klein",
+      "playerId": 28157,
+      "name": "Marlin Klein",
+      "nflTeam": "HOU",
+      "position": "TE",
+      "ecrRank": 423,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/marlin-klein.php"
+    },
+    {
+      "key": "nick-chubb",
+      "playerId": 17246,
+      "name": "Nick Chubb",
+      "nflTeam": "FA",
+      "position": "RB",
+      "ecrRank": 338,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/nick-chubb.php"
+    },
+    {
+      "key": "nick-folk",
+      "playerId": 9491,
+      "name": "Nick Folk",
+      "nflTeam": "ATL",
+      "position": "K",
+      "ecrRank": 364,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/nick-folk.php"
+    },
+    {
+      "key": "noah-fant",
+      "playerId": 17527,
+      "name": "Noah Fant",
+      "nflTeam": "NO",
+      "position": "TE",
+      "ecrRank": 406,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/noah-fant.php"
+    },
+    {
+      "key": "phil-mafah",
+      "playerId": 22928,
+      "name": "Phil Mafah",
+      "nflTeam": "DAL",
+      "position": "RB",
+      "ecrRank": 425,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/phil-mafah.php"
+    },
+    {
+      "key": "raheim-sanders",
+      "playerId": 24351,
+      "name": "Raheim Sanders",
+      "nflTeam": "CLE",
+      "position": "RB",
+      "ecrRank": 380,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/raheim-sanders.php"
+    },
+    {
+      "key": "riley-leonard",
+      "playerId": 25373,
+      "name": "Riley Leonard",
+      "nflTeam": "IND",
+      "position": "QB",
+      "ecrRank": 411,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/riley-leonard.php"
+    },
+    {
+      "key": "robert-henry-jr",
+      "playerId": 28404,
+      "name": "Robert Henry Jr.",
+      "nflTeam": "WAS",
+      "position": "RB",
+      "ecrRank": 424,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/robert-henry-jr.php"
+    },
+    {
+      "key": "ryan-fitzgerald",
+      "playerId": 27261,
+      "name": "Ryan Fitzgerald",
+      "nflTeam": "CAR",
+      "position": "K",
+      "ecrRank": 371,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/ryan-fitzgerald.php"
+    },
+    {
+      "key": "sam-roush",
+      "playerId": 28161,
+      "name": "Sam Roush",
+      "nflTeam": "CHI",
+      "position": "TE",
+      "ecrRank": 421,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/sam-roush.php"
+    },
+    {
+      "key": "tai-felton",
+      "playerId": 27182,
+      "name": "Tai Felton",
+      "nflTeam": "MIN",
+      "position": "WR",
+      "ecrRank": 402,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/tai-felton.php"
+    },
+    {
+      "key": "terrell-jennings",
+      "playerId": 26964,
+      "name": "Terrell Jennings",
+      "nflTeam": "NE",
+      "position": "RB",
+      "ecrRank": 396,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/terrell-jennings.php"
+    },
+    {
+      "key": "tommy-myers",
+      "playerId": 25167,
+      "name": "Tommy Myers",
+      "nflTeam": "FA",
+      "position": "TE",
+      "ecrRank": 372,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/tommy-myers.php"
+    },
+    {
+      "key": "trey-smack",
+      "playerId": 28507,
+      "name": "Trey Smack",
+      "nflTeam": "GB",
+      "position": "K",
+      "ecrRank": 392,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/trey-smack.php"
+    },
+    {
+      "key": "treylon-burks",
+      "playerId": 22905,
+      "name": "Treylon Burks",
+      "nflTeam": "WAS",
+      "position": "WR",
+      "ecrRank": 379,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/treylon-burks.php"
+    },
+    {
+      "key": "tyler-bass",
+      "playerId": 19760,
+      "name": "Tyler Bass",
+      "nflTeam": "BUF",
+      "position": "K",
+      "ecrRank": 405,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/tyler-bass.php"
+    },
+    {
+      "key": "tyler-loop",
+      "playerId": 27534,
+      "name": "Tyler Loop",
+      "nflTeam": "BAL",
+      "position": "K",
+      "ecrRank": 218,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/tyler-loop.php"
+    },
+    {
+      "key": "wil-lutz",
+      "playerId": 16026,
+      "name": "Wil Lutz",
+      "nflTeam": "DEN",
+      "position": "K",
+      "ecrRank": 276,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/wil-lutz.php"
+    },
+    {
+      "key": "will-reichard",
+      "playerId": 26341,
+      "name": "Will Reichard",
+      "nflTeam": "MIN",
+      "position": "K",
+      "ecrRank": 283,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/will-reichard.php"
+    },
+    {
+      "key": "will-shipley",
+      "playerId": 22930,
+      "name": "Will Shipley",
+      "nflTeam": "PHI",
+      "position": "RB",
+      "ecrRank": 332,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/will-shipley.php"
+    },
+    {
+      "key": "xavier-hutchinson",
+      "playerId": 25332,
+      "name": "Xavier Hutchinson",
+      "nflTeam": "HOU",
+      "position": "WR",
+      "ecrRank": 361,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/xavier-hutchinson.php"
+    },
+    {
+      "key": "zane-gonzalez",
+      "playerId": 16548,
+      "name": "Zane Gonzalez",
+      "nflTeam": "MIA",
+      "position": "K",
+      "ecrRank": 348,
+      "pageUrl": "https://www.fantasypros.com/nfl/players/zane-gonzalez.php"
+    }
+  ]
+}

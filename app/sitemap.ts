@@ -15,6 +15,7 @@ import { getPillarContentIdeas } from "@/lib/seo-content.registry";
 import { siteConfig } from "@/lib/site";
 import { getKBArticles } from "@/lib/support.kb.registry";
 import { getQuickStartGuides } from "@/src/content/editorial/quick-start-guides";
+import { getFantasyManagerProfileSlugs } from "@/data/fantasy-league";
 
 export const dynamic = "force-static";
 
@@ -168,6 +169,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: parseDateInput(guide.lastReviewed) ?? generatedAt
   }));
 
+  const fantasyManagerEntries: MetadataRoute.Sitemap = getFantasyManagerProfileSlugs().map((slug) => ({
+    url: url(`/fantasy/managers/${slug}/`),
+    changeFrequency: "weekly",
+    priority: 0.8,
+    lastModified: generatedAt
+  }));
+
   return [
     ...staticEntries,
     ...appEntries,
@@ -180,6 +188,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...downloadAssetEntries,
     ...guideEntries,
     ...quickStartGuideEntries,
+    ...fantasyManagerEntries,
     ...corporateFixEntries,
     ...pcBuildGuideEntries,
     ...kbEntries

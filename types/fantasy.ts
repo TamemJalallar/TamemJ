@@ -37,13 +37,43 @@ export interface FantasyKeeperRules {
   notes: string[];
 }
 
+export interface FantasyManagerOpeningPick {
+  playerId: string;
+  playerName: string;
+  position: FantasyPlayerPosition;
+  nflTeam: string;
+  round: number;
+  overallPick: number;
+}
+
+export interface FantasySeasonDraftTendency {
+  seasonId: string;
+  seasonYear: number;
+  teamId: string;
+  teamName: string;
+  strategyLabel: string;
+  summary: string;
+  openingPositions: FantasyPlayerPosition[];
+  openingPicks: FantasyManagerOpeningPick[];
+  firstPositionRounds: Partial<Record<FantasyPlayerPosition, number>>;
+  qbRound?: number;
+  teRound?: number;
+  keeperCount: number;
+  totalPicks: number;
+  draftGrade?: string | null;
+  draftRank?: number | null;
+  coachRank?: number | null;
+}
+
 export interface FantasyMember {
   id: string;
+  slug: string;
   managerName: string;
   avatarUrl?: string;
   favoriteTeam: string;
   rivalryNote: string;
   draftTendency: string;
+  draftTendenciesBySeason: FantasySeasonDraftTendency[];
   bio: string;
 }
 
@@ -87,6 +117,10 @@ export interface FantasyStanding {
   pointsFor: number;
   pointsAgainst: number;
   streak: string;
+  playoffSeed?: number | null;
+  playoffWins?: number;
+  playoffLosses?: number;
+  finishRank?: number | null;
 }
 
 export interface FantasyMatchup {
@@ -140,6 +174,8 @@ export interface FantasySeason {
   draftPicks: FantasyDraftPick[];
   draftDate: string;
   draftRounds: number;
+  numPlayoffTeams: number;
+  playoffStartWeek?: number | null;
   keeperSelections: FantasyKeeperSelection[];
   summary: FantasySeasonSummary;
   seasonNotes: string[];
@@ -152,6 +188,7 @@ export interface FantasyKeeperCandidate {
   playerId: string;
   previousDraftRound?: number;
   keeperCostRound?: number;
+  keeperCostOverallPick?: number;
   yearsKept: number;
   eligible: boolean;
   notes?: string;
@@ -185,6 +222,91 @@ export interface FantasyLeagueAward {
   summary: string;
 }
 
+export interface FantasyTradeAsset {
+  playerId: string;
+  playerName: string;
+  position?: string | null;
+  nflTeam?: string | null;
+  sourceTeamKey?: string | null;
+  sourceTeamName?: string | null;
+  destinationTeamKey?: string | null;
+  destinationTeamName?: string | null;
+}
+
+export interface FantasyTradeParty {
+  seasonTeamId?: string | null;
+  memberId?: string | null;
+  teamKey?: string | null;
+  teamName?: string | null;
+}
+
+export interface FantasyTrade {
+  id: string;
+  transactionKey: string;
+  seasonId: string;
+  seasonYear: number;
+  postedAt?: string | null;
+  weekLabel?: string | null;
+  value?: number | null;
+  status?: string | null;
+  trader: FantasyTradeParty;
+  tradee: FantasyTradeParty;
+  traderSent: FantasyTradeAsset[];
+  tradeeSent: FantasyTradeAsset[];
+}
+
+export interface FantasyManagerSeasonSnapshot {
+  seasonId: string;
+  seasonYear: number;
+  teamId: string;
+  teamName: string;
+  numPlayoffTeams: number;
+  wins: number;
+  losses: number;
+  ties: number;
+  pointsFor: number;
+  pointsAgainst: number;
+  regularSeasonRank?: number | null;
+  finishRank?: number | null;
+  playoffSeed?: number | null;
+  playoffWins?: number | null;
+  playoffLosses?: number | null;
+  draftGrade?: string | null;
+  draftRank?: number | null;
+  coachRank?: number | null;
+  numMoves: number;
+  numTrades: number;
+  avgPoints: number;
+}
+
+export interface FantasyManagerSeasonRosterPlayer {
+  playerId: string;
+  playerName: string;
+  position: FantasyPlayerPosition;
+  nflTeam: string;
+  round: number;
+  overallPick: number;
+  potentialKeeper: boolean;
+}
+
+export interface FantasyManagerSeasonRoster {
+  seasonId: string;
+  seasonYear: number;
+  teamId: string;
+  teamName: string;
+  players: FantasyManagerSeasonRosterPlayer[];
+}
+
+export interface FantasyManagerProfile {
+  member: FantasyMember;
+  team: FantasyTeamIdentity;
+  seasonHistory: FantasyManagerSeasonSnapshot[];
+  seasonRosters: FantasyManagerSeasonRoster[];
+  draftTendencies: FantasySeasonDraftTendency[];
+  trades: FantasyTrade[];
+  championshipYears: number[];
+}
+
 export interface FantasyLeagueDataset {
   league: FantasyLeagueIdentity;
   keeperRules: FantasyKeeperRules;
@@ -195,4 +317,5 @@ export interface FantasyLeagueDataset {
   keeperCandidates: FantasyKeeperCandidate[];
   records: FantasyLeagueRecord[];
   awards: FantasyLeagueAward[];
+  trades: FantasyTrade[];
 }

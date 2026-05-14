@@ -9,6 +9,7 @@
     "build:static": "node scripts/generate-images.mjs && next build",
     "analyze": "ANALYZE=true next build",
     "generate:images": "node scripts/generate-images.mjs",
+    "sync:fantasypros": "node scripts/sync-fantasypros-ppr-cheatsheet.mjs",
     "sync:downloads": "node scripts/sync-download-release-metadata.mjs",
     "scan:secrets": "gitleaks git --redact --verbose",
     "start": "next start"
