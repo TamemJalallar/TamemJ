@@ -101,6 +101,17 @@ function formatPoints(value: number): string {
   return value.toFixed(1);
 }
 
+function formatSignedValue(value: number): string {
+  return `${value > 0 ? "+" : ""}${value.toFixed(2)}`;
+}
+
+function getDraftValueTone(value: number): string {
+  if (value >= 10) return "text-emerald-300";
+  if (value > 0) return "text-sky-300";
+  if (value <= -10) return "text-rose-300";
+  return "text-amber-200";
+}
+
 function formatTradeDate(value?: string | null): string {
   if (!value) return "Date pending";
   return new Date(value).toLocaleDateString("en-US", {
@@ -445,6 +456,8 @@ export function FantasyLeagueHub({ data }: { data: FantasyLeagueDataset }) {
   const tradeSeasonOptions = [...new Set(data.trades.map((trade) => trade.seasonYear))].sort((left, right) => right - left);
   const [dashboardSeasonYear, setDashboardSeasonYear] = useState(latestCompletedSeason.year);
   const [tradeSeasonYear, setTradeSeasonYear] = useState(tradeSeasonOptions[0] ?? latestCompletedSeason.year);
+  const [tradeTeamFilter, setTradeTeamFilter] = useState<string>("all");
+  const [tradeStatusFilter, setTradeStatusFilter] = useState<string>("all");
 
   const [draftSeasonYear, setDraftSeasonYear] = useState(draftSeasons[0]?.year ?? currentSeason.year);
   const [draftView, setDraftView] = useState<FantasyDraftView>("table");
@@ -537,7 +550,13 @@ export function FantasyLeagueHub({ data }: { data: FantasyLeagueDataset }) {
     };
   }, []);
 
+  useEffect(() => {
+    setTradeTeamFilter("all");
+    setTradeStatusFilter("all");
+  }, [tradeSeasonYear]);
+
   const draftSeason = draftSeasons.find((season) => season.year === draftSeasonYear) ?? draftSeasons[0] ?? currentSeason;
+  const draftSeasonRecap = data.seasonRecaps.find((recap) => recap.season.year === draftSeason.year);
   const normalizedDraftQuery = deferredDraftSearch.trim().toLowerCase();
   const liveLeagueIdentity = liveLeague?.data.league;
   const displayLeagueName = liveLeagueIdentity?.name ?? data.league.name;
@@ -625,6 +644,34 @@ export function FantasyLeagueHub({ data }: { data: FantasyLeagueDataset }) {
   const selectedTradeSeasonYear = tradeSeasonOptions.includes(tradeSeasonYear) ? tradeSeasonYear : tradeSeasonOptions[0] ?? latestCompletedSeason.year;
   const selectedTradeSeasonTrades = tradesNewestFirst.filter((trade) => trade.seasonYear === selectedTradeSeasonYear);
   const dashboardSeasonTrades = selectedTradeSeasonTrades.slice(0, 4);
+  const tradeTeamOptions = Array.from(
+    new Set(selectedTradeSeasonTrades.flatMap((trade) => [trade.trader.teamName, trade.tradee.teamName]).filter(Boolean) as string[])
+  ).sort((left, right) => left.localeCompare(right));
+  const tradeStatusOptions = Array.from(new Set(selectedTradeSeasonTrades.map((trade) => trade.status ?? "recorded"))).sort((left, right) =>
+    left.localeCompare(right)
+  );
+  const filteredTradeReviewTrades = selectedTradeSeasonTrades.filter((trade) => {
+    if (tradeTeamFilter !== "all" && trade.trader.teamName !== tradeTeamFilter && trade.tradee.teamName !== tradeTeamFilter) {
+      return false;
+    }
+    if (tradeStatusFilter !== "all" && (trade.status ?? "recorded") !== tradeStatusFilter) {
+      return false;
+    }
+    return true;
+  });
+  const selectedSeasonRecap = data.seasonRecaps.find((recap) => recap.season.year === selectedTradeSeasonYear);
+  const tradeSummaryByTeam = tradeTeamOptions
+    .map((teamName) => ({
+      teamName,
+      count: selectedTradeSeasonTrades.filter((trade) => trade.trader.teamName === teamName || trade.tradee.teamName === teamName).length
+    }))
+    .sort((left, right) => right.count - left.count || left.teamName.localeCompare(right.teamName));
+  const mostActiveTradeTeam = tradeSummaryByTeam[0];
+  const tradeStatusCounts = {
+    approved: selectedTradeSeasonTrades.filter((trade) => (trade.status ?? "recorded") === "approved").length,
+    vetoed: selectedTradeSeasonTrades.filter((trade) => (trade.status ?? "recorded") === "vetoed").length,
+    pending: selectedTradeSeasonTrades.filter((trade) => !trade.status || trade.status === "pending").length
+  };
 
   const mostDecoratedTeam = [...data.teams].sort((left, right) => right.championships - left.championships || left.teamName.localeCompare(right.teamName))[0];
   const titleBoard = [...data.teams]
@@ -636,6 +683,37 @@ export function FantasyLeagueHub({ data }: { data: FantasyLeagueDataset }) {
   const defendingChampion = teamsById.get(latestCompletedSeason.summary.championTeamId);
   const defendingChampionMember = defendingChampion ? membersById.get(defendingChampion.memberId) : undefined;
   const nextDraftCountdown = getCountdownLabel(data.league.nextDraftDate);
+  const draftValueEntriesForSeason = data.draftValueEntries
+    .filter((entry) => entry.seasonYear === draftSeason.year)
+    .sort((left, right) => right.value - left.value || left.overallPick - right.overallPick);
+  const draftTopSteals = draftValueEntriesForSeason.filter((entry) => entry.value > 0).slice(0, 6);
+  const draftTopReaches = [...draftValueEntriesForSeason]
+    .filter((entry) => entry.value < 0)
+    .sort((left, right) => left.value - right.value || left.overallPick - right.overallPick)
+    .slice(0, 6);
+  const draftManagerValueLeaders = Array.from(
+    draftValueEntriesForSeason.reduce((map, entry) => {
+      const current = map.get(entry.teamId) ?? { teamId: entry.teamId, teamName: entry.teamName, totalValue: 0, pickCount: 0 };
+      current.totalValue += entry.value;
+      current.pickCount += 1;
+      map.set(entry.teamId, current);
+      return map;
+    }, new Map<string, { teamId: string; teamName: string; totalValue: number; pickCount: number }>())
+  )
+    .map(([, entry]) => ({
+      ...entry,
+      averageValue: entry.pickCount > 0 ? entry.totalValue / entry.pickCount : 0
+    }))
+    .sort((left, right) => right.averageValue - left.averageValue || right.totalValue - left.totalValue)
+    .slice(0, 4);
+  const topKeeperValueBoard = data.keeperValueBoard.slice(0, 18);
+  const recapCards = data.seasonRecaps.slice(0, 5);
+  const rivalryRows = data.rivalries;
+  const rivalryColumnTeams = rivalryRows.map((row) => ({
+    teamId: row.teamId,
+    managerName: row.managerName,
+    shortName: teamsById.get(row.teamId)?.shortName ?? row.teamName
+  }));
 
   const sourceRoster: Array<{ pick: FantasyDraftPick; player: { id: string; name: string; position: FantasyPlayerPosition; nflTeam: string; adp?: number }; candidate: FantasyKeeperCandidate | undefined }> = [];
   [...sourceSeason.draftPicks]
@@ -913,7 +991,7 @@ export function FantasyLeagueHub({ data }: { data: FantasyLeagueDataset }) {
                 <StatCard label="Years active" value={`${yearsActive}`} hint={`Since ${data.league.establishedYear}`} />
                 <StatCard label="Defending champion" value={defendingChampion?.shortName ?? "TBD"} hint={defendingChampionMember?.managerName} />
                 <StatCard label="Draft picks tracked" value={`${totalDraftPicksTracked}`} hint="Historic and current boards" />
-                <StatCard label="Keeper deadline" value={formatDate(data.keeperRules.deadline)} hint={`${data.keeperRules.targetSeasonYear} cycle`} />
+                <StatCard label="Keeper deadline" value={formatDate(data.keeperRules.deadline)} hint={`${data.league.upcomingDraftRounds}-round draft`} />
               </div>
             </div>
 
@@ -945,7 +1023,7 @@ export function FantasyLeagueHub({ data }: { data: FantasyLeagueDataset }) {
                 <div className="rounded-2xl border border-line/70 bg-card-2/70 p-4">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">Next draft placeholder</p>
                   <p className="mt-2 text-sm text-fg-secondary">
-                    The next draft window is set for <span className="font-semibold text-fg">{formatDateTime(data.league.nextDraftDate)}</span>.
+                    The next draft window is set for <span className="font-semibold text-fg">{formatDateTime(data.league.nextDraftDate)}</span>, with a {data.league.upcomingDraftRounds}-round board on deck.
                   </p>
                   <p className="mt-2 text-xs font-semibold text-primary-600 dark:text-primary-300">Countdown: {nextDraftCountdown}</p>
                 </div>
@@ -1401,6 +1479,136 @@ export function FantasyLeagueHub({ data }: { data: FantasyLeagueDataset }) {
             </div>
           ) : null}
 
+          <div className="grid gap-4 xl:grid-cols-[0.92fr_1.08fr]">
+            <div className="surface-card-strong p-5">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Draft market check</p>
+                  <h3 className="mt-1 font-display text-xl font-semibold text-fg">Steals, reaches, and room winners</h3>
+                </div>
+                <span className="rounded-full border border-line/70 bg-card px-3 py-1 text-xs font-semibold text-fg-secondary">
+                  {draftSeason.year}
+                </span>
+              </div>
+
+              <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2">
+                <div className="rounded-2xl border border-line/70 bg-card/75 p-4">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">Best draft room grade</p>
+                  <p className="mt-2 text-sm font-semibold text-fg">
+                    {draftSeasonRecap?.draftRoomLeader?.teamName ?? "Need draft rank data"}
+                  </p>
+                  <p className="mt-1 text-xs text-fg-secondary">
+                    {draftSeasonRecap?.draftRoomLeader?.draftGrade
+                      ? `Grade ${draftSeasonRecap.draftRoomLeader.draftGrade}`
+                      : "Archive rank not available for this season."}
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-line/70 bg-card/75 p-4">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">Best average value</p>
+                  <p className="mt-2 text-sm font-semibold text-fg">
+                    {draftManagerValueLeaders[0]?.teamName ?? "Draft board loading"}
+                  </p>
+                  <p className={`mt-1 text-xs font-semibold ${draftManagerValueLeaders[0] ? getDraftValueTone(draftManagerValueLeaders[0].averageValue) : "text-fg-secondary"}`}>
+                    {draftManagerValueLeaders[0] ? `${formatSignedValue(draftManagerValueLeaders[0].averageValue)} avg value per pick` : "No stored pick values"}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-4 space-y-3">
+                {draftManagerValueLeaders.map((entry, index) => (
+                  <div key={`draft-manager-value-${entry.teamId}`} className="rounded-2xl border border-line/70 bg-card-2/70 p-3">
+                    <div className="flex items-center justify-between gap-3">
+                      <div>
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">Room rank #{index + 1}</p>
+                        <p className="mt-1 text-sm font-semibold text-fg">{entry.teamName}</p>
+                      </div>
+                      <span className={`text-sm font-semibold ${getDraftValueTone(entry.averageValue)}`}>
+                        {formatSignedValue(entry.averageValue)}
+                      </span>
+                    </div>
+                    <p className="mt-1 text-xs text-fg-secondary">
+                      {formatSignedValue(entry.totalValue)} total value across {entry.pickCount} picks.
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid gap-4">
+              <div className="surface-card-strong overflow-hidden">
+                <div className="border-b border-line/70 px-4 py-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Draft steals</p>
+                  <h3 className="mt-1 font-display text-lg font-semibold text-fg">Best values on the board</h3>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full text-left text-sm">
+                    <thead className="bg-card-2/80 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
+                      <tr>
+                        <th className="px-3 py-2.5">Player</th>
+                        <th className="px-3 py-2.5">Team</th>
+                        <th className="px-3 py-2.5">Pick</th>
+                        <th className="px-3 py-2.5">Value</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {draftTopSteals.length > 0 ? draftTopSteals.map((entry) => (
+                        <tr key={entry.id} className="border-t border-line/70 bg-card/90">
+                          <td className="px-3 py-3">
+                            <p className="font-semibold text-fg">{entry.playerName}</p>
+                            <p className="text-xs text-fg-secondary">{entry.position} • {entry.nflTeam}</p>
+                          </td>
+                          <td className="px-3 py-3 text-fg-secondary">{entry.teamName}</td>
+                          <td className="px-3 py-3 text-fg-secondary">#{entry.overallPick} • R{entry.round}</td>
+                          <td className={`px-3 py-3 font-semibold ${getDraftValueTone(entry.value)}`}>{formatSignedValue(entry.value)}</td>
+                        </tr>
+                      )) : (
+                        <tr className="border-t border-line/70 bg-card/90">
+                          <td colSpan={4} className="px-4 py-8 text-center text-sm text-fg-secondary">No stored draft value scores for this season yet.</td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div className="surface-card-strong overflow-hidden">
+                <div className="border-b border-line/70 px-4 py-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Draft reaches</p>
+                  <h3 className="mt-1 font-display text-lg font-semibold text-fg">The picks that made the room squint</h3>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full text-left text-sm">
+                    <thead className="bg-card-2/80 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
+                      <tr>
+                        <th className="px-3 py-2.5">Player</th>
+                        <th className="px-3 py-2.5">Team</th>
+                        <th className="px-3 py-2.5">Pick</th>
+                        <th className="px-3 py-2.5">Value</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {draftTopReaches.length > 0 ? draftTopReaches.map((entry) => (
+                        <tr key={entry.id} className="border-t border-line/70 bg-card/90">
+                          <td className="px-3 py-3">
+                            <p className="font-semibold text-fg">{entry.playerName}</p>
+                            <p className="text-xs text-fg-secondary">{entry.position} • {entry.nflTeam}</p>
+                          </td>
+                          <td className="px-3 py-3 text-fg-secondary">{entry.teamName}</td>
+                          <td className="px-3 py-3 text-fg-secondary">#{entry.overallPick} • R{entry.round}</td>
+                          <td className={`px-3 py-3 font-semibold ${getDraftValueTone(entry.value)}`}>{formatSignedValue(entry.value)}</td>
+                        </tr>
+                      )) : (
+                        <tr className="border-t border-line/70 bg-card/90">
+                          <td colSpan={4} className="px-4 py-8 text-center text-sm text-fg-secondary">No reach scores landed in the archive for this season.</td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {filteredDraftPicks.length === 0 ? (
             <EmptyDraftState />
           ) : draftView === "board" ? (
@@ -1848,6 +2056,92 @@ export function FantasyLeagueHub({ data }: { data: FantasyLeagueDataset }) {
                   </table>
                 </div>
               </div>
+
+              <div className="surface-card-strong overflow-hidden">
+                <div className="border-b border-line/70 px-5 py-5 sm:px-6">
+                  <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Keeper value board</p>
+                      <h3 className="mt-2 font-display text-2xl font-semibold text-fg">The whole keeper market at a glance</h3>
+                      <p className="mt-2 text-sm text-fg-secondary">
+                        This pulls every Round 10+ candidate into one board so the league can compare market rise, FantasyPros rank, and current keeper cost without bouncing manager to manager.
+                      </p>
+                    </div>
+                    <span className="rounded-full border border-line/70 bg-card px-3 py-1 text-xs font-semibold text-fg-secondary">
+                      {data.keeperValueBoard.length} eligible players
+                    </span>
+                  </div>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="min-w-[1080px] w-full text-left text-sm">
+                    <thead className="bg-card-2/80 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
+                      <tr>
+                        <th className="px-3 py-2.5">Manager</th>
+                        <th className="px-3 py-2.5">Player</th>
+                        <th className="px-3 py-2.5">Last draft</th>
+                        <th className="px-3 py-2.5">FantasyPros</th>
+                        <th className="px-3 py-2.5">Current cost</th>
+                        <th className="px-3 py-2.5">Market rise</th>
+                        <th className="px-3 py-2.5">League board</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {topKeeperValueBoard.map((entry) => (
+                        <tr
+                          key={entry.id}
+                          className={`border-t border-line/70 align-top transition ${
+                            entry.teamId === selectedKeeperTeamId ? "bg-primary-50/80 dark:bg-primary-500/12" : "bg-card/90 hover:bg-card-2/70"
+                          }`}
+                        >
+                          <td className="px-3 py-3">
+                            <p className="font-semibold text-fg">{entry.managerName}</p>
+                            <p className="text-xs text-fg-secondary">{entry.teamName}</p>
+                          </td>
+                          <td className="px-3 py-3">
+                            <p className="font-semibold text-fg">{entry.playerName}</p>
+                            <p className="text-xs text-fg-secondary">{entry.position} • {entry.nflTeam}</p>
+                          </td>
+                          <td className="px-3 py-3 text-fg-secondary">
+                            <p className="font-semibold text-fg">#{entry.previousOverallPick}</p>
+                            <p className="text-xs text-muted">Round {entry.previousDraftRound}</p>
+                          </td>
+                          <td className="px-3 py-3 text-fg-secondary">
+                            <p className="font-semibold text-fg">
+                              {typeof entry.fantasyProsRank === "number" ? `Pick ${entry.fantasyProsRank}` : "Missing"}
+                            </p>
+                            <p className="text-xs text-muted">FantasyPros PPR</p>
+                          </td>
+                          <td className="px-3 py-3 text-fg-secondary">
+                            <p className="font-semibold text-fg">
+                              {entry.keeperCostRound ? `Round ${entry.keeperCostRound}` : "Review"}
+                            </p>
+                            <p className="text-xs text-muted">
+                              {entry.keeperCostOverallPick ? `Pick ${entry.keeperCostOverallPick}` : "Need source rank"}
+                              {entry.cappedToBoard ? " • capped" : ""}
+                            </p>
+                          </td>
+                          <td className="px-3 py-3">
+                            <p className={`font-semibold ${typeof entry.marketRisePicks === "number" ? getDraftValueTone(entry.marketRisePicks) : "text-fg-secondary"}`}>
+                              {typeof entry.marketRisePicks === "number" ? `${entry.marketRisePicks > 0 ? "+" : ""}${entry.marketRisePicks}` : "—"}
+                            </p>
+                            <p className="text-xs text-muted">Last draft pick vs market</p>
+                          </td>
+                          <td className="px-3 py-3">
+                            <button
+                              type="button"
+                              onClick={() => setSelectedKeeperTeamId(entry.teamId)}
+                              className="rounded-full border border-line/70 bg-card px-3 py-1.5 text-xs font-semibold text-fg-secondary transition hover:border-primary-200 hover:text-fg dark:hover:border-primary-400/30"
+                            >
+                              Open manager
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
 
             <aside className="xl:sticky xl:top-24 xl:self-start">
@@ -2056,12 +2350,61 @@ export function FantasyLeagueHub({ data }: { data: FantasyLeagueDataset }) {
           </div>
 
           <div className="surface-card-strong overflow-hidden">
+            <div className="border-b border-line/70 px-4 py-4">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Season recap pages</p>
+                  <h3 className="mt-1 font-display text-xl font-semibold text-fg">Jump into each year’s story</h3>
+                </div>
+                <span className="rounded-full border border-line/70 bg-card px-3 py-1 text-xs font-semibold text-fg-secondary">
+                  {data.seasonRecaps.length} seasons tracked
+                </span>
+              </div>
+            </div>
+
+            <div className="grid gap-3 p-4 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5">
+              {recapCards.map((recap) => {
+                const champion = teamsById.get(recap.season.summary.championTeamId);
+                const regularWinner = teamsById.get(recap.season.summary.regularSeasonWinnerTeamId);
+                return (
+                  <Link
+                    key={`recap-card-${recap.season.year}`}
+                    href={`/fantasy/seasons/${recap.season.year}/`}
+                    className="rounded-[22px] border border-line/70 bg-card/85 p-4 transition hover:-translate-y-0.5 hover:border-primary-300 hover:bg-card-2/80"
+                  >
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{recap.season.year}</p>
+                    <h4 className="mt-2 font-display text-xl font-semibold text-fg">{champion?.teamName ?? recap.season.summary.championDisplayName}</h4>
+                    <p className="mt-1 text-sm text-fg-secondary">Champion · {regularWinner?.shortName ?? recap.season.summary.regularSeasonWinnerDisplayName} led the regular season.</p>
+
+                    <div className="mt-4 grid grid-cols-2 gap-2">
+                      <div className="rounded-xl border border-line/70 bg-card-2/70 px-3 py-2">
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted">Trades</p>
+                        <p className="mt-1 text-sm font-semibold text-fg">{recap.trades.length}</p>
+                      </div>
+                      <div className="rounded-xl border border-line/70 bg-card-2/70 px-3 py-2">
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted">Steals</p>
+                        <p className="mt-1 text-sm font-semibold text-fg">{recap.topSteals.length}</p>
+                      </div>
+                    </div>
+
+                    <p className="mt-4 text-xs text-fg-secondary">
+                      {recap.draftRoomLeader?.teamName
+                        ? `Draft room darling: ${recap.draftRoomLeader.teamName}${recap.draftRoomLeader.draftGrade ? ` (${recap.draftRoomLeader.draftGrade})` : ""}.`
+                        : "Open the recap for the full standings, trades, and draft story."}
+                    </p>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="surface-card-strong overflow-hidden">
             <div className="flex flex-col gap-2 border-b border-line/70 px-4 py-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Trade ledger</p>
-                <h3 className="mt-1 font-display text-xl font-semibold text-fg">{selectedTradeSeasonYear} deals, with teams and packages</h3>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Trade review center</p>
+                <h3 className="mt-1 font-display text-xl font-semibold text-fg">{selectedTradeSeasonYear} deals, with filters and packages</h3>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-end gap-3">
                 <label className="space-y-2 text-sm font-medium text-fg">
                   <span className="block text-[10px] font-semibold uppercase tracking-[0.14em] text-muted">Season</span>
                   <select value={selectedTradeSeasonYear} onChange={(event) => setTradeSeasonYear(Number(event.target.value))} className="min-w-[8.5rem] px-3 py-2 text-sm">
@@ -2070,16 +2413,58 @@ export function FantasyLeagueHub({ data }: { data: FantasyLeagueDataset }) {
                     ))}
                   </select>
                 </label>
+                <label className="space-y-2 text-sm font-medium text-fg">
+                  <span className="block text-[10px] font-semibold uppercase tracking-[0.14em] text-muted">Team</span>
+                  <select value={tradeTeamFilter} onChange={(event) => setTradeTeamFilter(event.target.value)} className="min-w-[9rem] px-3 py-2 text-sm">
+                    <option value="all">All teams</option>
+                    {tradeTeamOptions.map((teamName) => (
+                      <option key={`trade-team-${teamName}`} value={teamName}>{teamName}</option>
+                    ))}
+                  </select>
+                </label>
+                <label className="space-y-2 text-sm font-medium text-fg">
+                  <span className="block text-[10px] font-semibold uppercase tracking-[0.14em] text-muted">Status</span>
+                  <select value={tradeStatusFilter} onChange={(event) => setTradeStatusFilter(event.target.value)} className="min-w-[8rem] px-3 py-2 text-sm">
+                    <option value="all">All status</option>
+                    {tradeStatusOptions.map((status) => (
+                      <option key={`trade-status-${status}`} value={status}>{formatTradeStatus(status)}</option>
+                    ))}
+                  </select>
+                </label>
                 <span className="rounded-full border border-line/70 bg-card px-3 py-1 text-xs font-semibold text-fg-secondary">
-                  {selectedTradeSeasonTrades.length} trades tracked
+                  {filteredTradeReviewTrades.length}/{selectedTradeSeasonTrades.length} trades shown
                 </span>
+              </div>
+            </div>
+            <div className="grid gap-3 border-b border-line/70 bg-card/55 px-4 py-4 md:grid-cols-3">
+              <div className="rounded-2xl border border-line/70 bg-card-2/70 px-3 py-3">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted">Most active team</p>
+                <p className="mt-1 text-sm font-semibold text-fg">{mostActiveTradeTeam?.teamName ?? "Quiet room"}</p>
+                <p className="mt-1 text-xs text-fg-secondary">{mostActiveTradeTeam ? `${mostActiveTradeTeam.count} deals touched` : "No trades logged"}</p>
+              </div>
+              <div className="rounded-2xl border border-line/70 bg-card-2/70 px-3 py-3">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted">Approved / vetoed</p>
+                <p className="mt-1 text-sm font-semibold text-fg">{tradeStatusCounts.approved} / {tradeStatusCounts.vetoed}</p>
+                <p className="mt-1 text-xs text-fg-secondary">Pending or unlabeled: {tradeStatusCounts.pending}</p>
+              </div>
+              <div className="rounded-2xl border border-line/70 bg-card-2/70 px-3 py-3">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted">Season link</p>
+                <p className="mt-1 text-sm font-semibold text-fg">
+                  <Link href={`/fantasy/seasons/${selectedTradeSeasonYear}/`} className="transition hover:text-primary-300">
+                    Open {selectedTradeSeasonYear} recap
+                  </Link>
+                </p>
+                <p className="mt-1 text-xs text-fg-secondary">
+                  {selectedSeasonRecap?.topSteals[0]?.playerName
+                    ? `Top steal: ${selectedSeasonRecap.topSteals[0].playerName}`
+                    : "Recap page holds the broader season story."}
+                </p>
               </div>
             </div>
             <div className="overflow-x-auto">
               <table className="min-w-full text-left text-sm">
                 <thead className="bg-card-2/80 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
                   <tr>
-                    <th className="px-3 py-2.5">Season</th>
                     <th className="px-3 py-2.5">Date</th>
                     <th className="px-3 py-2.5">Between</th>
                     <th className="px-3 py-2.5">Package A</th>
@@ -2088,9 +2473,8 @@ export function FantasyLeagueHub({ data }: { data: FantasyLeagueDataset }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {selectedTradeSeasonTrades.map((trade) => (
+                  {filteredTradeReviewTrades.map((trade) => (
                     <tr key={trade.transactionKey} className="border-t border-line/70 align-top bg-card/90 transition hover:bg-card-2/70">
-                      <td className="px-3 py-3 font-semibold text-fg">{trade.seasonYear}</td>
                       <td className="px-3 py-3 text-xs text-fg-secondary">{trade.weekLabel ?? formatTradeDate(trade.postedAt)}</td>
                       <td className="px-3 py-3">
                         <p className="font-semibold text-fg">{trade.trader.teamName}</p>
@@ -2111,10 +2495,10 @@ export function FantasyLeagueHub({ data }: { data: FantasyLeagueDataset }) {
                       </td>
                     </tr>
                   ))}
-                  {selectedTradeSeasonTrades.length === 0 ? (
+                  {filteredTradeReviewTrades.length === 0 ? (
                     <tr className="border-t border-line/70 bg-card/90">
-                      <td colSpan={6} className="px-4 py-8 text-center text-sm text-fg-secondary">
-                        No trades were logged for {selectedTradeSeasonYear}. Either peace broke out or nobody hit accept.
+                      <td colSpan={5} className="px-4 py-8 text-center text-sm text-fg-secondary">
+                        No trades match this review filter for {selectedTradeSeasonYear}. Try clearing the team or status filter.
                       </td>
                     </tr>
                   ) : null}
@@ -2479,6 +2863,92 @@ export function FantasyLeagueHub({ data }: { data: FantasyLeagueDataset }) {
                   })}
                 </tbody>
               </table>
+            </div>
+
+            <div className="border-t border-line/70 p-4 sm:p-5">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Rivalry matrix</p>
+                  <h3 className="mt-1 font-display text-xl font-semibold text-fg">Everybody’s receipts against everybody else</h3>
+                  <p className="mt-1 text-sm text-fg-secondary">Head-to-head history, the clean way. Stronger records skew cool, ugly ones skew warm.</p>
+                </div>
+                <span className="rounded-full border border-line/70 bg-card px-3 py-1 text-xs font-semibold text-fg-secondary">
+                  {rivalryRows.length} managers
+                </span>
+              </div>
+
+              <div className="mt-4 grid gap-3 md:hidden">
+                {rivalryRows.map((row) => (
+                  <div key={`rivalry-mobile-${row.teamId}`} className="rounded-2xl border border-line/70 bg-card/85 p-4">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{row.managerName}</p>
+                    <p className="mt-1 text-sm font-semibold text-fg">{row.teamName}</p>
+                    <p className="mt-2 text-xs text-fg-secondary">Main beef: {row.primaryRivalLabel ?? "Still developing"}</p>
+                    <div className="mt-3 space-y-2">
+                      {row.cells.slice(0, 3).map((cell) => (
+                        <div key={`rivalry-mobile-cell-${row.teamId}-${cell.opponentTeamId}`} className="flex items-center justify-between gap-3 rounded-xl border border-line/70 bg-card-2/70 px-3 py-2">
+                          <div>
+                            <p className="text-sm font-semibold text-fg">{cell.opponentManagerName}</p>
+                            <p className="text-xs text-fg-secondary">{cell.opponentTeamName}</p>
+                          </div>
+                          <span className={`text-sm font-semibold ${cell.differential > 0 ? "text-emerald-300" : cell.differential < 0 ? "text-rose-300" : "text-amber-200"}`}>
+                            {cell.record}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-4 hidden overflow-x-auto md:block">
+                <table className="min-w-[1100px] w-full text-left text-sm">
+                  <thead className="bg-card-2/80 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
+                    <tr>
+                      <th className="px-3 py-2.5">Manager</th>
+                      <th className="px-3 py-2.5">Primary rival</th>
+                      {rivalryColumnTeams.map((column) => (
+                        <th key={`rivalry-column-${column.teamId}`} className="px-3 py-2.5 text-center">{column.shortName}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {rivalryRows.map((row) => (
+                      <tr key={`rivalry-row-${row.teamId}`} className="border-t border-line/70 bg-card/90 align-top">
+                        <td className="px-3 py-3">
+                          <p className="font-semibold text-fg">{row.managerName}</p>
+                          <p className="text-xs text-fg-secondary">{row.teamName}</p>
+                        </td>
+                        <td className="px-3 py-3 text-sm text-fg-secondary">{row.primaryRivalLabel ?? "Still developing"}</td>
+                        {rivalryColumnTeams.map((column) => {
+                          if (column.teamId === row.teamId) {
+                            return (
+                              <td key={`rivalry-self-${row.teamId}-${column.teamId}`} className="px-3 py-3 text-center text-xs text-muted">—</td>
+                            );
+                          }
+
+                          const cell = row.cells.find((entry) => entry.opponentTeamId === column.teamId);
+                          const tone =
+                            !cell
+                              ? "bg-card/70 text-muted"
+                              : cell.differential > 0
+                                ? "bg-emerald-500/10 text-emerald-200"
+                                : cell.differential < 0
+                                  ? "bg-rose-500/10 text-rose-200"
+                                  : "bg-amber-500/10 text-amber-100";
+
+                          return (
+                            <td key={`rivalry-cell-${row.teamId}-${column.teamId}`} className="px-3 py-3 text-center">
+                              <span className={`inline-flex min-w-[4.25rem] justify-center rounded-full border border-line/70 px-2.5 py-1 text-xs font-semibold ${tone}`}>
+                                {cell?.record ?? "—"}
+                              </span>
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
 

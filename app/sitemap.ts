@@ -15,7 +15,7 @@ import { getPillarContentIdeas } from "@/lib/seo-content.registry";
 import { siteConfig } from "@/lib/site";
 import { getKBArticles } from "@/lib/support.kb.registry";
 import { getQuickStartGuides } from "@/src/content/editorial/quick-start-guides";
-import { getFantasyManagerProfileSlugs } from "@/data/fantasy-league";
+import { getFantasyManagerProfileSlugs, getFantasySeasonRecapYears } from "@/data/fantasy-league";
 
 export const dynamic = "force-static";
 
@@ -176,6 +176,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: generatedAt
   }));
 
+  const fantasySeasonRecapEntries: MetadataRoute.Sitemap = getFantasySeasonRecapYears().map((year) => ({
+    url: url(`/fantasy/seasons/${year}/`),
+    changeFrequency: "weekly",
+    priority: 0.79,
+    lastModified: generatedAt
+  }));
+
   return [
     ...staticEntries,
     ...appEntries,
@@ -189,6 +196,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...guideEntries,
     ...quickStartGuideEntries,
     ...fantasyManagerEntries,
+    ...fantasySeasonRecapEntries,
     ...corporateFixEntries,
     ...pcBuildGuideEntries,
     ...kbEntries

@@ -21,6 +21,7 @@ export interface FantasyLeagueIdentity {
   currentWeekLabel: string;
   location: string;
   nextDraftDate: string;
+  upcomingDraftRounds: number;
   platformReadiness: FantasyPlatform[];
   leagueSize: number;
 }
@@ -307,6 +308,208 @@ export interface FantasyManagerProfile {
   championshipYears: number[];
 }
 
+export interface FantasyKeeperValueEntry {
+  id: string;
+  teamId: string;
+  memberId: string;
+  teamName: string;
+  managerName: string;
+  playerId: string;
+  playerName: string;
+  position: FantasyPlayerPosition;
+  nflTeam: string;
+  previousDraftRound: number;
+  previousOverallPick: number;
+  fantasyProsRank?: number;
+  keeperCostOverallPick?: number;
+  keeperCostRound?: number;
+  marketRisePicks?: number;
+  keeperDiscountPicks?: number;
+  cappedToBoard: boolean;
+}
+
+export interface FantasyDraftValueEntry {
+  id: string;
+  seasonId: string;
+  seasonYear: number;
+  teamId: string;
+  memberId: string;
+  teamName: string;
+  playerId: string;
+  playerName: string;
+  position: FantasyPlayerPosition;
+  nflTeam: string;
+  round: number;
+  overallPick: number;
+  value: number;
+  kind: "steal" | "reach";
+}
+
+export interface FantasyRivalryCell {
+  opponentTeamId: string;
+  opponentMemberId: string;
+  opponentTeamName: string;
+  opponentManagerName: string;
+  wins: number;
+  losses: number;
+  ties: number;
+  meetings: number;
+  differential: number;
+  record: string;
+}
+
+export interface FantasyRivalryRow {
+  teamId: string;
+  memberId: string;
+  teamName: string;
+  managerName: string;
+  primaryRivalTeamId?: string;
+  primaryRivalLabel?: string;
+  cells: FantasyRivalryCell[];
+}
+
+export interface FantasySeasonRecap {
+  season: FantasySeason;
+  trades: FantasyTrade[];
+  topSteals: FantasyDraftValueEntry[];
+  topReaches: FantasyDraftValueEntry[];
+  awards: FantasyLeagueAward[];
+  records: FantasyLeagueRecord[];
+  draftRoomLeader?: {
+    teamId: string;
+    teamName: string;
+    draftGrade?: string | null;
+    draftRank?: number | null;
+  };
+}
+
+export interface FantasyWeeklyRecapMatchup {
+  week: number;
+  matchupId: string;
+  leftTeamId: string;
+  leftTeamName: string;
+  leftManagerName: string;
+  leftScore: number;
+  rightTeamId: string;
+  rightTeamName: string;
+  rightManagerName: string;
+  rightScore: number;
+  margin: number;
+}
+
+export interface FantasyWeeklyRecap {
+  week: number;
+  label: string;
+  headline: string;
+  summary: string;
+  topScorer: {
+    teamId: string;
+    teamName: string;
+    managerName: string;
+    score: number;
+  };
+  closestMatchup?: FantasyWeeklyRecapMatchup;
+  biggestBlowout?: FantasyWeeklyRecapMatchup;
+  worstBenchRegret?: {
+    teamId: string;
+    teamName: string;
+    managerName: string;
+    regretPoints: number;
+    efficiency: number;
+  };
+  powerPodium: Array<{
+    rank: number;
+    teamId: string;
+    teamName: string;
+    managerName: string;
+    powerScore: number;
+  }>;
+}
+
+export interface FantasyAllPlayRow {
+  teamId: string;
+  teamName: string;
+  managerName: string;
+  actualWins: number;
+  actualLosses: number;
+  actualTies: number;
+  actualWinPct: number;
+  allPlayWins: number;
+  allPlayLosses: number;
+  allPlayTies: number;
+  allPlayWinPct: number;
+  expectedWins: number;
+  luckDeltaWins: number;
+  scheduleLuckScore: number;
+  pointsFor: number;
+  averageScore: number;
+}
+
+export interface FantasyPlayoffOddsRow {
+  teamId: string;
+  teamName: string;
+  managerName: string;
+  wins: number;
+  losses: number;
+  ties: number;
+  pointsFor: number;
+  playoffOdds: number;
+  byeOdds: number;
+  titleOdds: number;
+  actualFinalSeed?: number | null;
+  actualFinalRank?: number | null;
+}
+
+export interface FantasyPlayoffOddsCheckpoint {
+  week: number;
+  label: string;
+  rows: FantasyPlayoffOddsRow[];
+}
+
+export interface FantasyPowerRankingRow {
+  rank: number;
+  teamId: string;
+  teamName: string;
+  managerName: string;
+  record: string;
+  averageScore: number;
+  allPlayWinPct: number;
+  coachScore: number;
+  powerScore: number;
+  trend: number;
+}
+
+export interface FantasyWeeklyPowerRanking {
+  week: number;
+  label: string;
+  rows: FantasyPowerRankingRow[];
+}
+
+export interface FantasyLineupEfficiencyRow {
+  teamId: string;
+  teamName: string;
+  managerName: string;
+  actualPoints: number;
+  optimalPoints: number;
+  efficiency: number;
+  coachScore: number;
+  regretPoints: number;
+  averageRegret: number;
+  biggestMissWeek: number;
+  biggestMissPoints: number;
+}
+
+export interface FantasySeasonAnalytics {
+  seasonYear: number;
+  regularSeasonWeeks: number;
+  totalWeeksTracked: number;
+  allPlayTable: FantasyAllPlayRow[];
+  playoffOddsCheckpoints: FantasyPlayoffOddsCheckpoint[];
+  powerRankings: FantasyWeeklyPowerRanking[];
+  weeklyRecaps: FantasyWeeklyRecap[];
+  lineupEfficiencyTable: FantasyLineupEfficiencyRow[];
+}
+
 export interface FantasyLeagueDataset {
   league: FantasyLeagueIdentity;
   keeperRules: FantasyKeeperRules;
@@ -315,6 +518,10 @@ export interface FantasyLeagueDataset {
   players: FantasyPlayer[];
   seasons: FantasySeason[];
   keeperCandidates: FantasyKeeperCandidate[];
+  keeperValueBoard: FantasyKeeperValueEntry[];
+  draftValueEntries: FantasyDraftValueEntry[];
+  rivalries: FantasyRivalryRow[];
+  seasonRecaps: FantasySeasonRecap[];
   records: FantasyLeagueRecord[];
   awards: FantasyLeagueAward[];
   trades: FantasyTrade[];

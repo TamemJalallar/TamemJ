@@ -3,7 +3,9 @@ import fantasyProsPprSnapshot from "@/data/fantasypros-ppr-cheatsheet.json";
 import fantasyLeagueTrades from "@/data/fantasy-league.trades.json";
 import type {
   FantasyDraftPick,
+  FantasyDraftValueEntry,
   FantasyKeeperCandidate,
+  FantasyKeeperValueEntry,
   FantasyKeeperRules,
   FantasyKeeperSelection,
   FantasyLeagueAward,
@@ -17,7 +19,9 @@ import type {
   FantasyMember,
   FantasyPlayer,
   FantasyPlayerPosition,
+  FantasyRivalryRow,
   FantasySeason,
+  FantasySeasonRecap,
   FantasySeasonDraftTendency,
   FantasyStanding,
   FantasyTeamIdentity,
@@ -191,6 +195,8 @@ const KEEPERS_START_AFTER_ROUND = 9;
 const FUTURE_ADP_RULE_START_SEASON = 2027;
 const FUTURE_ADP_ROUND_PENALTY = 2;
 const PICKS_PER_ROUND = archive.league.memberCount;
+const UPCOMING_DRAFT_ROUNDS = 17;
+const UPCOMING_DRAFT_TOTAL_PICKS = PICKS_PER_ROUND * UPCOMING_DRAFT_ROUNDS;
 const currentKeeperPickPenalty = FUTURE_ADP_ROUND_PENALTY * PICKS_PER_ROUND;
 
 function createPlayerId(name: string): string {
@@ -239,6 +245,14 @@ function formatNumber(value: number): string {
 
 function formatRecord(wins: number, losses: number, ties: number): string {
   return `${wins}-${losses}${ties ? `-${ties}` : ""}`;
+}
+
+function parseRecord(record: string): { wins: number; losses: number; ties: number } {
+  const [winsRaw = "0", lossesRaw = "0", tiesRaw = "0"] = record.split("-");
+  const wins = Number.parseInt(winsRaw, 10) || 0;
+  const losses = Number.parseInt(lossesRaw, 10) || 0;
+  const ties = Number.parseInt(tiesRaw, 10) || 0;
+  return { wins, losses, ties };
 }
 
 function formatPercentage(value: number): string {
@@ -343,7 +357,7 @@ function roundCost(previousDraftRound?: number): number | undefined {
 
 function futureAdpKeeperCostOverallPick(adp?: number): number | undefined {
   if (typeof adp !== "number" || !Number.isFinite(adp)) return undefined;
-  return Math.max(1, Math.round(adp + FUTURE_ADP_ROUND_PENALTY * PICKS_PER_ROUND));
+  return Math.max(1, Math.min(UPCOMING_DRAFT_TOTAL_PICKS, Math.round(adp + FUTURE_ADP_ROUND_PENALTY * PICKS_PER_ROUND)));
 }
 
 function buildProfileTag(memberId: string, championships: number, playoffAppearances: number): string {
@@ -706,6 +720,7 @@ const league: FantasyLeagueIdentity = {
   currentWeekLabel: "Predraft",
   location: "New York / New Jersey",
   nextDraftDate,
+  upcomingDraftRounds: UPCOMING_DRAFT_ROUNDS,
   platformReadiness: ["Yahoo", "Sleeper", "ESPN", "Manual"],
   leagueSize: archive.league.memberCount
 };
@@ -715,16 +730,40 @@ const keeperRules: FantasyKeeperRules = {
   sourceSeasonYear: latestSeasonYear,
   targetSeasonYear: nextSeasonYear,
   deadline: keeperDeadline,
-  costRule: `Only players drafted after Round ${KEEPERS_START_AFTER_ROUND} qualify. Current cost uses FantasyPros PPR overall rank plus ${currentKeeperPickPenalty} picks, then converts that slot back to a round.`,
-  roundPenaltyRule: `Example: a FantasyPros overall slot of 65 becomes Pick 85 in a ${PICKS_PER_ROUND}-team league, which lands in Round ${overallPickToRound(85)}.`,
+  costRule: `Only players drafted after Round ${KEEPERS_START_AFTER_ROUND} qualify. Current cost uses FantasyPros PPR overall rank plus ${currentKeeperPickPenalty} picks, then converts that slot back to a round, capped at the end of a ${UPCOMING_DRAFT_ROUNDS}-round board.`,
+  roundPenaltyRule: `Example: a FantasyPros overall slot of 65 becomes Pick 85 in a ${PICKS_PER_ROUND}-team league, which lands in Round ${overallPickToRound(85)}. If the math runs past Pick ${UPCOMING_DRAFT_TOTAL_PICKS}, it stays pinned to Round ${UPCOMING_DRAFT_ROUNDS}.`,
   defaultWaiverCost: "Waiver pickups default to a Round 8 keeper cost unless the commissioner records a different value.",
   ineligiblePlayersRule: `Anyone drafted in Round ${KEEPERS_START_AFTER_ROUND} or earlier stays ineligible. Costs stay editable only when a FantasyPros ranking is missing.`,
   notes: [
     `Eligibility is locked to players drafted in Round ${KEEPERS_START_AFTER_ROUND + 1} or later.`,
     `FantasyPros source: ${fantasyProsSnapshot.sourceLabel} (${fantasyProsSnapshot.updatedDisplay ?? "latest update"}) with ${fantasyProsSnapshot.playerCount} players synced from ${fantasyProsSnapshot.sourceUrl}.`,
-    `Keeper cost = FantasyPros overall slot plus ${currentKeeperPickPenalty} picks, then rounded back to the closest draft round.`
+    `Upcoming draft board: ${UPCOMING_DRAFT_ROUNDS} rounds, ${UPCOMING_DRAFT_TOTAL_PICKS} total picks.`,
+    `Keeper cost = FantasyPros overall slot plus ${currentKeeperPickPenalty} picks, then rounded back to the closest draft round and capped at Round ${UPCOMING_DRAFT_ROUNDS}.`
   ]
 };
+
+const draftValueEntries: FantasyDraftValueEntry[] = archive.draftResults
+  .filter((result) => typeof result.value === "number")
+  .map((result) => ({
+    id: `draft-value-${result.id}`,
+    seasonId: result.seasonId,
+    seasonYear: seasonsById.get(result.seasonId)?.year ?? latestSeasonYear,
+    teamId: teamIdForMember(result.memberId),
+    memberId: result.memberId,
+    teamName:
+      result.teamName ??
+      latestSeasonTeamsByMemberId.get(result.memberId)?.teamName ??
+      memberDisplayNamesById.get(result.memberId) ??
+      "League team",
+    playerId: createPlayerId(result.player.name),
+    playerName: result.player.name,
+    position: normalizePosition(result.player.position),
+    nflTeam: result.player.nflTeam,
+    round: result.round,
+    overallPick: result.overallPick,
+    value: result.value ?? 0,
+    kind: (result.value ?? 0) >= 0 ? "steal" : "reach"
+  }));
 
 const sourceSeason = seasons.find((season) => season.year === latestSeasonYear)!;
 const keeperCandidates: FantasyKeeperCandidate[] = sourceSeason.draftPicks.map((pick) => {
@@ -750,6 +789,86 @@ const keeperCandidates: FantasyKeeperCandidate[] = sourceSeason.draftPicks.map((
       : futureOverallPick && fantasyProsOverallSlot
         ? `Drafted in Round ${legacyRoundCost}. FantasyPros PPR slot ${fantasyProsOverallSlot} pulls the keeper cost to Pick ${futureOverallPick} (Round ${currentRuleRoundCost}).`
         : `Drafted in Round ${legacyRoundCost}. Add a FantasyPros PPR slot to lock the keeper cost.`
+  };
+});
+
+const keeperValueBoard: FantasyKeeperValueEntry[] = sourceSeason.draftPicks
+  .filter((pick) => pick.round > KEEPERS_START_AFTER_ROUND)
+  .map((pick) => {
+    const player = playersRegistry.get(pick.playerId);
+    const candidate = keeperCandidates.find((entry) => entry.teamId === pick.teamId && entry.playerId === pick.playerId);
+    const team = teamsById.get(pick.teamId);
+    const member = team ? members.find((entry) => entry.id === team.memberId) : undefined;
+    const fantasyProsRank = player?.adp;
+    const marketRisePicks =
+      typeof fantasyProsRank === "number"
+        ? pick.overallPick - fantasyProsRank
+        : undefined;
+    const keeperDiscountPicks =
+      typeof fantasyProsRank === "number" && candidate?.keeperCostOverallPick
+        ? candidate.keeperCostOverallPick - fantasyProsRank
+        : undefined;
+
+    return {
+      id: `keeper-board-${pick.teamId}-${pick.playerId}`,
+      teamId: pick.teamId,
+      memberId: team?.memberId ?? "",
+      teamName: pick.teamDisplayName ?? team?.teamName ?? "League team",
+      managerName: member?.managerName ?? "League manager",
+      playerId: pick.playerId,
+      playerName: player?.name ?? pick.playerId,
+      position: player?.position ?? "WR",
+      nflTeam: player?.nflTeam ?? "NFL",
+      previousDraftRound: pick.round,
+      previousOverallPick: pick.overallPick,
+      fantasyProsRank,
+      keeperCostOverallPick: candidate?.keeperCostOverallPick,
+      keeperCostRound: candidate?.keeperCostRound,
+      marketRisePicks,
+      keeperDiscountPicks,
+      cappedToBoard:
+        typeof candidate?.keeperCostOverallPick === "number" && candidate.keeperCostOverallPick >= UPCOMING_DRAFT_TOTAL_PICKS
+    };
+  })
+  .sort((left, right) => {
+    const leftRank = left.fantasyProsRank ?? 9999;
+    const rightRank = right.fantasyProsRank ?? 9999;
+    return leftRank - rightRank || (right.marketRisePicks ?? -999) - (left.marketRisePicks ?? -999);
+  });
+
+const rivalries: FantasyRivalryRow[] = archiveMembers.map((member) => {
+  const team = teams.find((entry) => entry.memberId === member.id);
+  const cells = archiveMembers
+    .filter((opponent) => opponent.id !== member.id)
+    .map((opponent) => {
+      const record = archive.h2h[member.id]?.[opponent.id] ?? "0-0";
+      const parsed = parseRecord(record);
+      const opponentTeam = teams.find((entry) => entry.memberId === opponent.id);
+      return {
+        opponentTeamId: teamIdForMember(opponent.id),
+        opponentMemberId: opponent.id,
+        opponentTeamName: opponentTeam?.teamName ?? opponent.displayName,
+        opponentManagerName: opponent.displayName,
+        wins: parsed.wins,
+        losses: parsed.losses,
+        ties: parsed.ties,
+        meetings: parsed.wins + parsed.losses + parsed.ties,
+        differential: parsed.wins - parsed.losses,
+        record: formatRecord(parsed.wins, parsed.losses, parsed.ties)
+      };
+    })
+    .sort((left, right) => right.meetings - left.meetings || Math.abs(left.differential) - Math.abs(right.differential) || left.opponentManagerName.localeCompare(right.opponentManagerName));
+
+  const primaryRival = cells[0];
+
+  return {
+    teamId: teamIdForMember(member.id),
+    memberId: member.id,
+    teamName: team?.teamName ?? member.displayName,
+    managerName: member.displayName,
+    primaryRivalTeamId: primaryRival?.opponentTeamId,
+    primaryRivalLabel: primaryRival ? `${primaryRival.opponentManagerName} (${primaryRival.record})` : undefined,
+    cells
   };
 });
 
@@ -965,6 +1084,52 @@ const trades: FantasyTrade[] = archivedTrades.map((trade) => ({
   }
 }));
 
+const seasonRecaps: FantasySeasonRecap[] = seasons
+  .map((season) => {
+    const seasonTrades = trades
+      .filter((trade) => trade.seasonYear === season.year)
+      .sort((left, right) => {
+        const leftTime = left.postedAt ? Date.parse(left.postedAt) : 0;
+        const rightTime = right.postedAt ? Date.parse(right.postedAt) : 0;
+        return rightTime - leftTime;
+      });
+    const seasonDraftValues = draftValueEntries.filter((entry) => entry.seasonYear === season.year);
+    const topSteals = seasonDraftValues
+      .filter((entry) => entry.value > 0)
+      .sort((left, right) => right.value - left.value || left.overallPick - right.overallPick)
+      .slice(0, 8);
+    const topReaches = seasonDraftValues
+      .filter((entry) => entry.value < 0)
+      .sort((left, right) => left.value - right.value || left.overallPick - right.overallPick)
+      .slice(0, 8);
+    const seasonAwards = awards.filter((award) => award.seasonYear === season.year);
+    const seasonRecords = records.filter((record) => record.seasonYear === season.year);
+    const seasonArchive = archiveSeasons.find((entry) => entry.year === season.year);
+    const draftRoomLeader = seasonArchive
+      ? seasonArchive.teams
+          .filter((team) => typeof team.draftRank === "number")
+          .sort((left, right) => (left.draftRank ?? 99) - (right.draftRank ?? 99))[0]
+      : undefined;
+
+    return {
+      season,
+      trades: seasonTrades,
+      topSteals,
+      topReaches,
+      awards: seasonAwards,
+      records: seasonRecords,
+      draftRoomLeader: draftRoomLeader
+        ? {
+            teamId: teamIdForMember(draftRoomLeader.memberId),
+            teamName: draftRoomLeader.teamName,
+            draftGrade: draftRoomLeader.draftGrade,
+            draftRank: draftRoomLeader.draftRank
+          }
+        : undefined
+    };
+  })
+  .sort((left, right) => right.season.year - left.season.year);
+
 export const fantasyLeagueData: FantasyLeagueDataset = {
   league,
   keeperRules,
@@ -973,6 +1138,10 @@ export const fantasyLeagueData: FantasyLeagueDataset = {
   players,
   seasons,
   keeperCandidates,
+  keeperValueBoard,
+  draftValueEntries,
+  rivalries,
+  seasonRecaps,
   records,
   awards,
   trades
@@ -984,6 +1153,14 @@ export function getFantasyLeague(): FantasyLeagueDataset {
 
 export function getFantasyManagerProfileSlugs(): string[] {
   return fantasyLeagueData.members.map((member) => member.slug);
+}
+
+export function getFantasySeasonRecapYears(): number[] {
+  return fantasyLeagueData.seasonRecaps.map((recap) => recap.season.year);
+}
+
+export function getFantasySeasonRecapByYear(year: number): FantasySeasonRecap | undefined {
+  return fantasyLeagueData.seasonRecaps.find((recap) => recap.season.year === year);
 }
 
 export function getFantasyManagerProfileBySlug(slug: string): FantasyManagerProfile | undefined {
