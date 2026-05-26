@@ -2,6 +2,7 @@ import publicLeagueLegacySeasons from '@/data/leaguelegacy-public-seasons.json';
 import type {
   FantasyAllPlayRow,
   FantasyLineupEfficiencyRow,
+  FantasyLineupRegretDetail,
   FantasyPlayoffOddsCheckpoint,
   FantasyPlayoffOddsRow,
   FantasyPowerRankingRow,
@@ -129,6 +130,52 @@ type TeamStandingState = {
   ties: number;
   pointsFor: number;
 };
+
+function normalizePlayerName(value?: string | null): string | undefined {
+  const normalized = value?.trim();
+  return normalized && normalized !== 'tbd' ? normalized : undefined;
+}
+
+function getRosterPlayerPoints(player: PublicRosterPlayer): number {
+  return toNumber(player.points ?? player.points_ppr);
+}
+
+function isFlexLineupPosition(value?: string | null): boolean {
+  const normalized = value?.toUpperCase();
+  return normalized === 'W/R/T' || normalized === 'FLEX' || normalized === 'RB/WR/TE' || normalized === 'WR/RB/TE';
+}
+
+function areLineupPositionsCompatible(left?: string | null, right?: string | null): boolean {
+  if (!left || !right) return true;
+  if (left === right) return true;
+  return isFlexLineupPosition(left) || isFlexLineupPosition(right);
+}
+
+function buildRegretDetail(roster: PublicRosterPlayer[]): FantasyLineupRegretDetail | undefined {
+  const missedCandidates = roster
+    .filter((player) => !player.started && player.is_optimal)
+    .sort((left, right) => getRosterPlayerPoints(right) - getRosterPlayerPoints(left));
+
+  if (missedCandidates.length === 0) return undefined;
+
+  const missedPlayer = missedCandidates.find((player) => normalizePlayerName(player.player_name)) ?? missedCandidates[0];
+  const badStarts = roster.filter((player) => player.started && !player.is_optimal);
+  const starterCandidates = badStarts
+    .filter((player) => areLineupPositionsCompatible(player.lineup_position, missedPlayer.lineup_position))
+    .sort((left, right) => getRosterPlayerPoints(left) - getRosterPlayerPoints(right));
+  const starter = starterCandidates.find((player) => normalizePlayerName(player.player_name)) ?? starterCandidates[0] ?? badStarts[0];
+
+  return {
+    missedPlayerName: normalizePlayerName(missedPlayer.player_name),
+    missedPlayerPosition: missedPlayer.player_position ?? null,
+    missedPlayerTeam: missedPlayer.player_team ?? null,
+    missedPlayerPoints: getRosterPlayerPoints(missedPlayer),
+    starterName: normalizePlayerName(starter?.player_name),
+    starterPosition: starter?.player_position ?? null,
+    starterTeam: starter?.player_team ?? null,
+    starterPoints: starter ? getRosterPlayerPoints(starter) : undefined
+  };
+}
 
 const publicSnapshot = publicLeagueLegacySeasons as PublicLeagueLegacySnapshot;
 const PLAYOFF_SIMULATIONS = 250;
@@ -635,6 +682,7 @@ function buildWeeklyRecaps(
 
     const topScorerRow = [...weekRows].sort((left, right) => right.points - left.points)[0];
     const worstRegretRow = [...weekRows].sort((left, right) => (right.optimalPoints - right.points) - (left.optimalPoints - left.points))[0];
+    const worstRegretDetail = buildRegretDetail(worstRegretRow.roster);
     const closestPair = [...weekPairings].sort((left, right) => left.margin - right.margin)[0];
     const biggestBlowout = [...weekPairings].sort((left, right) => right.margin - left.margin)[0];
     const powerEntry = powerRankings.find((entry) => entry.week === Math.min(week, powerRankings[powerRankings.length - 1]?.week ?? week));
@@ -649,7 +697,9 @@ function buildWeeklyRecaps(
         ? `${biggestBlowout.left.points > biggestBlowout.right.points ? biggestBlowout.left.teamName : biggestBlowout.right.teamName} delivered the heaviest thumping at ${biggestBlowout.margin.toFixed(1)} points.`
         : null,
       worstRegretRow && worstRegretRow.optimalPoints > worstRegretRow.points
-        ? `${worstRegretRow.teamName} left ${(worstRegretRow.optimalPoints - worstRegretRow.points).toFixed(1)} points on the bench.`
+        ? worstRegretDetail?.missedPlayerName
+          ? `${worstRegretRow.teamName} left ${(worstRegretRow.optimalPoints - worstRegretRow.points).toFixed(1)} points on the bench, with ${worstRegretDetail.missedPlayerName} doing most of the damage.`
+          : `${worstRegretRow.teamName} left ${(worstRegretRow.optimalPoints - worstRegretRow.points).toFixed(1)} points on the bench.`
         : null
     ].filter(Boolean).join(' ');
 
@@ -700,7 +750,8 @@ function buildWeeklyRecaps(
             teamName: worstRegretRow.teamName,
             managerName: worstRegretRow.managerName,
             regretPoints: worstRegretRow.optimalPoints - worstRegretRow.points,
-            efficiency: worstRegretRow.optimalPoints > 0 ? worstRegretRow.points / worstRegretRow.optimalPoints : 1
+            efficiency: worstRegretRow.optimalPoints > 0 ? worstRegretRow.points / worstRegretRow.optimalPoints : 1,
+            ...worstRegretDetail
           }
         : undefined,
       powerPodium: topThree.map((row) => ({
@@ -727,9 +778,16 @@ function buildLineupEfficiencyTable(season: PublicSeasonSnapshot, rows: TeamWeek
       const actualPoints = teamRows.reduce((sum, row) => sum + row.points, 0);
       const optimalPoints = teamRows.reduce((sum, row) => sum + row.optimalPoints, 0);
       const regretPoints = Math.max(0, optimalPoints - actualPoints);
-      const biggestMiss = teamRows
-        .map((row) => ({ week: row.week, miss: Math.max(0, row.optimalPoints - row.points) }))
-        .sort((left, right) => right.miss - left.miss)[0] ?? { week: 0, miss: 0 };
+      const biggestMissRow = [...teamRows].sort(
+        (left, right) => Math.max(0, right.optimalPoints - right.points) - Math.max(0, left.optimalPoints - left.points)
+      )[0];
+      const biggestMiss = biggestMissRow
+        ? {
+            week: biggestMissRow.week,
+            miss: Math.max(0, biggestMissRow.optimalPoints - biggestMissRow.points),
+            detail: buildRegretDetail(biggestMissRow.roster)
+          }
+        : { week: 0, miss: 0, detail: undefined };
       return {
         teamId,
         teamName: team.display_name ?? team.name,
@@ -741,7 +799,8 @@ function buildLineupEfficiencyTable(season: PublicSeasonSnapshot, rows: TeamWeek
         regretPoints,
         averageRegret: teamRows.length > 0 ? regretPoints / teamRows.length : 0,
         biggestMissWeek: biggestMiss.week,
-        biggestMissPoints: biggestMiss.miss
+        biggestMissPoints: biggestMiss.miss,
+        biggestMissDetail: biggestMiss.detail
       } satisfies FantasyLineupEfficiencyRow;
     })
     .sort((left, right) => left.efficiency - right.efficiency || right.regretPoints - left.regretPoints);

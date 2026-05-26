@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import type {
   FantasyAllPlayRow,
   FantasyLeagueDataset,
@@ -90,6 +90,12 @@ function getTrendClass(trend: number): string {
   return "text-fg-secondary";
 }
 
+function getTrendBadgeClass(trend: number): string {
+  if (trend > 0) return "border-emerald-400/35 bg-emerald-500/12 text-emerald-200";
+  if (trend < 0) return "border-rose-400/35 bg-rose-500/12 text-rose-200";
+  return "border-line/70 bg-card/80 text-fg-secondary";
+}
+
 function getLuckBarClass(value: number): string {
   if (value >= 1.5) return "bg-gradient-to-r from-emerald-500 to-lime-300";
   if (value > 0) return "bg-gradient-to-r from-sky-500 to-cyan-300";
@@ -140,7 +146,300 @@ function buildLuckNarrative(row: FantasyAllPlayRow | undefined): string {
 
 function buildEfficiencyNarrative(row: FantasyLineupEfficiencyRow | undefined): string {
   if (!row) return "Lineup lab still warming up.";
+  if (row.biggestMissDetail?.missedPlayerName) {
+    return `${row.teamName} posted a ${formatPercentage(row.efficiency)} lineup efficiency and kept ${row.biggestMissDetail.missedPlayerName} parked during its biggest miss.`;
+  }
   return `${row.teamName} posted a ${formatPercentage(row.efficiency)} lineup efficiency and left ${formatPoints(row.regretPoints)} points on the cutting-room floor.`;
+}
+
+function formatPlayerBadge(name?: string, position?: string | null, team?: string | null): string | null {
+  if (!name) return null;
+  const meta = [position, team].filter(Boolean).join(" • ");
+  return meta ? `${name} (${meta})` : name;
+}
+
+function buildWeeklyRegretText(row: FantasySeasonAnalytics["weeklyRecaps"][number]["worstBenchRegret"]): string {
+  if (!row) return "—";
+
+  const missedPlayer = formatPlayerBadge(row.missedPlayerName, row.missedPlayerPosition, row.missedPlayerTeam);
+  const starter = formatPlayerBadge(row.starterName, row.starterPosition, row.starterTeam);
+
+  if (missedPlayer && starter && row.missedPlayerPoints !== undefined && row.starterPoints !== undefined) {
+    return `${formatPoints(row.regretPoints)} points left behind • ${missedPlayer} over ${starter}`;
+  }
+
+  if (missedPlayer) {
+    return `${formatPoints(row.regretPoints)} points left behind • ${missedPlayer}`;
+  }
+
+  return `${formatPoints(row.regretPoints)} points left behind`;
+}
+
+type PlayoffBracketTeam = {
+  teamId: string;
+  seed: number;
+  teamName: string;
+  record: string;
+  pointsFor: number;
+  playoffLabel: string;
+};
+
+type PlayoffBracketMatchup = {
+  id: string;
+  top: PlayoffBracketTeam;
+  bottom: PlayoffBracketTeam;
+  winnerTeamId?: string;
+};
+
+type PlayoffBracketModel = {
+  wildcard: PlayoffBracketMatchup[];
+  semifinals: PlayoffBracketMatchup[];
+  championship: PlayoffBracketMatchup;
+};
+
+function getBracketStatusCopy(team: PlayoffBracketTeam, isWinner: boolean, isChampion?: boolean): string {
+  if (isChampion) return "Trophy secured";
+  if (team.playoffLabel === "Runner-up") return "Fell in the final";
+  if (isWinner) return "Advanced";
+  return "Season ended";
+}
+
+function buildPlayoffBracketModel(
+  standings: FantasyStanding[],
+  teamById: Map<string, FantasyLeagueDataset["teams"][number]>
+): PlayoffBracketModel | null {
+  const seededTeams = standings
+    .filter((standing): standing is FantasyStanding & { playoffSeed: number } => typeof standing.playoffSeed === "number")
+    .sort((left, right) => left.playoffSeed - right.playoffSeed);
+
+  if (seededTeams.length !== 6) {
+    return null;
+  }
+
+  const asBracketTeam = (standing: FantasyStanding & { playoffSeed: number }): PlayoffBracketTeam => {
+    const team = teamById.get(standing.teamId);
+    return {
+      teamId: standing.teamId,
+      seed: standing.playoffSeed,
+      teamName: getStandingShortName(standing, team?.shortName),
+      record: formatStandingRecord(standing),
+      pointsFor: standing.pointsFor,
+      playoffLabel: getPlayoffResultLabel(standing)
+    };
+  };
+
+  const seeds = new Map(seededTeams.map((standing) => [standing.playoffSeed, asBracketTeam(standing)] as const));
+  const seed1 = seeds.get(1);
+  const seed2 = seeds.get(2);
+  const seed3 = seeds.get(3);
+  const seed4 = seeds.get(4);
+  const seed5 = seeds.get(5);
+  const seed6 = seeds.get(6);
+
+  if (!seed1 || !seed2 || !seed3 || !seed4 || !seed5 || !seed6) {
+    return null;
+  }
+
+  const championStanding = seededTeams.find((standing) => standing.finishRank === 1);
+  const runnerUpStanding = seededTeams.find((standing) => standing.finishRank === 2);
+  if (!championStanding || !runnerUpStanding) {
+    return null;
+  }
+
+  const wildcardA: PlayoffBracketMatchup = {
+    id: "wildcard-a",
+    top: seed3,
+    bottom: seed6,
+    winnerTeamId: championStanding.teamId === seed3.teamId || runnerUpStanding.teamId === seed3.teamId || (seededTeams.find((standing) => standing.teamId === seed3.teamId)?.finishRank ?? 99) < (seededTeams.find((standing) => standing.teamId === seed6.teamId)?.finishRank ?? 99)
+      ? seed3.teamId
+      : seed6.teamId
+  };
+  const wildcardB: PlayoffBracketMatchup = {
+    id: "wildcard-b",
+    top: seed4,
+    bottom: seed5,
+    winnerTeamId: championStanding.teamId === seed4.teamId || runnerUpStanding.teamId === seed4.teamId || (seededTeams.find((standing) => standing.teamId === seed4.teamId)?.finishRank ?? 99) < (seededTeams.find((standing) => standing.teamId === seed5.teamId)?.finishRank ?? 99)
+      ? seed4.teamId
+      : seed5.teamId
+  };
+
+  const wildcardWinners = [wildcardA, wildcardB]
+    .map((matchup) => [matchup.top, matchup.bottom].find((team) => team.teamId === matchup.winnerTeamId))
+    .filter((team): team is PlayoffBracketTeam => Boolean(team))
+    .sort((left, right) => right.seed - left.seed);
+
+  if (wildcardWinners.length !== 2) {
+    return null;
+  }
+
+  const semifinalA: PlayoffBracketMatchup = {
+    id: "semifinal-a",
+    top: seed1,
+    bottom: wildcardWinners[0],
+    winnerTeamId:
+      [seed1.teamId, wildcardWinners[0].teamId].includes(championStanding.teamId)
+        ? championStanding.teamId
+        : runnerUpStanding.teamId
+  };
+  const semifinalB: PlayoffBracketMatchup = {
+    id: "semifinal-b",
+    top: seed2,
+    bottom: wildcardWinners[1],
+    winnerTeamId:
+      [seed2.teamId, wildcardWinners[1].teamId].includes(championStanding.teamId)
+        ? championStanding.teamId
+        : runnerUpStanding.teamId
+  };
+
+  const champion = asBracketTeam(championStanding);
+  const runnerUp = asBracketTeam(runnerUpStanding);
+
+  const championship: PlayoffBracketMatchup = {
+    id: "championship",
+    top: champion.seed < runnerUp.seed ? champion : runnerUp,
+    bottom: champion.seed < runnerUp.seed ? runnerUp : champion,
+    winnerTeamId: champion.teamId
+  };
+
+  return {
+    wildcard: [wildcardA, wildcardB],
+    semifinals: [semifinalA, semifinalB],
+    championship
+  };
+}
+
+function BracketTeamRow({
+  team,
+  isWinner,
+  isChampion
+}: {
+  team: PlayoffBracketTeam;
+  isWinner: boolean;
+  isChampion?: boolean;
+}) {
+  return (
+    <div
+      className={`rounded-[22px] border px-3 py-3 transition-colors ${
+        isChampion
+          ? "border-emerald-400/40 bg-[linear-gradient(135deg,rgba(16,185,129,0.2),rgba(132,204,22,0.08))] shadow-[0_0_0_1px_rgba(52,211,153,0.12)]"
+          : isWinner
+            ? "border-primary-400/35 bg-[linear-gradient(135deg,rgba(59,130,246,0.18),rgba(56,189,248,0.08))]"
+            : "border-line/70 bg-card/75"
+      }`}
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-muted">Seed {team.seed}</p>
+          <p className="mt-1 text-sm font-semibold text-fg">{team.teamName}</p>
+          <p className="text-xs text-fg-secondary">{team.record} • {formatPoints(team.pointsFor)} PF</p>
+          <p className={`mt-2 text-[11px] font-medium ${isChampion ? "text-emerald-100" : isWinner ? "text-primary-100" : "text-muted"}`}>
+            {getBracketStatusCopy(team, isWinner, isChampion)}
+          </p>
+        </div>
+        <span className={`inline-flex shrink-0 rounded-full border px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] ${getPlayoffTone(team.playoffLabel)}`}>
+          {team.playoffLabel === "Champion" ? "Champ" : team.playoffLabel === "Runner-up" ? "Finalist" : isWinner ? "Advanced" : "Out"}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function BracketConnector({
+  direction = "down"
+}: {
+  direction?: "down" | "right";
+}) {
+  if (direction === "right") {
+    return (
+      <div className="pointer-events-none hidden xl:flex items-center justify-center py-2">
+        <div className="h-px w-8 bg-gradient-to-r from-line/30 via-primary-300/60 to-line/30" />
+        <div className="-ml-1 h-2.5 w-2.5 rotate-45 border-r border-t border-primary-300/70" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex items-center justify-center py-1.5 xl:hidden">
+      <div className="flex flex-col items-center gap-1">
+        <div className="h-6 w-px bg-gradient-to-b from-line/20 via-primary-300/60 to-line/20" />
+        <div className="h-2.5 w-2.5 rotate-45 border-b border-r border-primary-300/70" />
+      </div>
+    </div>
+  );
+}
+
+function BracketMatchupCard({
+  title,
+  matchup,
+  showConnector = true
+}: {
+  title: string;
+  matchup: PlayoffBracketMatchup;
+  showConnector?: boolean;
+}) {
+  return (
+    <div className="relative rounded-[28px] border border-line/70 bg-card-2/80 p-4 shadow-[0_12px_30px_rgba(2,6,23,0.18)]">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-primary-200">{title}</p>
+      <div className="mt-3 space-y-3">
+        <BracketTeamRow team={matchup.top} isWinner={matchup.top.teamId === matchup.winnerTeamId} isChampion={matchup.top.teamId === matchup.winnerTeamId && matchup.id === "championship"} />
+        <div className="mx-3 border-t border-dashed border-line/70" />
+        <BracketTeamRow team={matchup.bottom} isWinner={matchup.bottom.teamId === matchup.winnerTeamId} isChampion={matchup.bottom.teamId === matchup.winnerTeamId && matchup.id === "championship"} />
+      </div>
+      {showConnector ? <div className="pointer-events-none absolute -right-10 top-1/2 hidden -translate-y-1/2 xl:block"><BracketConnector direction="right" /></div> : null}
+    </div>
+  );
+}
+
+function BracketRoundCard({
+  title,
+  subtitle,
+  children
+}: {
+  title: string;
+  subtitle?: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="rounded-[30px] border border-line/70 bg-card/88 p-4 backdrop-blur sm:p-5">
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-primary-200">{title}</p>
+          {subtitle ? <p className="mt-1 text-sm text-fg-secondary">{subtitle}</p> : null}
+        </div>
+      </div>
+      <div className="mt-4 space-y-4">{children}</div>
+    </div>
+  );
+}
+
+function ChampionBracketCard({ matchup }: { matchup: PlayoffBracketMatchup }) {
+  const champion = matchup.top.teamId === matchup.winnerTeamId ? matchup.top : matchup.bottom;
+  const runnerUp = matchup.top.teamId === matchup.winnerTeamId ? matchup.bottom : matchup.top;
+
+  return (
+    <div className="relative overflow-hidden rounded-[32px] border border-emerald-400/30 bg-[radial-gradient(circle_at_top,rgba(253,224,71,0.22),transparent_30%),linear-gradient(145deg,rgba(6,78,59,0.92),rgba(6,11,32,0.96))] p-5 shadow-[0_24px_80px_rgba(6,78,59,0.28)]">
+      <div className="absolute right-4 top-4 rounded-full border border-emerald-200/20 bg-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.28em] text-emerald-50">
+        Champion
+      </div>
+      <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-emerald-100/80">Championship</p>
+      <h3 className="mt-3 font-display text-3xl text-white sm:text-[2.4rem]">{champion.teamName}</h3>
+      <p className="mt-2 text-sm text-emerald-50/85">
+        Closed out the bracket from Seed {champion.seed}, finishing ahead of {runnerUp.teamName}.
+      </p>
+      <div className="mt-5 grid gap-3 sm:grid-cols-2">
+        <div className="rounded-[24px] border border-white/10 bg-white/10 p-4">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-emerald-100/70">Winner</p>
+          <p className="mt-1 text-base font-semibold text-white">{champion.teamName}</p>
+          <p className="text-xs text-emerald-50/80">{champion.record} • {formatPoints(champion.pointsFor)} PF</p>
+        </div>
+        <div className="rounded-[24px] border border-white/10 bg-black/10 p-4">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-emerald-100/70">Finalist</p>
+          <p className="mt-1 text-base font-semibold text-white">{runnerUp.teamName}</p>
+          <p className="text-xs text-emerald-50/80">{runnerUp.record} • {formatPoints(runnerUp.pointsFor)} PF</p>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function MetricPill({ label, value }: { label: string; value: string }) {
@@ -215,6 +514,7 @@ export function FantasySeasonRecapView({
   const efficiencyLeader = [...analytics.lineupEfficiencyTable].sort((left, right) => right.efficiency - left.efficiency)[0];
   const worstEfficiency = analytics.lineupEfficiencyTable[0];
   const latestPowerLeader = selectedPowerRanking?.rows[0];
+  const playoffBracket = buildPlayoffBracketModel(recap.season.standings, teamById);
 
   return (
     <div className="bg-[radial-gradient(circle_at_top,_rgba(96,165,250,0.16),_transparent_45%),linear-gradient(180deg,#060816_0%,#0b1120_32%,#050915_100%)] text-fg">
@@ -349,7 +649,36 @@ export function FantasySeasonRecapView({
               <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-primary-200">Final standings</p>
               <h2 className="mt-2 font-display text-2xl text-fg">How the table finished</h2>
             </div>
-            <div className="overflow-x-auto">
+            <div className="grid gap-3 p-4 md:hidden">
+              {recap.season.standings.map((standing) => {
+                const team = teamById.get(standing.teamId);
+                const playoffLabel = getPlayoffResultLabel(standing);
+                return (
+                  <div key={standing.teamId} className="rounded-[24px] border border-line/70 bg-card-2/90 p-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-muted">Rank {standing.rank}</p>
+                        <p className="mt-1 text-base font-semibold text-fg">{getStandingName(standing, team?.teamName)}</p>
+                        {team ? <p className="text-xs text-muted">{managerById.get(team.memberId)?.managerName ?? "Manager"}</p> : null}
+                      </div>
+                      <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-semibold ${getPlayoffTone(playoffLabel)}`}>{playoffLabel}</span>
+                    </div>
+                    <div className="mt-4 grid grid-cols-2 gap-3">
+                      <div className="rounded-2xl border border-line/60 bg-card/70 p-3">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">Record</p>
+                        <p className="mt-1 text-sm font-semibold text-fg">{formatStandingRecord(standing)}</p>
+                      </div>
+                      <div className="rounded-2xl border border-line/60 bg-card/70 p-3">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">Points</p>
+                        <p className="mt-1 text-sm font-semibold text-fg">{formatPoints(standing.pointsFor)} PF</p>
+                        <p className="text-[11px] text-muted">PA {formatPoints(standing.pointsAgainst)}</p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="hidden overflow-x-auto md:block">
               <table className="min-w-full text-sm">
                 <thead className="bg-card-2/90 text-left text-[11px] font-semibold uppercase tracking-[0.24em] text-muted">
                   <tr>
@@ -458,7 +787,51 @@ export function FantasySeasonRecapView({
                 Regular season only
               </span>
             </div>
-            <div className="overflow-x-auto">
+            <div className="grid gap-3 p-4 md:hidden">
+              {analytics.allPlayTable.map((row) => (
+                <div key={row.teamId} className="rounded-[24px] border border-line/70 bg-card-2/90 p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-base font-semibold text-fg">{row.teamName}</p>
+                      <p className="text-xs text-muted">{row.managerName}</p>
+                    </div>
+                    <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-semibold ${row.luckDeltaWins >= 0 ? "border-emerald-400/35 bg-emerald-500/12 text-emerald-200" : "border-rose-400/35 bg-rose-500/12 text-rose-200"}`}>
+                      {formatSignedValue(row.luckDeltaWins)} luck
+                    </span>
+                  </div>
+                  <div className="mt-4 grid grid-cols-2 gap-3">
+                    <div className="rounded-2xl border border-line/60 bg-card/70 p-3">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">Actual</p>
+                      <p className="mt-1 text-sm font-semibold text-fg">
+                        {row.actualWins}-{row.actualLosses}
+                        {row.actualTies ? `-${row.actualTies}` : ""}
+                      </p>
+                    </div>
+                    <div className="rounded-2xl border border-line/60 bg-card/70 p-3">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">All-play</p>
+                      <p className="mt-1 text-sm font-semibold text-fg">
+                        {row.allPlayWins}-{row.allPlayLosses}
+                        {row.allPlayTies ? `-${row.allPlayTies}` : ""}
+                      </p>
+                      <p className="text-[11px] text-muted">{formatPercentage(row.allPlayWinPct)}</p>
+                    </div>
+                  </div>
+                  <div className="mt-4 rounded-2xl border border-line/60 bg-card/70 p-3">
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">Average score</p>
+                      <p className="text-sm font-semibold text-fg">{formatPoints(row.averageScore)}</p>
+                    </div>
+                    <div className="mt-3 h-2 overflow-hidden rounded-full bg-card-2/90">
+                      <div
+                        className={`h-full ${getLuckBarClass(row.luckDeltaWins)}`}
+                        style={{ width: `${clampPercent(Math.abs(row.luckDeltaWins) * 16 + 8)}%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="hidden overflow-x-auto md:block">
               <table className="min-w-full text-sm">
                 <thead className="bg-card-2/90 text-left text-[11px] font-semibold uppercase tracking-[0.24em] text-muted">
                   <tr>
@@ -553,7 +926,49 @@ export function FantasySeasonRecapView({
                 </select>
               </label>
             </div>
-            <div className="overflow-x-auto">
+            <div className="grid gap-3 p-4 md:hidden">
+              {(selectedOddsCheckpoint?.rows ?? []).map((row) => (
+                <div key={row.teamId} className="rounded-[24px] border border-line/70 bg-card-2/90 p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-base font-semibold text-fg">{row.teamName}</p>
+                      <p className="text-xs text-muted">{row.managerName}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm font-semibold text-fg">
+                        {row.wins}-{row.losses}
+                        {row.ties ? `-${row.ties}` : ""}
+                      </p>
+                      <p className="text-[11px] text-muted">{formatPoints(row.pointsFor)} PF</p>
+                    </div>
+                  </div>
+                  <div className="mt-4 space-y-3">
+                    <div>
+                      <div className="mb-1 flex items-center justify-between gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">
+                        <span>Playoffs</span>
+                        <span>{formatPercentage(row.playoffOdds)}</span>
+                      </div>
+                      <OddsBar value={row.playoffOdds} label="playoff" />
+                    </div>
+                    <div>
+                      <div className="mb-1 flex items-center justify-between gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">
+                        <span>Bye</span>
+                        <span>{formatPercentage(row.byeOdds)}</span>
+                      </div>
+                      <OddsBar value={row.byeOdds} label="bye" />
+                    </div>
+                    <div>
+                      <div className="mb-1 flex items-center justify-between gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">
+                        <span>Title</span>
+                        <span>{formatPercentage(row.titleOdds)}</span>
+                      </div>
+                      <OddsBar value={row.titleOdds} label="title" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="hidden overflow-x-auto md:block">
               <table className="min-w-full text-sm">
                 <thead className="bg-card-2/90 text-left text-[11px] font-semibold uppercase tracking-[0.24em] text-muted">
                   <tr>
@@ -621,7 +1036,33 @@ export function FantasySeasonRecapView({
                 </select>
               </label>
             </div>
-            <div className="overflow-x-auto">
+            <div className="grid gap-3 p-4 md:hidden">
+              {(selectedPowerRanking?.rows ?? []).map((row) => (
+                <div key={row.teamId} className="rounded-[24px] border border-line/70 bg-card-2/90 p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-muted">Rank {row.rank}</p>
+                      <p className="mt-1 text-base font-semibold text-fg">{row.teamName}</p>
+                      <p className="text-xs text-muted">{row.record} • {row.managerName}</p>
+                    </div>
+                    <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-semibold ${getTrendBadgeClass(row.trend)}`}>
+                      {getTrendLabel(row.trend)}
+                    </span>
+                  </div>
+                  <div className="mt-4 rounded-2xl border border-line/60 bg-card/70 p-3">
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">Power score</p>
+                      <p className="text-sm font-semibold text-fg">{row.powerScore.toFixed(1)}</p>
+                    </div>
+                    <div className="mt-3 h-2 overflow-hidden rounded-full bg-card-2/90">
+                      <div className="h-full bg-gradient-to-r from-sky-500 via-violet-500 to-emerald-400" style={{ width: `${clampPercent(row.powerScore)}%` }} />
+                    </div>
+                    <p className="mt-2 text-[11px] text-muted">{formatPoints(row.averageScore)} PPG • {formatPercentage(row.allPlayWinPct)} all-play</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="hidden overflow-x-auto md:block">
               <table className="min-w-full text-sm">
                 <thead className="bg-card-2/90 text-left text-[11px] font-semibold uppercase tracking-[0.24em] text-muted">
                   <tr>
@@ -712,7 +1153,7 @@ export function FantasySeasonRecapView({
                   <StatCard
                     label="Bench regret"
                     title={selectedWeeklyRecap.worstBenchRegret?.teamName ?? "No miss logged"}
-                    detail={selectedWeeklyRecap.worstBenchRegret ? `${formatPoints(selectedWeeklyRecap.worstBenchRegret.regretPoints)} points left behind` : "—"}
+                    detail={buildWeeklyRegretText(selectedWeeklyRecap.worstBenchRegret)}
                   />
                 </div>
               </div>
@@ -744,10 +1185,63 @@ export function FantasySeasonRecapView({
               <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-primary-200">Lineup efficiency and start-sit regret</p>
               <h2 className="mt-2 font-display text-2xl text-fg">How much meat stayed on the bone</h2>
               <p className="mt-2 text-sm text-fg-secondary">
-                Public LeagueLegacy weekly feeds expose started vs optimal lineup slots and team-level optimal points. Player names are still masked on some weeks, so this view stays honest and team-first.
+                Weekly lineup cards compare what actually started to the best legal version of that same roster, then call out the player decisions that hurt the most.
               </p>
             </div>
-            <div className="overflow-x-auto">
+            <div className="grid gap-3 p-4 md:hidden">
+              {analytics.lineupEfficiencyTable.map((row) => (
+                <div key={row.teamId} className="rounded-[24px] border border-line/70 bg-card-2/90 p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-base font-semibold text-fg">{row.teamName}</p>
+                      <p className="text-xs text-muted">{row.managerName}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm font-semibold text-fg">{formatPercentage(row.efficiency)}</p>
+                      <p className="text-[11px] text-muted">Coach {row.coachScore.toFixed(1)}</p>
+                    </div>
+                  </div>
+                  <div className="mt-4 h-2 overflow-hidden rounded-full bg-card/80">
+                    <div className={`h-full ${getEfficiencyBarClass(row.efficiency)}`} style={{ width: `${clampPercent(row.efficiency * 100)}%` }} />
+                  </div>
+                  <div className="mt-4 grid grid-cols-2 gap-3">
+                    <div className="rounded-2xl border border-line/60 bg-card/70 p-3">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">Regret</p>
+                      <p className="mt-1 text-sm font-semibold text-fg">{formatPoints(row.regretPoints)} pts</p>
+                      <p className="text-[11px] text-muted">{formatPoints(row.averageRegret)} weekly</p>
+                    </div>
+                    <div className="rounded-2xl border border-line/60 bg-card/70 p-3">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">Worst week</p>
+                      <p className="mt-1 text-sm font-semibold text-fg">Week {row.biggestMissWeek}</p>
+                      <p className="text-[11px] text-muted">{formatPoints(row.biggestMissPoints)} points missed</p>
+                    </div>
+                  </div>
+                  {row.biggestMissDetail?.missedPlayerName ? (
+                    <div className="mt-4 rounded-2xl border border-primary-400/20 bg-primary-500/8 p-3">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary-200">Biggest bench sting</p>
+                      <p className="mt-1 text-sm font-semibold text-fg">
+                        {formatPlayerBadge(
+                          row.biggestMissDetail.missedPlayerName,
+                          row.biggestMissDetail.missedPlayerPosition,
+                          row.biggestMissDetail.missedPlayerTeam
+                        )}
+                      </p>
+                      {row.biggestMissDetail?.starterName ? (
+                        <p className="mt-1 text-[11px] text-fg-secondary">
+                          Started over{" "}
+                          {formatPlayerBadge(
+                            row.biggestMissDetail.starterName,
+                            row.biggestMissDetail.starterPosition,
+                            row.biggestMissDetail.starterTeam
+                          )}
+                        </p>
+                      ) : null}
+                    </div>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+            <div className="hidden overflow-x-auto md:block">
               <table className="min-w-full text-sm">
                 <thead className="bg-card-2/90 text-left text-[11px] font-semibold uppercase tracking-[0.24em] text-muted">
                   <tr>
@@ -780,6 +1274,25 @@ export function FantasySeasonRecapView({
                       <td className="px-4 py-3">
                         <div className="font-medium text-fg">Week {row.biggestMissWeek}</div>
                         <div className="text-xs text-muted">{formatPoints(row.biggestMissPoints)} points missed</div>
+                        {row.biggestMissDetail?.missedPlayerName ? (
+                          <div className="mt-2 text-xs text-primary-100">
+                            {formatPlayerBadge(
+                              row.biggestMissDetail.missedPlayerName,
+                              row.biggestMissDetail.missedPlayerPosition,
+                              row.biggestMissDetail.missedPlayerTeam
+                            )}
+                          </div>
+                        ) : null}
+                        {row.biggestMissDetail?.starterName ? (
+                          <div className="mt-1 text-[11px] text-muted">
+                            Started over{" "}
+                            {formatPlayerBadge(
+                              row.biggestMissDetail.starterName,
+                              row.biggestMissDetail.starterPosition,
+                              row.biggestMissDetail.starterTeam
+                            )}
+                          </div>
+                        ) : null}
                       </td>
                     </tr>
                   ))}
@@ -814,7 +1327,11 @@ export function FantasySeasonRecapView({
                   .map((row) => (
                     <div key={row.teamId} className="rounded-3xl border border-line/70 bg-card-2/90 px-4 py-3">
                       <p className="text-base font-semibold text-fg">{row.teamName}</p>
-                      <p className="text-sm text-fg-secondary">Week {row.biggestMissWeek} was the worst of it.</p>
+                      <p className="text-sm text-fg-secondary">
+                        {row.biggestMissDetail?.missedPlayerName
+                          ? `${row.biggestMissDetail.missedPlayerName} was the biggest bench sting in Week ${row.biggestMissWeek}.`
+                          : `Week ${row.biggestMissWeek} was the worst of it.`}
+                      </p>
                       <p className="mt-2 text-sm font-semibold text-rose-300">{formatPoints(row.biggestMissPoints)} points missed</p>
                     </div>
                   ))}
@@ -829,7 +1346,39 @@ export function FantasySeasonRecapView({
               <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-primary-200">Trade review center</p>
               <h2 className="mt-2 font-display text-2xl text-fg">Every deal from the {selectedYear} room</h2>
             </div>
-            <div className="overflow-x-auto">
+            <div className="grid gap-3 p-4 md:hidden">
+              {recap.trades.length ? (
+                recap.trades.map((trade) => (
+                  <div key={trade.id} className="rounded-[24px] border border-line/70 bg-card-2/90 p-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted">{formatTradeDate(trade.postedAt)}</p>
+                        <p className="mt-1 text-base font-semibold text-fg">{trade.trader.teamName ?? "League team"}</p>
+                        <p className="text-sm text-fg-secondary">for {trade.tradee.teamName ?? "League team"}</p>
+                      </div>
+                      <span className="inline-flex rounded-full border border-line/70 bg-card/80 px-2.5 py-1 text-[11px] font-semibold text-fg">
+                        {trade.status ? trade.status.charAt(0).toUpperCase() + trade.status.slice(1) : "Completed"}
+                      </span>
+                    </div>
+                    <div className="mt-4 grid gap-3">
+                      <div className="rounded-2xl border border-line/60 bg-card/70 p-3">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">{trade.trader.teamName ?? "Side A"} sent</p>
+                        <p className="mt-1 text-sm text-fg">{formatTradeBundle(trade.traderSent)}</p>
+                      </div>
+                      <div className="rounded-2xl border border-line/60 bg-card/70 p-3">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">{trade.tradee.teamName ?? "Side B"} sent</p>
+                        <p className="mt-1 text-sm text-fg">{formatTradeBundle(trade.tradeeSent)}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="rounded-[24px] border border-line/70 bg-card-2/90 p-4 text-sm text-fg-secondary">
+                  No trades were logged for this season. Either everyone behaved, or the receipts never made it into the book.
+                </div>
+              )}
+            </div>
+            <div className="hidden overflow-x-auto md:block">
               <table className="min-w-full text-sm">
                 <thead className="bg-card-2/90 text-left text-[11px] font-semibold uppercase tracking-[0.24em] text-muted">
                   <tr>
@@ -892,7 +1441,16 @@ export function FantasySeasonRecapView({
                 <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-primary-200">Records</p>
                 <h2 className="mt-2 font-display text-2xl text-fg">Season marks</h2>
               </div>
-              <div className="overflow-x-auto">
+              <div className="grid gap-3 p-4 md:hidden">
+                {recap.records.map((record) => (
+                  <div key={record.id} className="rounded-[24px] border border-line/70 bg-card-2/90 p-4">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted">{record.label}</p>
+                    <p className="mt-2 text-base font-semibold text-fg">{record.value}</p>
+                    <p className="mt-2 text-sm text-fg-secondary">{record.context}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="hidden overflow-x-auto md:block">
                 <table className="min-w-full text-sm">
                   <thead className="bg-card-2/90 text-left text-[11px] font-semibold uppercase tracking-[0.24em] text-muted">
                     <tr>
@@ -917,26 +1475,92 @@ export function FantasySeasonRecapView({
         </section>
 
         <section className="rounded-[32px] border border-line/70 bg-card/88 p-5 backdrop-blur md:p-6">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-primary-200">Playoff field</p>
-          <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
-            {recap.season.standings
-              .filter((standing) => typeof standing.playoffSeed === "number")
-              .sort((left, right) => (left.playoffSeed ?? 99) - (right.playoffSeed ?? 99))
-              .map((standing) => {
-                const team = teamById.get(standing.teamId);
-                const label = getPlayoffResultLabel(standing);
-                return (
-                  <div key={standing.teamId} className="rounded-3xl border border-line/70 bg-card-2/90 p-4">
-                    <div className="flex items-center justify-between gap-3">
-                      <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-muted">Seed {standing.playoffSeed}</span>
-                      <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-semibold ${getPlayoffTone(label)}`}>{label}</span>
-                    </div>
-                    <p className="mt-3 text-base font-semibold text-fg">{getStandingShortName(standing, team?.shortName)}</p>
-                    <p className="text-sm text-fg-secondary">{formatStandingRecord(standing)} • {formatPoints(standing.pointsFor)} PF</p>
-                  </div>
-                );
-              })}
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-primary-200">Playoff bracket</p>
+              <h2 className="mt-2 font-display text-2xl text-fg">How the postseason unfolded</h2>
+              <p className="mt-2 text-sm text-fg-secondary">
+                Rebuilt from archived seeds and final finishes so the playoff path reads like an actual bracket instead of a seed list.
+              </p>
+            </div>
+            <div className="rounded-full border border-line/70 bg-card-2/90 px-3 py-1.5 text-xs font-semibold text-fg-secondary">
+              {recap.season.numPlayoffTeams}-team playoff field
+            </div>
           </div>
+
+          {playoffBracket ? (
+            <div className="mt-6">
+              <div className="space-y-3 xl:hidden">
+                <BracketRoundCard
+                  title="Wildcard"
+                  subtitle="Seeds 3 through 6 fought for the right to meet the bye teams."
+                >
+                  <BracketMatchupCard title="3 vs 6" matchup={playoffBracket.wildcard[0]} showConnector={false} />
+                  <BracketMatchupCard title="4 vs 5" matchup={playoffBracket.wildcard[1]} showConnector={false} />
+                </BracketRoundCard>
+
+                <BracketConnector />
+
+                <BracketRoundCard
+                  title="Semifinals"
+                  subtitle="Seeds 1 and 2 entered here after skipping the opening round."
+                >
+                  <BracketMatchupCard title="Top seed side" matchup={playoffBracket.semifinals[0]} showConnector={false} />
+                  <BracketMatchupCard title="Two seed side" matchup={playoffBracket.semifinals[1]} showConnector={false} />
+                </BracketRoundCard>
+
+                <BracketConnector />
+
+                <ChampionBracketCard matchup={playoffBracket.championship} />
+              </div>
+
+              <div className="hidden xl:grid xl:grid-cols-[1.08fr_1.08fr_0.92fr] xl:gap-6">
+                <BracketRoundCard
+                  title="Wildcard"
+                  subtitle="Seeds 1 and 2 stayed home while the rest of the field survived opening weekend."
+                >
+                  <div className="rounded-3xl border border-dashed border-line/70 bg-card-2/50 px-4 py-3">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-muted">Bye week</p>
+                    <p className="mt-1 text-sm text-fg-secondary">Seeds 1 and 2 skipped this round and waited in the semifinals.</p>
+                  </div>
+                  <BracketMatchupCard title="3 vs 6" matchup={playoffBracket.wildcard[0]} />
+                  <BracketMatchupCard title="4 vs 5" matchup={playoffBracket.wildcard[1]} />
+                </BracketRoundCard>
+
+                <BracketRoundCard
+                  title="Semifinals"
+                  subtitle="The byes arrived and the bracket narrowed to the finalists."
+                >
+                  <BracketMatchupCard title="Top seed side" matchup={playoffBracket.semifinals[0]} />
+                  <BracketMatchupCard title="Two seed side" matchup={playoffBracket.semifinals[1]} />
+                </BracketRoundCard>
+
+                <div className="flex items-center">
+                  <ChampionBracketCard matchup={playoffBracket.championship} />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
+              {recap.season.standings
+                .filter((standing) => typeof standing.playoffSeed === "number")
+                .sort((left, right) => (left.playoffSeed ?? 99) - (right.playoffSeed ?? 99))
+                .map((standing) => {
+                  const team = teamById.get(standing.teamId);
+                  const label = getPlayoffResultLabel(standing);
+                  return (
+                    <div key={standing.teamId} className="rounded-3xl border border-line/70 bg-card-2/90 p-4">
+                      <div className="flex items-center justify-between gap-3">
+                        <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-muted">Seed {standing.playoffSeed}</span>
+                        <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-semibold ${getPlayoffTone(label)}`}>{label}</span>
+                      </div>
+                      <p className="mt-3 text-base font-semibold text-fg">{getStandingShortName(standing, team?.shortName)}</p>
+                      <p className="text-sm text-fg-secondary">{formatStandingRecord(standing)} • {formatPoints(standing.pointsFor)} PF</p>
+                    </div>
+                  );
+                })}
+            </div>
+          )}
         </section>
       </div>
     </div>

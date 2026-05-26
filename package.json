@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "prebuild": "node scripts/generate-images.mjs",
-    "build:static": "node scripts/generate-images.mjs && next build",
+    "build:static": "node scripts/generate-images.mjs && next build && node scripts/repair-fantasy-season-export.mjs",
     "analyze": "ANALYZE=true next build",
     "generate:images": "node scripts/generate-images.mjs",
     "sync:fantasypros": "node scripts/sync-fantasypros-ppr-cheatsheet.mjs",

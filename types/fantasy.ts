@@ -397,6 +397,17 @@ export interface FantasyWeeklyRecapMatchup {
   margin: number;
 }
 
+export interface FantasyLineupRegretDetail {
+  missedPlayerName?: string;
+  missedPlayerPosition?: string | null;
+  missedPlayerTeam?: string | null;
+  missedPlayerPoints?: number;
+  starterName?: string;
+  starterPosition?: string | null;
+  starterTeam?: string | null;
+  starterPoints?: number;
+}
+
 export interface FantasyWeeklyRecap {
   week: number;
   label: string;
@@ -416,7 +427,7 @@ export interface FantasyWeeklyRecap {
     managerName: string;
     regretPoints: number;
     efficiency: number;
-  };
+  } & FantasyLineupRegretDetail;
   powerPodium: Array<{
     rank: number;
     teamId: string;
@@ -497,6 +508,7 @@ export interface FantasyLineupEfficiencyRow {
   averageRegret: number;
   biggestMissWeek: number;
   biggestMissPoints: number;
+  biggestMissDetail?: FantasyLineupRegretDetail;
 }
 
 export interface FantasySeasonAnalytics {
