@@ -15,6 +15,8 @@ const categoryDescriptions: Record<string, string> = {
     "Wedding planning apps and tools for checklists, budgets, guest lists, vendors, timelines, and event coordination.",
   "Mileage Tracker":
     "Mileage, trip, earnings, expense, invoice, and small-business tracking products for independent operators.",
+  "Expense Sharing":
+    "Expense sharing apps for splitting restaurant bills, group outings, trip costs, tabs, and other peer-to-peer shared purchases.",
   "Broadcast Overlay":
     "Streaming and OBS products for overlays, scene graphics, live data displays, and broadcast-style workflows.",
   "Fantasy Sports":

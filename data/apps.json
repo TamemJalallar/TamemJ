@@ -449,5 +449,114 @@
     "primaryUrl": "https://apps.apple.com/us/app/fatt-football/id6762882771",
     "primaryUrlLabel": "View App Store Preview",
     "supportSubjectName": "FATT Football"
+  },
+  {
+    "slug": "lets-split-it",
+    "name": "Let's Split It",
+    "category": "Expense Sharing",
+    "status": "in-development",
+    "tagline": "Split shared bills, assign receipt items, and request repayment without spreadsheet math.",
+    "shortDescription": "Let's Split It helps users upload a receipt, review extracted items, assign them to participants, calculate each person's share, and request repayment for shared bills.",
+    "description": "Let's Split It is a mobile app for peer-to-peer expense sharing. It helps a group split restaurant checks, group outings, trips, tabs, and other shared purchases by turning a receipt into a structured bill that users can review before sending payment requests. A user can upload or photograph a receipt, confirm the extracted line items, assign items to participants, and calculate each person's share with tax, tip, discounts, service fees, and other shared adjustments applied. The app does not sell physical goods. It provides a software service that helps users calculate and manage shared expenses, then request repayment when one participant has already covered the bill. Depending on the payment integrations enabled, the app may support Apple Pay, card payments, PayPal, Venmo, Cash App, or external payment links so participants can settle what they owe. Revenue may come from optional service fees, payment processing fees, premium features, or optional instant payout fees that are clearly disclosed before use. The product is intended for everyday bill splitting and peer-to-peer settlement, not for gambling, lending, cryptocurrency, stored-value accounts, or the sale of regulated goods.",
+    "featured": true,
+    "appStoreUrl": "",
+    "icon": "/images/apps/lets-split-it/icon.svg",
+    "screenshots": [
+      {
+        "src": "/images/apps/lets-split-it/receipt-capture.svg",
+        "alt": "Let's Split It receipt import concept with extracted restaurant line items ready for review"
+      },
+      {
+        "src": "/images/apps/lets-split-it/participant-assignment.svg",
+        "alt": "Let's Split It participant assignment concept showing items mapped to different people on a shared bill"
+      },
+      {
+        "src": "/images/apps/lets-split-it/payment-request.svg",
+        "alt": "Let's Split It repayment summary concept with per-person totals, fee details, and payment request actions"
+      }
+    ],
+    "features": [
+      "Upload a receipt or snap a photo to start a shared bill",
+      "Review extracted line items before sending anything to the group",
+      "Assign items, shared charges, and split percentages across participants",
+      "Calculate each person's share with tax, tip, discounts, and service fees included",
+      "Request repayment when one person already paid the full bill",
+      "Support provider-dependent payment options like Apple Pay, cards, PayPal, Venmo, Cash App, or external payment links",
+      "Offer optional premium features or instant payout options with clear fee disclosure",
+      "Keep the workflow focused on peer-to-peer expense sharing instead of regulated financial products"
+    ],
+    "pricing": "Free",
+    "pricingNote": "Optional service fees, payment processing fees, premium features, or instant payout fees may apply",
+    "minIOSVersion": "iPhone",
+    "compatibility": "iPhone for shared-expense calculation and repayment requests",
+    "providerBadges": [
+      {
+        "name": "Peer-to-Peer Settlement",
+        "status": "Supported",
+        "description": "The product is designed for shared-expense repayment between participants after one person covers a bill."
+      },
+      {
+        "name": "Receipt OCR",
+        "status": "Planned",
+        "description": "Receipt photo upload and item extraction are central to the product workflow."
+      },
+      {
+        "name": "Apple Pay and Cards",
+        "status": "Optional",
+        "description": "Card-based and Apple Pay settlement may be available when the payment provider supports those methods."
+      },
+      {
+        "name": "PayPal / Venmo / Cash App",
+        "status": "Optional",
+        "description": "External payment methods or links may be available depending on which integrations are enabled."
+      },
+      {
+        "name": "Instant Payout",
+        "status": "Planned",
+        "description": "Eligible funds may be available faster for an extra disclosed fee when payout support is enabled."
+      }
+    ],
+    "supportEmail": "support@tamemj.com",
+    "maintainedBy": "Tamem J",
+    "lastUpdated": "2026-06-04",
+    "faqs": [
+      {
+        "question": "What is Let's Split It?",
+        "answer": "Let's Split It is a mobile app for splitting shared expenses like restaurant bills, group outings, trips, tabs, and other shared purchases. It helps users review receipt items, assign them to participants, calculate what each person owes, and request repayment."
+      },
+      {
+        "question": "Does the app sell physical goods or act as a marketplace?",
+        "answer": "No. The app does not sell physical goods. It provides a software service for receipt-based bill splitting, shared-expense management, and peer-to-peer repayment requests."
+      },
+      {
+        "question": "When are users charged or paid?",
+        "answer": "Users are paid or charged only when they initiate or complete a payment request tied to a shared bill. For example, if one user covers a restaurant bill for a group, the app can calculate what each friend owes and help request repayment."
+      },
+      {
+        "question": "Which payment methods may be supported?",
+        "answer": "Depending on the payment integrations enabled, the app may support Apple Pay, card payments, PayPal, Venmo, Cash App, or external payment links."
+      },
+      {
+        "question": "How can the app make money?",
+        "answer": "Revenue may come from optional service fees, payment processing fees, premium features, or optional instant payout fees. Standard payouts may also be available with no extra fee depending on the payment provider."
+      },
+      {
+        "question": "What is the app not intended for?",
+        "answer": "The product is intended for peer-to-peer expense sharing and bill settlement. It is not designed for gambling, lending, cryptocurrency, stored-value accounts, or the sale of regulated goods."
+      }
+    ],
+    "releaseNotes": [
+      {
+        "date": "2026-06-04",
+        "title": "Stripe verification product page added",
+        "description": "Added the public product page, payment-flow summary, and FAQ answers that explain how peer-to-peer shared expense settlement works in Let's Split It."
+      },
+      {
+        "date": "2026-06-04",
+        "title": "Initial shared-bill workflow documented",
+        "description": "Published the first product snapshot covering receipt capture, participant assignment, repayment requests, optional fees, and supported payment-method categories."
+      }
+    ],
+    "supportSubjectName": "Let's Split It"
   }
 ]

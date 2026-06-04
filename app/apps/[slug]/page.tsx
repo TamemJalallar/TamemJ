@@ -26,6 +26,7 @@ import { buildBreadcrumbJsonLd, buildOpenGraph, buildTwitter, toAbsoluteUrl } fr
 
 const STATIC_EXPORT_PLACEHOLDER_SLUG = "__site-build-placeholder__";
 const FANTASY_OBS_OVERLAY_SLUG = "fantasy-football-obs-overlay";
+const LETS_SPLIT_IT_SLUG = "lets-split-it";
 
 const fantasyObsQuickStartCommands = [
   "npm install",
@@ -73,6 +74,31 @@ const fantasyObsRoutes = [
     path: "http://localhost:3030/overlay/centered-card",
     description: "A larger matchup card layout for feature scenes."
   }
+];
+
+const letsSplitItVerificationCards = [
+  {
+    label: "Core service",
+    title: "Shared bill splitting software",
+    body: "The app helps users review receipt items, assign them to participants, calculate each person's share, and request repayment after one person covers the bill."
+  },
+  {
+    label: "When money moves",
+    title: "Only after a user triggers repayment",
+    body: "Users are charged or paid only when they initiate or complete a payment request tied to a shared expense such as a restaurant bill, trip tab, or group outing."
+  },
+  {
+    label: "Revenue model",
+    title: "Optional fees and premium features",
+    body: "Revenue may come from optional service fees, payment processing fees, premium app features, or optional instant payout fees that are clearly disclosed."
+  }
+];
+
+const letsSplitItGuardrails = [
+  "Designed for peer-to-peer expense sharing and bill settlement.",
+  "Does not sell physical goods or act as a marketplace for merchants.",
+  "Not intended for gambling, lending, cryptocurrency, stored-value accounts, or regulated-goods sales.",
+  "Payment methods can vary by enabled integrations, including Apple Pay, cards, PayPal, Venmo, Cash App, or external links."
 ];
 
 interface AppPageProps {
@@ -209,6 +235,7 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
   const isPublished = isPublishedApp(app);
   const isLive = hasAppStoreRelease(app);
   const isFantasyObsOverlay = app.slug === FANTASY_OBS_OVERLAY_SLUG;
+  const isLetsSplitIt = app.slug === LETS_SPLIT_IT_SLUG;
   const primaryLink = getAppPrimaryLink(app);
   const supportHref = getAppSupportHref(app);
   const supportSubjectName = getAppSupportSubjectName(app);
@@ -391,6 +418,44 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
           </section>
 
           {app.providerBadges?.length ? <ProductProviderBadges badges={app.providerBadges} /> : null}
+
+          {isLetsSplitIt ? (
+            <section className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
+              <div className="surface-card-strong p-6 sm:p-8">
+                <p className="eyebrow">Stripe Verification</p>
+                <h2 className="mt-3 font-display text-2xl font-semibold text-fg">
+                  Clear product and payment-flow summary
+                </h2>
+                <p className="mt-3 text-sm leading-7 text-fg-secondary sm:text-base">
+                  Let&apos;s Split It is a software service for peer-to-peer shared expense settlement. It helps a host split a receipt, calculate what each participant owes, and request repayment after one person already covered the bill.
+                </p>
+
+                <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                  {letsSplitItVerificationCards.map((card) => (
+                    <article key={card.title} className="surface-card rounded-2xl p-4">
+                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{card.label}</p>
+                      <h3 className="mt-2 text-base font-semibold text-fg">{card.title}</h3>
+                      <p className="mt-2 text-sm leading-6 text-fg-secondary">{card.body}</p>
+                    </article>
+                  ))}
+                </div>
+              </div>
+
+              <div className="surface-card p-6 sm:p-8">
+                <p className="eyebrow">Product Guardrails</p>
+                <h2 className="mt-3 font-display text-2xl font-semibold text-fg">
+                  What the app is and is not for
+                </h2>
+                <div className="mt-5 space-y-3">
+                  {letsSplitItGuardrails.map((item) => (
+                    <div key={item} className="rounded-2xl border border-line bg-card-2/70 px-4 py-3 text-sm leading-6 text-fg-secondary">
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          ) : null}
 
           {isFantasyObsOverlay ? (
             <section className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
