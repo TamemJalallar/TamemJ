@@ -1,0 +1,32 @@
+{
+  "name": "stripe-payments-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/server.js",
+    "check": "tsc --noEmit -p tsconfig.json",
+    "stripe:listen": "stripe listen --forward-to http://localhost:4242/api/payments/webhook",
+    "stripe:trigger:success": "stripe trigger payment_intent.succeeded",
+    "stripe:trigger:failure": "stripe trigger payment_intent.payment_failed",
+    "stripe:trigger:payout-paid": "stripe trigger payout.paid",
+    "stripe:trigger:payout-failed": "stripe trigger payout.failed"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "pino": "^9.7.0",
+    "stripe": "^20.4.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.3",
+    "@types/node": "^22.15.33",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.2"
+  }
+}
