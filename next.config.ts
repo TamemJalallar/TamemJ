@@ -21,6 +21,7 @@ const withBundleAnalyzer = getBundleAnalyzer();
 
 const nextConfig: NextConfig = {
   ...(wantsStaticExport ? { output: "export" as const } : {}),
+  outputFileTracingRoot: process.cwd(),
   trailingSlash: true,
   images: {
     unoptimized: true
