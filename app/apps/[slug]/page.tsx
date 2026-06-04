@@ -101,6 +101,25 @@ const letsSplitItGuardrails = [
   "Payment methods can vary by enabled integrations, including Apple Pay, cards, PayPal, Venmo, Cash App, or external links."
 ];
 
+const letsSplitItPolicyCards = [
+  {
+    title: "Customer support",
+    body: "Users can contact support at support@tamemj.com for account, billing, payment request, or payout questions."
+  },
+  {
+    title: "Refunds and corrections",
+    body: "If a payment request is sent for the wrong amount, users should contact support. Eligible refunds, reversals, or balance corrections are reviewed against the underlying shared bill and payment provider rules."
+  },
+  {
+    title: "Cancellations",
+    body: "A user can abandon a draft bill before payment requests are sent. Once a repayment is submitted, cancellation depends on the payment status and processor availability."
+  },
+  {
+    title: "Terms and privacy",
+    body: "Use of the product is governed by the public privacy policy and support terms shown on this site. Raw card data is never stored by the app."
+  }
+];
+
 interface AppPageProps {
   params: Promise<{
     slug: string;
@@ -364,7 +383,7 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
                   href={primaryLink?.href}
                   label={primaryLink?.label}
                   ariaLabel={primaryLink ? `${primaryLink.label} for ${app.name}` : undefined}
-                  unavailableText="Product page coming soon"
+                  {...(!primaryLink ? { unavailableText: "Product page coming soon" } : {})}
                   tracking={{
                     appSlug: app.slug,
                     appName: app.name,
@@ -452,6 +471,29 @@ export default async function IndividualAppPage({ params }: AppPageProps) {
                       {item}
                     </div>
                   ))}
+                </div>
+              </div>
+
+              <div className="surface-card p-6 sm:p-8 xl:col-span-2">
+                <p className="eyebrow">Payment Policies</p>
+                <h2 className="mt-3 font-display text-2xl font-semibold text-fg">
+                  Support, refunds, cancellations, and privacy
+                </h2>
+                <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                  {letsSplitItPolicyCards.map((card) => (
+                    <article key={card.title} className="surface-card rounded-2xl p-4">
+                      <h3 className="text-base font-semibold text-fg">{card.title}</h3>
+                      <p className="mt-2 text-sm leading-6 text-fg-secondary">{card.body}</p>
+                    </article>
+                  ))}
+                </div>
+                <div className="mt-5 flex flex-wrap gap-3">
+                  <Link href="/privacy/" className="btn-secondary">
+                    Privacy Policy
+                  </Link>
+                  <a href={supportHref} className="btn-secondary">
+                    Contact Support
+                  </a>
                 </div>
               </div>
             </section>

@@ -454,12 +454,14 @@
     "slug": "lets-split-it",
     "name": "Let's Split It",
     "category": "Expense Sharing",
-    "status": "in-development",
+    "status": "published",
     "tagline": "Split shared bills, assign receipt items, and request repayment without spreadsheet math.",
     "shortDescription": "Let's Split It helps users upload a receipt, review extracted items, assign them to participants, calculate each person's share, and request repayment for shared bills.",
     "description": "Let's Split It is a mobile app for peer-to-peer expense sharing. It helps a group split restaurant checks, group outings, trips, tabs, and other shared purchases by turning a receipt into a structured bill that users can review before sending payment requests. A user can upload or photograph a receipt, confirm the extracted line items, assign items to participants, and calculate each person's share with tax, tip, discounts, service fees, and other shared adjustments applied. The app does not sell physical goods. It provides a software service that helps users calculate and manage shared expenses, then request repayment when one participant has already covered the bill. Depending on the payment integrations enabled, the app may support Apple Pay, card payments, PayPal, Venmo, Cash App, or external payment links so participants can settle what they owe. Revenue may come from optional service fees, payment processing fees, premium features, or optional instant payout fees that are clearly disclosed before use. The product is intended for everyday bill splitting and peer-to-peer settlement, not for gambling, lending, cryptocurrency, stored-value accounts, or the sale of regulated goods.",
     "featured": true,
     "appStoreUrl": "",
+    "primaryUrl": "https://tamemj.com/apps/lets-split-it/",
+    "primaryUrlLabel": "View Product Page",
     "icon": "/images/apps/lets-split-it/icon.svg",
     "screenshots": [
       {
@@ -546,6 +548,11 @@
       }
     ],
     "releaseNotes": [
+      {
+        "date": "2026-06-04",
+        "title": "Stripe review page made crawler-ready",
+        "description": "Updated the public product page status, primary product URL, and support context so payment provider review can verify the product and payment flow."
+      },
       {
         "date": "2026-06-04",
         "title": "Stripe verification product page added",
