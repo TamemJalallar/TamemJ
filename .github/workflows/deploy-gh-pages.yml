@@ -70,27 +70,12 @@ jobs:
 
       - name: Configure Pages
         uses: actions/configure-pages@v6.0.0
-        with:
-          enablement: true
 
-      - name: Archive Pages artifact
-        run: |
-          tar \
-            --dereference --hard-dereference \
-            --directory out \
-            -cvf "$RUNNER_TEMP/artifact.tar" \
-            --exclude=.git \
-            --exclude=.github \
-            --exclude=.DS_Store \
-            .
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v6.0.0
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v5.0.0
         with:
-          name: github-pages
-          path: ${{ runner.temp }}/artifact.tar
-          retention-days: 1
-          if-no-files-found: error
+          path: out
+          include-hidden-files: true
 
   deploy:
     environment:
