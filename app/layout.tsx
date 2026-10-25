@@ -176,8 +176,9 @@ gtag('config', '${googleAnalyticsId}');`
         <AccountProvider>
           <SentryBootstrap />
           <div className="min-h-screen bg-mesh-soft">
+            <a className="skip-link" href="#main-content">Skip to content</a>
             <SiteHeader />
-            <main>{children}</main>
+            <main id="main-content">{children}</main>
             <SiteFooter />
           </div>
           <GlobalCommandPalette />

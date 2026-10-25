@@ -1,8 +1,90 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Our Wedding · TamemJ</title><meta name="description" content="A collection of moments from our wedding. Browse and save your favorite photos."><link rel="stylesheet" href="gallery.css"><script src="gallery.js" defer></script></head>
-<body><header><a href="https://tamemj.com">TamemJ</a><span>A day to remember</span></header>
-<main><section class="intro"><p class="eyebrow">WITH LOVE, FOR EVERYONE WHO WAS THERE</p><h1>Our wedding.</h1><p>The little moments. The big feelings. All of us, together.</p><p class="note">Browse the day and save your favorite moments.</p></section>
-<section aria-label="Wedding photos"><div class="toolbar"><p id="count" role="status">Loading photographs…</p><label>Find a photo <input id="search" type="search" placeholder="e.g. 0142" autocomplete="off"></label></div><div id="grid" class="grid"></div><p id="empty" hidden>No photos match that number.</p><button id="more" hidden>Show more photographs</button></section></main>
-<footer>Made for sharing. Made to remember.<br><small>Downloads are web-quality copies. Original photographs are kept separately.</small></footer>
-<dialog id="viewer" aria-label="Photo viewer"><div class="viewerbar"><span id="caption"></span><a id="download" download>Save photo</a><button id="close" aria-label="Close photo viewer">Close ×</button></div><div class="stage"><button id="previous" aria-label="Previous photo">‹</button><img id="large" alt=""><button id="next" aria-label="Next photo">›</button></div><p id="position" aria-live="polite"></p></dialog>
-</body></html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Our Wedding · TamemJ</title>
+    <meta
+      name="description"
+      content="Our wedding in 1,541 photographs. Browse the full collection and save your favorite moments."
+    />
+    <link rel="stylesheet" href="gallery.css" />
+    <script src="gallery.js" defer></script>
+  </head>
+  <body>
+    <a class="skip" href="#collection">Skip to photographs</a>
+    <header>
+      <a href="https://tamemj.com">TamemJ</a
+      ><a href="#collection">The photographs</a>
+    </header>
+    <main>
+      <section class="cover" aria-labelledby="title">
+        <img
+          class="cover-image"
+          src="photos/NG-0451.jpg"
+          width="1800"
+          height="1200"
+          alt="The bride and groom together in a garden framed by white columns"
+          fetchpriority="high"
+        />
+        <div class="cover-copy">
+          <h1 id="title">Our wedding</h1>
+          <p>
+            A day we’ll always come back to.<br />Thank you for being part of
+            it.
+          </p>
+        </div>
+        <a class="cover-link" href="#collection"
+          >Explore the photographs <span aria-hidden="true">↓</span></a
+        >
+      </section>
+      <section
+        id="collection"
+        class="collection"
+        aria-labelledby="collection-title"
+      >
+        <div class="collection-heading">
+          <div>
+            <h2 id="collection-title">Every little moment</h2>
+            <p id="count" role="status">Loading photographs…</p>
+          </div>
+          <label class="search-label" for="search"
+            >Find a photograph<input
+              id="search"
+              type="search"
+              placeholder="Photo number, e.g. 0142"
+              autocomplete="off"
+          /></label>
+        </div>
+        <div id="grid" class="grid"></div>
+        <p id="empty" hidden>
+          No photographs match that number. Try another search.
+        </p>
+        <button id="more" hidden>Load more photographs</button>
+      </section>
+    </main>
+    <footer>
+      <p>For everyone who made this day ours.</p>
+      <div>
+        <a href="https://tamemj.com">TamemJ</a
+        ><span
+          >Save any photo as a web-quality copy. Originals are kept
+          separately.</span
+        >
+      </div>
+    </footer>
+    <dialog id="viewer" aria-label="Photo viewer">
+      <div class="viewerbar">
+        <span id="caption"></span><a id="download" download>Save photo</a
+        ><button id="close" aria-label="Close photo viewer">Close ×</button>
+      </div>
+      <div class="stage">
+        <button id="previous" aria-label="Previous photo">‹</button
+        ><img id="large" alt="" /><button id="next" aria-label="Next photo">
+          ›
+        </button>
+      </div>
+      <p id="position" aria-live="polite"></p>
+    </dialog>
+  </body>
+</html>

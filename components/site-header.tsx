@@ -27,68 +27,72 @@ const reviewModeNavItems: NavItem[] = [
   { href: "/", label: "Home" },
   { href: "/support/tickets", label: "Tickets" },
   { href: "/downloads", label: "Downloads" },
-  { href: "/guides", label: "Guides" }
+  { href: "/guides", label: "Guides" },
 ];
 
 const desktopPrimaryNavItems: NavItem[] = [
-  { href: "/", label: "Home" },
   { href: "/support/tickets", label: "Tickets" },
   { href: "/downloads", label: "Downloads" },
   { href: "/guides", label: "Guides" },
-  { href: "/corporate-tech-fixes", label: "Tech Fixes" }
+  { href: "/corporate-tech-fixes", label: "Tech Fixes" },
 ];
 
 const desktopExploreMenuItems: NavItem[] = [
   {
     href: "/support",
     label: "Support Portal",
-    description: "Incident intake, service catalog, analytics, and support workflow surfaces"
+    description: "Submit an issue and find support resources",
   },
   {
     href: "/apps",
     label: "Apps",
-    description: "Product pages, privacy links, support paths, and app release previews"
+    description: "Apps, release previews, and support",
   },
   {
     href: "/ai-agents",
     label: "AI Hub",
-    description: "AI agent libraries and prompt collections kept outside the core IT review path"
+    description: "AI agents and practical prompt collections",
   },
   {
     href: "/pc-build-guides",
     label: "PC Builds",
-    description: "Interactive hardware planning and workload-based component recommendations"
+    description:
+      "Interactive hardware planning and workload-based component recommendations",
   },
   {
     href: "/recommended-gear",
     label: "Recommended Gear",
-    description: "Curated desk, networking, power, and home lab recommendations"
+    description:
+      "Curated desk, networking, power, and home lab recommendations",
   },
   {
     href: "/services/msp",
     label: "MSP Services",
-    description: "Retained systems administration and ongoing support for growing teams"
-  }
+    description:
+      "Retained systems administration and ongoing support for growing teams",
+  },
 ].filter((item) => item.href !== "/apps" || appsSectionEnabled);
 
-const desktopMenus: MenuConfig[] = [{ key: "explore", label: "Explore", items: desktopExploreMenuItems }];
+const desktopMenus: MenuConfig[] = [
+  { key: "explore", label: "Explore", items: desktopExploreMenuItems },
+];
 
 const mobileSections = adsenseReviewModeEnabled
   ? [
       {
         title: "Main",
-        items: reviewModeNavItems
-      }
+        items: reviewModeNavItems,
+      },
     ]
   : [
       {
         title: "Main",
-        items: desktopPrimaryNavItems
+        items: desktopPrimaryNavItems,
       },
       {
         title: "Explore",
-        items: desktopExploreMenuItems
-      }
+        items: desktopExploreMenuItems,
+      },
     ];
 
 function pathMatches(pathname: string | null, href: string): boolean {
@@ -111,7 +115,7 @@ function MenuButton({
   label,
   open,
   active,
-  onClick
+  onClick,
 }: {
   label: string;
   open: boolean;
@@ -124,7 +128,7 @@ function MenuButton({
       onClick={onClick}
       className={`nav-link flex items-center gap-1.5 ${active ? "nav-link-active" : ""}`}
       aria-expanded={open}
-      aria-haspopup="menu"
+      aria-controls="explore-navigation"
     >
       {label}
       <svg
@@ -172,7 +176,11 @@ export function SiteHeader() {
 
     function handlePointerDown(event: MouseEvent | TouchEvent) {
       const target = event.target as Node | null;
-      if (desktopMenuRef.current && target && !desktopMenuRef.current.contains(target)) {
+      if (
+        desktopMenuRef.current &&
+        target &&
+        !desktopMenuRef.current.contains(target)
+      ) {
         setOpenDesktopMenu(null);
       }
     }
@@ -186,8 +194,19 @@ export function SiteHeader() {
     };
   }, [openDesktopMenu]);
 
+  useEffect(() => {
+    function closeOnEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setMobileMenuOpen(false);
+        setOpenDesktopMenu(null);
+      }
+    }
+    document.addEventListener("keydown", closeOnEscape);
+    return () => document.removeEventListener("keydown", closeOnEscape);
+  }, []);
+
   return (
-    <header className="glass-nav sticky top-0 z-40 border-b">
+    <header className="glass-nav clean-header sticky top-0 z-40">
       <div className="page-shell">
         <div className="flex min-h-[4.75rem] items-center justify-between gap-4 py-3">
           <Link href="/" className="shrink-0">
@@ -201,8 +220,14 @@ export function SiteHeader() {
             </div>
           </Link>
 
-          <nav aria-label="Primary navigation" className="hidden items-center gap-1 lg:flex">
-            {(adsenseReviewModeEnabled ? reviewModeNavItems : desktopPrimaryNavItems).map((item) => (
+          <nav
+            aria-label="Primary navigation"
+            className="hidden items-center gap-1 lg:flex"
+          >
+            {(adsenseReviewModeEnabled
+              ? reviewModeNavItems
+              : desktopPrimaryNavItems
+            ).map((item) => (
               <NavLink key={item.href} href={item.href}>
                 {item.label}
               </NavLink>
@@ -220,13 +245,17 @@ export function SiteHeader() {
                         label={menu.label}
                         open={open}
                         active={active}
-                        onClick={() => setOpenDesktopMenu((current) => (current === menu.key ? null : menu.key))}
+                        onClick={() =>
+                          setOpenDesktopMenu((current) =>
+                            current === menu.key ? null : menu.key,
+                          )
+                        }
                       />
 
                       {open ? (
                         <div
                           className="absolute right-0 top-[calc(100%+0.75rem)] w-[24rem] rounded-[24px] border border-line bg-card/95 p-3 shadow-card backdrop-blur-md"
-                          role="menu"
+                          id="explore-navigation"
                         >
                           <div className="mb-2 px-2 py-1">
                             <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted">
@@ -243,11 +272,14 @@ export function SiteHeader() {
                                     ? "border-primary-200 bg-primary-50 text-primary-700 dark:border-primary-400/30 dark:bg-primary-500/10 dark:text-primary-300"
                                     : "border-transparent text-fg-secondary hover:border-line hover:bg-white/70 hover:text-fg dark:hover:bg-white/5"
                                 }`}
-                                role="menuitem"
                               >
-                                <p className="text-sm font-semibold">{item.label}</p>
+                                <p className="text-sm font-semibold">
+                                  {item.label}
+                                </p>
                                 {item.description ? (
-                                  <p className="mt-1 text-xs leading-5 text-muted">{item.description}</p>
+                                  <p className="mt-1 text-xs leading-5 text-muted">
+                                    {item.description}
+                                  </p>
                                 ) : null}
                               </Link>
                             ))}
@@ -282,12 +314,32 @@ export function SiteHeader() {
           >
             <span className="sr-only">Menu</span>
             {mobileMenuOpen ? (
-              <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 6l12 12M18 6L6 18" />
+              <svg
+                viewBox="0 0 24 24"
+                className="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 6l12 12M18 6L6 18"
+                />
               </svg>
             ) : (
-              <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              <svg
+                viewBox="0 0 24 24"
+                className="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
               </svg>
             )}
           </button>
@@ -295,7 +347,7 @@ export function SiteHeader() {
       </div>
 
       {mobileMenuOpen ? (
-        <div className="border-t border-line bg-card/95 px-4 py-5 backdrop-blur-md lg:hidden">
+        <div className="clean-mobile-menu bg-card px-4 py-5 lg:hidden">
           <div className="page-shell !px-0">
             <div className="grid gap-5">
               {mobileSections.map((section) => (
@@ -316,7 +368,9 @@ export function SiteHeader() {
                       >
                         <p className="text-sm font-semibold">{item.label}</p>
                         {item.description ? (
-                          <p className="mt-1 text-xs leading-5 text-muted">{item.description}</p>
+                          <p className="mt-1 text-xs leading-5 text-muted">
+                            {item.description}
+                          </p>
                         ) : null}
                       </Link>
                     ))}
@@ -333,7 +387,10 @@ export function SiteHeader() {
                     <AccountNavLabel />
                   </Link>
                 ) : null}
-                <Link href="/contact" className="btn-primary justify-center text-center">
+                <Link
+                  href="/contact"
+                  className="btn-primary justify-center text-center"
+                >
                   Contact
                 </Link>
               </div>

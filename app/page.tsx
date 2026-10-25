@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { EditorialStandardsStrip } from "@/components/shared/editorial-authority-panels";
 import { buildRobotsIndexRule } from "@/lib/adsense-review-mode";
 import { buildOpenGraph, buildTwitter, toAbsoluteUrl } from "@/lib/seo";
-import { getPillarContentIdeas, getTopSeoKeywordOpportunities } from "@/lib/seo-content.registry";
+import {
+  getPillarContentIdeas,
+  getTopSeoKeywordOpportunities,
+} from "@/lib/seo-content.registry";
 import { siteConfig } from "@/lib/site";
 import { getCorporateFixes } from "@/lib/corporate-fixes.registry";
 import { getDownloads } from "@/lib/downloads.registry";
@@ -47,21 +49,21 @@ export const metadata: Metadata = {
     "helpdesk resources",
     "sysadmin tools",
     "IT download assets",
-    ...homeKeywordOpportunities.map((entry) => entry.keyword)
+    ...homeKeywordOpportunities.map((entry) => entry.keyword),
   ]),
   alternates: {
-    canonical: "/"
+    canonical: "/",
   },
   robots: buildRobotsIndexRule("/"),
   openGraph: buildOpenGraph(
     "Enterprise IT Troubleshooting Guides & Downloads | Tamem J",
     "Microsoft 365, endpoint, identity, networking, and security troubleshooting guides with practical scripts and templates.",
-    "/"
+    "/",
   ),
   twitter: buildTwitter(
     "Enterprise IT Troubleshooting Guides & Downloads | Tamem J",
-    "Microsoft 365, endpoint, identity, networking, and security troubleshooting guides with practical scripts and templates."
-  )
+    "Microsoft 365, endpoint, identity, networking, and security troubleshooting guides with practical scripts and templates.",
+  ),
 };
 
 const trendingArticleSlugs = [
@@ -70,7 +72,7 @@ const trendingArticleSlugs = [
   "onedrive-processing-changes-or-stuck-syncing",
   "sharepoint-access-denied-site-library-file",
   "intune-windows-device-not-checking-in-or-compliance-stale",
-  "vpn-connected-but-no-internet-or-internal-access"
+  "vpn-connected-but-no-internet-or-internal-access",
 ] as const;
 
 const topCategoryConfig = [
@@ -78,26 +80,26 @@ const topCategoryConfig = [
     label: "M365",
     description: "Outlook, Teams, OneDrive, SharePoint",
     href: "/support/tickets/?q=microsoft%20365",
-    match: (category: string) => category === "Microsoft 365"
+    match: (category: string) => category === "Microsoft 365",
   },
   {
     label: "Windows",
     description: "OS, Intune, drivers, endpoint health",
     href: "/support/tickets/?q=windows",
-    match: (category: string) => category === "Windows"
+    match: (category: string) => category === "Windows",
   },
   {
     label: "Security",
     description: "MFA, SSO, Conditional Access",
     href: "/support/tickets/?q=identity%20mfa%20sso",
-    match: (category: string) => category === "Identity / MFA / SSO"
+    match: (category: string) => category === "Identity / MFA / SSO",
   },
   {
     label: "Networking",
     description: "VPN, DNS, Wi-Fi, access paths",
     href: "/support/tickets/?q=vpn%20networking",
-    match: (category: string) => category === "Networking / VPN"
-  }
+    match: (category: string) => category === "Networking / VPN",
+  },
 ] as const;
 
 const primaryWorkspaceConfig = [
@@ -105,49 +107,30 @@ const primaryWorkspaceConfig = [
     label: "Tickets",
     href: "/support/tickets",
     eyebrow: "Troubleshooting",
-    description: "Issue-specific fixes for Microsoft 365, Windows, identity, networking, and endpoint support."
+    description:
+      "Issue-specific fixes for Microsoft 365, Windows, identity, networking, and endpoint support.",
   },
   {
     label: "Downloads",
     href: "/downloads",
     eyebrow: "Assets",
-    description: "Direct software links, scripts, templates, and support-ready resources for working admins."
+    description:
+      "Direct software links, scripts, templates, and support-ready resources for working admins.",
   },
   {
     label: "Guides",
     href: "/guides",
     eyebrow: "Pillar Content",
-    description: "Broader Microsoft 365, identity, network, and operations guides that connect the library together."
+    description:
+      "Broader Microsoft 365, identity, network, and operations guides that connect the library together.",
   },
   {
     label: "Tech Fixes",
     href: "/corporate-tech-fixes",
     eyebrow: "Runbooks",
-    description: "Structured, enterprise-safe remediation paths for recurring corporate support issues."
-  }
-] as const;
-
-const trustPillars = [
-  {
-    title: "Written for real enterprise environments",
-    detail: "Guides prioritize production-safe actions, escalation points, and supportable remediation instead of shortcuts or bypasses."
+    description:
+      "Structured, enterprise-safe remediation paths for recurring corporate support issues.",
   },
-  {
-    title: "Search-first and issue-first",
-    detail: "The strongest pages are centered on exact problems people actually search when they need a fix quickly."
-  },
-  {
-    title: "Resources stay attached to the problem",
-    detail: "Downloads, scripts, and supporting templates stay close to the fixes they belong with so the site remains practical."
-  }
-] as const;
-
-const quickActionLinks = [
-  { label: "Search Tickets", href: "/support/tickets" },
-  { label: "Browse Downloads", href: "/downloads" },
-  { label: "Open Guides", href: "/guides" },
-  { label: "Open Tech Fixes", href: "/corporate-tech-fixes" },
-  { label: "Contact", href: "/contact" }
 ] as const;
 
 export default function HomePage() {
@@ -160,34 +143,37 @@ export default function HomePage() {
     .sort(
       (left, right) =>
         parseDateValue(right.releaseMetadata?.publishedAt) -
-        parseDateValue(left.releaseMetadata?.publishedAt)
+        parseDateValue(left.releaseMetadata?.publishedAt),
     )
     .slice(0, 4);
-  const keywordOpportunities = homeKeywordOpportunities.slice(0, 8);
-  const totalGuides = kbArticles.length + corporateFixes.length + getPillarContentIdeas().length;
-  const totalSupportCategories = new Set(kbArticles.map((article) => article.category)).size;
+  const totalGuides =
+    kbArticles.length + corporateFixes.length + getPillarContentIdeas().length;
 
   const primaryWorkspaceCounts: Record<string, number> = {
     "/corporate-tech-fixes": corporateFixes.length,
     "/support/tickets": kbArticles.length,
     "/downloads": downloads.length,
-    "/guides": getPillarContentIdeas().length
+    "/guides": getPillarContentIdeas().length,
   };
 
   const topCategories = topCategoryConfig.map((config) => ({
     ...config,
-    count: kbArticles.filter((article) => config.match(article.category)).length
+    count: kbArticles.filter((article) => config.match(article.category))
+      .length,
   }));
 
   const trendingArticles = trendingArticleSlugs
     .map((slug) => getKBArticleBySlug(slug))
-    .filter((article): article is NonNullable<typeof article> => Boolean(article));
+    .filter((article): article is NonNullable<typeof article> =>
+      Boolean(article),
+    );
 
   const collectionSchema = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: "TamemJ Enterprise IT Knowledge Hub",
-    description: "Enterprise IT troubleshooting guides, downloads, and support resources.",
+    description:
+      "Enterprise IT troubleshooting guides, downloads, and support resources.",
     url: siteConfig.url,
     mainEntity: {
       "@type": "ItemList",
@@ -195,338 +181,183 @@ export default function HomePage() {
         "@type": "ListItem",
         position: index + 1,
         name: article.title,
-        url: toAbsoluteUrl(`/support/tickets/${article.slug}/`)
-      }))
-    }
-  };
-
-  const queryIntentSchema = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    name: "Popular IT troubleshooting search intents",
-    numberOfItems: keywordOpportunities.length,
-    itemListElement: keywordOpportunities.map((entry, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      name: entry.keyword,
-      url: toAbsoluteUrl(`/support/tickets/?q=${encodeURIComponent(entry.keyword)}`)
-    }))
+        url: toAbsoluteUrl(`/support/tickets/${article.slug}/`),
+      })),
+    },
   };
 
   return (
-    <>
-      <section className="section-shell pt-10 sm:pt-14 lg:pt-20">
-        <div className="page-shell">
-          <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-            <div className="hero-surface p-6 sm:p-8 lg:p-12">
-              <span className="eyebrow">Enterprise IT Knowledge Hub</span>
-              <h1 className="mt-5 text-balance font-display text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
-                Search <span className="text-primary-500 dark:text-accent-300">enterprise IT fixes, guides, and admin-ready downloads</span>
-              </h1>
-              <p className="mt-4 max-w-3xl text-base text-fg-secondary sm:text-lg">
-                Microsoft 365, endpoint, identity, networking, and operations troubleshooting with practical assets that help support teams move faster.
-              </p>
+    <div className="home-redesign">
+      <section className="home-hero page-shell" aria-labelledby="home-title">
+        <div className="home-intro">
+          <h1 id="home-title">
+            Find your
+            <br />
+            next IT fix.
+          </h1>
+          <p>
+            Practical troubleshooting for Microsoft 365, Windows, identity, and
+            the systems you support every day.
+          </p>
+          <form
+            action="/support/tickets/"
+            method="get"
+            className="home-search"
+            role="search"
+          >
+            <label htmlFor="home-guide-search" className="sr-only">
+              Search support guides
+            </label>
+            <input
+              id="home-guide-search"
+              name="q"
+              type="search"
+              placeholder="An error message, app, or issue…"
+            />
+            <button type="submit" className="btn-primary">
+              Search guides
+            </button>
+          </form>
+          <div className="home-search-examples">
+            <span>Try</span>
+            <Link href="/support/tickets/?q=outlook">Outlook search</Link>
+            <Link href="/support/tickets/?q=vpn">VPN connection</Link>
+            <Link href="/support/tickets/?q=mfa">MFA</Link>
+          </div>
+        </div>
+        <aside className="home-directory" aria-label="Resource library">
+          <h2>Your IT library</h2>
+          <p>
+            {totalGuides} fixes and guides. A place to start when something
+            stops working.
+          </p>
+          {primaryWorkspaceConfig.map((workspace) => (
+            <Link
+              key={workspace.href}
+              href={workspace.href}
+              className="directory-row"
+            >
+              <span>{workspace.label}</span>
+              <span>{primaryWorkspaceCounts[workspace.href]}</span>
+            </Link>
+          ))}
+          <Link className="home-standards" href="/editorial-standards/">
+            How these resources are maintained
+          </Link>
+        </aside>
+      </section>
 
-              <form action="/support/tickets/" method="get" className="mt-7">
-                <label htmlFor="home-guide-search" className="sr-only">
-                  Search support guides
-                </label>
-                <div className="flex flex-col gap-3 sm:flex-row">
-                  <input
-                    id="home-guide-search"
-                    name="q"
-                    type="search"
-                    defaultValue=""
-                    placeholder={`Search ${totalGuides}+ IT troubleshooting guides, downloads, or error messages`}
-                    className="form-input h-12"
-                  />
-                  <button type="submit" className="btn-primary h-12 shrink-0 px-6 py-0">
-                    Search
-                  </button>
+      <section
+        className="home-resources page-shell"
+        aria-labelledby="fixes-heading"
+      >
+        <div className="home-section-heading">
+          <div>
+            <h2 id="fixes-heading">Start with a fix</h2>
+            <p>Common problems, with a practical path forward.</p>
+          </div>
+          <Link href="/support/tickets/">Browse all tickets</Link>
+        </div>
+        <div className="home-fixes-layout">
+          <div className="home-fix-list">
+            {trendingArticles.map((article) => (
+              <Link
+                href={`/support/tickets/${article.slug}/`}
+                key={article.slug}
+                className="home-fix"
+              >
+                <div>
+                  <span className="home-meta">{article.category}</span>
+                  <h3>{article.title}</h3>
+                  <p>{article.description}</p>
                 </div>
-              </form>
+                <span className="home-time">{article.estimatedTime}</span>
+              </Link>
+            ))}
+          </div>
+          <aside className="home-topics">
+            <h3>Browse by system</h3>
+            {topCategories.map((category) => (
+              <Link href={category.href} key={category.label}>
+                <span>{category.label}</span>
+                <p>{category.description}</p>
+                <small>{category.count} articles</small>
+              </Link>
+            ))}
+          </aside>
+        </div>
+      </section>
 
-              <div className="mt-5 flex flex-wrap gap-2">
-                {quickActionLinks.map((item) => (
-                  <Link key={item.href} href={item.href} className="btn-secondary !px-4 !py-2 text-xs sm:text-sm">
-                    {item.label}
-                  </Link>
-                ))}
-              </div>
-
-              <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                <div className="surface-card p-4">
-                  <p className="font-display text-2xl font-bold text-primary-600 dark:text-primary-300">{totalGuides}+</p>
-                  <p className="mt-1 text-xs font-medium uppercase tracking-wide text-muted">Fixes + guides</p>
-                </div>
-                <div className="surface-card p-4">
-                  <p className="font-display text-2xl font-bold text-primary-600 dark:text-primary-300">{kbArticles.length}</p>
-                  <p className="mt-1 text-xs font-medium uppercase tracking-wide text-muted">Support tickets</p>
-                </div>
-                <div className="surface-card p-4">
-                  <p className="font-display text-2xl font-bold text-primary-600 dark:text-primary-300">{downloads.length}+</p>
-                  <p className="mt-1 text-xs font-medium uppercase tracking-wide text-muted">Downloads</p>
-                </div>
-                <div className="surface-card p-4">
-                  <p className="font-display text-2xl font-bold text-primary-600 dark:text-primary-300">{totalSupportCategories}</p>
-                  <p className="mt-1 text-xs font-medium uppercase tracking-wide text-muted">Support lanes</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <div className="surface-card-strong p-5 sm:p-6">
-                <p className="eyebrow">Start Here</p>
-                <div className="mt-4 space-y-3">
-                  {primaryWorkspaceConfig.map((workspace) => (
-                    <Link
-                      key={workspace.href}
-                      href={workspace.href}
-                      className="surface-card-interactive flex items-start justify-between gap-4 rounded-2xl p-4"
-                    >
-                      <div>
-                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
-                          {workspace.eyebrow}
-                        </p>
-                        <h2 className="mt-1 font-display text-lg font-semibold text-fg">
-                          {workspace.label}
-                        </h2>
-                        <p className="mt-2 text-sm text-fg-secondary">{workspace.description}</p>
-                      </div>
-                      <div className="shrink-0 text-right">
-                        <p className="font-display text-xl font-bold text-primary-600 dark:text-primary-300">
-                          {primaryWorkspaceCounts[workspace.href]}+
-                        </p>
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
-                          resources
-                        </p>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
-              <div className="surface-card p-5 sm:p-6">
-                <p className="eyebrow">Why Teams Use This</p>
-                <div className="mt-4 space-y-3">
-                  {trustPillars.map((pillar) => (
-                    <div key={pillar.title} className="rounded-2xl border border-line/80 bg-card-2/80 p-4 dark:bg-card/80">
-                      <p className="text-sm font-semibold text-fg">{pillar.title}</p>
-                      <p className="mt-1 text-sm text-fg-secondary">{pillar.detail}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+      <section className="home-learning" aria-labelledby="learning-heading">
+        <div className="page-shell home-learning-inner">
+          <div className="home-learning-intro">
+            <h2 id="learning-heading">Go a little deeper.</h2>
+            <p>
+              Work through the bigger picture with guides to the tools and
+              systems behind the ticket.
+            </p>
+            <Link href="/guides/" className="btn-primary">
+              Explore guides
+            </Link>
+          </div>
+          <div className="home-guide-list">
+            {pillarGuides.map((guide) => (
+              <Link href={`/guides/${guide.slug}/`} key={guide.slug}>
+                <h3>{guide.title}</h3>
+                <p>{guide.description}</p>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="section-shell pt-2 sm:pt-4">
-        <div className="page-shell">
-          <EditorialStandardsStrip
-            title="How this library is maintained"
-            description="The strongest pages on the site are issue-specific support articles, broader operational guides, and practical downloads. Content is reviewed for enterprise-safe remediation, tested environments, escalation criteria, and direct linkage to related resources."
-          />
-        </div>
-      </section>
-
-      <section className="section-shell pt-2 sm:pt-4">
-        <div className="page-shell">
-          <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
-            <section className="surface-card p-5 sm:p-6">
-              <div className="mb-4 flex items-center justify-between gap-3">
-                <div>
-                  <p className="eyebrow">Popular Right Now</p>
-                  <h2 className="mt-3 font-display text-2xl font-semibold text-fg sm:text-3xl">
-                    Trending support fixes
-                  </h2>
-                </div>
-                <Link href="/support/tickets" className="btn-ghost !px-4 !py-2 text-sm">
-                  View all tickets
-                </Link>
-              </div>
-              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                {trendingArticles.map((article) => (
-                  <Link
-                    key={article.slug}
-                    href={`/support/tickets/${article.slug}`}
-                    className="surface-card-interactive group rounded-2xl p-4"
-                  >
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="filter-chip px-2.5 py-1 text-[11px] font-semibold">{article.category}</span>
-                      <span className="filter-chip px-2.5 py-1 text-[11px] font-semibold">{article.estimatedTime}</span>
-                    </div>
-                    <h3 className="mt-3 text-base font-semibold text-fg transition group-hover:text-primary-600 dark:group-hover:text-primary-300">
-                      {article.title}
-                    </h3>
-                    <p className="mt-2 text-sm text-fg-secondary">{article.description}</p>
-                    <p className="mt-4 text-xs font-semibold text-primary-600 dark:text-primary-300">Open article →</p>
-                  </Link>
-                ))}
-              </div>
-            </section>
-
-            <section className="surface-card p-5 sm:p-6">
-              <div className="mb-4 flex items-center justify-between gap-3">
-                <div>
-                  <p className="eyebrow">Fast Paths</p>
-                  <h2 className="mt-3 font-display text-2xl font-semibold text-fg">Top categories</h2>
-                </div>
-                <Link href="/corporate-tech-fixes" className="btn-ghost !px-4 !py-2 text-sm">
-                  Open fixes
-                </Link>
-              </div>
-              <div className="grid gap-3">
-                {topCategories.map((category) => (
-                  <Link
-                    key={category.label}
-                    href={category.href}
-                    className="surface-card-interactive rounded-2xl p-4"
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
-                          {category.count} articles
-                        </p>
-                        <h3 className="mt-2 font-display text-lg font-semibold text-fg">{category.label}</h3>
-                        <p className="mt-1 text-sm text-fg-secondary">{category.description}</p>
-                      </div>
-                      <span className="mt-1 text-sm font-semibold text-primary-600 dark:text-primary-300">Open</span>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </section>
+      <section
+        className="home-downloads page-shell"
+        aria-labelledby="downloads-heading"
+      >
+        <div className="home-section-heading">
+          <div>
+            <h2 id="downloads-heading">Tools for the job</h2>
+            <p>Software and resources to keep close at hand.</p>
           </div>
+          <Link href="/downloads/">All downloads</Link>
+        </div>
+        <div className="home-download-list">
+          {featuredDownloadGuides.map((entry) => (
+            <Link href={`/downloads/${entry.slug}/`} key={entry.slug}>
+              <span className="home-meta">{entry.category}</span>
+              <h3>{entry.name}</h3>
+              <p>{entry.summary}</p>
+              <span className="home-release">
+                {entry.releaseMetadata?.releaseTag ?? "Available"}
+              </span>
+            </Link>
+          ))}
         </div>
       </section>
 
-      <section className="section-shell pt-2">
-        <div className="page-shell">
-          <div className="grid gap-6 lg:grid-cols-2">
-            <section className="surface-card p-5 sm:p-6">
-              <div className="mb-4 flex items-center justify-between gap-3">
-                <div>
-                  <p className="eyebrow">Guided Learning</p>
-                  <h2 className="mt-3 font-display text-2xl font-semibold text-fg sm:text-3xl">
-                    Pillar guides
-                  </h2>
-                </div>
-                <Link href="/guides" className="btn-ghost !px-4 !py-2 text-sm">
-                  Open guides
-                </Link>
-              </div>
-              <div className="grid gap-3">
-                {pillarGuides.map((guide) => (
-                  <Link
-                    key={guide.slug}
-                    href={`/guides/${guide.slug}/`}
-                    className="surface-card-interactive rounded-2xl p-4"
-                  >
-                    <h3 className="text-base font-semibold text-fg">{guide.title}</h3>
-                    <p className="mt-2 text-sm text-fg-secondary">{guide.description}</p>
-                  </Link>
-                ))}
-              </div>
-            </section>
-
-            <section className="surface-card p-5 sm:p-6">
-              <div className="mb-4 flex items-center justify-between gap-3">
-                <div>
-                  <p className="eyebrow">Practical Assets</p>
-                  <h2 className="mt-3 font-display text-2xl font-semibold text-fg sm:text-3xl">
-                    Recent downloads
-                  </h2>
-                </div>
-                <Link href="/downloads" className="btn-ghost !px-4 !py-2 text-sm">
-                  Open downloads
-                </Link>
-              </div>
-              <div className="grid gap-3">
-                {featuredDownloadGuides.map((entry) => (
-                  <Link
-                    key={entry.slug}
-                    href={`/downloads/${entry.slug}/`}
-                    className="surface-card-interactive rounded-2xl p-4"
-                  >
-                    <div className="flex items-center justify-between gap-3">
-                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
-                        {entry.category}
-                      </p>
-                      <span className="filter-chip px-2.5 py-1 text-[11px] font-semibold">
-                        {entry.releaseMetadata?.releaseTag ?? "Available"}
-                      </span>
-                    </div>
-                    <h3 className="mt-2 text-base font-semibold text-fg">{entry.name}</h3>
-                    <p className="mt-2 text-sm text-fg-secondary">{entry.summary}</p>
-                  </Link>
-                ))}
-              </div>
-            </section>
-          </div>
+      <section
+        className="home-contact page-shell"
+        aria-labelledby="contact-heading"
+      >
+        <div>
+          <h2 id="contact-heading">Need a hand?</h2>
+          <p>
+            I help small teams manage Microsoft 365, Google Workspace,
+            endpoints, and day-to-day IT operations.
+          </p>
+        </div>
+        <div>
+          <Link href="/contact/" className="btn-primary">
+            Get in touch
+          </Link>
+          <Link href="/services/msp/">Explore managed IT services</Link>
         </div>
       </section>
-
-      <section className="section-shell pt-2">
-        <div className="page-shell">
-          <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
-            <section className="surface-card-strong p-6 sm:p-8">
-              <p className="eyebrow">Need Hands-On Help?</p>
-              <h2 className="mt-4 text-balance font-display text-2xl font-semibold text-fg sm:text-3xl">
-                Retained systems support for teams that need more than a single fix
-              </h2>
-              <p className="mt-3 max-w-2xl text-sm text-fg-secondary sm:text-base">
-                I work across Microsoft 365, Google Workspace, macOS, Windows, Linux, identity, collaboration,
-                endpoint management, and operational cleanup for small teams and growing businesses.
-              </p>
-              <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-                <Link href="/services/msp" className="btn-primary">
-                  Explore MSP Services
-                </Link>
-                <Link href="/contact" className="btn-secondary">
-                  Request Availability
-                </Link>
-              </div>
-            </section>
-
-            <section className="surface-card p-5 sm:p-6">
-              <div className="mb-4 flex items-center justify-between gap-3">
-                <div>
-                  <p className="eyebrow">Common Enterprise Issues</p>
-                  <h2 className="mt-3 font-display text-2xl font-semibold text-fg sm:text-3xl">
-                    Popular search-driven problems
-                  </h2>
-                </div>
-                <Link href="/support/tickets" className="btn-ghost !px-4 !py-2 text-sm">
-                  Search tickets
-                </Link>
-              </div>
-              <div className="grid gap-3 md:grid-cols-2">
-                {keywordOpportunities.map((entry) => (
-                  <Link
-                    key={entry.keyword}
-                    href={`/support/tickets/?q=${encodeURIComponent(entry.keyword)}`}
-                    className="surface-card-interactive rounded-2xl p-4"
-                  >
-                    <h3 className="text-sm font-semibold text-fg">{entry.keyword}</h3>
-                    <p className="mt-2 text-xs text-muted">Open the closest matching support articles and related resources.</p>
-                  </Link>
-                ))}
-              </div>
-            </section>
-          </div>
-        </div>
-      </section>
-
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(queryIntentSchema) }}
-      />
-    </>
+    </div>
   );
 }

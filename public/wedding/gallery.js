@@ -1,11 +1,113 @@
-'use strict';
-const $=id=>document.getElementById(id);
-let all=[],filtered=[],shown=0,current=0,lastFocus=null;
-const batch=60,dialog=$('viewer');
-function append(){const end=Math.min(shown+batch,filtered.length);const fragment=document.createDocumentFragment();for(let i=shown;i<end;i++){const p=filtered[i],button=document.createElement('button');button.className='tile';button.setAttribute('aria-label',`Open wedding photo ${p.id}`);const img=document.createElement('img');img.src=`thumbs/${p.id}.jpg`;img.alt=`Wedding photo ${p.id}`;img.loading='lazy';img.decoding='async';const label=document.createElement('span');label.textContent=p.id;button.append(img,label);button.addEventListener('click',()=>open(i));fragment.append(button)}$('grid').append(fragment);shown=end;$('more').hidden=shown>=filtered.length;}
-function filter(){const query=$('search').value.trim().toLowerCase();filtered=all.filter(p=>p.id.toLowerCase().includes(query));shown=0;$('grid').replaceChildren();$('count').textContent=`${filtered.length.toLocaleString()} ${filtered.length===1?"photograph":"photographs"}`;$('empty').hidden=filtered.length>0;append()}
-function render(){const p=filtered[current];$('large').src=`photos/${p.id}.jpg`;$('large').alt=`Wedding photo ${p.id}`;$('caption').textContent=p.id;$('download').href=`photos/${p.id}.jpg`;$('download').download=`${p.id}-web.jpg`;$('position').textContent=`${current+1} of ${filtered.length.toLocaleString()}`;history.replaceState(null,'',`#${p.id}`)}
-function open(i){current=i;lastFocus=document.activeElement;render();dialog.showModal();document.body.classList.add('locked')}
-function move(delta){current=(current+delta+filtered.length)%filtered.length;render()}
-$('close').onclick=()=>dialog.close();dialog.addEventListener('close',()=>{document.body.classList.remove('locked');history.replaceState(null,'',location.pathname+location.search);lastFocus?.focus()});$('previous').onclick=()=>move(-1);$('next').onclick=()=>move(1);dialog.addEventListener('keydown',e=>{if(e.key==='ArrowRight'){e.preventDefault();move(1)}if(e.key==='ArrowLeft'){e.preventDefault();move(-1)}});$('more').onclick=append;$('search').addEventListener('input',filter);
-fetch('manifest.json').then(r=>{if(!r.ok)throw Error('Unable to load gallery');return r.json()}).then(data=>{all=data;filter();const index=filtered.findIndex(p=>'#'+p.id===location.hash);if(index>=0)open(index)}).catch(()=>{$('count').textContent='The gallery could not load. Please refresh to try again.'});
+"use strict";
+const $ = (id) => document.getElementById(id);
+let all = [],
+  filtered = [],
+  shown = 0,
+  current = 0,
+  lastFocus = null;
+const batch = 60,
+  dialog = $("viewer");
+function append() {
+  const end = Math.min(shown + batch, filtered.length);
+  const fragment = document.createDocumentFragment();
+  for (let i = shown; i < end; i++) {
+    const p = filtered[i],
+      button = document.createElement("button");
+    button.className = "tile";
+    button.setAttribute("aria-label", `Open wedding photo ${p.id}`);
+    const img = document.createElement("img");
+    img.src = `thumbs/${p.id}.jpg`;
+    img.alt = `Wedding photo ${p.id}`;
+    img.width = p.width;
+    img.height = p.height;
+    img.loading = "lazy";
+    img.decoding = "async";
+    const label = document.createElement("span");
+    label.textContent = p.id;
+    button.append(img, label);
+    button.addEventListener("click", (event) => open(i, event.detail > 0));
+    fragment.append(button);
+  }
+  const group = document.createElement("div");
+  group.className = "photo-batch";
+  group.append(fragment);
+  $("grid").append(group);
+  shown = end;
+  $("more").hidden = shown >= filtered.length;
+}
+function filter() {
+  const query = $("search").value.trim().toLowerCase();
+  filtered = all.filter((p) => p.id.toLowerCase().includes(query));
+  shown = 0;
+  $("grid").replaceChildren();
+  $("count").textContent =
+    `${filtered.length.toLocaleString()} ${filtered.length === 1 ? "photograph" : "photographs"}`;
+  $("empty").hidden = filtered.length > 0;
+  append();
+}
+function render() {
+  const p = filtered[current];
+  $("large").src = `photos/${p.id}.jpg`;
+  $("large").alt = `Wedding photo ${p.id}`;
+  $("caption").textContent = p.id;
+  $("download").href = `photos/${p.id}.jpg`;
+  $("download").download = `${p.id}-web.jpg`;
+  $("position").textContent =
+    `${current + 1} of ${filtered.length.toLocaleString()}`;
+  history.replaceState(null, "", `#${p.id}`);
+}
+function open(i, animate = false) {
+  current = i;
+  lastFocus = document.activeElement;
+  render();
+  dialog.showModal();
+  document.body.classList.add("locked");
+  if (animate && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    dialog.animate(
+      [
+        { opacity: 0, transform: "translateY(6px)" },
+        { opacity: 1, transform: "translateY(0)" },
+      ],
+      { duration: 220, easing: "cubic-bezier(.22,1,.36,1)" },
+    );
+  }
+}
+function move(delta) {
+  current = (current + delta + filtered.length) % filtered.length;
+  render();
+}
+$("close").onclick = () => dialog.close();
+dialog.addEventListener("close", () => {
+  document.body.classList.remove("locked");
+  history.replaceState(null, "", location.pathname + location.search);
+  lastFocus?.focus();
+});
+$("previous").onclick = () => move(-1);
+$("next").onclick = () => move(1);
+dialog.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowRight") {
+    e.preventDefault();
+    move(1);
+  }
+  if (e.key === "ArrowLeft") {
+    e.preventDefault();
+    move(-1);
+  }
+});
+$("more").onclick = append;
+$("search").addEventListener("input", filter);
+fetch("manifest.json")
+  .then((r) => {
+    if (!r.ok) throw Error("Unable to load gallery");
+    return r.json();
+  })
+  .then((data) => {
+    all = data;
+    filter();
+    const index = filtered.findIndex((p) => "#" + p.id === location.hash);
+    if (index >= 0) open(index);
+  })
+  .catch(() => {
+    $("count").textContent =
+      "The gallery could not load. Please refresh to try again.";
+  });
