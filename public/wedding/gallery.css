@@ -154,6 +154,34 @@ header a:last-child {
   color: var(--muted);
   font-size: 14px;
 }
+.chapters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 36px;
+}
+.chapters button {
+  border: 0;
+  border-radius: 3px;
+  padding: 11px 15px;
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  transition:
+    background 160ms var(--ease),
+    color 160ms var(--ease),
+    transform 160ms var(--ease);
+}
+.chapters button:hover {
+  background: #e2e5dc;
+}
+.chapters button[aria-pressed="true"] {
+  background: var(--accent);
+  color: white;
+}
+.chapters button:active {
+  transform: scale(0.98);
+}
 .search-label {
   font-size: 13px;
   color: var(--muted);
@@ -356,6 +384,17 @@ dialog::backdrop {
     align-items: stretch;
     gap: 24px;
     margin-bottom: 28px;
+  }
+  .chapters {
+    flex-wrap: nowrap;
+    margin: 0 -20px 28px;
+    padding: 0 20px 6px;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+  .chapters button {
+    flex: 0 0 auto;
+    min-height: 44px;
   }
   .search-label {
     gap: 8px;

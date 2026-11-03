@@ -46,3 +46,19 @@ Top three problems and fixes:
 1. Mobile homepage hero wrapped into three lines at 390px: changed the explicit break to “Find your / next IT fix.”
 2. Additional photos could rebalance existing columns: append independent photo batches.
 3. Original gallery forced portrait crops: render natural image proportions.
+
+## Photo organization follow-up
+
+The existing “The place carries it” direction remains unchanged; this update is a gallery-control component and did not need a new design draw. The photo number sequence now becomes the navigation device: six story chapters filter the real collection while preserving search, deep links, downloads, and the fullscreen viewer.
+
+The chapters are Getting Ready (NG-0001–NG-0225), First Look & Portraits (NG-0226–NG-0466), Family Portraits (NG-0467–NG-0559), Ceremony & Traditions (NG-0560–NG-0777), Reception Details (NG-0778–NG-0889), and Celebration (NG-0890–NG-1541).
+
+ROUND 2
+
+Seen in one second: the album can be browsed as a story or searched by photo number.
+Hierarchy: the collection title, count, search, chapter controls, and photographs read in that order on desktop and phone.
+Interaction: selected chapters have visible state and `aria-pressed`; the horizontal phone control row exposes the next chapter at the edge; search operates within the selected chapter; shared chapter URLs use `?chapter=`.
+Scores (subjective): design 8 · usability 9 · creativity 6.5 · content 8.5 → overall 8.0.
+Remaining limit: chapter boundaries were visually reviewed from the chronological sequence and are intentionally broad; individual photos are not tagged by person.
+
+Verification: Taste source lint passed with 0 FAIL and 0 WARN. Browser checks covered all six counts and starting photos, the Family Portraits ending boundary, chapter-scoped search, viewer open/Escape close, a 390px phone viewport, and a 1280px desktop viewport with no horizontal page overflow. The final static export passed for all 1,395 pages, and the existing fantasy recap export repair completed for five pages.

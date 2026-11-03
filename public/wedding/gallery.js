@@ -4,9 +4,26 @@ let all = [],
   filtered = [],
   shown = 0,
   current = 0,
-  lastFocus = null;
+  lastFocus = null,
+  activeChapter = "all";
 const batch = 60,
   dialog = $("viewer");
+const chapters = [
+  { id: "all", label: "All moments", start: 1, end: 1541 },
+  { id: "getting-ready", label: "Getting ready", start: 1, end: 225 },
+  { id: "portraits", label: "First look & portraits", start: 226, end: 466 },
+  { id: "family", label: "Family portraits", start: 467, end: 559 },
+  { id: "ceremony", label: "Ceremony & traditions", start: 560, end: 777 },
+  { id: "details", label: "Reception details", start: 778, end: 889 },
+  { id: "celebration", label: "Celebration", start: 890, end: 1541 },
+];
+const chapterButtons = [...document.querySelectorAll("[data-chapter]")];
+function photoNumber(photo) {
+  return Number(photo.id.slice(3));
+}
+function selectedChapter() {
+  return chapters.find((chapter) => chapter.id === activeChapter) || chapters[0];
+}
 function append() {
   const end = Math.min(shown + batch, filtered.length);
   const fragment = document.createDocumentFragment();
@@ -37,13 +54,39 @@ function append() {
 }
 function filter() {
   const query = $("search").value.trim().toLowerCase();
-  filtered = all.filter((p) => p.id.toLowerCase().includes(query));
+  const chapter = selectedChapter();
+  filtered = all.filter((p) => {
+    const number = photoNumber(p);
+    return (
+      number >= chapter.start &&
+      number <= chapter.end &&
+      p.id.toLowerCase().includes(query)
+    );
+  });
   shown = 0;
   $("grid").replaceChildren();
+  const amount = `${filtered.length.toLocaleString()} ${filtered.length === 1 ? "photograph" : "photographs"}`;
   $("count").textContent =
-    `${filtered.length.toLocaleString()} ${filtered.length === 1 ? "photograph" : "photographs"}`;
+    chapter.id === "all" ? amount : `${amount} in ${chapter.label}`;
   $("empty").hidden = filtered.length > 0;
   append();
+}
+function chooseChapter(id, updateHistory = true) {
+  activeChapter = chapters.some((chapter) => chapter.id === id) ? id : "all";
+  chapterButtons.forEach((button) => {
+    button.setAttribute(
+      "aria-pressed",
+      String(button.dataset.chapter === activeChapter),
+    );
+  });
+  if (updateHistory) {
+    const url = new URL(location.href);
+    if (activeChapter === "all") url.searchParams.delete("chapter");
+    else url.searchParams.set("chapter", activeChapter);
+    url.hash = "";
+    history.replaceState(null, "", url);
+  }
+  filter();
 }
 function render() {
   const p = filtered[current];
@@ -96,6 +139,9 @@ dialog.addEventListener("keydown", (e) => {
 });
 $("more").onclick = append;
 $("search").addEventListener("input", filter);
+chapterButtons.forEach((button) => {
+  button.addEventListener("click", () => chooseChapter(button.dataset.chapter));
+});
 fetch("manifest.json")
   .then((r) => {
     if (!r.ok) throw Error("Unable to load gallery");
@@ -103,7 +149,7 @@ fetch("manifest.json")
   })
   .then((data) => {
     all = data;
-    filter();
+    chooseChapter(new URLSearchParams(location.search).get("chapter"), false);
     const index = filtered.findIndex((p) => "#" + p.id === location.hash);
     if (index >= 0) open(index);
   })
