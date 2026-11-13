@@ -125,7 +125,8 @@ function currentSet() {
   return bothPicks();
 }
 
-function filterPhotos() {
+function filterPhotos({ preserveShown = false } = {}) {
+  const desiredShown = preserveShown ? Math.max(batchSize, shown) : batchSize;
   const query = $("search").value.trim().toLowerCase();
   const chapter = chapters.find((item) => item.id === $("chapter").value) || chapters[0];
   const viewSet = currentSet();
@@ -144,7 +145,7 @@ function filterPhotos() {
   $("empty").hidden = visible.length > 0;
   $("view-summary").textContent =
     `${visible.length.toLocaleString()} ${visible.length === 1 ? "photograph" : "photographs"} in this view`;
-  appendPhotos();
+  appendPhotos(desiredShown);
 }
 
 function selectionState(photoId) {
@@ -156,8 +157,8 @@ function selectionState(photoId) {
   return "Not selected";
 }
 
-function appendPhotos() {
-  const end = Math.min(shown + batchSize, visible.length);
+function appendPhotos(target = shown + batchSize) {
+  const end = Math.min(Math.max(target, shown), visible.length);
   const fragment = document.createDocumentFragment();
 
   for (let index = shown; index < end; index += 1) {
@@ -242,7 +243,7 @@ async function syncRoom(silent = false) {
     updateIdentity();
     updateCounts();
     saveCache();
-    filterPhotos();
+    filterPhotos({ preserveShown: true });
     if (Object.keys(pending).length > 0) {
       await flushPending();
     } else {
@@ -323,7 +324,7 @@ function togglePick(photoId) {
   if (selected) mine.add(photoId);
   else mine.delete(photoId);
   updateCounts();
-  filterPhotos();
+  filterPhotos({ preserveShown: true });
   if (dialog.open) {
     const nextIndex = visible.findIndex((photo) => photo.id === openPhotoId);
     if (nextIndex < 0) dialog.close();
@@ -390,7 +391,7 @@ $("selected-only").addEventListener("click", () => {
   $("selected-only").setAttribute("aria-pressed", String(selectedOnly));
   filterPhotos();
 });
-$("more").addEventListener("click", appendPhotos);
+$("more").addEventListener("click", () => appendPhotos());
 $("export").addEventListener("click", exportBoth);
 $("viewer-pick").addEventListener("click", () => togglePick($("viewer-pick").dataset.photoId));
 $("close").addEventListener("click", () => dialog.close());
