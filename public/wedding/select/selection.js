@@ -30,6 +30,7 @@ let selectedOnly = false;
 let lastFocus = null;
 let picks = { tamem: new Set(), wife: new Set() };
 let pending = readJson(pendingKey, {});
+let flushingPending = false;
 
 function readJson(key, fallback) {
   try {
@@ -81,12 +82,37 @@ function restoreCache() {
   applyPending();
 }
 
-function applyPending() {
+function normalizePendingEntry(value) {
+  if (typeof value === "boolean") return { selected: value, saved: false };
+  if (value && typeof value.selected === "boolean") {
+    return { selected: value.selected, saved: value.saved === true };
+  }
+  return null;
+}
+
+function savePending() {
+  localStorage.setItem(pendingKey, JSON.stringify(pending));
+}
+
+function applyPending({ confirmServer = false } = {}) {
   const mine = picks[mineRole()];
-  for (const [photoId, selected] of Object.entries(pending)) {
-    if (selected) mine.add(photoId);
+  for (const [photoId, value] of Object.entries(pending)) {
+    const entry = normalizePendingEntry(value);
+    if (!entry) {
+      delete pending[photoId];
+      continue;
+    }
+
+    if (confirmServer && entry.saved && mine.has(photoId) === entry.selected) {
+      delete pending[photoId];
+      continue;
+    }
+
+    pending[photoId] = entry;
+    if (entry.selected) mine.add(photoId);
     else mine.delete(photoId);
   }
+  savePending();
 }
 
 function updateIdentity() {
@@ -238,7 +264,7 @@ async function syncRoom(silent = false) {
     viewerRole = data.viewerRole === "wife" ? "wife" : "tamem";
     picks.tamem = new Set(data.picks?.tamem || []);
     picks.wife = new Set(data.picks?.wife || []);
-    applyPending();
+    applyPending({ confirmServer: true });
     localStorage.setItem("wedding-selection-access", access);
     updateIdentity();
     updateCounts();
@@ -257,64 +283,69 @@ async function syncRoom(silent = false) {
 }
 
 async function flushPending() {
-  const changes = Object.entries(pending);
-  if (changes.length === 0) return true;
+  if (flushingPending) return true;
+  flushingPending = true;
 
-  setSyncStatus(`Saving ${changes.length} pending ${changes.length === 1 ? "change" : "changes"}…`);
-  for (const [photoId, selected] of changes) {
-    try {
+  try {
+    while (true) {
+      const change = Object.entries(pending).find(([, value]) => {
+        const entry = normalizePendingEntry(value);
+        return entry && !entry.saved;
+      });
+      if (!change) break;
+
+      const [photoId, value] = change;
+      const entry = normalizePendingEntry(value);
+      if (!entry) {
+        delete pending[photoId];
+        continue;
+      }
+
+      const unsavedCount = Object.values(pending).filter((item) => {
+        const pendingEntry = normalizePendingEntry(item);
+        return pendingEntry && !pendingEntry.saved;
+      }).length;
+      setSyncStatus(
+        `Saving ${unsavedCount} pending ${unsavedCount === 1 ? "change" : "changes"}…`,
+      );
       const response = await fetch(API_ENDPOINT, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${access}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ photoId, selected }),
+        body: JSON.stringify({ photoId, selected: entry.selected }),
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "Unable to save this pick");
 
-      if (pending[photoId] === selected) delete pending[photoId];
-    } catch (error) {
-      localStorage.setItem(pendingKey, JSON.stringify(pending));
-      setSyncStatus(error.message || "Offline — changes will retry", "error");
-      return false;
+      const current = normalizePendingEntry(pending[photoId]);
+      if (current && current.selected === entry.selected) {
+        pending[photoId] = { selected: current.selected, saved: true };
+      }
+      savePending();
     }
-  }
 
-  localStorage.setItem(pendingKey, JSON.stringify(pending));
-  saveCache();
-  setSyncStatus("Saved and synced");
-  return true;
+    saveCache();
+    setSyncStatus(
+      Object.keys(pending).length > 0 ? "Saved — syncing across devices…" : "Saved and synced",
+    );
+    return true;
+  } catch (error) {
+    savePending();
+    setSyncStatus(error.message || "Offline — changes will retry", "error");
+    return false;
+  } finally {
+    flushingPending = false;
+  }
 }
 
 async function writePick(photoId, selected) {
-  pending[photoId] = selected;
-  localStorage.setItem(pendingKey, JSON.stringify(pending));
+  pending[photoId] = { selected, saved: false };
+  savePending();
   setSyncStatus("Saving…");
-
-  try {
-    const response = await fetch(API_ENDPOINT, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${access}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ photoId, selected }),
-    });
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.error || "Unable to save this pick");
-
-    if (pending[photoId] === selected) {
-      delete pending[photoId];
-      localStorage.setItem(pendingKey, JSON.stringify(pending));
-    }
-    setSyncStatus("Saved and synced");
-    saveCache();
-    window.setTimeout(() => syncRoom(true), 600);
-  } catch (error) {
-    setSyncStatus(error.message || "Offline — changes will retry", "error");
-  }
+  const saved = await flushPending();
+  if (saved) window.setTimeout(() => syncRoom(true), 2000);
 }
 
 function togglePick(photoId) {
