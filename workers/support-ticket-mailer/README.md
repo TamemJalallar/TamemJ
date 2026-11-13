@@ -13,7 +13,7 @@ This is designed for static deployments (GitHub Pages) where the frontend cannot
 - Returns JSON success/error response
 - Supports strict CORS for your site origin
 - Authenticates each wedding selector with a separate private bearer token
-- Stores Tamem's and his wife's photo numbers independently in Cloudflare KV
+- Stores Tamem's and his wife's photo-number arrays in two independent Cloudflare KV keys
 - Returns the mutual selection as the intersection of both lists
 
 ## Files
@@ -91,5 +91,7 @@ NEXT_PUBLIC_TURNSTILE_SITE_KEY=<your-turnstile-site-key>
 - Keep `ALLOWED_ORIGIN` pinned to your production domain.
 - If you skip KV binding, requests will not be rate-limited.
 - The wedding selection endpoint is `GET`/`POST /wedding-selection` and requires the existing `RATE_LIMIT_KV` binding.
-- The browser only sends a photo number and selected state. Wedding images remain static assets on the website.
+- The browser only sends selected photo numbers. Wedding images remain static assets on the website.
 - The two raw wedding access tokens are not committed. Only their SHA-256 hashes appear in the Worker source.
+- The first v2 read migrates the former per-photo v1 keys once. Normal synchronization then uses two KV reads and no list requests.
+- The browser batches rapid choices into one role-specific array write and polls every 30 seconds only while visible.

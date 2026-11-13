@@ -48,6 +48,7 @@ interface TurnstileVerificationResponse {
 }
 
 interface WeddingSelectionRequest {
+  picks?: unknown;
   photoId?: string;
   selected?: boolean;
 }
@@ -55,7 +56,8 @@ interface WeddingSelectionRequest {
 type WeddingRole = "tamem" | "wife";
 
 const WEDDING_SELECTION_PATH = "/wedding-selection";
-const WEDDING_PICK_PREFIX = "wedding-selection:v1";
+const WEDDING_LEGACY_PICK_PREFIX = "wedding-selection:v1";
+const WEDDING_ROLE_KEY_PREFIX = "wedding-selection:v2";
 const WEDDING_TAMEM_TOKEN_HASH = "07195742d3327fdc61f23a5f37b877cb9a818e8418c3861f1abd1056fe9cd573";
 const WEDDING_WIFE_TOKEN_HASH = "8f74a97b32d7cc62b40302432f99808862d1333661a2195686c21459ade3d734";
 
@@ -122,8 +124,24 @@ function isWeddingPhotoId(value: unknown): value is string {
   return number >= 1 && number <= 1541;
 }
 
-async function listWeddingPicks(store: RateLimitStore, role: WeddingRole): Promise<string[]> {
-  const prefix = `${WEDDING_PICK_PREFIX}:${role}:`;
+function normalizeWeddingPicks(value: unknown): string[] | null {
+  if (!Array.isArray(value) || value.length > 1541) {
+    return null;
+  }
+
+  const photos = value.filter(isWeddingPhotoId);
+  if (photos.length !== value.length) {
+    return null;
+  }
+  return [...new Set(photos)].sort();
+}
+
+function weddingRoleKey(role: WeddingRole): string {
+  return `${WEDDING_ROLE_KEY_PREFIX}:${role}`;
+}
+
+async function listLegacyWeddingPicks(store: RateLimitStore, role: WeddingRole): Promise<string[]> {
+  const prefix = `${WEDDING_LEGACY_PICK_PREFIX}:${role}:`;
   const photos: string[] = [];
   let cursor: string | undefined;
 
@@ -141,6 +159,22 @@ async function listWeddingPicks(store: RateLimitStore, role: WeddingRole): Promi
   return photos.sort();
 }
 
+async function readWeddingPicks(store: RateLimitStore, role: WeddingRole): Promise<string[]> {
+  const key = weddingRoleKey(role);
+  const raw = await store.get(key);
+  if (raw !== null) {
+    try {
+      return normalizeWeddingPicks(JSON.parse(raw)) ?? [];
+    } catch {
+      return [];
+    }
+  }
+
+  const migrated = await listLegacyWeddingPicks(store, role);
+  await store.put(key, JSON.stringify(migrated));
+  return migrated;
+}
+
 async function handleWeddingSelection(request: Request, env: Env, origin: string): Promise<Response> {
   const role = await resolveWeddingRole(request);
   if (!role) {
@@ -154,8 +188,8 @@ async function handleWeddingSelection(request: Request, env: Env, origin: string
 
   if (request.method === "GET") {
     const [tamem, wife] = await Promise.all([
-      listWeddingPicks(store, "tamem"),
-      listWeddingPicks(store, "wife")
+      readWeddingPicks(store, "tamem"),
+      readWeddingPicks(store, "wife")
     ]);
     const wifeSet = new Set(wife);
 
@@ -185,23 +219,30 @@ async function handleWeddingSelection(request: Request, env: Env, origin: string
     return jsonResponse({ error: "Invalid JSON payload" }, 400, origin);
   }
 
-  if (!isWeddingPhotoId(payload.photoId) || typeof payload.selected !== "boolean") {
-    return jsonResponse({ error: "A valid photoId and selected state are required." }, 400, origin);
+  let nextPicks = normalizeWeddingPicks(payload.picks);
+
+  // Keep the original single-photo request working while the static site deploy propagates.
+  if (!nextPicks && isWeddingPhotoId(payload.photoId) && typeof payload.selected === "boolean") {
+    const current = new Set(await readWeddingPicks(store, role));
+    if (payload.selected) {
+      current.add(payload.photoId);
+    } else {
+      current.delete(payload.photoId);
+    }
+    nextPicks = [...current].sort();
   }
 
-  const key = `${WEDDING_PICK_PREFIX}:${role}:${payload.photoId}`;
-  if (payload.selected) {
-    await store.put(key, "1");
-  } else {
-    await store.delete(key);
+  if (!nextPicks) {
+    return jsonResponse({ error: "A valid picks array is required." }, 400, origin);
   }
+
+  await store.put(weddingRoleKey(role), JSON.stringify(nextPicks));
 
   return jsonResponse(
     {
       ok: true,
       viewerRole: role,
-      photoId: payload.photoId,
-      selected: payload.selected
+      count: nextPicks.length
     },
     200,
     origin

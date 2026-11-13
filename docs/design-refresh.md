@@ -74,3 +74,11 @@ Only photo numbers and selected states are sent to the existing Cloudflare Worke
 Motion follows the earlier frequency rule: filtering and pick changes are immediate; only a pointer-opened fullscreen viewer receives a brief 180ms opacity/6px entrance. Reduced-motion preferences disable generated motion.
 
 Verification: TypeScript strict compilation passed. A mocked-KV Worker test covered both identities, independent writes, automatic intersection, role isolation, invalid credentials, and invalid photo numbers. JavaScript syntax validation passed. Taste app-source lint passed with 0 FAIL and 0 WARN.
+
+### Free-tier synchronization update
+
+The original per-photo storage model required two KV list operations every eight seconds. The free tier permits far fewer list operations than ordinary reads, so this could exhaust the daily list allowance during a long selection session.
+
+The v2 model stores one sorted photo-number array per person. A normal refresh now performs two ordinary KV reads and zero lists. The first v2 request migrates existing v1 per-photo keys once and leaves those legacy keys dormant. Rapid choices are batched into a single role-specific write, writes are spaced to respect the same-key rate limit, polling runs every 30 seconds only while the page is visible, and focus/online events request an immediate refresh.
+
+Pending local choices remain authoritative until a later GET returns the same state. This prevents eventually consistent KV reads from temporarily undoing a visible selection. The mocked-KV test covers one-time migration, zero repeat lists, batch normalization, role isolation, mutual intersection, legacy request compatibility, and invalid input.
