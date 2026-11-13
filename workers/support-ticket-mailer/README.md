@@ -1,6 +1,6 @@
 # Support Ticket Mailer Worker
 
-Cloudflare Worker endpoint for automatic Support Portal ticket email delivery.
+Cloudflare Worker endpoint for automatic Support Portal ticket email delivery and the private wedding-photo selection room.
 
 This is designed for static deployments (GitHub Pages) where the frontend cannot send email directly.
 
@@ -12,6 +12,9 @@ This is designed for static deployments (GitHub Pages) where the frontend cannot
 - Sends email through Resend API
 - Returns JSON success/error response
 - Supports strict CORS for your site origin
+- Authenticates each wedding selector with a separate private bearer token
+- Stores Tamem's and his wife's photo numbers independently in Cloudflare KV
+- Returns the mutual selection as the intersection of both lists
 
 ## Files
 
@@ -87,3 +90,6 @@ NEXT_PUBLIC_TURNSTILE_SITE_KEY=<your-turnstile-site-key>
 - Frontend calls this endpoint directly over HTTPS.
 - Keep `ALLOWED_ORIGIN` pinned to your production domain.
 - If you skip KV binding, requests will not be rate-limited.
+- The wedding selection endpoint is `GET`/`POST /wedding-selection` and requires the existing `RATE_LIMIT_KV` binding.
+- The browser only sends a photo number and selected state. Wedding images remain static assets on the website.
+- The two raw wedding access tokens are not committed. Only their SHA-256 hashes appear in the Worker source.

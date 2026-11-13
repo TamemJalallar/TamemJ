@@ -19,6 +19,15 @@ interface TicketEmailRequest {
 interface RateLimitStore {
   get: (key: string) => Promise<string | null>;
   put: (key: string, value: string, options?: { expirationTtl?: number }) => Promise<void>;
+  delete: (key: string) => Promise<void>;
+  list: (options: {
+    prefix: string;
+    cursor?: string;
+  }) => Promise<{
+    keys: Array<{ name: string }>;
+    list_complete: boolean;
+    cursor?: string;
+  }>;
 }
 
 interface Env {
@@ -38,17 +47,165 @@ interface TurnstileVerificationResponse {
   "error-codes"?: string[];
 }
 
+interface WeddingSelectionRequest {
+  photoId?: string;
+  selected?: boolean;
+}
+
+type WeddingRole = "tamem" | "wife";
+
+const WEDDING_SELECTION_PATH = "/wedding-selection";
+const WEDDING_PICK_PREFIX = "wedding-selection:v1";
+const WEDDING_TAMEM_TOKEN_HASH = "07195742d3327fdc61f23a5f37b877cb9a818e8418c3861f1abd1056fe9cd573";
+const WEDDING_WIFE_TOKEN_HASH = "8f74a97b32d7cc62b40302432f99808862d1333661a2195686c21459ade3d734";
+
 function jsonResponse(body: Record<string, unknown>, status = 200, origin = "*"): Response {
   return new Response(JSON.stringify(body), {
     status,
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       "Access-Control-Allow-Origin": origin,
-      "Access-Control-Allow-Methods": "POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Authorization, Content-Type",
+      "Cache-Control": "no-store",
       Vary: "Origin"
     }
   });
+}
+
+async function sha256(value: string): Promise<string> {
+  const bytes = new TextEncoder().encode(value);
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
+}
+
+function hashesMatch(left: string, right: string): boolean {
+  if (left.length !== right.length) {
+    return false;
+  }
+
+  let difference = 0;
+  for (let index = 0; index < left.length; index += 1) {
+    difference |= left.charCodeAt(index) ^ right.charCodeAt(index);
+  }
+  return difference === 0;
+}
+
+async function resolveWeddingRole(request: Request): Promise<WeddingRole | null> {
+  const authorization = request.headers.get("Authorization")?.trim() ?? "";
+  const token = authorization.startsWith("Bearer ") ? authorization.slice(7).trim() : "";
+  if (!token || token.length > 256) {
+    return null;
+  }
+
+  const tokenHash = await sha256(token);
+  if (hashesMatch(tokenHash, WEDDING_TAMEM_TOKEN_HASH)) {
+    return "tamem";
+  }
+  if (hashesMatch(tokenHash, WEDDING_WIFE_TOKEN_HASH)) {
+    return "wife";
+  }
+  return null;
+}
+
+function isWeddingPhotoId(value: unknown): value is string {
+  if (typeof value !== "string") {
+    return false;
+  }
+
+  const match = /^NG-(\d{4})$/.exec(value);
+  if (!match) {
+    return false;
+  }
+
+  const number = Number.parseInt(match[1], 10);
+  return number >= 1 && number <= 1541;
+}
+
+async function listWeddingPicks(store: RateLimitStore, role: WeddingRole): Promise<string[]> {
+  const prefix = `${WEDDING_PICK_PREFIX}:${role}:`;
+  const photos: string[] = [];
+  let cursor: string | undefined;
+
+  do {
+    const result = await store.list({ prefix, cursor });
+    for (const key of result.keys) {
+      const photoId = key.name.slice(prefix.length);
+      if (isWeddingPhotoId(photoId)) {
+        photos.push(photoId);
+      }
+    }
+    cursor = result.list_complete ? undefined : result.cursor;
+  } while (cursor);
+
+  return photos.sort();
+}
+
+async function handleWeddingSelection(request: Request, env: Env, origin: string): Promise<Response> {
+  const role = await resolveWeddingRole(request);
+  if (!role) {
+    return jsonResponse({ error: "This private selection link is not valid." }, 401, origin);
+  }
+
+  const store = env.RATE_LIMIT_KV;
+  if (!store) {
+    return jsonResponse({ error: "Selection storage is not configured." }, 503, origin);
+  }
+
+  if (request.method === "GET") {
+    const [tamem, wife] = await Promise.all([
+      listWeddingPicks(store, "tamem"),
+      listWeddingPicks(store, "wife")
+    ]);
+    const wifeSet = new Set(wife);
+
+    return jsonResponse(
+      {
+        ok: true,
+        viewerRole: role,
+        picks: {
+          tamem,
+          wife,
+          both: tamem.filter((photoId) => wifeSet.has(photoId))
+        }
+      },
+      200,
+      origin
+    );
+  }
+
+  if (request.method !== "POST") {
+    return jsonResponse({ error: "Method not allowed" }, 405, origin);
+  }
+
+  let payload: WeddingSelectionRequest;
+  try {
+    payload = (await request.json()) as WeddingSelectionRequest;
+  } catch {
+    return jsonResponse({ error: "Invalid JSON payload" }, 400, origin);
+  }
+
+  if (!isWeddingPhotoId(payload.photoId) || typeof payload.selected !== "boolean") {
+    return jsonResponse({ error: "A valid photoId and selected state are required." }, 400, origin);
+  }
+
+  const key = `${WEDDING_PICK_PREFIX}:${role}:${payload.photoId}`;
+  if (payload.selected) {
+    await store.put(key, "1");
+  } else {
+    await store.delete(key);
+  }
+
+  return jsonResponse(
+    {
+      ok: true,
+      viewerRole: role,
+      photoId: payload.photoId,
+      selected: payload.selected
+    },
+    200,
+    origin
+  );
 }
 
 function resolveAllowedOrigin(request: Request, env: Env): { allowed: boolean; responseOrigin: string } {
@@ -250,6 +407,7 @@ async function sendViaResend(env: Env, payload: EmailPayload, replyTo?: string):
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const origin = resolveAllowedOrigin(request, env);
+    const url = new URL(request.url);
 
     if (request.method === "OPTIONS") {
       return jsonResponse({ ok: true }, 200, origin.responseOrigin);
@@ -257,6 +415,10 @@ export default {
 
     if (!origin.allowed) {
       return jsonResponse({ error: "Origin not allowed" }, 403, origin.responseOrigin);
+    }
+
+    if (url.pathname === WEDDING_SELECTION_PATH) {
+      return handleWeddingSelection(request, env, origin.responseOrigin);
     }
 
     if (request.method !== "POST") {

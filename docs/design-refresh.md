@@ -62,3 +62,15 @@ Scores (subjective): design 8 · usability 9 · creativity 6.5 · content 8.5 �
 Remaining limit: chapter boundaries were visually reviewed from the chronological sequence and are intentionally broad; individual photos are not tagged by person.
 
 Verification: Taste source lint passed with 0 FAIL and 0 WARN. Browser checks covered all six counts and starting photos, the Family Portraits ending boundary, chapter-scoped search, viewer open/Escape close, a 390px phone viewport, and a 1280px desktop viewport with no horizontal page overflow. The final static export passed for all 1,395 pages, and the existing fantasy recap export repair completed for five pages.
+
+## Two-person selection room — November 12, 2026
+
+The private selection room lives at `/wedding/select/` and uses Taste's `editorial-greeting` app direction, seed 287929552. It keeps the public album's garden-derived green, white ground, serif headings, and natural photo proportions. The working interface is the composition: a restrained progress panel, three list tabs, search and chapter controls, then the photographs themselves.
+
+Each person receives a different unguessable link. The access token identifies the viewer as Tamem or his wife; only the token hashes are committed. Each person can add or remove only their own choices. “Both picks” is calculated from the intersection of the two independent lists, so it cannot drift into a third manually edited list. The interface syncs immediately, polls while open on separate devices, caches the last good state, retries offline changes, and exports the shared photo numbers as CSV.
+
+Only photo numbers and selected states are sent to the existing Cloudflare Worker and stored in its existing KV namespace. The original photographs remain static website assets. The browser uses `no-referrer`, the API is limited to the production origin, and invalid tokens or photo numbers are rejected.
+
+Motion follows the earlier frequency rule: filtering and pick changes are immediate; only a pointer-opened fullscreen viewer receives a brief 180ms opacity/6px entrance. Reduced-motion preferences disable generated motion.
+
+Verification: TypeScript strict compilation passed. A mocked-KV Worker test covered both identities, independent writes, automatic intersection, role isolation, invalid credentials, and invalid photo numbers. JavaScript syntax validation passed. Taste app-source lint passed with 0 FAIL and 0 WARN.

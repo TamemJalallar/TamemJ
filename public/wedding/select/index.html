@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <title>Choose Our Wedding Photographs · TamemJ</title>
+    <meta
+      name="description"
+      content="A private two-person room for choosing our final wedding photographs."
+    />
+    <link rel="stylesheet" href="selection.css" />
+    <script src="selection.js" defer></script>
+  </head>
+  <body>
+    <a class="skip" href="#photographs">Skip to photographs</a>
+    <header>
+      <a href="../">Our wedding</a>
+      <span id="identity">Private selection room</span>
+    </header>
+    <main class="selection-app">
+      <section class="selection-intro" aria-labelledby="selection-title">
+        <div>
+          <h1 id="selection-title">Choose the photographs</h1>
+          <p id="room-copy">
+            Make your own choices. A photograph moves into Both picks when you
+            both select it.
+          </p>
+        </div>
+        <div class="mutual-progress" aria-labelledby="mutual-title">
+          <div>
+            <span id="mutual-title">Both picks</span>
+            <strong id="mutual-count">0</strong>
+          </div>
+          <div
+            class="progress-track"
+            role="progressbar"
+            aria-label="Mutual selection progress"
+            aria-valuemin="0"
+            aria-valuemax="80"
+            aria-valuenow="0"
+          >
+            <span id="progress-fill"></span>
+          </div>
+          <p id="target-copy">Choose 60–80 photographs together.</p>
+        </div>
+      </section>
+
+      <section class="selection-workspace" aria-labelledby="photographs">
+        <div class="workspace-heading">
+          <div>
+            <h2 id="photographs">Your selection room</h2>
+            <p id="sync-status" role="status">Connecting securely…</p>
+          </div>
+          <button id="export" type="button" disabled>Download both picks</button>
+        </div>
+
+        <nav class="pick-views" aria-label="Selection lists">
+          <button type="button" data-view="mine" aria-pressed="true">
+            <span id="mine-label">My picks</span>
+            <strong id="mine-count">0</strong>
+          </button>
+          <button type="button" data-view="partner" aria-pressed="false">
+            <span id="partner-label">Partner’s picks</span>
+            <strong id="partner-count">0</strong>
+          </button>
+          <button type="button" data-view="both" aria-pressed="false">
+            <span>Both picks</span>
+            <strong id="both-count">0</strong>
+          </button>
+        </nav>
+
+        <div class="selection-tools">
+          <label for="search"
+            >Find a photograph
+            <input
+              id="search"
+              type="search"
+              placeholder="Photo number, e.g. 0500"
+              autocomplete="off"
+            />
+          </label>
+          <label for="chapter"
+            >Part of the day
+            <select id="chapter">
+              <option value="all">All moments</option>
+              <option value="getting-ready">Getting ready</option>
+              <option value="portraits">First look &amp; portraits</option>
+              <option value="family">Family portraits</option>
+              <option value="ceremony">Ceremony &amp; traditions</option>
+              <option value="details">Reception details</option>
+              <option value="celebration">Celebration</option>
+            </select>
+          </label>
+          <button
+            id="selected-only"
+            type="button"
+            aria-pressed="false"
+            title="Show only photographs already in My picks"
+          >
+            Selected only
+          </button>
+        </div>
+
+        <p id="view-summary">Loading photographs…</p>
+        <div id="grid" class="selection-grid"></div>
+        <p id="empty" hidden>No photographs match this view.</p>
+        <button id="more" type="button" hidden>Load more photographs</button>
+      </section>
+    </main>
+
+    <footer>
+      <p>Your links are private. Only photo numbers are saved.</p>
+      <a href="../">Return to the public wedding gallery</a>
+    </footer>
+
+    <dialog id="viewer" aria-label="Photo viewer">
+      <div class="viewerbar">
+        <span id="caption"></span>
+        <button id="viewer-pick" type="button">Add to my picks</button>
+        <button id="close" type="button" aria-label="Close photo viewer">
+          Close ×
+        </button>
+      </div>
+      <div class="stage">
+        <button id="previous" type="button" aria-label="Previous photo">‹</button>
+        <img id="large" alt="" />
+        <button id="next" type="button" aria-label="Next photo">›</button>
+      </div>
+      <p id="position" aria-live="polite"></p>
+    </dialog>
+  </body>
+</html>
